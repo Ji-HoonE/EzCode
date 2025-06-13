@@ -15,19 +15,19 @@
 
 - Team Tool: Discode, Jira, Notion
 
-현재 진행도
-디자인: 러프한 Figma 디자인 https://buly.kr/1c9EwQg
-프론트엔드: 회원가입/로그인/채팅/검색/문제풀이 기본 HTML (아주 간단한 기능 시연용)
-Frontend Github: https://github.com/ezcode-my/frontend
-백엔드: MVP 완료, 기능 고도화 작업중, API 문서 정리중
-Backend Github: https://github.com/ezcode-my/backend
-swagger: http://3.38.223.188/swagger-ui/index.html
+### 현재 진행도
+- 디자인: 러프한 Figma 디자인 https://buly.kr/1c9EwQg
+- 프론트엔드: 회원가입/로그인/채팅/검색/문제풀이 기본 HTML (아주 간단한 기능 시연용)
+- Frontend Github: https://github.com/ezcode-my/frontend
+- 백엔드: MVP 완료, 기능 고도화 작업중, API 문서 정리중
+- Backend Github: https://github.com/ezcode-my/backend
+- swagger: http://3.38.223.188/swagger-ui/index.html
 
 ### MVP
 
-황재연: 메인페이지
-김정하: 로그인/회원가입
-유선향: 채팅
+- 황재연: 메인페이지
+- 김정하: 로그인/회원가입
+- 유선향: 채팅
 
 ### 프로젝트 구조
 
