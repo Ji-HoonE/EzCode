@@ -11,21 +11,9 @@
 
 ## 기술 스택
 
-- Frontend
-  React v19
-  Next.js 15
-  TypeScript
-  Tailwind CSS
-  Node v22
-  Shadcn/ui
-  TanStack Query
-  Zustand
-  pnpm
+- Frontend: React v19, Next.js 15, TypeScript, TailwindCSS Node v22, Shadcn/ui, TanStack Query, Zustandpnpm
 
-- Team Tool
-  Discode
-  Jira
-  Notion
+- Team Tool: Discode, Jira, Notion
 
 현재 진행도
 디자인: 러프한 Figma 디자인 https://buly.kr/1c9EwQg
