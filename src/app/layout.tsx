@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "EZ-Code",
   description: "임시 description",
   icons: {
-    icon: "/images/ezcode.ico",
+    icon: "/favicon.ico",
   },
 };
 export default function RootLayout({
