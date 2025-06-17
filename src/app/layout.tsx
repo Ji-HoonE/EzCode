@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "EZ-Code",
-  description: "임시 description",
+  title: 'EZ-Code',
+  description: '임시 description',
   icons: {
-    icon: "/favicon.ico",
+    icon: '/favicon.ico',
   },
 };
 export default function RootLayout({
@@ -14,8 +14,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="ko">
+      <body className="h-100dvh w-100dvw flex justify-center ">{children}</body>
     </html>
   );
 }
