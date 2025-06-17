@@ -14,10 +14,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="h-100dvh w-100dvw bg-black flex justify-center items-center">
-        {children}
-      </body>
+    <html lang="ko">
+      <body className="h-100dvh w-100dvw flex justify-center ">{children}</body>
     </html>
   );
 }
