@@ -10,12 +10,17 @@ export const metadata: Metadata = {
 };
 export default function RootLayout({
   children,
+  chatDialog,
 }: Readonly<{
   children: React.ReactNode;
+  chatDialog: React.ReactNode;
 }>) {
   return (
     <html lang="ko">
-      <body className="h-100dvh w-100dvw flex justify-center ">{children}</body>
+      <body className="h-100dvh w-100dvw flex justify-center ">
+        {chatDialog}
+        {children}
+      </body>
     </html>
   );
 }

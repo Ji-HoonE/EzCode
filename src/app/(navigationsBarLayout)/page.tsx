@@ -1,3 +1,4 @@
+import ChatTriggerButton from '@/features/chat/ui/ChatTriggerButton';
 import Image from 'next/image';
 
 export default function HomePage() {
@@ -9,13 +10,14 @@ export default function HomePage() {
         코딩을 쉽게, 성장은 빠르게
       </h1>
       <section className="flex items-center">
-        <Image src="/logo/EZMainLogo.svg" alt="EZ-MainLogo" width={603} height={603} />
+        <Image src="/logo/EZMainLogo.svg" alt="EZ-MainLogo" width={603} height={603} priority />
         <section className="flex flex-col text-right">
           <p> 코드가 쉬워지는 순간,</p>
           <p className="flex items-center">
             <Image src="/logo/EZcodeLogo.svg" alt="ezCodeLogo.svg" width={200} height={56} />와 함께
           </p>
         </section>
+        <ChatTriggerButton />
       </section>
     </div>
   );
