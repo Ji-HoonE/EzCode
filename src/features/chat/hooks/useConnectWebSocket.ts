@@ -1,15 +1,19 @@
 'use client';
 import SockJS from 'sockjs-client';
 import { Client, IMessage } from '@stomp/stompjs';
-import { useRef } from 'react';
 import { Room } from '../types/stomp';
+import { sharedStompRef } from '../store/stompClientStore';
 
 const BASE_WEBSOCKET_URL = process.env.NEXT_PUBLIC_WEBSOCKET_URL;
 
 export function useConnectWebSocket(token: string) {
-  const stompRef = useRef<Client | null>(null);
+  // const stompRef = useRef<Client | null>(null);
 
-  if (stompRef.current) return;
+  if (sharedStompRef.current) {
+    console.log('already stomp connected');
+    return sharedStompRef;
+  }
+
   const socket = new SockJS(`${BASE_WEBSOCKET_URL}/ws?token=${encodeURIComponent(token)}`);
 
   const client = new Client({
@@ -63,9 +67,7 @@ export function useConnectWebSocket(token: string) {
     //   }
     // });
   };
-  stompRef.current = client;
+  sharedStompRef.current = client;
   client.activate();
-  return {
-    stompRef,
-  };
+  return sharedStompRef;
 }
