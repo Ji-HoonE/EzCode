@@ -12,7 +12,7 @@ export default function RootLayout({
   return (
     <>
       <NavigationBar />
-      <div className="mt-[110px]">{children}</div>
+      <div className="mt-27">{children}</div>
     </>
   );
 }
