@@ -1,7 +1,8 @@
 'use client';
-import { getChattingRoomPath } from '@/features/chat/constants/path';
+import { getChatRoomPath, StompInitialRoomsType } from '@/features/chat';
+import CreateChatRoom from '@/features/chat/ui/CreateChatRoom';
+
 import Link from 'next/link';
-import { StompInitialRoomsType } from '@/features/chat/types/stomp';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 
@@ -13,7 +14,6 @@ export default function ChatPage() {
   const [rooms, setRooms] = useState<StompInitialRoomsType>([]);
 
   useEffect(() => {
-    if (!localStorage) return;
     const chatRooms = localStorage.getItem('chatRooms')
       ? (JSON.parse(localStorage.getItem('chatRooms')!) as StompInitialRoomsType)
       : [];
@@ -26,7 +26,7 @@ export default function ChatPage() {
       <WebSocketClient />
       {rooms.length > 0 ? (
         rooms.map((room) => {
-          const path = getChattingRoomPath(room.roomId);
+          const path = getChatRoomPath(room.roomId);
           return (
             <Link href={path} key={room.roomId}>
               <p>{room.title}</p>
@@ -37,6 +37,7 @@ export default function ChatPage() {
       ) : (
         <div>생성된 채팅방이 없습니다.</div>
       )}
+      <CreateChatRoom />
     </div>
   );
 }
