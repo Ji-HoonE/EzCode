@@ -1,15 +1,14 @@
-import ChattingRoomPage from '@/app/chat/[chattingRoomId]/page';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import ChatRoomPage from '@/app/chat/[chatRoomId]/page';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { ChatFooterNavigation } from '@/features/chat';
-import { DialogDescription } from '@radix-ui/react-dialog';
 
-export default function ChattingRoomDialog() {
+export default function ChatRoomDialog() {
   return (
     <Dialog defaultOpen={true}>
       <DialogContent>
         <DialogTitle>채팅방</DialogTitle>
         <DialogDescription></DialogDescription>
-        <ChattingRoomPage />
+        <ChatRoomPage />
         <ChatFooterNavigation />
       </DialogContent>
     </Dialog>

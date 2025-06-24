@@ -1,5 +1,5 @@
-export interface ChattingRoomPageProps {
-  params: Promise<{ chattingRoomId: string }>;
+export interface ChatRoomPageProps {
+  params: Promise<{ chatRoomId: string }>;
 }
 
-export type ChattingRoomId = number;
+export type ChatRoomId = number;

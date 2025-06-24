@@ -1,5 +1,5 @@
 import { PATHS } from '@/constants/paths';
-import { ChattingRoomId } from '../types';
+import { ChatRoomId } from '../types';
 
 export const CHAT_PATHS = {
   CHAT: PATHS.CHAT,
@@ -7,5 +7,4 @@ export const CHAT_PATHS = {
   HOME: `${PATHS.CHAT}/home`,
 };
 
-export const getChattingRoomPath = (chattingRoomId: ChattingRoomId) =>
-  `${PATHS.CHAT}/${chattingRoomId}`;
+export const getChatRoomPath = (chatRoomId: ChatRoomId) => `${PATHS.CHAT}/${chatRoomId}`;
