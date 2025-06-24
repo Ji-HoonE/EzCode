@@ -1,9 +1,11 @@
 'use client';
 
 import { ChatInput, useJoinChatRoom } from '@/features/chat';
+import { usePathname } from 'next/navigation';
 
 export default function ChatRoomPage() {
-  const messages = useJoinChatRoom(1);
+  const roomId = usePathname().split('/')[2];
+  const messages = useJoinChatRoom(Number(roomId));
 
   return (
     <div className="flex flex-col">
@@ -15,7 +17,7 @@ export default function ChatRoomPage() {
           </li>
         ))}
       </ul>
-      <ChatInput chatRoomId={1} />
+      <ChatInput chatRoomId={Number(roomId)} />
     </div>
   );
 }
