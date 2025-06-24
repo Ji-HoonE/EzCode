@@ -1,16 +1,17 @@
 'use client';
 import { getChattingRoomPath } from '@/features/chat/constants/path';
 import { useConnectWebSocket } from '@/features/chat/hooks/useConnectWebSocket';
-import { StompInitialRoomsType } from '@/features/chat/types/stomp';
 import Link from 'next/link';
+import { StompInitialRoomsType } from '@/features/chat/types/stomp';
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+
+const WebSocketClient = dynamic(() => import('@/features/chat/ui/WebSocketClient'), {
+  ssr: false,
+});
 
 export default function ChatPage() {
   const [rooms, setRooms] = useState<StompInitialRoomsType>([]);
-
-  const stompRef = useConnectWebSocket(
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1IiwiZW1haWwiOiJnYnRteGxmQG5hdmVyLmNvbSIsInVzZXJuYW1lIjoi7Jyg7ISg7ZalIiwibmlja25hbWUiOiLsnKDshKDtlqUiLCJ1c2VyUm9sZSI6IkFETUlOIiwidGllciI6Ik5FV0JJRSIsImV4cCI6MTc1MTI2ODQ0OSwiaWF0IjoxNzUwNjYzNjQ5fQ.DoyfoP68LeybEmP8L6frvgy5-94PQeBTe3Oo-q36ejE'
-  );
 
   useEffect(() => {
     if (!localStorage) return;
@@ -19,10 +20,11 @@ export default function ChatPage() {
       : [];
 
     setRooms(chatRooms);
-  }, [stompRef]);
+  }, []);
 
   return (
     <div>
+      <WebSocketClient />
       {rooms.length > 0 ? (
         rooms.map((room) => {
           const path = getChattingRoomPath(room.roomId);
