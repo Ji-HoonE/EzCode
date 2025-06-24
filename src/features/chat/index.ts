@@ -13,5 +13,7 @@ export { default as useJoinChatRoom } from './hooks/useJoinChatRoom';
 
 //types
 export type { StompInitialRoomsType } from './types/stomp';
+export type { StompChatMessageType } from './types/stomp';
+
 export type { ChatRoomId } from './types/index';
 export type { ChatRoomPageProps } from './types/index';

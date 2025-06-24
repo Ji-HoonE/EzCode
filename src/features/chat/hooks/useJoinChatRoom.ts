@@ -3,9 +3,10 @@ import { IMessage } from '@stomp/stompjs';
 import { useState } from 'react';
 import { ChatRoomId } from '../types';
 import useConnectWebSocket from './useConnectWebSocket';
+import { StompChatMessageType } from '../types/stomp';
 
 export default function useJoinChatRoom(chatroomId: ChatRoomId) {
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<StompChatMessageType[]>([]);
   const stompRef = useConnectWebSocket();
 
   if (!stompRef?.current) return messages;
@@ -35,9 +36,13 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
       (msg: IMessage) => {
         try {
           const chat = JSON.parse(msg.body);
+          console.log(chat);
           setMessages((prev) => [...prev, chat]);
         } catch {
-          setMessages((prev) => [...prev, { name: '시스템', message: msg.body }]);
+          setMessages((prev) => [
+            ...prev,
+            { name: '시스템', message: msg.body, tier: '', time: '' },
+          ]);
         }
       },
       { receipt: chatMessageReceiptId }
