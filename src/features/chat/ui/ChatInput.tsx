@@ -1,15 +1,22 @@
 'use client';
 
 import { BASE_URL } from '@/constants/env';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { ChatRoomId } from '../types';
 
 export default function ChatInput({ chatRoomId }: { chatRoomId: ChatRoomId }) {
-  const accessToken = localStorage.getItem('accessToken');
+  const [accessToken, setAccessToken] = useState('');
   const [value, setValue] = useState('');
 
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      setAccessToken(accessToken);
+    }
+  }, []);
+
   const handleSubmitChat = async () => {
-    fetch(`${BASE_URL}/api/room/${chatRoomId}/chat`, {
+    fetch(`${BASE_URL}/api/rooms/${chatRoomId}/chat`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -17,7 +24,7 @@ export default function ChatInput({ chatRoomId }: { chatRoomId: ChatRoomId }) {
         Authorization: 'Bearer ' + accessToken,
       },
       body: JSON.stringify({ message: value }),
-    });
+    }).then(() => setValue(''));
   };
 
   return (

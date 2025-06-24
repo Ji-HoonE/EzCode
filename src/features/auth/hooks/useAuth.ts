@@ -22,7 +22,7 @@ export default function useAuth(authForm: any, authType: AuthType) {
     })
       .then((res) => res.json())
       .then((data) => {
-        localStorage.setItem('accessToken', data.result.accessToken);
+        localStorage.setItem('accessToken', data.result.accessToken.split(/\s+/)[1]);
         localStorage.setItem('refreshToken', data.result.refreshToken);
       })
       .catch((err) => console.error('Error:', err));

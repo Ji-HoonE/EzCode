@@ -1,10 +1,9 @@
 'use client';
 
-import { ChatInput, useConnectWebSocket, useJoinChatRoom } from '@/features/chat';
+import { ChatInput, useJoinChatRoom } from '@/features/chat';
 
 export default function ChatRoomPage() {
-  const stompRef = useConnectWebSocket();
-  const messages = useJoinChatRoom(1, stompRef);
+  const messages = useJoinChatRoom(1);
 
   return (
     <div className="flex flex-col">

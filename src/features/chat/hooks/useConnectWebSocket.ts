@@ -4,18 +4,23 @@ import { Client, IMessage } from '@stomp/stompjs';
 import { Room } from '../types/stomp';
 import { sharedStompRef } from '../store/stompClientStore';
 import { BASE_URL } from '@/constants/env';
+import { useEffect, useState } from 'react';
 
 export default function useConnectWebSocket() {
-  // const stompRef = useRef<Client | null>(null);
-
-  const accessToken = localStorage.getItem('accessToken');
+  const [accessToken, setAccessToken] = useState('');
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      setAccessToken(accessToken);
+    }
+  });
 
   if (sharedStompRef.current || !accessToken) {
     console.log('already stomp connected');
     return sharedStompRef;
   }
 
-  const socket = new SockJS(`${BASE_URL}/ws?token=${encodeURIComponent(accessToken)}`);
+  const socket = new SockJS(`${BASE_URL}/ws?chat-token=${encodeURIComponent(accessToken)}`);
 
   const client = new Client({
     webSocketFactory: () => socket,

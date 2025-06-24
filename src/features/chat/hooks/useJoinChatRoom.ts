@@ -1,13 +1,12 @@
 'use client';
-import { Client, IMessage } from '@stomp/stompjs';
+import { IMessage } from '@stomp/stompjs';
 import { useState } from 'react';
 import { ChatRoomId } from '../types';
+import useConnectWebSocket from './useConnectWebSocket';
 
-export default function useJoinChatRoom(
-  chatroomId: ChatRoomId,
-  stompRef: React.RefObject<Client | null>
-) {
+export default function useJoinChatRoom(chatroomId: ChatRoomId) {
   const [messages, setMessages] = useState<any[]>([]);
+  const stompRef = useConnectWebSocket();
 
   if (!stompRef?.current) return messages;
 
@@ -46,7 +45,7 @@ export default function useJoinChatRoom(
 
     // 입장 메시지 전송
     stompRef.current.publish({
-      destination: `/chat/room/${chatroomId}/enter`,
+      destination: `/chat/rooms/${chatroomId}/enter`,
       body: String(chatroomId),
     });
   };

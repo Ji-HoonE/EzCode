@@ -1,11 +1,18 @@
 'use client';
 
 import { BASE_URL } from '@/constants/env';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 export default function CreateChatRoom() {
   const [chatRoomTitle, setChatRoomTitle] = useState('');
-  const accessToken = localStorage.getItem('accessToken');
+  const [accessToken, setAccessToken] = useState('');
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      setAccessToken(accessToken);
+    }
+  }, []);
 
   const createChatRoom = async () => {
     fetch(`${BASE_URL}/api/chatrooms`, {
