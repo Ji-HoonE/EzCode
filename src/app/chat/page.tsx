@@ -1,6 +1,5 @@
 'use client';
 import { getChattingRoomPath } from '@/features/chat/constants/path';
-import { useConnectWebSocket } from '@/features/chat/hooks/useConnectWebSocket';
 import Link from 'next/link';
 import { StompInitialRoomsType } from '@/features/chat/types/stomp';
 import dynamic from 'next/dynamic';
