@@ -35,8 +35,6 @@ export default function useConnectWebSocket() {
     client.subscribe(
       '/user/queue/chatrooms',
       (msg: IMessage) => {
-        console.log('채팅방:', JSON.parse(msg.body));
-
         try {
           const list = JSON.parse(msg.body);
           localStorage.setItem(

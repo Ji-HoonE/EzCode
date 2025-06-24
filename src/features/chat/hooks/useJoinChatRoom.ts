@@ -36,7 +36,6 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
       (msg: IMessage) => {
         try {
           const chat = JSON.parse(msg.body);
-          console.log(chat);
           setMessages((prev) => [...prev, chat]);
         } catch {
           setMessages((prev) => [
