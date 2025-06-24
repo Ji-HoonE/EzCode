@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { AuthType, SigninFormType, SignupFormType } from '../types';
 import { BASE_URL } from '@/constants/env';
 
-export default function useAuth(authForm: any, authType: AuthType) {
+export default function useAuth(authForm: SigninFormType | SignupFormType, authType: AuthType) {
   const [formData, setFormData] = useState<SigninFormType | SignupFormType>(authForm);
 
   const handleChangeAuthForm = (key: string, value: string) => {
