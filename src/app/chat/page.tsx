@@ -1,14 +1,14 @@
 'use client';
-import { useConnectWebSocket } from '@/features/chat/hooks/useConnectWebSocket';
 import { StompInitialRoomsType } from '@/features/chat/types/stomp';
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+
+const WebSocketClient = dynamic(() => import('@/features/chat/ui/WebSocketClient'), {
+  ssr: false,
+});
 
 export default function ChatPage() {
   const [rooms, setRooms] = useState<StompInitialRoomsType>([]);
-
-  const stompRef = useConnectWebSocket(
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1IiwiZW1haWwiOiJnYnRteGxmQG5hdmVyLmNvbSIsInVzZXJuYW1lIjoi7Jyg7ISg7ZalIiwibmlja25hbWUiOiLsnKDshKDtlqUiLCJ1c2VyUm9sZSI6IkFETUlOIiwidGllciI6Ik5FV0JJRSIsImV4cCI6MTc1MTAyNzQ5NywiaWF0IjoxNzUwNDIyNjk3fQ.GYBJkFE4Q_GyiRNjefuyanChGs4h0LJuRyzIrHTdJE0'
-  );
 
   useEffect(() => {
     if (!localStorage) return;
@@ -17,10 +17,11 @@ export default function ChatPage() {
       : [];
 
     setRooms(chatRooms);
-  }, [stompRef]);
+  }, []);
 
   return (
     <div>
+      <WebSocketClient />
       {rooms.length > 0 ? (
         rooms.map((room) => {
           return (
