@@ -3,18 +3,19 @@ import SockJS from 'sockjs-client';
 import { Client, IMessage } from '@stomp/stompjs';
 import { Room } from '../types/stomp';
 import { sharedStompRef } from '../store/stompClientStore';
+import { BASE_URL } from '@/constants/env';
 
-const BASE_WEBSOCKET_URL = process.env.NEXT_PUBLIC_WEBSOCKET_URL;
-
-export function useConnectWebSocket(token: string) {
+export default function useConnectWebSocket() {
   // const stompRef = useRef<Client | null>(null);
 
-  if (sharedStompRef.current) {
+  const accessToken = localStorage.getItem('accessToken');
+
+  if (sharedStompRef.current || !accessToken) {
     console.log('already stomp connected');
     return sharedStompRef;
   }
 
-  const socket = new SockJS(`${BASE_WEBSOCKET_URL}/ws?token=${encodeURIComponent(token)}`);
+  const socket = new SockJS(`${BASE_URL}/ws?token=${encodeURIComponent(accessToken)}`);
 
   const client = new Client({
     webSocketFactory: () => socket,
