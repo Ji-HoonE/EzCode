@@ -10,9 +10,19 @@ RUN npm install -g pnpm
 COPY pnpm-lock.yaml package.json ./
 RUN pnpm install
 
-# 앱 전체 복사 후 빌드
+# 앱 전체 복사
 COPY . .
-RUN pnpm run build
+
+#  build-time 환경변수 받을 ARG 정의
+ARG NEXT_PUBLIC_BASE_URL
+ARG NEXT_PUBLIC_WEBSOCKET_URL
+ARG NEXT_PUBLIC_WS_URL
+
+#  환경변수 주입하여 빌드 실행
+RUN NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL \
+    NEXT_PUBLIC_WEBSOCKET_URL=$NEXT_PUBLIC_WEBSOCKET_URL \
+    NEXT_PUBLIC_WS_URL=$NEXT_PUBLIC_WS_URL \
+    pnpm run build
 
 # 2단계: 실행 단계
 FROM node:18-alpine AS runner
