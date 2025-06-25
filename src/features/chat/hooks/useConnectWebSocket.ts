@@ -8,12 +8,13 @@ import { useEffect, useState } from 'react';
 
 export default function useConnectWebSocket() {
   const [accessToken, setAccessToken] = useState('');
+
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
       setAccessToken(accessToken);
     }
-  });
+  }, []);
 
   if (sharedStompRef.current || !accessToken) {
     console.log('already stomp connected');
@@ -71,6 +72,7 @@ export default function useConnectWebSocket() {
     //   }
     // });
   };
+
   sharedStompRef.current = client;
   client.activate();
   return sharedStompRef;
