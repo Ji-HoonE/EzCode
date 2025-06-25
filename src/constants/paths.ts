@@ -3,7 +3,7 @@ export const PATHS = {
   SIGNUP: '/signup',
 
   CODING_TEST: '/coding-test',
-  COMMUNITY: '/community',
+  RANK: '/rank',
   BUSINESS: '/business',
   CHAT: '/chat',
 };
