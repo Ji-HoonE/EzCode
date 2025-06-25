@@ -2,8 +2,8 @@ import { PATHS } from '@/constants/paths';
 import Link from 'next/link';
 
 export default function StartButton() {
-  const isLogin = true;
-  const path = isLogin ? PATHS.SIGNIN : PATHS.SIGNIN;
+  const isLoggedIn = true;
+  const path = isLoggedIn ? PATHS.SIGNIN : PATHS.SIGNIN;
 
   return (
     <Link href={path}>
