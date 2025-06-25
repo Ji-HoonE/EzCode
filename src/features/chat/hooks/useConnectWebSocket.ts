@@ -1,16 +1,27 @@
 'use client';
 import SockJS from 'sockjs-client';
 import { Client, IMessage } from '@stomp/stompjs';
-import { useRef } from 'react';
 import { Room } from '../types/stomp';
+import { sharedStompRef } from '../store/stompClientStore';
+import { BASE_URL } from '@/constants/env';
+import { useEffect, useState } from 'react';
 
-const BASE_WEBSOCKET_URL = process.env.NEXT_PUBLIC_WEBSOCKET_URL;
+export default function useConnectWebSocket() {
+  const [accessToken, setAccessToken] = useState('');
 
-export function useConnectWebSocket(token: string) {
-  const stompRef = useRef<Client | null>(null);
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      setAccessToken(accessToken);
+    }
+  }, []);
 
-  if (stompRef.current) return;
-  const socket = new SockJS(`${BASE_WEBSOCKET_URL}/ws?token=${encodeURIComponent(token)}`);
+  if (sharedStompRef.current || !accessToken) {
+    console.log('already stomp connected');
+    return sharedStompRef;
+  }
+
+  const socket = new SockJS(`${BASE_URL}/ws?chat-token=${encodeURIComponent(accessToken)}`);
 
   const client = new Client({
     webSocketFactory: () => socket,
@@ -25,8 +36,6 @@ export function useConnectWebSocket(token: string) {
     client.subscribe(
       '/user/queue/chatrooms',
       (msg: IMessage) => {
-        console.log('채팅방:', JSON.parse(msg.body));
-
         try {
           const list = JSON.parse(msg.body);
           localStorage.setItem(
@@ -63,9 +72,8 @@ export function useConnectWebSocket(token: string) {
     //   }
     // });
   };
-  stompRef.current = client;
+
+  sharedStompRef.current = client;
   client.activate();
-  return {
-    stompRef,
-  };
+  return sharedStompRef;
 }

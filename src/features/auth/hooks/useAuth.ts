@@ -1,7 +1,7 @@
 'use client';
-import { BASE_URL } from '@/types/url';
 import { useState } from 'react';
 import { AuthType, SigninFormType, SignupFormType } from '../types';
+import { BASE_URL } from '@/constants/env';
 
 export default function useAuth(authForm: SigninFormType | SignupFormType, authType: AuthType) {
   const [formData, setFormData] = useState<SigninFormType | SignupFormType>(authForm);
@@ -22,7 +22,7 @@ export default function useAuth(authForm: SigninFormType | SignupFormType, authT
     })
       .then((res) => res.json())
       .then((data) => {
-        localStorage.setItem('accessToken', data.result.accessToken);
+        localStorage.setItem('accessToken', data.result.accessToken.split(/\s+/)[1]);
         localStorage.setItem('refreshToken', data.result.refreshToken);
       })
       .catch((err) => console.error('Error:', err));
