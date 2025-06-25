@@ -29,7 +29,7 @@ export default function NavigationBar() {
           alt="notification-icon"
           priority
         />
-        <Link href={PATHS.LOGIN}>로그인</Link>
+        <Link href={PATHS.SIGNIN}>로그인</Link>
       </div>
     </header>
   );
