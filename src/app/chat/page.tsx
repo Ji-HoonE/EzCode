@@ -1,8 +1,7 @@
 'use client';
-import { getChatRoomPath, StompInitialRoomsType } from '@/features/chat';
+import { ChatRoom, StompInitialRoomsType } from '@/features/chat';
 import CreateChatRoom from '@/features/chat/ui/CreateChatRoom';
 
-import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 
@@ -22,22 +21,18 @@ export default function ChatPage() {
   }, []);
 
   return (
-    <div>
+    <main>
       <WebSocketClient />
       {rooms.length > 0 ? (
-        rooms.map((room) => {
-          const path = getChatRoomPath(room.roomId);
-          return (
-            <Link href={path} key={room.roomId}>
-              <p>{room.title}</p>
-              <p>{room.headCount}명</p>
-            </Link>
-          );
-        })
+        <ul>
+          {rooms.map((room) => {
+            return <ChatRoom key={room.roomId} room={room} />;
+          })}
+        </ul>
       ) : (
         <div>생성된 채팅방이 없습니다.</div>
       )}
       <CreateChatRoom />
-    </div>
+    </main>
   );
 }
