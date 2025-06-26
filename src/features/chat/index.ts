@@ -11,6 +11,7 @@ export { getChatRoomPath } from './constants/path';
 //hooks
 export { default as useConnectWebSocket } from './hooks/useConnectWebSocket';
 export { default as useJoinChatRoom } from './hooks/useJoinChatRoom';
+export { default as useSubChatRooms } from './hooks/useSubChatRooms';
 
 //types
 export type { StompInitialRoomsType } from './types/stomp';

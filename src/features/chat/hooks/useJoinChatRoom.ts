@@ -16,13 +16,14 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
 
   stompRef.current.onConnect = () => {
     if (!stompRef.current) return;
+
     // 채팅방 메시지 초기 구독
     stompRef.current.subscribe(
       '/user/queue/chat',
       (msg: IMessage) => {
         try {
           const chats = JSON.parse(msg.body);
-          localStorage.setItem('initialMessage', JSON.stringify(chats));
+          setMessages(chats);
         } catch (e) {
           console.error('채팅 내역 파싱 오류', e);
         }

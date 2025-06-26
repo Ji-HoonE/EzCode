@@ -2,7 +2,7 @@ export interface Room {
   roomId: number;
   title: string;
   headCount: number;
-  eventType: 'GET';
+  eventType: 'GET' | 'CREATE' | 'DELETE' | 'UPDATE';
 }
 
 export type StompInitialRoomsType = Room[];
