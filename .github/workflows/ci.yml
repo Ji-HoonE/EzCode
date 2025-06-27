@@ -1,0 +1,61 @@
+# .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      # 1) 코드를 checkout
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2) Node / pnpm 설치
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      # 3) 의존성 설치 (lockfile 기준)
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 4) 타입검사 & 린트
+      - name: Type-check
+        run: pnpm exec tsc --noEmit
+
+      - name: Lint
+        run: pnpm exec eslint .
+
+      # 5) 테스트 (jest / vitest 등 사용 시)
+      - name: Run tests
+        run: pnpm test
+
+      # 6) 프로덕션 빌드
+      - name: Build Next.js
+        run: pnpm build
+
+      # 7) 빌드 산출물 아티팩트로 업로드 (선택)
+      - name: Upload build artifact
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: nextjs-build
+          path: .next/
