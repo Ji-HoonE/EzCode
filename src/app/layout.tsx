@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="h-100dvh w-100dvw flex justify-center ">
+      <body className="flex justify-center">
         <QueryProvider>
           {chatDialog}
           {children}
