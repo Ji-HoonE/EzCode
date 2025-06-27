@@ -25,10 +25,10 @@
 
 @layer {
   html {
-    height: 100dvw;
+    height: screen;
   }
   body {
-    height: 100dvw;
+    height: screen;
     font-family: 'NanumSquare';
     color: var(--color-white);
     background-color: var(--color-black);
