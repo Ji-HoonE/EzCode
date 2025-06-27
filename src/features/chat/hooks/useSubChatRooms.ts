@@ -35,22 +35,18 @@ export default function useSubChatRooms() {
       '/topic/chatrooms',
       (msg: IMessage) => {
         try {
-          console.log('업데이트 직전 방들', chatRooms);
           const update = JSON.parse(msg.body);
           switch (update.eventType) {
             case 'CREATE': {
               return setChatRooms((prev) => [...prev, update]);
             }
             case 'DELETE': {
-              const filteredRooms = chatRooms.filter((room) => room.roomId !== update.roomId);
-              setChatRooms(filteredRooms);
-              break;
+              return setChatRooms((prev) => prev.filter((room) => room.roomId !== update.roomId));
             }
             case 'UPDATE': {
-              const updatedRooms = chatRooms.map((room) =>
-                room.roomId === update.roomId ? update : room
+              return setChatRooms((prev) =>
+                prev.map((room) => (room.roomId === update.roomId ? update : room))
               );
-              return setChatRooms(updatedRooms);
             }
           }
         } catch (e) {
