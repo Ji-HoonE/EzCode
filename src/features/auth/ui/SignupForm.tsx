@@ -4,13 +4,13 @@ import useAuth from '../hooks/useAuth';
 import { DEFAULT_SIGNUP_FORM_VALUE } from '../model/defaultFormValues';
 
 export default function SignupForm() {
-  const { handleChangeAuthForm, submitAuthForm } = useAuth(DEFAULT_SIGNUP_FORM_VALUE, 'signup');
+  const { handleChangeAuthForm } = useAuth(DEFAULT_SIGNUP_FORM_VALUE, 'signup');
 
   return (
     <form
       onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        submitAuthForm();
+        // submitAuthForm();
       }}
     >
       <Input

@@ -4,13 +4,12 @@ import useAuth from '../hooks/useAuth';
 import { DEFAULT_SIGNIN_FORM_VALUE } from '../model/defaultFormValues';
 
 export default function SigninForm() {
-  const { handleChangeAuthForm, submitAuthForm } = useAuth(DEFAULT_SIGNIN_FORM_VALUE, 'signin');
+  const { handleChangeAuthForm, signIn } = useAuth(DEFAULT_SIGNIN_FORM_VALUE, 'signin');
 
   return (
     <form
       onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        submitAuthForm();
       }}
     >
       <Input
@@ -29,7 +28,7 @@ export default function SigninForm() {
           handleChangeAuthForm('password', e.target.value)
         }
       />
-      <button type="submit">로그인</button>
+      <button type="submit" onClick={signIn}>로그인</button>
     </form>
   );
 }

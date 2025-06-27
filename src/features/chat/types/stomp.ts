@@ -6,3 +6,10 @@ export interface Room {
 }
 
 export type StompInitialRoomsType = Room[];
+
+export interface StompChatMessageType {
+  message: string;
+  name: string;
+  tier: string;
+  time: string;
+}
