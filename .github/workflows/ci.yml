@@ -22,40 +22,45 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2) Node.js 설정 (캐시 포함)
+      # 2) Node.js 설정 (pnpm 캐시 포함)
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
+          cache: pnpm
 
-      # 3) pnpm 설치
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 8
+      # 3) npm으로 pnpm CLI 글로벌 설치
+      - name: Install pnpm via npm
+        run: npm install -g pnpm@8
 
-      # 4) 의존성 설치 (lockfile 고정)
+      # 4) 툴 버전 확인 (확인용)
+      - name: Check tool versions
+        run: |
+          echo "Node: $(node --version)"
+          echo "npm:  $(npm --version)"
+          echo "pnpm: $(pnpm --version)"
+
+      # 5) 의존성 설치 (lockfile 고정)
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 5) 타입 검사
+      # 6) 타입 검사
       - name: Type-check
         run: pnpm exec tsc --noEmit
 
-      # 6) 린트 검사
+      # 7) 린트 검사
       - name: Lint
         run: pnpm exec eslint .
 
-      # 7) 유닛/통합 테스트
+      # 8) 테스트 실행
       - name: Run tests
         run: pnpm test
 
-      # 8) 프로덕션 빌드
+      # 9) 프로덕션 빌드
       - name: Build Next.js
         run: pnpm build
 
-      # 9) 빌드 산출물 업로드 (아티팩트)
+      # 10) 빌드 산출물(아티팩트) 업로드
       - name: Upload build artifact
         if: success()
         uses: actions/upload-artifact@v4
