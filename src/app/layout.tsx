@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import QueryProvider from '@/query/QueryProvider';
 
 export const metadata: Metadata = {
   title: 'EZ-Code',
@@ -18,8 +19,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="flex justify-center">
-        {chatDialog}
-        {children}
+        <QueryProvider>
+          {chatDialog}
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );
