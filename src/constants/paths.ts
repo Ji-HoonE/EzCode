@@ -2,8 +2,7 @@ export const PATHS = {
   SIGNIN: '/signin',
   SIGNUP: '/signup',
 
-  CODING_TEST: '/coding-test',
+  PROBLEMS: '/problems',
   RANK: '/rank',
-  BUSINESS: '/business',
   CHAT: '/chat',
 };

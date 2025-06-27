@@ -15,7 +15,7 @@ export default function NavigationBar() {
             priority
           />
         </Link>
-        <Link href={PATHS.CODING_TEST}>문제풀이</Link>
+        <Link href={PATHS.PROBLEMS}>문제풀이</Link>
         <Link href={PATHS.RANK}>랭킹보기</Link>
         <Image
           src="/icons/notification-icon.svg"
