@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 export default function HomePage() {
   return (
-    <main className="w-full bg-gradient flex justify-center h-full pt-27">
+    <main className="w-full bg-gradient flex justify-center h-full pt-20">
       <section>
         <div className="flex items-center">
           <Image src="/logo/EZMainLogo.svg" alt="EZ-MainLogo" width={603} height={603} priority />

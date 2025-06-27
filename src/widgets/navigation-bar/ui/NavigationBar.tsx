@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function NavigationBar() {
   return (
-    <header className="w-full fixed top-0 h-27 px-20 rounded-b-4xl bg-black">
+    <header className="w-full fixed top-0 h-20 px-20 rounded-b-4xl bg-black">
       <div className="flex w-full justify-around items-center h-full">
         <Link href="/">
           <Image
