@@ -2,10 +2,16 @@ export interface IRequestConfig extends RequestInit {
     params?: Record<string, string>;
 }
 
-export interface IApiResponse<T = unknown> {
+export interface IApiResponseFormat<T> {
+    success: boolean;
     status: number;
-    data: T;
-    error?: string;
+    message: string;
+    result: T;
+}
+
+
+export interface IApiResponse<T = unknown> {
+    data: IApiResponseFormat<T>;
 }
 
 export interface IRequestInterceptorConfig {

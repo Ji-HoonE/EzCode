@@ -1,59 +1,57 @@
 'use client';
 import { Input } from '@/components/ui/input';
-import useAuth from '../hooks/useAuth';
-import { DEFAULT_SIGNUP_FORM_VALUE } from '../model/defaultFormValues';
+import useSignUp from '../hooks/useSignUp';
 
-export default function SignupForm() {
-  const { handleChangeAuthForm } = useAuth(DEFAULT_SIGNUP_FORM_VALUE, 'signup');
+const SignupForm = () => {
+  const { signUpInfo, handleChangeSignUpInfo, handleSignUpClick } = useSignUp();
 
   return (
-    <form
-      onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // submitAuthForm();
-      }}
-    >
+    <div>
       <Input
         type="text"
         placeholder="username"
         name="username"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleChangeAuthForm('username', e.target.value)
-        }
+        value={signUpInfo.username}
+        onChange={handleChangeSignUpInfo}
       />
       <Input
         type="text"
         placeholder="nickname"
         name="nickname"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleChangeAuthForm('nickname', e.target.value)
-        }
+        value={signUpInfo.nickname}
+        onChange={handleChangeSignUpInfo}
       />
       <Input
         type="text"
         placeholder="email"
         name="email"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleChangeAuthForm('email', e.target.value)
-        }
+        value={signUpInfo.email}
+        onChange={handleChangeSignUpInfo}
       />
       <Input
         type="password"
         placeholder="password"
         name="password"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleChangeAuthForm('password', e.target.value)
-        }
+        value={signUpInfo.password}
+        onChange={handleChangeSignUpInfo}
       />
       <Input
         type="password"
         placeholder="passwordConfirm"
         name="passwordConfirm"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleChangeAuthForm('passwordConfirm', e.target.value)
-        }
+        value={signUpInfo.passwordConfirm}
+        onChange={handleChangeSignUpInfo}
       />
-      <button type="submit">회원가입</button>
-    </form>
+      <Input
+        type="age"
+        placeholder="age"
+        name="age"
+        value={signUpInfo.age}
+        onChange={handleChangeSignUpInfo}
+      />
+      <button onClick={handleSignUpClick}>회원가입</button>
+    </div>
   );
 }
+
+export default SignupForm;
