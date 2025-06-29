@@ -1,7 +1,7 @@
 import ApiHelper from "@/api/client/api";
 import { API_URL } from "@/api/constants/api.constants";
 import { useMutation } from "@tanstack/react-query";
-import { IRefreshResponse, ISignInRequest, ISignInResponse, ISignUpRequest, ISignUpResponse } from "./auth.interface";
+import { IRefreshResponse, ISignUpRequest, ISignUpResponse } from "./auth.interface";
 import { BASE_URL } from "@/constants/env";
 
 /** 회원가입 뮤테이션 */
