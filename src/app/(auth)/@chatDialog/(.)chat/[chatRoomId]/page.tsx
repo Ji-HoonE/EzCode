@@ -1,4 +1,4 @@
-import ChatRoomPage from '@/app/chat/[chatRoomId]/page';
+import ChatRoomPage from '@/app/(auth)/chat/[chatRoomId]/page';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { ChatFooterNavigation } from '@/features/chat';
 

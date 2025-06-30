@@ -1,34 +1,44 @@
 'use client';
 import { Input } from '@/components/ui/input';
-import useAuth from '../hooks/useAuth';
-import { DEFAULT_SIGNIN_FORM_VALUE } from '../model/defaultFormValues';
+import useLogin from '../hooks/useLogin';
+import { useRouter } from 'next/navigation';
 
-export default function SigninForm() {
-  const { handleChangeAuthForm, signIn } = useAuth(DEFAULT_SIGNIN_FORM_VALUE, 'signin');
+const SigninForm = () => {
+  const router = useRouter();
+  const { loginInfo, handleChangeLoginInfo, handleSignInClick } = useLogin();
 
   return (
-    <form
-      onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-      }}
-    >
-      <Input
-        type="text"
-        placeholder="email"
-        name="email"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleChangeAuthForm('email', e.target.value)
-        }
-      />
-      <Input
-        type="password"
-        placeholder="비번"
-        name="password"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleChangeAuthForm('password', e.target.value)
-        }
-      />
-      <button type="submit" onClick={signIn}>로그인</button>
-    </form>
+    <div className='pt-[47px] pb-[50px] px-[65px] flex flex-col items-center'>
+      <p>Login</p>
+      <div className='flex flex-col gap-[13px] mt-[27px]'>
+        <Input
+          type="text"
+          placeholder="이메일"
+          name="email"
+          value={loginInfo.email}
+          onChange={handleChangeLoginInfo}
+        />
+        <Input
+          type="password"
+          placeholder="비밀번호"
+          name="password"
+          value={loginInfo.password}
+          onChange={handleChangeLoginInfo}
+        />
+      </div>
+      <div className='flex flex-col mt-[25px] gap-[20px]'>
+        <button onClick={handleSignInClick}>로그인</button>
+        <button onClick={() => router.push('/signup')}>이메일 회원가입</button>
+      </div>
+      <div className='flex justify-end w-full mt-[13px]'>
+        <p onClick={() => router.push('/find/id')}>아이디 찾기</p>
+      </div>
+      <div className='flex justify-end w-full mt-[13px]'>
+        <p onClick={() => router.push('/find/password')}>비밀번호 찾기</p>
+      </div>
+      <div className="border-[1px] w-full mt-[16px]" />
+    </div >
   );
 }
+
+export default SigninForm;

@@ -1,26 +1,17 @@
-import type { Metadata } from 'next';
+import { Toaster } from 'sonner';
 import './globals.css';
 import QueryProvider from '@/query/QueryProvider';
 
-export const metadata: Metadata = {
-  title: 'EZ-Code',
-  description: '임시 description',
-  icons: {
-    icon: '/favicon.ico',
-  },
-};
 export default function RootLayout({
   children,
-  chatDialog,
 }: Readonly<{
   children: React.ReactNode;
-  chatDialog: React.ReactNode;
 }>) {
   return (
     <html lang="ko">
       <body className="flex justify-center">
         <QueryProvider>
-          {chatDialog}
+          <Toaster />
           {children}
         </QueryProvider>
       </body>
