@@ -1,12 +1,17 @@
 import { BASE_URL } from '@/constants/env';
 import { IApiResponseFormat } from '../interceptor/interceptor.interface';
 import { getSession } from 'next-auth/react';
-import { requestInterceptor } from '../interceptor/request.interceptor';
 import { responseInterceptor } from '../interceptor/response.interceptor';
 import { API_URL } from '../constants/api.constants';
+import { requestClientInterceptor, requestServerInterceptor } from '../interceptor/request.interceptor';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/authOptions';
+
+type ReqType = 'client' | 'server';
 
 interface RequestConfig extends RequestInit {
   params?: Record<string, string>;
+  reqType?: ReqType;
 }
 
 interface ApiResponse<T = unknown> {
@@ -32,16 +37,17 @@ const buildUrl = (endpoint: string, params?: Record<string, string>): string => 
 const defaultConfig: Partial<RequestConfig> = {
   credentials: 'include',
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
+  reqType: 'client',
 };
 const refreshToken = async (refreshToken: string) => {
   try {
     const response = await fetch(`${BASE_URL}/api${API_URL.AUTH.REFRESH}`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${refreshToken}`
-      }
+        Authorization: `Bearer ${refreshToken}`,
+      },
     });
 
     const data = await response.json();
@@ -53,28 +59,47 @@ const refreshToken = async (refreshToken: string) => {
   }
 };
 
-const request = async <T>(endpoint: string, config: RequestConfig & { method: string }): Promise<ApiResponse<T>> => {
+const request = async <T>(
+  endpoint: string,
+  config: RequestConfig & { method: string }
+): Promise<ApiResponse<T>> => {
   const url = buildUrl(endpoint, config?.params);
 
   try {
-    const interceptedConfig = await requestInterceptor(config);
+    console.log('config.reqType', config.reqType);
+    const interceptedConfig = await (config.reqType === 'server'
+      ? requestServerInterceptor(config)
+      : requestClientInterceptor(config));
+
     const response = await fetch(url, interceptedConfig);
 
     if (response.status === 401) {
-      const session = await getSession();
+      const session = config.reqType === 'server'
+        ? await getServerSession(authOptions)
+        : await getSession();
+
       if (!session?.refreshToken) {
         throw new Error('No refresh token');
       }
 
       try {
-        const newAccessToken = await refreshToken(session.refreshToken as string);
-        const retryConfig = await requestInterceptor({
-          ...config,
-          headers: {
-            ...config.headers,
-            Authorization: `Bearer ${newAccessToken}`,
-          },
-        });
+        const newAccessToken = await refreshToken(session.refreshToken as string)
+
+        const retryConfig = await (config.reqType === 'server'
+          ? requestServerInterceptor({
+            ...config,
+            headers: {
+              ...config.headers,
+              Authorization: `Bearer ${newAccessToken}`,
+            },
+          })
+          : requestClientInterceptor({
+            ...config,
+            headers: {
+              ...config.headers,
+              Authorization: `Bearer ${newAccessToken}`,
+            },
+          }));
 
         const retryResponse = await fetch(url, retryConfig);
         return responseInterceptor<T>(retryResponse);
@@ -90,7 +115,6 @@ const request = async <T>(endpoint: string, config: RequestConfig & { method: st
 };
 
 const ApiHelper = {
-
   /**
    * GET 요청
    * @template T 응답 데이터의 타입
@@ -103,6 +127,7 @@ const ApiHelper = {
       method: 'GET',
       ...defaultConfig,
       ...config,
+      reqType: config?.reqType || 'client',
     });
   },
 
@@ -120,6 +145,7 @@ const ApiHelper = {
       body: JSON.stringify(data),
       ...defaultConfig,
       ...config,
+      reqType: config?.reqType || 'client',
     });
   },
 
@@ -137,6 +163,7 @@ const ApiHelper = {
       body: JSON.stringify(data),
       ...defaultConfig,
       ...config,
+      reqType: config?.reqType || 'client',
     });
   },
 
@@ -152,6 +179,7 @@ const ApiHelper = {
       method: 'DELETE',
       ...defaultConfig,
       ...config,
+      reqType: config?.reqType || 'client',
     });
   },
 };

@@ -1,5 +1,4 @@
-'use client';
-
+'use client'
 import ApiHelper from '@/api/client/api';
 import { API_CONSTANTS } from '@/api/constants/api.constants';
 import ChatTriggerButton from '@/features/chat/ui/ChatTriggerButton';
@@ -12,7 +11,14 @@ import { useEffect } from 'react';
 
 export default function HomePage() {
 
+
   const { mutateAsync } = useLogoutMutation();
+
+  // 서버 컴포넌트 사용시 리액트쿼리도 사용불가 그럴때 요청시
+  // const fetchUserInfo = async () => {
+  //   const response = await ApiHelper.get('/users', { reqType: 'client' });
+  //   console.log('response', response);
+  // }
 
   // TODO 로그아웃 api 임의연동
   const handleLogout = async () => {
@@ -29,7 +35,7 @@ export default function HomePage() {
   // TODO 테스트 유저정보 api 임의연동
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const response = await ApiHelper.get('/users');
+      const response = await ApiHelper.get('/users', { reqType: 'client' });
       console.log('response', response);
     }
     fetchUserInfo();
