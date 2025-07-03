@@ -21,7 +21,6 @@ export const requestClientInterceptor = async (config: IRequestConfig): Promise<
   };
 };
 
-
 export const requestServerInterceptor = async (config: IRequestConfig): Promise<IRequestConfig> => {
   const session = await getServerSession(authOptions);
   const token = session?.accessToken;

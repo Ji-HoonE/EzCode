@@ -7,6 +7,9 @@ export const API_URL = {
     LOGOUT: '/logout',
     FIND_PASSWORD: '/auth/find-password',
   },
+  PROBLEM: {
+    GET_PROBLEMS: '/problems',
+  },
 };
 
 /** API 요청 주소 */

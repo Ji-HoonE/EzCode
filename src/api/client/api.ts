@@ -3,7 +3,10 @@ import { IApiResponseFormat } from '../interceptor/interceptor.interface';
 import { getSession } from 'next-auth/react';
 import { responseInterceptor } from '../interceptor/response.interceptor';
 import { API_URL } from '../constants/api.constants';
-import { requestClientInterceptor, requestServerInterceptor } from '../interceptor/request.interceptor';
+import {
+  requestClientInterceptor,
+  requestServerInterceptor,
+} from '../interceptor/request.interceptor';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
 
@@ -74,32 +77,31 @@ const request = async <T>(
     const response = await fetch(url, interceptedConfig);
 
     if (response.status === 401) {
-      const session = config.reqType === 'server'
-        ? await getServerSession(authOptions)
-        : await getSession();
+      const session =
+        config.reqType === 'server' ? await getServerSession(authOptions) : await getSession();
 
       if (!session?.refreshToken) {
         throw new Error('No refresh token');
       }
 
       try {
-        const newAccessToken = await refreshToken(session.refreshToken as string)
+        const newAccessToken = await refreshToken(session.refreshToken as string);
 
         const retryConfig = await (config.reqType === 'server'
           ? requestServerInterceptor({
-            ...config,
-            headers: {
-              ...config.headers,
-              Authorization: `Bearer ${newAccessToken}`,
-            },
-          })
+              ...config,
+              headers: {
+                ...config.headers,
+                Authorization: `Bearer ${newAccessToken}`,
+              },
+            })
           : requestClientInterceptor({
-            ...config,
-            headers: {
-              ...config.headers,
-              Authorization: `Bearer ${newAccessToken}`,
-            },
-          }));
+              ...config,
+              headers: {
+                ...config.headers,
+                Authorization: `Bearer ${newAccessToken}`,
+              },
+            }));
 
         const retryResponse = await fetch(url, retryConfig);
         return responseInterceptor<T>(retryResponse);
