@@ -27,5 +27,5 @@ export const LANGUAGE_SELECTOR_OPTIONS: ILanguageSelectOption[] = [
   { value: 'Python', label: 'Python', id: LANGUAGE_ID.Python },
   { value: 'Java', label: 'Java', id: LANGUAGE_ID.Java },
   { value: 'Cpp', label: 'C++', id: LANGUAGE_ID.Cpp },
-  { value: 'C', label: 'C', id: LANGUAGE_ID.Cpp },
+  { value: 'C', label: 'C', id: LANGUAGE_ID.C },
 ];
