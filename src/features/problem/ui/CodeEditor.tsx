@@ -19,17 +19,18 @@ interface ICodeEditorProps {
 export default function CodeEditor({ onChangeSourceCodeData }: ICodeEditorProps) {
   const [currentLanguage, setCurrentLanguage] = useState<ProblemLanguageType>(INITIAL_LANG);
 
+  const changeSourceCodeData = (option: ILanguageSelectOption) => {
+    setCurrentLanguage(option.value);
+    onChangeSourceCodeData('languageId', option.id);
+    onChangeSourceCodeData('sourceCode', INITIAL_VALUE[option.value as keyof typeof INITIAL_VALUE]);
+  };
+
   return (
     <section className="flex-1 h-full">
       <LanguageSelector
         currentLanguage={currentLanguage}
-        onSelect={(option: ILanguageSelectOption) => {
-          setCurrentLanguage(option.value);
-          onChangeSourceCodeData('languageId', option.id);
-          onChangeSourceCodeData(
-            'sourceCode',
-            INITIAL_VALUE[option.value as keyof typeof INITIAL_VALUE]
-          );
+        onSelect={(option) => {
+          changeSourceCodeData(option);
         }}
       />
       <CodeMirror

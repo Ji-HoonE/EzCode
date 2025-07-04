@@ -30,6 +30,7 @@ type MessageKey = 'initCases' | 'results' | 'finalResult' | 'error' | 'git-statu
 
 /** 스토어 상태 인터페이스 */
 export interface IMessageInitialState {
+  sessionKey: string;
   isSubmitted: boolean;
   initCases: IProblemStompInitCase[] | null;
   results: IProblemStompResult[] | [];
@@ -41,6 +42,7 @@ export interface IMessageInitialState {
 /** 스토어 액션 인터페이스 */
 interface IMessageInitialAction {
   actions: {
+    setSessionKey: (key: string) => void;
     setStatus: (status: boolean) => void;
     setMessage: (key: MessageKey, message: unknown) => void;
     clearMessages: () => void;

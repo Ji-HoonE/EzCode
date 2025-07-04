@@ -5,16 +5,22 @@ import {
   IMessageInitialState,
   IProblemStompResult,
   IProblemWebSocketStore,
-} from './submitProblemStore.types';
+} from './useProblemWebSocketStore.types';
 
 /** 인증 스토어 */
 const useProblemWebSocketStore = create<IProblemWebSocketStore>()(
   devtools((set) => ({
+    sessionKey: '',
     isSubmitted: false,
     testCase: null,
     results: null,
     totalResult: null,
     actions: {
+      setSessionKey: (key) => {
+        set({
+          sessionKey: key,
+        });
+      },
       setStatus: (status) => {
         set({
           isSubmitted: status,
@@ -57,6 +63,7 @@ const useProblemWebSocketStore = create<IProblemWebSocketStore>()(
 export function useProblemWebSocketStoreActions() {
   return useProblemWebSocketStore(
     useShallow((state) => ({
+      setSessionKey: state.actions.setSessionKey,
       setStatus: state.actions.setStatus,
       setMessage: state.actions.setMessage,
       clearMessages: state.actions.clearMessages,
