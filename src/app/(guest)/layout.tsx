@@ -15,7 +15,7 @@ export default function GuestLayout({
     children: React.ReactNode;
 }) {
     return (
-        <main className="w-full h-full bg-gradient-to-r from-[#6E00AA] to-[#2C0044] pt-[256px] pb-[198px] pl-[181px] pr-[231px]">
+        <main className="w-full h-full flex">
             {children}
         </main>
     );

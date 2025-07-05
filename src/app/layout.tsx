@@ -9,7 +9,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="flex justify-center">
+      <body className="flex justify-center w-full h-full">
         <QueryProvider>
           <Toaster />
           {children}
