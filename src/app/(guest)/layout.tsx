@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-
+import Image from 'next/image';
 
 export const metadata: Metadata = {
     title: 'EZ-Code - 로그인',
@@ -16,7 +16,10 @@ export default function GuestLayout({
 }) {
     return (
         <main className="w-full h-full flex">
-            {children}
+            <div className='w-full h-full px-[51px] py-[29px] flex flex-col justify-center relative bg-gradient'>
+                <Image src="/logo/EZMainLogo.svg" alt="EZ-MainLogo" width={94} height={94} priority className='absolute top-[29px] left-[51px]' />
+                {children}
+            </div>
         </main>
     );
 } 
