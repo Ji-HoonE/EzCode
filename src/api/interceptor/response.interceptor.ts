@@ -1,5 +1,4 @@
 import { IApiResponse } from './interceptor.interface';
-import { toast } from 'sonner';
 
 /**
  * 응답 인터셉터
