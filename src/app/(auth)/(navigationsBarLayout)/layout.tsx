@@ -1,5 +1,5 @@
-import AuthProvider from '@/lib/AuthProvider';
-import { NavigationBar } from '@/widgets/navigation-bar';
+import AuthProvider from "@/lib/AuthProvider";
+import { NavigationBar } from "@/widgets/navigation-bar";
 
 export default function RootLayout({
   children,
@@ -10,7 +10,7 @@ export default function RootLayout({
     <AuthProvider>
       <div className="w-full h-full">
         <NavigationBar />
-        <div className="w-full h-full">{children}</div>
+        <div className="w-full h-full ">{children}</div>
       </div>
     </AuthProvider>
   );
