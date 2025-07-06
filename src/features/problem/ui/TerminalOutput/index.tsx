@@ -1,21 +1,36 @@
 'use client';
-import { Spinner } from '@/shared/ui/loading-indicators';
 import useProblemWebSocketStore from '@/features/problem/model/useProblemWebSocketStore';
-import useCodeReviewStore, { useCodeReviewStoreActions } from '../../model/codeReviewStore';
-import SubmissionResult from './SubmissionResult';
+import { useCodeReviewStoreActions } from '../../model/codeReviewStore';
+import { useEffect } from 'react';
+import { Mode } from '../ProblemWorksSection';
+import CodeResultSummary from './CodeResultSummary';
+import CodeReviewSummary from './CodeReviewSummary';
+import { IProblemRequestData } from '@/query/problemSubmission/problems.submission.interface';
 
-export default function TerminalOutput() {
-  const { isSubmitted, finalResult } = useProblemWebSocketStore();
+interface ITerminalOutputProps {
+  mode: Mode;
+  sourceCodeData: IProblemRequestData;
+}
+export default function TerminalOutput({ mode, sourceCodeData }: ITerminalOutputProps) {
+  const { finalResult } = useProblemWebSocketStore();
 
-  const { isSubmittedReview, codeReviewContent } = useCodeReviewStore();
   const { setIsCorrect } = useCodeReviewStoreActions();
 
-  setIsCorrect(finalResult?.isCorrect || false);
+  useEffect(() => {
+    if (finalResult) {
+      setIsCorrect(finalResult?.isCorrect || false);
+    }
+  }, [finalResult]);
 
   return (
     <section className="flex flex-col w-full px-[14px] py-[22px]">
-      {isSubmitted ? <SubmissionResult /> : <p>코드제출을 먼저 실행 해주세요</p>}
-      <p>코드리뷰 {codeReviewContent || '코드리뷰 없음 '}</p>
+      {mode === 'result' ? (
+        <CodeResultSummary />
+      ) : mode === 'review' ? (
+        <CodeReviewSummary problemId="1" sourceCodeData={sourceCodeData} />
+      ) : (
+        <p>코드제출을 먼저 실행 해주세요</p>
+      )}
     </section>
   );
 }

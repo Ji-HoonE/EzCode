@@ -7,7 +7,6 @@ export default async function ProblemPage({ params }: IProblemPageProps) {
   const problemId = (await params).problemId;
 
   const detailProblem = await getDetailProblem(problemId);
-
   if (!detailProblem) {
     console.error('문제를 불러오는 데 실패했습니다.');
     return <div>문제를 불러오는 데 실패했습니다.</div>;

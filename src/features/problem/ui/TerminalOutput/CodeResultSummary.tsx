@@ -1,7 +1,7 @@
 import { Spinner } from '@/shared/ui/loading-indicators';
 import useProblemWebSocketStore from '../../model/useProblemWebSocketStore';
 
-export default function SubmissionResult() {
+export default function CodeResultSummary() {
   const { initCases, isSubmitted, results, finalResult } = useProblemWebSocketStore();
 
   if (!isSubmitted) return null;

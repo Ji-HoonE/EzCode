@@ -8,7 +8,7 @@ const useCodeReviewStore = create<ICodeReviewStore>()(
   devtools((set) => ({
     isCorrect: false,
     isSubmittedReview: false,
-    codeReviewContent: '',
+    codeReviewContent: null,
     actions: {
       setIsCorrect: (status) => {
         set({
@@ -20,9 +20,14 @@ const useCodeReviewStore = create<ICodeReviewStore>()(
           isSubmittedReview: status,
         });
       },
-      setCodeReviewContent: (Review) => {
+      setCodeReviewContent: (review) => {
+        const matches = [...review.matchAll(/(\*\*(.*?)\*\*)([^*]+)/g)];
+        const sections = matches.map(([_, _unused, key, content]) => ({
+          key,
+          content: content.trim(),
+        }));
         set({
-          codeReviewContent: Review,
+          codeReviewContent: sections,
         });
       },
 
@@ -30,7 +35,8 @@ const useCodeReviewStore = create<ICodeReviewStore>()(
       clearCodeReviewStore: () => {
         set({
           isCorrect: false,
-          codeReviewContent: '',
+          codeReviewContent: null,
+          isSubmittedReview: false,
         });
       },
     },
