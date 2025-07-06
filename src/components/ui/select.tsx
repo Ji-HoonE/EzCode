@@ -5,7 +5,7 @@ import * as SelectPrimitive from "@radix-ui/react-select"
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-
+//TODO : item 선택 시 전체 페이지 리렌더링 되는 이슈 해결 해야함
 function Select({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Root>) {
