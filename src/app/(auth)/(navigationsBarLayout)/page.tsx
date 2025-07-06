@@ -1,19 +1,17 @@
-'use client'
+'use client';
 import ApiHelper from '@/api/client/api';
 import { API_CONSTANTS } from '@/api/constants/api.constants';
 import ChatTriggerButton from '@/features/chat/ui/ChatTriggerButton';
 import { useLogoutMutation } from '@/query/auth/auth';
 import { StartButton } from '@/widgets/ladingCTA';
+import { useQueryClient } from '@tanstack/react-query';
 import { signOut } from 'next-auth/react';
 import Image from 'next/image';
 import { useEffect } from 'react';
 
-
 export default function HomePage() {
-
-
   const { mutateAsync } = useLogoutMutation();
-
+  const queryClient = useQueryClient();
   // 서버 컴포넌트 사용시 리액트쿼리도 사용불가 그럴때 요청시
   // const fetchUserInfo = async () => {
   //   const response = await ApiHelper.get('/users', { reqType: 'client' });
@@ -26,22 +24,23 @@ export default function HomePage() {
       const res = await mutateAsync();
       if (res.data.status === API_CONSTANTS.CODE.OK) {
         await signOut({ redirect: true, callbackUrl: '/signin' });
-
+        // 로그아웃 시 내정보조회하는 api 캐시 무효화
+        queryClient.invalidateQueries({ queryKey: ['my-info'] });
+        queryClient.invalidateQueries({ queryKey: ['my-ranking'] });
+        queryClient.invalidateQueries({ queryKey: ['my-review'] });
       }
     } catch (error) {
       console.error(error);
     }
-  }
+  };
   // TODO 테스트 유저정보 api 임의연동
   useEffect(() => {
     const fetchUserInfo = async () => {
       const response = await ApiHelper.get('/users', { reqType: 'client' });
       console.log('response', response);
-    }
+    };
     fetchUserInfo();
   }, []);
-
-
 
   return (
     <main className="w-full bg-gradient flex justify-center h-full pt-20">
