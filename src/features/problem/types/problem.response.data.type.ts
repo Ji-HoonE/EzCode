@@ -16,12 +16,3 @@ export interface IDetailProblemResponse {
   createdAt: string;
   modifiedAt: string;
 }
-
-//문제 제출시 sessionKey가 포함된 리스폰스
-
-export interface IProblemResponseData {
-  success: boolean;
-  status: number;
-  message: string;
-  result: string[];
-}

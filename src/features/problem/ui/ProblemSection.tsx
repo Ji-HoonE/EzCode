@@ -1,9 +1,11 @@
+'use client';
 import { Button } from '@/components/ui/button';
 import { IDetailProblemResponse } from '../types/problem.response.data.type';
 
 interface IProblemSectionProps {
   detailProblem: IDetailProblemResponse;
 }
+
 export default function ProblemSection({ detailProblem }: IProblemSectionProps) {
   const { title, difficulty, categories, description } = detailProblem;
   return (
@@ -15,7 +17,7 @@ export default function ProblemSection({ detailProblem }: IProblemSectionProps) 
       <h1 className="text-[15px] flex items-center gap-[14px]">
         <span className="text-[40px]">{title}</span>
         난이도 <span className="text-[#FFCFA7]">{difficulty}</span>
-        {categories.length > 0 && (
+        {categories && categories.length > 0 && (
           <>
             {'>'}
             {categories[0]}

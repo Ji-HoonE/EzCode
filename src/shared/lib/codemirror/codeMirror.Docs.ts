@@ -1,4 +1,4 @@
-import { IProblemRequestData } from '@/features/problem/types/problem.request.data.type';
+import { IProblemRequestData } from '@/query/problemSubmission/problems.submission.interface';
 import {
   ILanguageSelectOption,
   LANGUAGE_ID,
