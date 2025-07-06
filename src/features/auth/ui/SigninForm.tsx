@@ -46,12 +46,17 @@ const SigninForm = () => {
             />
             <Image src="/icons/eyeOff.svg" alt="eyeOff" width={16} height={16} priority className='absolute right-[10px] top-[9px]' onClick={handlePasswordVisible} />
           </div>
-          {errorMessage && <div className='flex items-center gap-[4px]'><Image src="/icons/alert.svg" alt="error" width={10} height={10} priority className='mb-[2px]' /><span className='text-[10px] font-[700] text-[#EC3030]'>{errorMessage}</span></div>} {/* 6->4, 15->10, 3->2, 15->10 */}
+          <div className='flex relative h-[10px]'>
+            {errorMessage && <div className='flex items-center gap-[4px] absolute'>
+              <Image src="/icons/alert.svg" alt="error" width={10} height={10} priority className='mb-[2px]' />
+              <span className='text-[10px] font-[700] text-[#EC3030]'>{errorMessage}</span>
+            </div>}
+          </div>
         </div>
         <div className='flex flex-col mt-[13px] w-full gap-[6px]'>
           <button onClick={handleSignInClick} className='h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] bg-[#969696] text-white text-[15px] font-[800]'>로그인</button>
           <button className='text-black rounded-[7px] h-[37px] text-[15px] font-[800] border-[1px] border-[#6C6C6C]' onClick={() => router.push('/signup')}>이메일 회원가입</button>
-          <p className='text-[10px] font-[400] text-[#6C6C6C] text-end decoration-black underline underline-offset-[2px]' onClick={() => router.push('/find')}>비밀번호를 잊었어요.</p>
+          <p className='text-[10px] font-[400] text-[#6C6C6C] text-end decoration-black underline underline-offset-[2px]' onClick={() => router.push('/find/password')}>비밀번호를 잊었어요.</p>
         </div>
         <p className='text-[13px] font-[600] text-black leading-[47px]'>SNS 계정으로 시작하기</p>
         <div className="w-full flex justify-center gap-[46px]" >
@@ -71,7 +76,7 @@ const SigninForm = () => {
           <p className='text-[10px] text-[#666766] font-[400] pl-[2px]'>에 동의하고 가입하기</p>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

@@ -6,6 +6,9 @@ import type { NextRequest } from 'next/server';
 const publicPaths = [
     '/signin',
     '/signup',
+    '/find/password',
+    '/find/api/auth/find-password-verify',
+
 ];
 
 

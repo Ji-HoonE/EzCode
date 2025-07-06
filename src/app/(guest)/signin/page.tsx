@@ -14,7 +14,7 @@ export default function SigninPage() {
         </p>
       </div>
       <div className='flex flex-col justify-center items-center'>
-        <div className='w-[391px] h-[455px] border-[3px] border-white/75 rounded-[21px] p-[11px]'>
+        <div className='w-[391px] h-[470px] border-[3px] border-white/75 rounded-[21px] p-[11px]'>
           <SigninForm />
         </div>
         <div className='w-full flex justify-center items-center gap-[32px] mt-[9px]'>

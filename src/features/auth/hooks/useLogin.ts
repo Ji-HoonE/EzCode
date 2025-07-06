@@ -40,6 +40,7 @@ const useLogin = () => {
     /** 로그인 클릭 함수 */
     const handleSignInClick = async () => {
         try {
+            setErrorMessage('');
             const result = await signIn('credentials', {
                 email: loginInfo.email,
                 password: loginInfo.password,
