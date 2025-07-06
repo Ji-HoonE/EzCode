@@ -1,4 +1,4 @@
-import { DailySolved, IHeatmapItem } from '@/query/mypage/mypage.interface';
+import { IHeatmapItem } from '@/query/mypage/mypage.interface'; //DailySolved
 import { ActivityCalendar } from 'react-activity-calendar';
 import { eachDayOfInterval, format, startOfYear, endOfYear } from 'date-fns';
 export const Heatmap = ({ data }: { data: IHeatmapItem[] }) => {

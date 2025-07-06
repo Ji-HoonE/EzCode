@@ -1,10 +1,5 @@
 import { Button } from '@/components/ui/button';
-import {
-  useMyAiReviewCheckQuery,
-  useMyDailySolved,
-  useMyInfoQuery,
-  useMyRankingQuery,
-} from '@/query/mypage/mypage';
+import { useMyAiReviewCheckQuery, useMyDailySolved, useMyInfoQuery } from '@/query/mypage/mypage';
 import { TPeriod } from '@/shared/types/mypage.type';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -39,13 +34,13 @@ const DetailInfoRow = ({
 );
 
 export const Mine = () => {
-  const [period, setPeriod] = useState<TPeriod>('all-time');
+  const [_unused, _setUnused] = useState<TPeriod>('all-time');
   const { data } = useMyInfoQuery();
-  const { data: ranking } = useMyRankingQuery(period || 'all-time');
+  // const { data: ranking } = useMyRankingQuery(period || 'all-time');
   const { data: aiReview } = useMyAiReviewCheckQuery();
   const { data: heatmap } = useMyDailySolved();
   const myInfo = data?.data.result;
-  const myRanking = ranking?.data.result;
+  // const myRanking = ranking?.data.result;
   const aiReviewCnt = aiReview?.data.result.reviewToken;
   const [heatmapData, setHeatmapData] = useState<IHeatmapItem[]>([]);
   const levelCalculator = (count: number) => {
