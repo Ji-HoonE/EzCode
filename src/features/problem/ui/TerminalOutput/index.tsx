@@ -20,7 +20,7 @@ export default function TerminalOutput({ mode, sourceCodeData }: ITerminalOutput
     if (finalResult) {
       setIsCorrect(finalResult?.isCorrect || false);
     }
-  }, [finalResult]);
+  }, [finalResult, setIsCorrect]);
 
   return (
     <section className="flex flex-col w-full px-[14px] py-[22px]">
