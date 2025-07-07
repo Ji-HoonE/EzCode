@@ -1,7 +1,6 @@
 'use client';
 import { API_CONSTANTS } from '@/api/constants/api.constants';
 import { useSignUpMutation } from '@/query/auth/auth';
-import { ApiError } from 'next/dist/server/api-utils';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 
@@ -50,20 +49,25 @@ const useSignUp = () => {
     /** 회원가입 클릭 함수 */
     const handleSignUpClick = async () => {
         try {
+            setErrorMessage('');
             const response = await mutateAsync(signUpInfo);
+            console.log("response", response);
+            if (response.data.status !== API_CONSTANTS.CODE.CREATED) {
+                handleSignUpError(response.data.message);
+                return;
+            }
             if (response.data.status === API_CONSTANTS.CODE.CREATED) {
                 router.push('/signin');
             }
-        } catch (err: unknown) {
-            handleSignUpError((err as ApiError).message);
+        } catch (err) {
+            console.error(err);
         }
     }
 
     /** 비밀번호 보이기/숨기기 토글 함수 */
     const handlePasswordVisible = () => {
         setShowPassword(!showPassword);
-    };
-
+    }
     /** 비밀번호 확인 보이기/숨기기 토글 함수 */
     const handlePasswordConfirmVisible = () => {
         setShowPasswordConfirm(!showPasswordConfirm);

@@ -6,6 +6,8 @@ export const API_URL = {
     REFRESH: '/auth/refresh',
     LOGOUT: '/logout',
     FIND_PASSWORD: '/auth/find-password',
+    RESET_PASSWORD: '/auth/reset-password',
+    FIND_PASSWORD_VERIFY: '/auth/find-password-verify',
   },
   PROBLEM: {
     GET_PROBLEMS: '/problems',

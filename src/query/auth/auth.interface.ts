@@ -23,12 +23,39 @@ export interface ISignUpResponse {
     message: string;
 }
 
+/** 비밀번호 찾기 요청 인터페이스 */
 export interface IFindPasswordRequest {
     email: string;
     redirectUrl: string;
 }
 
+/** 비밀번호 찾기 응답 인터페이스 */
+export interface IFindPasswordResponse {
+    message: string;
+}
+
 /** refresh 토큰 응답 인터페이스 */
 export interface IRefreshResponse {
     token: string;
+}
+
+
+export interface IResetPasswordRequest {
+    tempResetToken: string;
+    newPassword: string;
+    newPasswordConfirm: string;
+}
+
+export interface IResetPasswordResponse {
+    message: string;
+}
+
+export interface IVerifyResetPasswordRequest {
+    email: string;
+    key: string;
+}
+
+export interface IVerifyResetPasswordResponse {
+    message: string;
+    tempResetToken: string;
 }
