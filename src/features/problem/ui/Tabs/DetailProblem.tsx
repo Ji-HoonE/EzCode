@@ -1,19 +1,14 @@
 'use client';
-import { Button } from '@/components/ui/button';
-import { IDetailProblemResponse } from '../types/problem.response.data.type';
+import { IDetailProblemResponse } from '../../types/problem.response.data.type';
 
-interface IProblemSectionProps {
+interface IDetailProblemProps {
   detailProblem: IDetailProblemResponse;
 }
 
-export default function ProblemSection({ detailProblem }: IProblemSectionProps) {
+export default function DetailProblem({ detailProblem }: IDetailProblemProps) {
   const { title, difficulty, categories, description } = detailProblem;
   return (
-    <section className="flex-1 flex flex-col gap-[29px] pl-[81px] pr-[78px] overflow-scroll">
-      <div className="flex gap-4">
-        <Button>문제</Button>
-        <Button>토론</Button>
-      </div>
+    <article className="flex flex-col gap-[29px] pl-[81px] pr-[78px] overflow-scroll">
       <h1 className="text-[15px] flex items-center gap-[14px]">
         <span className="text-[40px]">{title}</span>
         난이도 <span className="text-[#FFCFA7]">{difficulty}</span>
@@ -38,6 +33,6 @@ export default function ProblemSection({ detailProblem }: IProblemSectionProps) 
           <p>옵셔널한 값임..</p>
         </div>
       </div>
-    </section>
+    </article>
   );
 }

@@ -7,12 +7,14 @@ import useSubscribeProblem from '../hooks/useSubscribeProblem';
 import { ProblemId } from '@/shared';
 import clsx from 'clsx';
 import { Mode } from './ProblemWorksSection';
+import TerminalGitHubIcon from '@/shared/ui/icons/terminal-icons/TerminalGitHubIcon';
 
 interface TerminalPanelProps {
   problemId: ProblemId;
   sourceCodeData: IProblemRequestData;
   setMode: (mode: Mode) => void;
   mode: Mode;
+  githubUrl: string | null;
 }
 
 export default function TerminalPanel({
@@ -20,6 +22,7 @@ export default function TerminalPanel({
   sourceCodeData,
   setMode,
   mode,
+  githubUrl,
 }: TerminalPanelProps) {
   const { submitCodeForResult } = useSubmissions(problemId);
   const stompRef = useConnectProblemWebSocket();
@@ -48,6 +51,9 @@ export default function TerminalPanel({
         <button className="flex flex-col gap-[3px] items-center" onClick={() => setMode('review')}>
           <TerminalReviewIcon className={clsx(mode !== 'review' && 'text-[#6B6B6B]')} />
           <h3 className={clsx(mode !== 'review' && 'text-[#6B6B6B]')}>REVIEW</h3>
+        </button>
+        <button onClick={() => {}}>
+          <TerminalGitHubIcon disabled={!!githubUrl} />
         </button>
       </div>
     </div>

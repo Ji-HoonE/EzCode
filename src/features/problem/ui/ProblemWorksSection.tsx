@@ -8,10 +8,11 @@ import { IProblemRequestData } from '@/query/problemSubmission/problems.submissi
 
 interface IProblemWorksSectionProps {
   problemId: string;
+  githubUrl: string | null;
 }
 export type Mode = 'init' | 'result' | 'review';
 
-export default function ProblemWorksSection({ problemId }: IProblemWorksSectionProps) {
+export default function ProblemWorksSection({ problemId, githubUrl }: IProblemWorksSectionProps) {
   const [sourceCodeData, setSourceCodeData] =
     useState<IProblemRequestData>(INITIAL_SOURCE_CODE_DATA);
   const [mode, setMode] = useState<Mode>('init');
@@ -21,7 +22,7 @@ export default function ProblemWorksSection({ problemId }: IProblemWorksSectionP
   };
 
   return (
-    <section className="flex flex-col flex-1">
+    <section className="flex flex-col">
       <CodeEditor onChangeSourceCodeData={handleChangeSourceCodeData} />
       <div className="h-[1px] w-full bg-white" />
       <div className="flex flex-1">
@@ -31,6 +32,7 @@ export default function ProblemWorksSection({ problemId }: IProblemWorksSectionP
           sourceCodeData={sourceCodeData}
           setMode={(mode) => setMode(mode)}
           mode={mode}
+          githubUrl={githubUrl}
         />
       </div>
     </section>
