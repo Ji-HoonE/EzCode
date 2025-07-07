@@ -105,10 +105,12 @@ const SignupForm = () => {
             <p className='text-[10px] text-[#666766] font-[400] pl-[2px]'>에 동의하고 가입하기</p>
           </div>
         </div>
-        {errorMessage && <div className='w-full mt-[7px] flex items-center gap-[4px]'>
-          <Image src="/icons/alert.svg" alt="error" width={10} height={10} priority className='mb-[2px]' />
-          <span className='text-[10px] font-[700] text-[#EC3030]'>{errorMessage}</span>
-        </div>}
+        <div className='flex relative h-[15px] mt-[7px] w-full'>
+          {errorMessage && <div className='flex items-center gap-[4px] absolute'>
+            <Image src="/icons/alert.svg" alt="error" width={10} height={10} priority className='mb-[2px]' />
+            <span className='text-[10px] font-[700] text-[#EC3030]'>{errorMessage}</span>
+          </div>}
+        </div>
         <div className='flex flex-col w-full gap-[6px] mt-[7px]'>
           <button onClick={handleSignUpClick} className='h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] bg-[#969696] text-white text-[15px] font-[800]'>회원가입</button>
         </div>

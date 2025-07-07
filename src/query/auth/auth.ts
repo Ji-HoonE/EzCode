@@ -1,7 +1,7 @@
 import ApiHelper from "@/api/client/api";
 import { API_URL } from "@/api/constants/api.constants";
-import { useMutation } from "@tanstack/react-query";
-import { IRefreshResponse, ISignUpRequest, ISignUpResponse } from "./auth.interface";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { IFindPasswordRequest, IFindPasswordResponse, IRefreshResponse, IResetPasswordRequest, IResetPasswordResponse, ISignUpRequest, ISignUpResponse, IVerifyResetPasswordRequest, IVerifyResetPasswordResponse } from "./auth.interface";
 import { BASE_URL } from "@/constants/env";
 
 /** 회원가입 뮤테이션 */
@@ -22,17 +22,7 @@ export const useSignUpMutation = () => {
 export const useLogoutMutation = () => {
     return useMutation({
         mutationFn: async () => {
-            const response = await ApiHelper.post<string>(API_URL.AUTH.LOGOUT);
-            return response;
-        },
-    });
-};
-
-/** 비밀번호 찾기 뮤테이션 */
-export const useFindPasswordMutation = () => {
-    return useMutation({
-        mutationFn: async () => {
-            const response = await ApiHelper.post<string>(API_URL.AUTH.FIND_PASSWORD);
+            const response = await ApiHelper.post<string>(API_URL.AUTH.LOGOUT, { reqType: 'client' });
             return response;
         },
     });
@@ -55,4 +45,35 @@ export const refreshAccessToken = async (refreshToken: string): Promise<IRefresh
     }
 
     return data.result;
+};
+
+/** 비밀번호 찾기 요청 뮤테이션 */
+export const useFindPasswordMutation = () => {
+    return useMutation({
+        mutationFn: async (params: IFindPasswordRequest) => {
+            const response = await ApiHelper.post<IFindPasswordResponse>(API_URL.AUTH.FIND_PASSWORD, params);
+            return response;
+        },
+    });
+};
+
+/** 비밀번호 변경 뮤테이션 */
+export const useResetPasswordMutation = () => {
+    return useMutation({
+        mutationFn: async (params: IResetPasswordRequest) => {
+            const response = await ApiHelper.post<IResetPasswordResponse>(API_URL.AUTH.RESET_PASSWORD, params);
+            return response;
+        },
+    });
+};
+
+/** 인증 토큰 쿼리 확인 */
+export const useVerifyResetPasswordQuery = (params: IVerifyResetPasswordRequest) => {
+    return useQuery({
+        queryKey: ['verifyResetPassword', params],
+        queryFn: async () => {
+            const response = await ApiHelper.get<IVerifyResetPasswordResponse>(`${API_URL.AUTH.FIND_PASSWORD_VERIFY}?email=${params.email}&key=${params.key}`, { reqType: 'client' });
+            return response;
+        },
+    });
 };
