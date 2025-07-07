@@ -14,6 +14,7 @@ interface TerminalPanelProps {
   sourceCodeData: IProblemRequestData;
   setMode: (mode: Mode) => void;
   mode: Mode;
+  githubUrl: string | null;
 }
 
 export default function TerminalPanel({
@@ -21,6 +22,7 @@ export default function TerminalPanel({
   sourceCodeData,
   setMode,
   mode,
+  githubUrl,
 }: TerminalPanelProps) {
   const { submitCodeForResult } = useSubmissions(problemId);
   const stompRef = useConnectProblemWebSocket();
@@ -50,7 +52,9 @@ export default function TerminalPanel({
           <TerminalReviewIcon className={clsx(mode !== 'review' && 'text-[#6B6B6B]')} />
           <h3 className={clsx(mode !== 'review' && 'text-[#6B6B6B]')}>REVIEW</h3>
         </button>
-        <TerminalGitHubIcon disabled={true} />
+        <button onClick={() => {}}>
+          <TerminalGitHubIcon disabled={!!githubUrl} />
+        </button>
       </div>
     </div>
   );
