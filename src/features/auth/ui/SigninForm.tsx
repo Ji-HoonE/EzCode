@@ -108,7 +108,7 @@ const SigninForm = () => {
           </button>
           <p
             className="text-[10px] font-[400] text-[#6C6C6C] text-end decoration-black underline underline-offset-[2px]"
-            onClick={() => router.push('/find')}
+            onClick={() => router.push('/find/password')}
           >
             비밀번호를 잊었어요.
           </p>
@@ -142,7 +142,7 @@ const SigninForm = () => {
           <p className="text-[10px] text-[#666766] font-[400] pl-[2px]">에 동의하고 가입하기</p>
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
