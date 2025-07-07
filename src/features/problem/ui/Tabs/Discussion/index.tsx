@@ -21,7 +21,7 @@ export default function Discussion({ detailProblem, discussions }: IDiscussionPr
         <div>아직 토론이 없습니다.</div>
       ) : (
         discussions.content.map((content) => {
-          return <DiscussionContent discussionContent={content} />;
+          return <DiscussionContent discussionContent={content} key={content.discussionId} />;
         })
       )}
     </div>

@@ -9,7 +9,7 @@ export default async function ProblemPage({ params, searchParams }: IProblemPage
   const problemId = (await params).problemId;
   const isDiscussion = (await searchParams).discussion;
   const detailProblem = await getDetailProblem(problemId);
-  let discussions = await getDiscussions(problemId);
+  const discussions = await getDiscussions(problemId);
 
   if (!detailProblem) {
     console.error('문제를 불러오는 데 실패했습니다.');
