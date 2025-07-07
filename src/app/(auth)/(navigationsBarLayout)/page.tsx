@@ -3,7 +3,7 @@ import ApiHelper from '@/api/client/api';
 import { API_CONSTANTS } from '@/api/constants/api.constants';
 import ChatTriggerButton from '@/features/chat/ui/ChatTriggerButton';
 import { useLogoutMutation } from '@/query/auth/auth';
-import { StartButton } from '@/widgets/ladingCTA';
+import { StartButton } from '@/widgets/landingCTA';
 import { useQueryClient } from '@tanstack/react-query';
 import { signOut } from 'next-auth/react';
 import Image from 'next/image';
