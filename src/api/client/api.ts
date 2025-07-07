@@ -11,7 +11,6 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
 
 type ReqType = 'client' | 'server';
-
 interface RequestConfig extends RequestInit {
   params?: Record<string, string>;
   reqType?: ReqType;
@@ -69,7 +68,6 @@ const request = async <T>(
   const url = buildUrl(endpoint, config?.params);
 
   try {
-    console.log('config.reqType', config.reqType);
     const interceptedConfig = await (config.reqType === 'server'
       ? requestServerInterceptor(config)
       : requestClientInterceptor(config));
