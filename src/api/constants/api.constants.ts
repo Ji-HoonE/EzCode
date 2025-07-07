@@ -1,3 +1,6 @@
+import { ProblemId } from '@/shared';
+import { TGetProblemIdOptions } from '@/shared/types/pathOptions';
+
 /** API 요청 주소 */
 export const API_URL = {
   AUTH: {
@@ -18,4 +21,15 @@ export const API_CONSTANTS = {
     OK: 200,
     CREATED: 201,
   },
+};
+
+export const getProblemIdPath = (problemId: ProblemId, pathOption?: TGetProblemIdOptions) => {
+  switch (pathOption) {
+    case 'DISCUSSION':
+      return 'discussions';
+    default:
+      break;
+  }
+
+  return `${API_URL.PROBLEM.GET_PROBLEMS}/${problemId}/${pathOption}`;
 };

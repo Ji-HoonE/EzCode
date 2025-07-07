@@ -22,7 +22,7 @@ export default function ProblemWorksSection({ problemId, githubUrl }: IProblemWo
   };
 
   return (
-    <section className="flex flex-col flex-1">
+    <section className="flex flex-col">
       <CodeEditor onChangeSourceCodeData={handleChangeSourceCodeData} />
       <div className="h-[1px] w-full bg-white" />
       <div className="flex flex-1">
