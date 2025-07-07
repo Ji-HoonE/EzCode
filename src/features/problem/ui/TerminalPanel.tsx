@@ -7,6 +7,7 @@ import useSubscribeProblem from '../hooks/useSubscribeProblem';
 import { ProblemId } from '@/shared';
 import clsx from 'clsx';
 import { Mode } from './ProblemWorksSection';
+import TerminalGitHubIcon from '@/shared/ui/icons/terminal-icons/TerminalGitHubIcon';
 
 interface TerminalPanelProps {
   problemId: ProblemId;
@@ -49,6 +50,7 @@ export default function TerminalPanel({
           <TerminalReviewIcon className={clsx(mode !== 'review' && 'text-[#6B6B6B]')} />
           <h3 className={clsx(mode !== 'review' && 'text-[#6B6B6B]')}>REVIEW</h3>
         </button>
+        <TerminalGitHubIcon disabled={true} />
       </div>
     </div>
   );
