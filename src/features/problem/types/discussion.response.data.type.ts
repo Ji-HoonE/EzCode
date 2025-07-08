@@ -31,12 +31,7 @@ export interface IDiscussionResponse {
 /** 토론글 하나 의 인터페이스  */
 export interface IDiscussionContentResponse {
   discussionId: number;
-  userInfo: {
-    userId: number;
-    nickname: string;
-    tier: string;
-    profileImageUrl: null | string;
-  };
+  userInfo: TUserInfo;
   problemId: number;
   content: string;
   createdAt: string;
@@ -47,4 +42,10 @@ export interface IDiscussionContentResponse {
   isAuthor: boolean;
 }
 
+type TUserInfo = {
+  userId: number;
+  nickname: string;
+  tier: string;
+  profileImageUrl: null | string;
+};
 type TVoteStatus = 'UP' | 'DOWN' | 'NONE';

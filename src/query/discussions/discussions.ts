@@ -4,7 +4,7 @@ import { ProblemId } from '@/shared';
 import { useMutation } from '@tanstack/react-query';
 import {
   IDiscussionContentMutationRequest,
-  IDiscussionContentMutationResponse,
+  TDiscussionContentMutationResponse,
 } from './discussions.types';
 
 /** 토론글 생성 뮤테이션 */
@@ -12,7 +12,7 @@ export const useCreateDiscussionContent = (problemId: ProblemId) => {
   const path = getProblemIdPath(problemId, 'discussions');
   return useMutation({
     mutationFn: async (params: IDiscussionContentMutationRequest) => {
-      const response = await ApiHelper.post<IDiscussionContentMutationResponse>(path, params);
+      const response = await ApiHelper.post<TDiscussionContentMutationResponse>(path, params);
       return response;
     },
   });
@@ -23,7 +23,7 @@ export const useEditDiscussionContent = (problemId: ProblemId, discussionId: num
   const path = getProblemIdPath(problemId, 'discussions');
   return useMutation({
     mutationFn: async (params: IDiscussionContentMutationRequest) => {
-      const response = await ApiHelper.put<IDiscussionContentMutationResponse>(
+      const response = await ApiHelper.put<TDiscussionContentMutationResponse>(
         `${path}/${discussionId}`,
         params
       );

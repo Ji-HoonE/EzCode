@@ -1,6 +1,9 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { IDiscussionResponse } from '../../../types/discussion.response.data.type';
+import {
+  IDiscussionContentResponse,
+  IDiscussionResponse,
+} from '../../../types/discussion.response.data.type';
 import { IDetailProblemResponse } from '../../../types/problem.response.data.type';
 import DetailProblem from '../DetailProblem';
 import DiscussionContent from './DiscussionContent';
@@ -19,18 +22,22 @@ interface IDiscussionProps {
 export default function Discussions({ detailProblem, discussions, problemId }: IDiscussionProps) {
   const [contentForm, setContentForm] =
     useState<IDiscussionContentMutationRequest>(DISCUSSION_CREATE_VALUE);
+  const [currentContents, setCurrentContents] = useState<IDiscussionContentResponse[]>(
+    Array.isArray(discussions?.content) ? discussions.content : []
+  );
+
   const { mutateAsync, data } = useCreateDiscussionContent(problemId);
 
-  if (!discussions) {
+  if (!currentContents) {
     return <div>토론 목록을 불러오는데 실패했습니다.</div>;
   }
 
   useEffect(() => {
-    if (data) {
-      discussions.content.push(...data.data.result.content);
+    if (data?.data.success) {
+      setCurrentContents((prev) => [...prev, data.data.result]);
       setContentForm((prev) => ({ ...prev, content: '' }));
     }
-  }, [data]);
+  }, [data?.data.success]);
 
   return (
     <div className=" flex flex-col gap-[10px]">
@@ -50,10 +57,10 @@ export default function Discussions({ detailProblem, discussions, problemId }: I
         </Button>
       </div>
       <div>
-        {discussions.content.length < 1 ? (
+        {currentContents.length < 1 ? (
           <div>아직 토론이 없습니다.</div>
         ) : (
-          discussions.content.map((content) => {
+          currentContents.map((content) => {
             return <DiscussionContent discussionContent={content} key={content.discussionId} />;
           })
         )}
