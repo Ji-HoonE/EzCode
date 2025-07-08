@@ -48,4 +48,5 @@ type TUserInfo = {
   tier: string;
   profileImageUrl: null | string;
 };
-type TVoteStatus = 'UP' | 'DOWN' | 'NONE';
+
+export type TVoteStatus = 'UP' | 'DOWN' | 'NONE';

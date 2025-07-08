@@ -7,7 +7,7 @@ import {
 import { IDetailProblemResponse } from '../../../types/problem.response.data.type';
 import DetailProblem from '../DetailProblem';
 import DiscussionContent from './DiscussionContent';
-import { useCreateDiscussionContent } from '@/query/discussions/discussions';
+import { useCreateDiscussionContent } from '@/query/discussions/discussions.mutations';
 import { ProblemId } from '@/shared';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { DISCUSSION_CREATE_VALUE } from '@/query/discussions/initial.value';

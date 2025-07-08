@@ -4,8 +4,9 @@ import { IDiscussionContentResponse } from '@/features/problem/types/discussion.
 import {
   useDeleteDiscussionContent,
   useEditDiscussionContent,
-} from '@/query/discussions/discussions';
+} from '@/query/discussions/discussions.mutations';
 import { ChangeEvent, useEffect, useState } from 'react';
+import DiscussionVote from './DiscussionVote';
 
 interface IDiscussionContentProps {
   discussionContent: IDiscussionContentResponse;
@@ -56,6 +57,9 @@ export default function DiscussionContent({ discussionContent }: IDiscussionCont
             ) : (
               <p>{currentContent}</p>
             )}
+            <div className="flex items-center">
+              <DiscussionVote content={discussionContent} />
+            </div>
           </div>
           <Button
             onClick={() => {
