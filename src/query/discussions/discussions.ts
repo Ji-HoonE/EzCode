@@ -31,3 +31,14 @@ export const useEditDiscussionContent = (problemId: ProblemId, discussionId: num
     },
   });
 };
+
+/** 토론글 삭제 뮤테이션 */
+export const useDeleteDiscussionContent = (problemId: ProblemId, discussionId: number) => {
+  const path = getProblemIdPath(problemId, 'discussions');
+  return useMutation({
+    mutationFn: async () => {
+      const response = await ApiHelper.delete(`${path}/${discussionId}`);
+      return response;
+    },
+  });
+};
