@@ -8,11 +8,11 @@ interface IProblemPageProps {
 export default async function ProblemPage({ params }: IProblemPageProps) {
   const problemId = (await params).problemId;
 
-  const userInfo = await getUserInfo();
+  // const userInfo = await getUserInfo();
 
-  if (!userInfo) {
-    redirect('/signin');
-  }
+  // if (!userInfo) {
+  //   redirect('/signin');
+  // }
 
-  return <ProblemWorksSection problemId={problemId} githubUrl={userInfo.githubUrl} />;
+  return <ProblemWorksSection problemId={problemId} githubUrl={''} />;
 }

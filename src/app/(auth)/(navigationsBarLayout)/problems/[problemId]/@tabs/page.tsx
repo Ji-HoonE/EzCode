@@ -1,4 +1,4 @@
-import { DetailProblem, Discussion, getDetailProblem, getDiscussions } from '@/features/problem';
+import { DetailProblem, Discussions, getDetailProblem, getDiscussions } from '@/features/problem';
 
 interface IProblemPageProps {
   params: Promise<{ problemId: string }>;
@@ -24,7 +24,11 @@ export default async function ProblemPage({ params, searchParams }: IProblemPage
       {!isDiscussion ? (
         <DetailProblem detailProblem={detailProblem} />
       ) : (
-        <Discussion detailProblem={detailProblem} discussions={discussions} />
+        <Discussions
+          detailProblem={detailProblem}
+          discussions={discussions}
+          problemId={problemId}
+        />
       )}
     </div>
   );

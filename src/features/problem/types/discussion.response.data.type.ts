@@ -43,6 +43,8 @@ export interface IDiscussionContentResponse {
   upvoteCount: number;
   downvoteCount: number;
   replyCount: number;
-  voteStatus: string;
+  voteStatus: TVoteStatus;
   isAuthor: boolean;
 }
+
+type TVoteStatus = 'UP' | 'DOWN' | 'NONE';

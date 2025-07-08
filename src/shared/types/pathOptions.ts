@@ -1,1 +1,1 @@
-export type TGetProblemIdOptions = 'DISCUSSION';
+export type TGetProblemIdOptions = 'discussions';
