@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import React, { useState, useEffect, useMemo } from "react";
+import Image from 'next/image';
+import React, { useState, useEffect, useMemo } from 'react';
 
-import { SkeletonBox } from "@/components/Skeleton";
-import { useProblemListQuery } from "@/query/problem/problems";
-import { useRouter } from "next/navigation";
+import { SkeletonBox } from '@/components/Skeleton';
+import { useProblemListQuery } from '@/query/problem/problems';
+import { useRouter } from 'next/navigation';
 
 const PAGE_LIMIT = 15;
 
 const getLevelColorClass = (levelStr: string): string => {
-  const level = parseInt(levelStr.replace(/[^0-9]/g, ""), 10);
-  if (level <= 2) return "text-orange-300 font-semibold";
-  if (level <= 4) return "text-yellow-500 font-semibold";
-  if (level <= 6) return "text-red-500 font-semibold";
-  return "text-red-700 font-semibold";
+  const level = parseInt(levelStr.replace(/[^0-9]/g, ''), 10);
+  if (level <= 2) return 'text-orange-300 font-semibold';
+  if (level <= 4) return 'text-yellow-500 font-semibold';
+  if (level <= 6) return 'text-red-500 font-semibold';
+  return 'text-red-700 font-semibold';
 };
 
 export default function ProblemTable({
@@ -28,7 +28,7 @@ export default function ProblemTable({
   const [currentPage, setCurrentPage] = useState(1);
   const [pageGroupStart, setPageGroupStart] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const { data, isLoading } = useProblemListQuery(currentPage, 10, "", categoryCode, difficulty);
+  const { data, isLoading } = useProblemListQuery(currentPage, 10, '', categoryCode, difficulty);
 
   useEffect(() => {
     if (data?.data.result.totalPages) {
@@ -97,7 +97,7 @@ export default function ProblemTable({
                   <td className="text-center py-3 px-2">{item.totalSubmissions}건</td>
                   <td className="text-center py-3 px-2">
                     {item.totalSubmissions === 0
-                      ? "0%"
+                      ? '0%'
                       : `${
                           Math.round((item.correctSubmissions / item.totalSubmissions) * 10) / 10
                         }%`}
@@ -123,7 +123,7 @@ export default function ProblemTable({
           <button
             key={num}
             className={`w-8 h-8 rounded-md flex items-center justify-center text-sm hover:bg-blue-600 transition bg-[#6B6B6B] ${
-              currentPage === num ? "bg-[#FFA75F] text-black" : "text-white"
+              currentPage === num ? 'bg-[#FFA75F] text-black' : 'text-white'
             }`}
             onClick={() => !isLoading && setCurrentPage(num)}
           >
