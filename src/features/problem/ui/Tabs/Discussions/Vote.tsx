@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 interface IDiscussionVoteProps {
   content: IDiscussionContentResponse;
 }
-export default function DiscussionVote({ content }: IDiscussionVoteProps) {
+export default function Vote({ content }: IDiscussionVoteProps) {
   const [voteStatus, setVoteStatus] = useState<TVoteStatus>(content.voteStatus);
   const [voteCount, setVoteCount] = useState({
     upvoteCount: content.upvoteCount,
