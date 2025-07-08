@@ -1,17 +1,14 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import {
-  IDiscussionContentResponse,
-  IDiscussionResponse,
-} from '../../../types/discussion.response.data.type';
+import { IDiscussionResponse } from '../../../types/discussion.response.data.type';
 import { IDetailProblemResponse } from '../../../types/problem.response.data.type';
 import DetailProblem from '../DetailProblem';
 import DiscussionContent from './DiscussionContent';
 import { useCreateDiscussionContent } from '@/query/discussions/discussions';
 import { ProblemId } from '@/shared';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { ICreateDiscussionContentRequest } from '@/query/discussions/discussions.types';
 import { DISCUSSION_CREATE_VALUE } from '@/query/discussions/initial.value';
+import { IDiscussionContentMutationRequest } from '@/query/discussions/discussions.types';
 
 interface IDiscussionProps {
   detailProblem: IDetailProblemResponse;
@@ -21,7 +18,7 @@ interface IDiscussionProps {
 
 export default function Discussions({ detailProblem, discussions, problemId }: IDiscussionProps) {
   const [contentForm, setContentForm] =
-    useState<ICreateDiscussionContentRequest>(DISCUSSION_CREATE_VALUE);
+    useState<IDiscussionContentMutationRequest>(DISCUSSION_CREATE_VALUE);
   const { mutateAsync, data } = useCreateDiscussionContent(problemId);
 
   if (!discussions) {
@@ -30,7 +27,7 @@ export default function Discussions({ detailProblem, discussions, problemId }: I
 
   useEffect(() => {
     if (data) {
-      discussions.content.push(data.data.result);
+      discussions.content.push(...data.data.result.content);
       setContentForm((prev) => ({ ...prev, content: '' }));
     }
   }, [data]);

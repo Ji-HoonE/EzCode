@@ -1,11 +1,11 @@
 import { IDiscussionContentResponse } from '@/features/problem/types/discussion.response.data.type';
 
-export interface ICreateDiscussionContentRequest {
+export interface IDiscussionContentMutationRequest {
   languageId: number;
   content: string;
 }
 
-export interface ICreateDiscussionContentResponse {
+export interface IDiscussionContentMutationResponse {
   content: IDiscussionContentResponse[];
   pageable: {
     pageNumber: number;
