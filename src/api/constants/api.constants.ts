@@ -26,12 +26,5 @@ export const API_CONSTANTS = {
 };
 
 export const getProblemIdPath = (problemId: ProblemId, pathOption?: TGetProblemIdOptions) => {
-  switch (pathOption) {
-    case 'DISCUSSION':
-      return 'discussions';
-    default:
-      break;
-  }
-
   return `${API_URL.PROBLEM.GET_PROBLEMS}/${problemId}/${pathOption}`;
 };
