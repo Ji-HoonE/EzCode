@@ -28,16 +28,16 @@ export default function Discussions({ detailProblem, discussions, problemId }: I
 
   const { mutateAsync, data } = useCreateDiscussionContent(problemId);
 
-  if (!currentContents) {
-    return <div>토론 목록을 불러오는데 실패했습니다.</div>;
-  }
-
   useEffect(() => {
     if (data?.data.success) {
       setCurrentContents((prev) => [...prev, data.data.result]);
       setContentForm((prev) => ({ ...prev, content: '' }));
     }
   }, [data?.data.success]);
+
+  if (!currentContents) {
+    return <div>토론 목록을 불러오는데 실패했습니다.</div>;
+  }
 
   return (
     <div className=" flex flex-col gap-[10px]">

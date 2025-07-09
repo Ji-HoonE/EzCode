@@ -5,12 +5,12 @@ import { ProblemId } from '@/shared';
 import { Spinner } from '@/shared/ui/loading-indicators';
 
 interface RepliesProps {
-  isOpen: boolean;
+  isOpen?: boolean;
   problemId: ProblemId;
   discussionId: number;
 }
-export default function Replies({ problemId, discussionId, isOpen }: RepliesProps) {
-  const queryResult = useRepliesQuery(problemId, discussionId, isOpen);
+export default function Replies({ problemId, discussionId }: RepliesProps) {
+  const queryResult = useRepliesQuery(problemId, discussionId);
   const data = queryResult?.data;
   const isPending = queryResult?.isPending;
 

@@ -42,6 +42,10 @@ export default function DiscussionContent({ discussionContent }: IDiscussionCont
     }
   }, [editResponse?.data.success, deleteResponse?.data.success]);
 
+  const handleClickEditMode = () => {
+    if (isEdit) return editMutate({ languageId: 4, content: currentContent });
+    setIsEdit(true); // languageId를 받아올 방법이 없음, 백엔드측에 요청후 수정 예정
+  };
   return (
     <>
       {!isDelete && (
@@ -83,13 +87,7 @@ export default function DiscussionContent({ discussionContent }: IDiscussionCont
             >
               삭제
             </Button>
-            <Button
-              onClick={() => {
-                isEdit ? editMutate({ languageId: 4, content: currentContent }) : setIsEdit(true); // languageId를 받아올 방법이 없음, 백엔드측에 요청후 수정 예정
-              }}
-            >
-              {isEdit ? '완료' : '수정'}
-            </Button>
+            <Button onClick={handleClickEditMode}>{isEdit ? '완료' : '수정'}</Button>
           </div>
           {isRepliesOpen && (
             <Replies
