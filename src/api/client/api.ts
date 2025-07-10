@@ -10,7 +10,7 @@ import {
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
 
-type ReqType = 'client' | 'server';
+export type ReqType = 'client' | 'server';
 interface RequestConfig extends RequestInit {
   params?: Record<string, string>;
   reqType?: ReqType;
@@ -160,6 +160,24 @@ const ApiHelper = {
   put: <T>(endpoint: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>> => {
     return request<T>(endpoint, {
       method: 'PUT',
+      body: JSON.stringify(data),
+      ...defaultConfig,
+      ...config,
+      reqType: config?.reqType || 'client',
+    });
+  },
+
+  /**
+   * PATCH 요청
+   * @template T 응답 데이터의 타입
+   * @param {string} endpoint - API 엔드포인트
+   * @param {unknown} [data] - 요청 본문 데이터
+   * @param {RequestConfig} [config] - 요청 설정
+   * @returns {Promise<ApiResponse<T>>} API 응답
+   */
+  patch: <T>(endpoint: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>> => {
+    return request<T>(endpoint, {
+      method: 'PATCH',
       body: JSON.stringify(data),
       ...defaultConfig,
       ...config,

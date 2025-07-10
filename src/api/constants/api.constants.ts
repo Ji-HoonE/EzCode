@@ -15,6 +15,14 @@ export const API_URL = {
   PROBLEM: {
     GET_PROBLEMS: '/problems',
   },
+  GAME: {
+    CHECK_CHARACTER: '/games/characters/check',
+    GET_GAME_CHARACTERS: '/games/characters',
+    CREATE_CHARACTER: '/games/characters',
+    GET_GAME_CHARACTERS_INVENTORIES: '/games/characters/inventories',
+    EQUIP_ITEM: '/games/characters/items/equip',
+    GET_GAME_CHARACTERS_SKILLS: '/games/characters/skills/unequipped',
+  },
 };
 
 /** API 요청 주소 */
@@ -22,6 +30,7 @@ export const API_CONSTANTS = {
   CODE: {
     OK: 200,
     CREATED: 201,
+    BAD_REQUEST: 400,
   },
 };
 
