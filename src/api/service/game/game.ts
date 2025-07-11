@@ -3,6 +3,9 @@ import {
   ICheckCharacterResponse,
   IEquipItemRequest,
   IGetGameCharactersInventoriesResponse,
+  IGetGameCharactersPvpMatchingAcceptRequest,
+  IGetGameCharactersPvpMatchingAcceptResponse,
+  IGetGameCharactersPvpMatchingResponse,
   IGetGameCharactersResponse,
   IGetGameCharactersSkillsResponse,
 } from './game.interface';
@@ -60,6 +63,27 @@ export const gameApi = {
       {
         reqType: 'client',
       }
+    );
+    return response;
+  },
+  /** 무작위 배틀 매칭 Api */
+  getGameCharactersPvpMatching: async () => {
+    const response = await ApiHelper.get<IGetGameCharactersPvpMatchingResponse>(
+      API_URL.GAME.GET_GAME_CHARACTERS_PVP_MATCHING,
+      {
+        reqType: 'client',
+      }
+    );
+    return response;
+  },
+  /** 배틀 수락 Api */
+  getGameCharactersPvpMatchingAccept: async (
+    params: IGetGameCharactersPvpMatchingAcceptRequest
+  ) => {
+    const response = await ApiHelper.post<IGetGameCharactersPvpMatchingAcceptResponse>(
+      API_URL.GAME.GET_GAME_CHARACTERS_PVP_MATCHING_ACCEPT,
+      params,
+      { reqType: 'client' }
     );
     return response;
   },

@@ -66,3 +66,23 @@ export interface IGetGameCharactersSkillsResponse {
   skillDetails: string;
   slotType: string;
 }
+
+/** 무작위 배틀 매칭 응답 인터페이스 */
+export interface IGetGameCharactersPvpMatchingResponse {
+  isEnemyStrongThanMe: boolean;
+  message: string;
+  enemyIdToken: string;
+}
+
+/** 배틀 수락 요청 인터페이스 */
+export interface IGetGameCharactersPvpMatchingAcceptRequest {
+  battleToken: string;
+}
+
+/** 배틀 수락 응답 인터페이스 */
+export interface IGetGameCharactersPvpMatchingAcceptResponse {
+  playerNickName: string;
+  enemyNickName: string;
+  battleLog: string[];
+  isPlayerWin: boolean;
+}

@@ -1,5 +1,8 @@
 import { gameApi } from '@/api/service/game/game';
-import { IEquipItemRequest } from '@/api/service/game/game.interface';
+import {
+  IEquipItemRequest,
+  IGetGameCharactersPvpMatchingAcceptRequest,
+} from '@/api/service/game/game.interface';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 /** 캐릭터 생성 뮤테이션 */
@@ -55,5 +58,27 @@ export const useGetGameCharactersSkillsQuery = (isOpen: boolean) => {
       return response;
     },
     enabled: isOpen,
+  });
+};
+
+/** 무작위 배틀 매칭  Api */
+export const useGetGameCharactersPvpMatchingQuery = (isOpen: boolean) => {
+  return useQuery({
+    queryKey: ['characterPvpMatching'],
+    queryFn: async () => {
+      const response = await gameApi.getGameCharactersPvpMatching();
+      return response;
+    },
+    enabled: isOpen,
+  });
+};
+
+/** 배틀 수락 Api*/
+export const useGetGameCharactersPvpMatchingAcceptQuery = () => {
+  return useMutation({
+    mutationFn: async (params: IGetGameCharactersPvpMatchingAcceptRequest) => {
+      const response = await gameApi.getGameCharactersPvpMatchingAccept(params);
+      return response;
+    },
   });
 };

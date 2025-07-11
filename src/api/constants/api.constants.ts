@@ -22,6 +22,8 @@ export const API_URL = {
     GET_GAME_CHARACTERS_INVENTORIES: '/games/characters/inventories',
     EQUIP_ITEM: '/games/characters/items/equip',
     GET_GAME_CHARACTERS_SKILLS: '/games/characters/skills/unequipped',
+    GET_GAME_CHARACTERS_PVP_MATCHING: '/games/characters/battles/matching',
+    GET_GAME_CHARACTERS_PVP_MATCHING_ACCEPT: '/games/characters/battles',
   },
   Git: '/users/github',
   MYPAGE: {
