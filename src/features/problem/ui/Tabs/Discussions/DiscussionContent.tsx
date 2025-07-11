@@ -6,9 +6,9 @@ import {
   useEditDiscussionContent,
 } from '@/query/discussions/discussions.mutations';
 import { ChangeEvent, useEffect, useState } from 'react';
-import Image from 'next/image';
-import Replies from './Replies';
+import Replies from '../replies';
 import Vote from './Vote';
+import ShowChildReplies from './ShowChildReplies';
 
 interface IDiscussionContentProps {
   discussionContent: IDiscussionContentResponse;
@@ -46,6 +46,7 @@ export default function DiscussionContent({ discussionContent }: IDiscussionCont
     if (isEdit) return editMutate({ languageId: 4, content: currentContent });
     setIsEdit(true); // languageId를 받아올 방법이 없음, 백엔드측에 요청후 수정 예정
   };
+
   return (
     <>
       {!isDelete && (
@@ -65,19 +66,17 @@ export default function DiscussionContent({ discussionContent }: IDiscussionCont
                 <p>{currentContent}</p>
               )}
               <div className="flex items-center">
-                <Vote content={discussionContent} />
-                <button
-                  className="flex items-center"
-                  onClick={() => setIsRepliesOpen((prev) => !prev)}
-                >
-                  <Image
-                    alt="댓글보기 아이콘"
-                    src="/icons/discussion/replies.icon.svg"
-                    width={17}
-                    height={17}
-                  />
-                  <p>답글 {replyCount}개</p>
-                </button>
+                <Vote
+                  content={discussionContent}
+                  problemId={String(problemId)}
+                  onSuccess={() => {}}
+                />
+                <ShowChildReplies
+                  onClick={() => {
+                    setIsRepliesOpen((prev) => !prev);
+                  }}
+                  replyCount={replyCount}
+                />
               </div>
             </div>
             <Button
@@ -89,13 +88,7 @@ export default function DiscussionContent({ discussionContent }: IDiscussionCont
             </Button>
             <Button onClick={handleClickEditMode}>{isEdit ? '완료' : '수정'}</Button>
           </div>
-          {isRepliesOpen && (
-            <Replies
-              isOpen={isRepliesOpen}
-              problemId={String(problemId)}
-              discussionId={discussionId}
-            />
-          )}
+          {isRepliesOpen && <Replies problemId={String(problemId)} discussionId={discussionId} />}
         </div>
       )}
     </>

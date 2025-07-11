@@ -1,1 +1,1 @@
-export { useVoteStatusMutation } from './vote';
+export { useVoteStatusMutation } from './vote/vote';

@@ -7,6 +7,7 @@ interface IDetailProblemProps {
 
 export default function DetailProblem({ detailProblem }: IDetailProblemProps) {
   const { title, difficulty, categories, description } = detailProblem;
+
   return (
     <article className="flex flex-col gap-[29px] pl-[81px] pr-[78px] overflow-scroll">
       <h1 className="text-[15px] flex items-center gap-[14px]">
