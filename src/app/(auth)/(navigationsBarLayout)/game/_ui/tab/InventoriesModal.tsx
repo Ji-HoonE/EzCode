@@ -14,6 +14,7 @@ import {
   useGameCharacterEquipItemMutation,
   useGetGameCharactersInventoriesQuery,
 } from '@/query/game/game';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface InventorieFormProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ interface InventorieFormProps {
 }
 
 const InventoriesModal = ({ isOpen, onClose }: InventorieFormProps) => {
+  const queryClient = useQueryClient();
   const { data, isLoading } = useGetGameCharactersInventoriesQuery(isOpen);
   const { mutateAsync } = useGameCharacterEquipItemMutation();
 
@@ -28,6 +30,8 @@ const InventoriesModal = ({ isOpen, onClose }: InventorieFormProps) => {
     try {
       const response = await mutateAsync({ name: pName });
       if (response.data.status === API_CONSTANTS.CODE.OK) {
+        queryClient.invalidateQueries({ queryKey: ['characterStatus'] });
+        queryClient.invalidateQueries({ queryKey: ['characterInventories'] });
         onClose();
       }
     } catch (error) {
