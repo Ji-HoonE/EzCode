@@ -22,7 +22,7 @@ const useSocialLogin = () => {
         redirect: false,
       }).then((response) => {
         if (response?.ok) {
-          router.push('/');
+          router.replace('/');
         }
       });
       return;
