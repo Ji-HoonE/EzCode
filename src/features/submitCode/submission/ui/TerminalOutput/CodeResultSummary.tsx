@@ -1,6 +1,6 @@
 import { Spinner } from '@/shared/ui/loading-indicators';
-import useProblemWebSocketStore from '../../model/useProblemWebSocketStore';
 import ResultStatusIcon from '@/shared/ui/icons/terminal-icons/ResultStatusIcon';
+import useProblemWebSocketStore from '../../model/useProblemWebSocketStore';
 
 export default function CodeResultSummary() {
   const { results, totalResult } = useProblemWebSocketStore();

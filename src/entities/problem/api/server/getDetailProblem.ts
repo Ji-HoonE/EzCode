@@ -3,7 +3,7 @@
 import ApiHelper from '@/api/client/api';
 import { API_URL } from '@/api/constants/api.constants';
 import { ProblemId } from '@/shared';
-import { IDetailProblemResponse } from './getProblem.type';
+import { IDetailProblemResponse } from './getDetailProblem.type';
 
 //문제 불러오기
 export const getDetailProblem = async (problemId: ProblemId) => {

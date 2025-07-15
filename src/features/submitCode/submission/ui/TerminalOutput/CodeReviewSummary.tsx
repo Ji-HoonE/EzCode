@@ -1,12 +1,12 @@
 import { Button } from '@/components/ui/button';
-import useCodeReviewStore from '../../model/codeReviewStore';
 import useSubmissions from '../../hooks/useSubmissions';
 import { ProblemId } from '@/shared';
-import { IProblemRequestData } from '@/query/problemSubmission/problems.submission.interface';
+import useCodeReviewStore from '../../model/codeReviewStore';
+import { ISourceCode } from '@/entities/submitCode/submission/model/mutation/submitCode.mutation.type';
 
 interface ICodeReviewSummaryProps {
   problemId: ProblemId;
-  sourceCodeData: IProblemRequestData;
+  sourceCodeData: ISourceCode;
 }
 export default function CodeReviewSummary({ problemId, sourceCodeData }: ICodeReviewSummaryProps) {
   const { isCorrect } = useCodeReviewStore();

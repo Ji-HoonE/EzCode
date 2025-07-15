@@ -1,15 +1,15 @@
 'use client';
-import useProblemWebSocketStore from '@/features/problem/model/useProblemWebSocketStore';
-import { useCodeReviewStoreActions } from '../../model/codeReviewStore';
+import useProblemWebSocketStore from '@/features/submitCode/submission/model/useProblemWebSocketStore';
 import { useEffect } from 'react';
-import { Mode } from '../ProblemWorksSection';
 import CodeResultSummary from './CodeResultSummary';
 import CodeReviewSummary from './CodeReviewSummary';
-import { IProblemRequestData } from '@/query/problemSubmission/problems.submission.interface';
+import { ISourceCode } from '@/entities/submitCode/submission/model/mutation/submitCode.mutation.type';
+import { Mode } from 'fs';
+import { useCodeReviewStoreActions } from '../../model/codeReviewStore';
 
 interface ITerminalOutputProps {
   mode: Mode;
-  sourceCodeData: IProblemRequestData;
+  sourceCodeData: ISourceCode;
 }
 export default function TerminalOutput({ mode, sourceCodeData }: ITerminalOutputProps) {
   const { totalResult } = useProblemWebSocketStore();

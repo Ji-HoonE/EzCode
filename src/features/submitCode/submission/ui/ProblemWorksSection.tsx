@@ -1,11 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
 import CodeEditor from './CodeEditor';
-import TerminalOutput from './TerminalOutput';
 import { INITIAL_SOURCE_CODE_DATA } from '@/shared/lib/codemirror/codeMirror.Docs';
-import TerminalPanel from './TerminalPanel';
-import { IProblemRequestData } from '@/query/problemSubmission/problems.submission.interface';
 import { useProblemWebSocketStoreActions } from '../model/useProblemWebSocketStore';
+import { ISourceCode } from '@/entities/submitCode/submission/model/mutation/submitCode.mutation.type';
+import TerminalOutput from './TerminalOutput';
+import TerminalPanel from './TerminalPanel';
 
 interface IProblemWorksSectionProps {
   problemId: string;
@@ -19,8 +19,7 @@ export default function ProblemWorksSection({
   githubUrl,
   sessionKey,
 }: IProblemWorksSectionProps) {
-  const [sourceCodeData, setSourceCodeData] =
-    useState<IProblemRequestData>(INITIAL_SOURCE_CODE_DATA);
+  const [sourceCodeData, setSourceCodeData] = useState<ISourceCode>(INITIAL_SOURCE_CODE_DATA);
   const [mode, setMode] = useState<Mode>('init');
 
   const { setSessionKey } = useProblemWebSocketStoreActions();

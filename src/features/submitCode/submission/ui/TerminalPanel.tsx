@@ -1,22 +1,22 @@
 'use client';
 import { TerminalResultIcon, TerminalReviewIcon, TerminalRunIcon } from '@/shared/ui/icons';
-import useSubscribeProblem from '../hooks/useSubscribeProblem';
 import { ProblemId } from '@/shared';
 import clsx from 'clsx';
+import { useSubmissionForResultMutationT } from '@/entities/submitCode/submission/model/mutation/submitCode.mutation';
 import { Mode } from './ProblemWorksSection';
-import { IProblemRequestData } from '@/query/problemSubmission/problems.submission.interface';
-import { useSubmissionForResultMutationT } from '@/entities/problemSubmit/model/mutations/submitCode.mutation';
+import { ISourceCode } from '@/entities/submitCode/submission/model/mutation/submitCode.mutation.type';
 import useProblemWebSocketStore, {
   useProblemWebSocketStoreActions,
 } from '../model/useProblemWebSocketStore';
-import GitPushDialog from '@/features/submitProblem/gitPush/ui/GitPushDialog';
+import useSubscribeProblem from '../hooks/useSubscribeProblem';
+import GitPushDialog from '../../gitPush/ui/GitPushDialog';
 
 interface TerminalPanelProps {
   problemId: ProblemId;
   setMode: (mode: Mode) => void;
   mode: Mode;
   githubUrl: string | null;
-  sourceCodeData: IProblemRequestData;
+  sourceCodeData: ISourceCode;
 }
 
 export default function TerminalPanel({

@@ -1,6 +1,6 @@
 'use client';
 
-import { IDetailProblemResponse } from '../api/server/getProblem.type';
+import { IDetailProblemResponse } from '../api/server/getDetailProblem.type';
 
 interface IDetailProblemProps {
   detailProblem: IDetailProblemResponse;

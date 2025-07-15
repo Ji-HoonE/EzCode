@@ -1,4 +1,4 @@
-import TabsToggle from '@/features/problem/ui/TabsToggle';
+import TabsToggle from '@/features/discussions/disussions/ui/TabsToggle';
 
 export default async function ProblemPageLayout({
   children,

@@ -3,7 +3,7 @@
 import { IMessage } from '@stomp/stompjs';
 import useProblemWebSocketStore, {
   useProblemWebSocketStoreActions,
-} from '@/features/problem/model/useProblemWebSocketStore';
+} from '@/features/submitCode/submission/model/useProblemWebSocketStore';
 import { useEffect } from 'react';
 import useConnectProblemWebSocket from './useConnectProblemWebSocket';
 

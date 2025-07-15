@@ -1,4 +1,4 @@
-import { IProblemRequestData } from '@/query/problemSubmission/problems.submission.interface';
+import { ISourceCode } from '@/entities/submitCode/submission/model/mutation/submitCode.mutation.type';
 import {
   ILanguageSelectOption,
   LANGUAGE_ID,
@@ -17,7 +17,7 @@ export const INITIAL_VALUE: Record<ProblemLanguageType, string> = {
 export const INITIAL_LANG = 'Python';
 
 // 초기 소스 코드 데이터
-export const INITIAL_SOURCE_CODE_DATA: IProblemRequestData = {
+export const INITIAL_SOURCE_CODE_DATA: ISourceCode = {
   languageId: LANGUAGE_ID[INITIAL_LANG],
   sourceCode: INITIAL_VALUE[INITIAL_LANG],
 };

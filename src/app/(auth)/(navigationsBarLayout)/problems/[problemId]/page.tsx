@@ -1,6 +1,6 @@
-import { ProblemWorksSection } from '@/features/problem';
-import { getSessionKey } from '@/features/problem/api/server/getSessionKey';
-import { getGitHubUrl } from '@/features/submitProblem';
+import { getSessionKey } from '@/entities/problem/api/server/getSessionKey';
+import { getGitHubUrl } from '@/features/submitCode/gitPush/api/server/getGitHub';
+import ProblemWorksSection from '@/features/submitCode/submission/ui/ProblemWorksSection';
 
 interface IProblemPageProps {
   params: Promise<{ problemId: string }>;
