@@ -7,7 +7,7 @@ export interface ISubmitCodeRequest extends ISourceCode {
   sessionKey: string;
 }
 
-export interface ISubmissionReviewRequest extends ISubmitCodeRequest {
+export interface ISubmissionReviewRequest extends ISourceCode {
   isCorrect: boolean;
 }
 

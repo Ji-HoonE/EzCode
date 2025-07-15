@@ -26,7 +26,7 @@ export const useISubmissionForReviewMutation = (problemId: ProblemId) => {
       const path = getProblemIdPath(problemId, 'review');
 
       const response = await ApiHelper.post<ISubmissionReviewResponse>(path, params);
-      return response;
+      return response.data.result.reviewContent;
     },
   });
 };

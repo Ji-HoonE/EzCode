@@ -1,39 +1,47 @@
 import { Button } from '@/components/ui/button';
-import useSubmissions from '../../hooks/useSubmissions';
 import { ProblemId } from '@/shared';
-import useCodeReviewStore from '../../model/codeReviewStore';
 import { ISourceCode } from '@/entities/submitCode/submission/model/mutation/submitCode.mutation.type';
+import useSubmitForReview from '../../hooks/useSubmitForReview';
+import { BouncingDots } from '@/shared/ui/loading-indicators';
 
 interface ICodeReviewSummaryProps {
   problemId: ProblemId;
   sourceCodeData: ISourceCode;
 }
 export default function CodeReviewSummary({ problemId, sourceCodeData }: ICodeReviewSummaryProps) {
-  const { isCorrect } = useCodeReviewStore();
-  const { codeReviewContent } = useCodeReviewStore();
+  const { tokenCount, submitForReview, codeReview, isSubmittedReview } =
+    useSubmitForReview(problemId);
 
-  const { submitCodeForReview } = useSubmissions(problemId);
   return (
     <div className="flex flex-col">
-      <p>AI 코드 리뷰를 받으시겠습니까? 남은 토큰 수는 10개 입니다.</p>
-      <Button onClick={() => submitCodeForReview({ isCorrect, ...sourceCodeData })}>
+      <p>AI 코드 리뷰를 받으시겠습니까? 남은 토큰 수는 {tokenCount}개 입니다.</p>
+      <Button
+        onClick={() => {
+          submitForReview(sourceCodeData);
+        }}
+      >
         코드리뷰
       </Button>
-      <div>
-        코드리뷰:
-        {codeReviewContent && (
-          <>
-            {codeReviewContent.map((review) => {
-              return (
-                <div className="flex flex-col" key={review.key}>
-                  <h3>{review.key}</h3>
-                  <p>{review.content}</p>
-                </div>
-              );
-            })}
-          </>
-        )}
-      </div>
+      {isSubmittedReview && (
+        <div>
+          코드리뷰:
+          {codeReview ? (
+            <div>
+              {codeReview.split('\n').map((line, idx) => (
+                <p key={idx}>
+                  {line.trim().startsWith('**') ? (
+                    <strong>{line.replace(/\*\*/g, '')}</strong>
+                  ) : (
+                    line
+                  )}
+                </p>
+              ))}
+            </div>
+          ) : (
+            <BouncingDots />
+          )}
+        </div>
+      )}
     </div>
   );
 }
