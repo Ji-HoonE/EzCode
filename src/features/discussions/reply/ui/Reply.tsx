@@ -1,12 +1,12 @@
-import Vote from '../vote/Vote';
+import Vote from '../../vote/ui/Vote';
 import { Button } from '@/components/ui/button';
 import { ProblemId } from '@/shared';
 import { useState } from 'react';
 import { BouncingDots } from '@/shared/ui/loading-indicators';
-import ShowChildReplies from '../ShowChildReplies';
-import NestedReplies from '../nestedReplies';
+import NestedReplies from './NestedReplies';
 import { IReply, useDeleteReplyMutation } from '@/entities/discussionReplies';
-import ReplyForm from '../../ReplyForm';
+import ReplyForm from './ReplyForm';
+import ShowChildReplies from './ShowChildReplies';
 
 interface IReplyProps {
   reply: IReply;

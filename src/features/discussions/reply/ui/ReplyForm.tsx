@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { ProblemId } from '@/shared';
-import useReply from './lib/useReply';
+import useReply from '../lib/useReply';
 
 interface ReplyFormProps {
   problemId: ProblemId;

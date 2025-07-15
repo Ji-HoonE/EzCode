@@ -2,9 +2,9 @@ import { Button } from '@/components/ui/button';
 import { ProblemId } from '@/shared';
 import { BouncingDots } from '@/shared/ui/loading-indicators';
 import { useState } from 'react';
-import Vote from '../vote/Vote';
+import Vote from '../../vote/ui/Vote';
 import { IReply, useDeleteReplyMutation } from '@/entities/discussionReplies';
-import ReplyForm from '../../ReplyForm';
+import ReplyForm from './ReplyForm';
 
 interface INestedReplyProps {
   nestedReply: IReply;

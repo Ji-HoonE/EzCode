@@ -1,4 +1,4 @@
-import Discussions from '@/features/discussions/ui/discussions';
+import Discussions from '@/features/discussions/disussions/ui/Discussions';
 import { DetailProblem, getDetailProblem } from '@/features/problem';
 
 interface IProblemPageProps {

@@ -1,14 +1,14 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import Replies from '../replies';
-import Vote from '../vote/Vote';
-import ShowChildReplies from '../ShowChildReplies';
+import ShowChildReplies from '../../reply/ui/ShowChildReplies';
 import DiscussionForm from './DiscussionForm';
 import {
   TDiscussionContentMutationResponse,
   useDeleteDiscussionContent,
 } from '@/entities/discussions';
+import { Vote } from '../../vote';
+import Replies from '../../reply/ui/Replies';
 
 interface IDiscussionContentProps {
   discussion: TDiscussionContentMutationResponse;
