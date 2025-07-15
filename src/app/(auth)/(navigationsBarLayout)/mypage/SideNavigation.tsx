@@ -31,8 +31,19 @@ export const SideNavigation = ({ tab, setTab }: IProps) => {
         </ul>
       </div>
       <div className="flex flex-col justify-center items-center">
-        <ul className="text-sm font-semibold">
-          <li className="text-gray-400">비밀번호 변경</li>
+        <ul className="text-xl font-semibold">
+          <li
+            className={`cursor-pointer py-2 px-3 text-center rounded-md ${
+              tab === 'changePassword'
+                ? 'text-green-400 font-extrabold text-lg'
+                : 'text-white text-base font-light'
+            }`}
+            onClick={() => {
+              setTab('changePassword');
+            }}
+          >
+            비밀번호 변경
+          </li>
         </ul>
       </div>
     </div>

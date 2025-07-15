@@ -5,6 +5,7 @@ import { Mine } from './tab/Mine';
 import { Solved } from './tab/Solved';
 import { Report } from './tab/Report';
 import { Inquiry } from './tab/Inquiry';
+import { ChangePassword } from './tab/ChangePassword';
 
 const Mypage = () => {
   const [tab, setTab] = useState('mine');
@@ -13,6 +14,7 @@ const Mypage = () => {
     solved: <Solved />,
     report: <Report />,
     inquiry: <Inquiry />,
+    changePassword: <ChangePassword />,
   } as const;
   return (
     <div className="w-full h-full pt-[114px] px-10 py-[34px] flex">

@@ -24,6 +24,10 @@ export const API_URL = {
     GET_GAME_CHARACTERS_SKILLS: '/games/characters/skills/unequipped',
   },
   Git: '/users/github',
+  MYPAGE: {
+    CHANGE_PASSWORD: '/users/password',
+    SUBMISSION: '/submissions',
+  },
 };
 
 /** API 요청 주소 */

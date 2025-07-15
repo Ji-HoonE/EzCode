@@ -1,15 +1,5 @@
 export interface ProblemList {
-  content: {
-    id: number;
-    creator: string;
-    categories: string[];
-    title: string;
-    score: number;
-    difficulty: string;
-    reference: string;
-    totalSubmissions: number;
-    correctSubmissions: number;
-  }[];
+  content: ProblemsContent[];
   pageable: {
     pageNumber: number;
     pageSize: number;
@@ -35,4 +25,21 @@ export interface ProblemList {
   numberOfElements: number;
   first: boolean;
   empty: boolean;
+}
+
+export interface ProblemsContent {
+  id: number;
+  creator: string;
+  categories: string[];
+  title: string;
+  score: number;
+  difficulty: string;
+  reference: string;
+  totalSubmissions: number;
+  correctSubmissions: number;
+}
+
+export interface ProblemListWithSearch {
+  content: ProblemsContent[];
+  totalPages: number;
 }

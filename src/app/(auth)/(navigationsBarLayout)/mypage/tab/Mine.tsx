@@ -1,11 +1,17 @@
 import { Button } from '@/components/ui/button';
-import { useMyAiReviewCheckQuery, useMyDailySolved, useMyInfoQuery } from '@/query/mypage/mypage';
+import {
+  useMyAiReviewCheckQuery,
+  useMyDailySolved,
+  useMyInfoQuery,
+  useMyRankingQuery,
+} from '@/query/mypage/mypage';
 import { TPeriod } from '@/shared/types/mypage.type';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 import { IHeatmapItem } from '@/query/mypage/mypage.interface';
-import { Heatmap } from '../Heatmap';
+import { Heatmap } from '../ui/Heatmap';
+
 const SummaryStatItem = ({ title, value }: { title: string; value: string | number }) => (
   <div className="flex flex-col gap-2">
     <span className="text-center font-bold text-[#EBEBEBAB] text-xs">{title}</span>
@@ -36,11 +42,12 @@ const DetailInfoRow = ({
 export const Mine = () => {
   const [_unused, _setUnused] = useState<TPeriod>('all-time');
   const { data } = useMyInfoQuery();
-  // const { data: ranking } = useMyRankingQuery(period || 'all-time');
+  const { data: ranking } = useMyRankingQuery('all-time');
   const { data: aiReview } = useMyAiReviewCheckQuery();
   const { data: heatmap } = useMyDailySolved();
   const myInfo = data?.data.result;
-  // const myRanking = ranking?.data.result;
+  const myRanking = ranking?.data.result;
+  console.log(myRanking);
   const aiReviewCnt = aiReview?.data.result.reviewToken;
   const [heatmapData, setHeatmapData] = useState<IHeatmapItem[]>([]);
   const levelCalculator = (count: number) => {

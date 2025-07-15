@@ -1,20 +1,52 @@
 import ApiHelper from '@/api/client/api';
 import { useQuery } from '@tanstack/react-query';
-import { ProblemList } from './problem.interface';
+import { ProblemList, ProblemsContent } from './problem.interface';
 
-export const useProblemListQuery = (page: number, size: number, sort: string,categoryCode? : string,difficulty?:string) => {
-const queryParams: Record<string, string> = {};
-if (difficulty && difficulty !== "전체") queryParams.difficulty = difficulty;
-if (categoryCode && categoryCode !== "전체") queryParams.categoryCode = categoryCode;
+export const useProblemListQuery = (
+  page: number,
+  size: number,
+  sort: string,
+  categoryCode?: string,
+  difficulty?: string,
+  keyword?: string
+) => {
+  const isSearching = Boolean(keyword && keyword.trim() !== '');
+  const queryParams: Record<string, string> = {};
+  if (difficulty && difficulty !== '전체') queryParams.difficulty = difficulty;
+  if (categoryCode && categoryCode !== '전체') queryParams.categoryCode = categoryCode;
+  if (isSearching && keyword) queryParams.keyword = keyword;
+
+  const endpoint = isSearching ? '/problems/search' : '/problems';
+
   return useQuery({
-    queryKey: ['problemList', page, size, sort,categoryCode,difficulty], 
+    queryKey: ['problemList', endpoint, page, size, sort, categoryCode, difficulty, keyword],
     queryFn: async () => {
-      const response = await ApiHelper.get<ProblemList>(
-        `/problems?page=${page}&size=${size}&sort=${sort}`,{params : queryParams }
-      );
-      return response;
-    },
+      if (isSearching) {
+        const response = await ApiHelper.get<ProblemsContent[]>(
+          `${endpoint}`, //
+          { params: queryParams }
+        );
+        const result = response.data.result;
 
-    staleTime: 1000 * 60 * 5, // 5분간 캐시 유지
+        const startIdx = (page - 1) * size;
+        const sliced = result.slice(startIdx, startIdx + size);
+
+        return {
+          content: sliced,
+          totalPages: Math.ceil(result.length / size),
+        };
+      } else {
+        const response = await ApiHelper.get<ProblemList>(
+          `${endpoint}?page=${page}&size=${size}&sort=${sort}`,
+          { params: queryParams }
+        );
+        return {
+          content: response.data.result.content,
+          totalPages: response.data.result.totalPages,
+        };
+      }
+    },
+    enabled: isSearching ? !!keyword?.trim() : true,
+    staleTime: 1000 * 60 * 5,
   });
 };

@@ -30,3 +30,29 @@ export interface IHeatmapItem {
   count: number;
   level: number;
 }
+
+export interface ChangePasswordBody {
+  oldPassword: string;
+  newPassword: string;
+}
+
+export interface ChangePasswordRequest {
+  message: string;
+}
+
+export interface SubmissionsResonse {
+  problemId: number;
+  problemTitle: string;
+  problemDescription: string;
+  submissions: Submission[];
+}
+
+export interface Submission {
+  id: number;
+  sourceCode: string;
+  isCorrect: boolean;
+  message: string;
+  executionTime: number;
+  memoryUsage: number;
+  submittedAt: string;
+}
