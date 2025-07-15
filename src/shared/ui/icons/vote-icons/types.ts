@@ -1,4 +1,4 @@
-import { TVoteStatus } from '@/entities/vote';
+import { TVoteStatus } from '@/entities/discussions/vote';
 
 export interface IVoteIconProps {
   status: TVoteStatus;

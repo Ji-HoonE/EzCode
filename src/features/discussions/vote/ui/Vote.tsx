@@ -1,8 +1,7 @@
 'use client';
 
-import { IReply } from '@/entities/discussionReplies';
-import { IDiscussionContentResponse } from '@/entities/discussions';
-import { TVoteStatus, useVoteStatusMutation } from '@/entities/vote';
+import { IReply, TVoteStatus, useVoteStatusMutation } from '@/entities/discussions';
+import { IDiscussionContentResponse } from '@/entities/discussions/discussions/model/query/discussion.query.type';
 import { ProblemId } from '@/shared';
 import DownVoteIcon from '@/shared/ui/icons/vote-icons/DownVoteIcon';
 import UpVoteIcon from '@/shared/ui/icons/vote-icons/UpVoteIcon';

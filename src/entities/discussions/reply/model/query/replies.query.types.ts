@@ -1,4 +1,4 @@
-import { TVoteStatus } from '@/entities/vote';
+import { TVoteStatus } from '@/entities/discussions/vote';
 import { IUserInfo } from '@/shared/types/auth';
 
 export interface IGetRepliesResponse {

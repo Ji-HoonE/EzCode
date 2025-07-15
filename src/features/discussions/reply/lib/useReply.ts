@@ -1,4 +1,4 @@
-import { useCreateReplyMutation, useEditReplyMutation } from '@/entities/discussionReplies';
+import { useCreateReplyMutation, useEditReplyMutation } from '@/entities/discussions';
 import { ProblemId } from '@/shared';
 import { useState } from 'react';
 

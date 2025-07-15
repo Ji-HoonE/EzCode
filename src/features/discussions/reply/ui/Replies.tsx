@@ -2,8 +2,8 @@
 import { ProblemId } from '@/shared';
 import { Spinner } from '@/shared/ui/loading-indicators';
 import Reply from './Reply';
-import { useRepliesQuery } from '@/entities/discussionReplies';
 import ReplyForm from './ReplyForm';
+import { useRepliesQuery } from '@/entities/discussions';
 
 interface RepliesProps {
   problemId: ProblemId;
