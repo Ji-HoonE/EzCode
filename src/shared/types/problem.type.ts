@@ -17,6 +17,14 @@ export const LANGUAGE_ID: Record<ProblemLanguageType, number> = {
   Python: 4,
 };
 
+//id별 언어
+export const LANGUAGE: Record<number, ProblemLanguageType> = {
+  1: 'Java',
+  2: 'C',
+  3: 'Cpp',
+  4: 'Python',
+};
+
 //언어 선택하는 셀렉트 옵션 타입
 export interface ILanguageSelectOption {
   value: ProblemLanguageType;

@@ -12,15 +12,15 @@ interface ITerminalOutputProps {
   sourceCodeData: IProblemRequestData;
 }
 export default function TerminalOutput({ mode, sourceCodeData }: ITerminalOutputProps) {
-  const { finalResult } = useProblemWebSocketStore();
+  const { totalResult } = useProblemWebSocketStore();
 
   const { setIsCorrect } = useCodeReviewStoreActions();
 
   useEffect(() => {
-    if (finalResult) {
-      setIsCorrect(finalResult?.isCorrect || false);
+    if (totalResult) {
+      setIsCorrect(totalResult?.isCorrect || false);
     }
-  }, [finalResult, setIsCorrect]);
+  }, [totalResult, setIsCorrect]);
 
   return (
     <section className="flex flex-col w-full px-[14px] py-[22px]">

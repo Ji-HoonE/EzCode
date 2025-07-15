@@ -1,20 +1,11 @@
-//웹소켓 메시지로 받는 init type - destination(/init)
-
-interface IProblemStompInitCase {
-  id: number;
-  problemId: number;
-  input: string;
-  output: string;
-}
-
-//웹소켓 메시지로 받는 result type - destination(/testcase)
+//웹소켓 메시지로 받는 results type - destination(/testcase)
 export interface IProblemStompResult {
+  testcaseId: number;
+  isPassed: boolean;
   actualOutput: string;
   executionTime: number;
-  isPassed: boolean;
   memoryUsage: number;
   message: string;
-  seqId: number;
 }
 
 //웹소켓 메시지로 받는 finalResult type - destination(/final)
@@ -26,15 +17,14 @@ interface IProblemStompFinalResult {
 }
 
 /** 메시지 키 타입 */
-type MessageKey = 'initCases' | 'results' | 'finalResult' | 'error' | 'git-status';
+type MessageKey = 'results' | 'totalResult' | 'error' | 'git-status';
 
 /** 스토어 상태 인터페이스 */
 export interface IMessageInitialState {
   sessionKey: string;
-  isSubmitted: boolean;
-  initCases: IProblemStompInitCase[] | null;
+  isConnected: boolean;
   results: IProblemStompResult[] | [];
-  finalResult: IProblemStompFinalResult | null;
+  totalResult: IProblemStompFinalResult | null;
   error?: unknown | null;
   gitStatus?: unknown | null;
 }
@@ -46,6 +36,7 @@ interface IMessageInitialAction {
     setStatus: (status: boolean) => void;
     setMessage: (key: MessageKey, message: unknown) => void;
     clearMessages: () => void;
+    clearResults: () => void;
   };
 }
 

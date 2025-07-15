@@ -10,10 +10,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { LANGUAGE_SELECTOR_OPTIONS } from '@/shared/lib/codemirror/codeMirror.Docs';
-import { ILanguageSelectOption } from '@/shared/types/problem.type';
+import { ILanguageSelectOption, ProblemLanguageType } from '@/shared/types/problem.type';
 
 interface ILanguageSelector {
-  currentLanguage: string;
+  currentLanguage: ProblemLanguageType;
   onSelect: (option: ILanguageSelectOption) => void;
 }
 

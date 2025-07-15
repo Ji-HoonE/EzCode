@@ -1,32 +1,37 @@
 'use client';
-import useConnectProblemWebSocket from '../hooks/useConnectProblemWebSocket';
 import { TerminalResultIcon, TerminalReviewIcon, TerminalRunIcon } from '@/shared/ui/icons';
-import useSubmissions from '../hooks/useSubmissions';
-import { IProblemRequestData } from '@/query/problemSubmission/problems.submission.interface';
 import useSubscribeProblem from '../hooks/useSubscribeProblem';
 import { ProblemId } from '@/shared';
 import clsx from 'clsx';
 import { Mode } from './ProblemWorksSection';
-import TerminalGitHubIcon from '@/shared/ui/icons/terminal-icons/TerminalGitHubIcon';
+import { IProblemRequestData } from '@/query/problemSubmission/problems.submission.interface';
+import { useSubmissionForResultMutationT } from '@/entities/problemSubmit/model/mutations/submitCode.mutation';
+import useProblemWebSocketStore, {
+  useProblemWebSocketStoreActions,
+} from '../model/useProblemWebSocketStore';
+import GitPushDialog from '@/features/submitProblem/gitPush/ui/GitPushDialog';
 
 interface TerminalPanelProps {
   problemId: ProblemId;
-  sourceCodeData: IProblemRequestData;
   setMode: (mode: Mode) => void;
   mode: Mode;
   githubUrl: string | null;
+  sourceCodeData: IProblemRequestData;
 }
 
 export default function TerminalPanel({
   problemId,
-  sourceCodeData,
   setMode,
   mode,
   githubUrl,
+  sourceCodeData,
 }: TerminalPanelProps) {
-  const { submitCodeForResult } = useSubmissions(problemId);
-  const stompRef = useConnectProblemWebSocket();
-  useSubscribeProblem(stompRef);
+  const { sessionKey } = useProblemWebSocketStore();
+
+  useSubscribeProblem(sessionKey);
+
+  const { mutateAsync } = useSubmissionForResultMutationT(problemId);
+  const { clearResults } = useProblemWebSocketStoreActions();
 
   return (
     <div className="flex flex-col w-[68px] px-[10px] pt-[19px]">
@@ -34,7 +39,8 @@ export default function TerminalPanel({
         <button
           className="flex flex-col gap-[3px] items-center"
           onClick={() => {
-            submitCodeForResult(sourceCodeData);
+            clearResults();
+            mutateAsync({ ...sourceCodeData, sessionKey: sessionKey || '' });
             setMode('result');
           }}
         >
@@ -52,9 +58,7 @@ export default function TerminalPanel({
           <TerminalReviewIcon className={clsx(mode !== 'review' && 'text-[#6B6B6B]')} />
           <h3 className={clsx(mode !== 'review' && 'text-[#6B6B6B]')}>REVIEW</h3>
         </button>
-        <button onClick={() => {}}>
-          <TerminalGitHubIcon disabled={!!githubUrl} />
-        </button>
+        <GitPushDialog githubUrl={githubUrl} />
       </div>
     </div>
   );

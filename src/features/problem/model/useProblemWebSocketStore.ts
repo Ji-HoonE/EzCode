@@ -11,8 +11,7 @@ import {
 const useProblemWebSocketStore = create<IProblemWebSocketStore>()(
   devtools((set) => ({
     sessionKey: '',
-    isSubmitted: false,
-    testCase: null,
+    isConnected: false,
     results: null,
     totalResult: null,
     actions: {
@@ -23,15 +22,14 @@ const useProblemWebSocketStore = create<IProblemWebSocketStore>()(
       },
       setStatus: (status) => {
         set({
-          isSubmitted: status,
+          isConnected: status,
         });
       },
-
       setMessage: (key, message) => {
         set((state: IMessageInitialState) => {
           if (key === 'results') {
             const newResults = [...(state.results ?? []), message] as Array<IProblemStompResult>;
-            newResults.sort((a, b) => a.seqId - b.seqId);
+            newResults.sort((a, b) => a.testcaseId - b.testcaseId);
             return {
               ...state,
               results: newResults as IProblemStompResult[],
@@ -47,12 +45,16 @@ const useProblemWebSocketStore = create<IProblemWebSocketStore>()(
       clearMessages: () => {
         //초기화
         set({
-          isSubmitted: false,
-          initCases: null,
+          isConnected: false,
           results: [],
-          finalResult: null,
+          totalResult: null,
           error: null,
           gitStatus: null,
+        });
+      },
+      clearResults: () => {
+        set({
+          results: [],
         });
       },
     },
@@ -67,6 +69,7 @@ export function useProblemWebSocketStoreActions() {
       setStatus: state.actions.setStatus,
       setMessage: state.actions.setMessage,
       clearMessages: state.actions.clearMessages,
+      clearResults: state.actions.clearResults,
     }))
   );
 }

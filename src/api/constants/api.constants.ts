@@ -23,6 +23,7 @@ export const API_URL = {
     EQUIP_ITEM: '/games/characters/items/equip',
     GET_GAME_CHARACTERS_SKILLS: '/games/characters/skills/unequipped',
   },
+  Git: '/users/github',
 };
 
 /** API 요청 주소 */

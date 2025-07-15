@@ -1,33 +1,28 @@
 'use client';
 
-import { Client, IMessage } from '@stomp/stompjs';
+import { IMessage } from '@stomp/stompjs';
 import useProblemWebSocketStore, {
   useProblemWebSocketStoreActions,
 } from '@/features/problem/model/useProblemWebSocketStore';
-import { RefObject, useEffect } from 'react';
+import { useEffect } from 'react';
+import useConnectProblemWebSocket from './useConnectProblemWebSocket';
 
-export default function useSubscribeProblem({
-  problemStompRef,
-}: {
-  problemStompRef: RefObject<Client | null>;
-}) {
-  const { sessionKey } = useProblemWebSocketStore();
-  const { setStatus, setMessage, clearMessages } = useProblemWebSocketStoreActions();
+export default function useSubscribeProblem(sessionKey: string) {
+  const { setMessage, clearMessages } = useProblemWebSocketStoreActions();
+  const { problemStompRef } = useConnectProblemWebSocket();
+  const { isConnected } = useProblemWebSocketStore();
 
   useEffect(() => {
-    if (!sessionKey || !problemStompRef.current) return;
+    if (!problemStompRef.current) return;
 
     const base = `/user/queue/submission/${sessionKey}`;
+
     if (problemStompRef.current.connected) {
-      setStatus(true);
-      problemStompRef.current.subscribe(`${base}/init`, (msg: IMessage) =>
-        setMessage('initCases', JSON.parse(msg.body))
-      );
       problemStompRef.current.subscribe(`${base}/case`, (msg: IMessage) => {
         setMessage('results', JSON.parse(msg.body));
       });
       problemStompRef.current.subscribe(`${base}/final`, (msg: IMessage) =>
-        setMessage('finalResult', JSON.parse(msg.body))
+        setMessage('totalResult', JSON.parse(msg.body))
       );
       problemStompRef.current.subscribe(`/topic/submission/${sessionKey}/error`, (msg: IMessage) =>
         setMessage('error', JSON.parse(msg.body))
@@ -39,13 +34,12 @@ export default function useSubscribeProblem({
       // 에러 발생 시 스토어 초기화
       problemStompRef.current.onStompError = () => {
         clearMessages();
-        setStatus(false);
       };
 
       // 클라이언트가 끊겼을때
       problemStompRef.current.onDisconnect = () => {
-        setStatus(false);
+        clearMessages();
       };
     }
-  }, [sessionKey, problemStompRef, setMessage, clearMessages, setStatus]);
+  }, [isConnected, setMessage, clearMessages, sessionKey, problemStompRef]);
 }

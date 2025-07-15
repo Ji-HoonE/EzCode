@@ -1,1 +1,1 @@
-export type TGetProblemIdOptions = 'discussions';
+export type TGetProblemIdOptions = 'discussions' | 'submit-ready' | 'submit-prepare';
