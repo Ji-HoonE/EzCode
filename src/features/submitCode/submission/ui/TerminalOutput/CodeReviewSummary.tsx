@@ -17,16 +17,14 @@ export default function CodeReviewSummary({ problemId, sourceCodeData }: ICodeRe
     useSubmitForReview(problemId);
   const { token } = useProblemWebSocketStore();
 
+  const submitCode = () => {
+    if (!token) return router.push(API_URL.AUTH.SIGN_IN);
+    submitForReview(sourceCodeData);
+  };
   return (
     <div className="flex flex-col">
       <p>AI 코드 리뷰를 받으시겠습니까? 남은 토큰 수는 {tokenCount}개 입니다.</p>
-      <Button
-        onClick={() => {
-          token ? submitForReview(sourceCodeData) : router.push(API_URL.AUTH.SIGN_IN);
-        }}
-      >
-        코드리뷰
-      </Button>
+      <Button onClick={submitCode}>코드리뷰</Button>
       {isSubmittedReview && (
         <div>
           코드리뷰:

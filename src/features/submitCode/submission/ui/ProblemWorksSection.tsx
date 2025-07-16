@@ -6,7 +6,7 @@ import { useProblemWebSocketStoreActions } from '../model/useProblemWebSocketSto
 import { ISourceCode } from '@/entities/submitCode/submission/model/mutation/submitCode.mutation.type';
 import TerminalOutput from './TerminalOutput';
 import TerminalPanel from './TerminalPanel';
-import useAccessToken from '@/entities/auth/hooks/useAuthToken';
+import useAccessToken from '@/shared/hooks/useAuthToken';
 
 interface IProblemWorksSectionProps {
   problemId: string;

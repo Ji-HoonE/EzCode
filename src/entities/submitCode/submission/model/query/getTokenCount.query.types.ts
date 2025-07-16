@@ -1,3 +1,3 @@
-interface IReviewToken {
+export interface IReviewToken {
   reviewToken: number;
 }

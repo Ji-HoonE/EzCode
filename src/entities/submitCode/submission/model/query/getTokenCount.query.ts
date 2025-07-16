@@ -1,6 +1,7 @@
 import ApiHelper from '@/api/client/api';
 import { API_URL } from '@/api/constants/api.constants';
 import { useQuery } from '@tanstack/react-query';
+import { IReviewToken } from './getTokenCount.query.types';
 
 /**git push */
 export const useGetTokenCountQuery = () => {
