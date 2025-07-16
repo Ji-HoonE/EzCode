@@ -3,21 +3,23 @@ import { devtools } from 'zustand/middleware';
 import { useShallow } from 'zustand/shallow';
 import {
   IMessageInitialState,
+  INITIAL_STATE,
   IProblemStompResult,
   IProblemWebSocketStore,
+  IWebSocketAuth,
 } from './useProblemWebSocketStore.types';
 
 /** 인증 스토어 */
 const useProblemWebSocketStore = create<IProblemWebSocketStore>()(
   devtools((set) => ({
-    sessionKey: '',
-    isConnected: false,
-    results: null,
-    totalResult: null,
+    ...INITIAL_STATE,
     actions: {
-      setSessionKey: (key) => {
-        set({
-          sessionKey: key,
+      setAuth: (key, value) => {
+        set((state: IWebSocketAuth) => {
+          return {
+            ...state,
+            [key]: value,
+          };
         });
       },
       setStatus: (status) => {
@@ -65,7 +67,7 @@ const useProblemWebSocketStore = create<IProblemWebSocketStore>()(
 export function useProblemWebSocketStoreActions() {
   return useProblemWebSocketStore(
     useShallow((state) => ({
-      setSessionKey: state.actions.setSessionKey,
+      setAuth: state.actions.setAuth,
       setStatus: state.actions.setStatus,
       setMessage: state.actions.setMessage,
       clearMessages: state.actions.clearMessages,

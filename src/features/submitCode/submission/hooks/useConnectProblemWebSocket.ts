@@ -5,14 +5,16 @@ import { Client } from '@stomp/stompjs';
 import { BASE_URL } from '@/constants/env';
 import { sharedStompRef } from '@/shared/lib/stomp/sharedStompRef';
 import { useEffect } from 'react';
-import useAccessToken from '@/entities/auth/hooks/useAuthToken';
-import { useProblemWebSocketStoreActions } from '../model/useProblemWebSocketStore';
+import useProblemWebSocketStore, {
+  useProblemWebSocketStoreActions,
+} from '../model/useProblemWebSocketStore';
 
 export default function useConnectProblemWebSocket() {
-  const accessToken = useAccessToken();
   const problemStompRef = sharedStompRef;
-  const { clearMessages } = useProblemWebSocketStoreActions();
-  const { setStatus } = useProblemWebSocketStoreActions();
+
+  const { clearMessages, setStatus } = useProblemWebSocketStoreActions();
+  const { token: accessToken } = useProblemWebSocketStore();
+
   useEffect(() => {
     if (!accessToken) {
       console.log('No token, skipping WebSocket connection');
