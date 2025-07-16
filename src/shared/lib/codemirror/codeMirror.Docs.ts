@@ -10,7 +10,7 @@ export const INITIAL_VALUE: Record<ProblemLanguageType, string> = {
   Python: `# Python code goes here\nprint("Hello, World!")\n`,
   Java: `// Java code goes here\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}\n`,
   Cpp: `// C++ code goes here\n#include <iostream>\nint main() {\n    std::cout << "Hello, World!";\n    return 0;\n}\n`,
-  C: '// C code goes here',
+  C: `// C code goes here`,
 };
 
 //기본 언어

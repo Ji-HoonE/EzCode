@@ -2,10 +2,10 @@ import { Button } from '@/components/ui/button';
 import {
   DISCUSSION_CREATE_VALUE,
   IDiscussionContentMutationRequest,
-  TDiscussionContentMutationResponse,
   useCreateDiscussionContent,
   useEditDiscussionContent,
 } from '@/entities/discussions';
+import { TDiscussionContentMutationResponse } from '@/entities/discussions/discussions/model/mutation/discussions.types';
 
 import {
   ILanguageSelectOption,

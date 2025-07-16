@@ -3,12 +3,11 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import ShowChildReplies from '../../reply/ui/ShowChildReplies';
 import DiscussionForm from './DiscussionForm';
-import {
-  TDiscussionContentMutationResponse,
-  useDeleteDiscussionContent,
-} from '@/entities/discussions';
+import { useDeleteDiscussionContent } from '@/entities/discussions';
 import { Vote } from '../../vote';
 import Replies from '../../reply/ui/Replies';
+import { TDiscussionContentMutationResponse } from '@/entities/discussions/discussions/model/mutation/discussions.types';
+import { LANGUAGE } from '@/shared/types/problem.type';
 
 interface IDiscussionContentProps {
   discussion: TDiscussionContentMutationResponse;
@@ -18,7 +17,7 @@ export default function Discussion({ discussion }: IDiscussionContentProps) {
   const [isEdit, setIsEdit] = useState(false);
   const [isRepliesOpen, setIsRepliesOpen] = useState(false);
 
-  const { userInfo, replyCount, problemId, discussionId, content } = discussion;
+  const { userInfo, replyCount, problemId, discussionId, content, languageId } = discussion;
 
   const { mutateAsync: deleteMutate } = useDeleteDiscussionContent(
     String(discussion.problemId),
@@ -38,6 +37,7 @@ export default function Discussion({ discussion }: IDiscussionContentProps) {
             />
           ) : (
             <div>
+              <p>언어 : {LANGUAGE[languageId]}</p>
               <h3>닉네임: {userInfo.nickname}</h3>
               <p>{content}</p>
               <div className="flex items-center">
