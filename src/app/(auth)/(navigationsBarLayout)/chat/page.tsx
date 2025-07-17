@@ -4,7 +4,7 @@ import { ChatRoom, CreateChatRoom, useSubChatRooms } from '@/features/chat';
 export default function ChatPage() {
   const rooms = useSubChatRooms();
   return (
-    <main>
+    <main className="w-full flex justify-center h-full pt-20">
       {rooms.length > 0 ? (
         <ul>
           {rooms.map((room) => {

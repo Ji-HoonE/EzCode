@@ -1,4 +1,4 @@
-import ChatPage from '@/app/(auth)/chat/page';
+import ChatPage from '@/app/(auth)/(navigationsBarLayout)/chat/page';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { ChatFooterNavigation } from '@/features/chat';
 import { DialogDescription } from '@radix-ui/react-dialog';
