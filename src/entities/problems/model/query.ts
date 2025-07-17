@@ -1,6 +1,6 @@
 import ApiHelper from '@/api/client/api';
 import { useQuery } from '@tanstack/react-query';
-import { ProblemList, ProblemsContent } from './problem.interface';
+import { ProblemList, ProblemsContent } from './types';
 
 export const useProblemListQuery = (
   page: number,

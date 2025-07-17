@@ -5,8 +5,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 
 import { useRouter } from 'next/navigation';
 import { SkeletonBox } from '@/shared/ui/loading-indicators';
-
-import { ProblemsContent } from '@/query/problem/problem.interface';
+import { ProblemsContent } from '@/entities/problems/model/types';
 
 const PAGE_LIMIT = 15;
 
