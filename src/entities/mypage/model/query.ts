@@ -7,7 +7,7 @@ import {
   DailySolved,
   IMyInfo,
   SubmissionsResonse,
-} from './mypage.interface';
+} from './types';
 import { TPeriod } from '@/shared/types/mypage.type';
 import { API_URL } from '@/api/constants/api.constants';
 

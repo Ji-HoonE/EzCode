@@ -5,8 +5,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-
-import { SubmissionsResonse } from '@/query/mypage/mypage.interface';
+import { SubmissionsResonse } from '@/entities/mypage/model/types';
 
 export const SolvedModal = ({
   data,

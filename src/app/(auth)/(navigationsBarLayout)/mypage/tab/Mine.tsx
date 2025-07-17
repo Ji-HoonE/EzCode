@@ -1,16 +1,17 @@
 import { Button } from '@/components/ui/button';
+
+import { TPeriod } from '@/shared/types/mypage.type';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+
+import { Heatmap } from '../ui/Heatmap';
 import {
   useMyAiReviewCheckQuery,
   useMyDailySolved,
   useMyInfoQuery,
   useMyRankingQuery,
-} from '@/query/mypage/mypage';
-import { TPeriod } from '@/shared/types/mypage.type';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
-
-import { IHeatmapItem } from '@/query/mypage/mypage.interface';
-import { Heatmap } from '../ui/Heatmap';
+} from '@/entities/mypage/model/query';
+import { IHeatmapItem } from '@/entities/mypage/model/types';
 
 const SummaryStatItem = ({ title, value }: { title: string; value: string | number }) => (
   <div className="flex flex-col gap-2">

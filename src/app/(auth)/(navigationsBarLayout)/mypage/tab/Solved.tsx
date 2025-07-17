@@ -1,7 +1,6 @@
-import { useSubmissionList } from '@/query/mypage/mypage';
-
 import { useState } from 'react';
 import { SolvedModal } from '../ui/SolvedModal';
+import { useSubmissionList } from '@/entities/mypage/model/query';
 
 export const Solved = () => {
   const { data } = useSubmissionList();

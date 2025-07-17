@@ -12,7 +12,7 @@ import {
 import { useState } from 'react';
 import Image from 'next/image';
 import ProblemTable from './ui/Table';
-import { useProblemListQuery } from '@/query/problem/problems';
+import { useProblemListQuery } from '@/entities/problems/model/query';
 
 const ProblemsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
