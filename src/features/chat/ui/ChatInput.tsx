@@ -12,6 +12,8 @@ export default function ChatInput({ chatRoomId }: { chatRoomId: ChatRoomId }) {
       <input
         onChange={(e: ChangeEvent<HTMLInputElement>) => handleChangeMessage(e)}
         value={value}
+        className="border"
+        placeholder="채팅을 입력해주세요"
       />
       <button onClick={createMessage}>채팅보내기</button>
     </div>

@@ -38,7 +38,7 @@ interface IChatWebSocketStoreActions {
     setRooms: (response: IChatRoom) => void;
     setInitMessages: (message: IChatMessage[]) => void;
     setMessage: (message: IChatMessage) => void;
-
+    setEnterMessage: (message: string) => void;
     clearMessages: () => void;
     clearStore: () => void;
   };

@@ -8,7 +8,7 @@ export const useCreateChatMessage = (chatRoomId: number) => {
 
   return useMutation({
     mutationFn: async (params: ICreateMessage) => {
-      const res = await ApiHelper.post(path, { params: { ...params } });
+      const res = await ApiHelper.post(path, params);
       return res;
     },
   });

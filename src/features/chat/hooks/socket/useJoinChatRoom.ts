@@ -36,8 +36,17 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
       chatStompRef.current.subscribe(
         `/topic/chat/${chatroomId}`,
         (msg: IMessage) => {
-          const chat = JSON.parse(msg.body);
-          setMessage(chat);
+          try {
+            const parsedBody = JSON.parse(msg.body);
+            setMessage({ ...parsedBody });
+          } catch (e) {
+            setMessage({
+              message: msg.body,
+              tier: 'LV1',
+              name: '시스템',
+              time: Number(new Date()),
+            });
+          }
         },
         { receipt: chatMessageReceiptId }
       );
@@ -48,5 +57,5 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
         body: String(chatroomId),
       });
     }
-  }, []);
+  }, [isConnected, chatStompRef]);
 }

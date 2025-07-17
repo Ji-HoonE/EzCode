@@ -60,7 +60,7 @@ const useChatWebSocketStore = create<IChatWebSocketStore>()(
           newMessages.sort((a, b) => a.time - b.time);
           return {
             ...state,
-            results: newMessages as IChatMessage[],
+            messages: newMessages as IChatMessage[],
           };
         });
       },

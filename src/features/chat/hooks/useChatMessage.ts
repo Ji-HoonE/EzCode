@@ -10,8 +10,11 @@ export default function useChatMessage(roomId: number) {
   };
 
   const createMessage = () => {
+    if (!value) return;
     createMessageMutation({ message: value });
+    setValue('');
   };
+
   return {
     value,
     setValue,
