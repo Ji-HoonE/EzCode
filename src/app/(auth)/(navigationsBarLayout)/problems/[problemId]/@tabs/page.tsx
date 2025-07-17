@@ -1,5 +1,5 @@
-import Discussions from '@/features/discussions/ui/discussions';
-import { DetailProblem, getDetailProblem } from '@/features/problem';
+import Discussions from '@/features/discussions/disussions/ui/Discussions';
+import { DetailProblem, getDetailProblem } from '@/entities/problem';
 
 interface IProblemPageProps {
   params: Promise<{ problemId: string }>;

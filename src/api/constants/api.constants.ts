@@ -28,6 +28,9 @@ export const API_URL = {
     CHANGE_PASSWORD: '/users/password',
     SUBMISSION: '/submissions',
   },
+  USER: {
+    TOKEN_COUNT: '/users/review-token',
+  },
 };
 
 /** API 요청 주소 */

@@ -13,5 +13,5 @@ export const CODEMIRROR_EXTENSIONS: Record<ProblemLanguageType, LanguageSupport>
   Python: python(),
   Java: java(),
   Cpp: cpp(),
-  C: cpp(), // c로 바꿔야함
+  C: cpp(),
 };
