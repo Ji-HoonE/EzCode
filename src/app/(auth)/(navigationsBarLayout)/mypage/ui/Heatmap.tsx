@@ -1,7 +1,7 @@
-import { IHeatmapItem } from '@/query/mypage/mypage.interface';
 import { ActivityCalendar } from 'react-activity-calendar';
 import { eachDayOfInterval, format, startOfYear, endOfYear } from 'date-fns';
 import { useMemo, useState } from 'react';
+import { IHeatmapItem } from '@/entities/mypage/model/types';
 
 export const Heatmap = ({ data }: { data: IHeatmapItem[] }) => {
   const currentYear = new Date().getFullYear();

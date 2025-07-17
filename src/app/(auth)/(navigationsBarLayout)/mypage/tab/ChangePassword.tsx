@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
-import { useChangePassword } from '@/query/mypage/mypage';
+import { useChangePassword } from '@/entities/mypage/model/query';
+
 import { useState } from 'react';
 
 export const ChangePassword = () => {

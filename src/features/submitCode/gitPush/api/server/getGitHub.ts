@@ -1,6 +1,6 @@
 'use server';
 import ApiHelper from '@/api/client/api';
-import { IMyInfo } from '@/query/mypage/mypage.interface';
+import { IMyInfo } from '@/entities/mypage/model/types';
 
 //유저 정보 불러오기 -> git 연동 유무 파악을 위해
 export const getGitHubUrl = async () => {
