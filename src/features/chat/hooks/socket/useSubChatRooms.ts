@@ -1,16 +1,18 @@
 'use client';
 import { IMessage } from '@stomp/stompjs';
-import { Room, StompInitialRoomsType } from '../../types/stomp';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useConnectChatWebSocket from './useConnectChatWebSocket';
+import useChatWebSocketStore, { useChatWebSocketActions } from '../../model/useChatWebSocketStore';
+import { IChatRoom } from '../../model/useChatWebSocketStore.types';
 
 export default function useSubChatRooms() {
-  const [chatRooms, setChatRooms] = useState<StompInitialRoomsType>([]);
-
   const { chatStompRef } = useConnectChatWebSocket();
+  const { isConnected } = useChatWebSocketStore();
+  const { setInitRooms, setRooms } = useChatWebSocketActions();
 
   useEffect(() => {
     if (!chatStompRef.current) return;
+    if (!isConnected) return;
 
     const roomReceiptId = 'sub-chatrooms';
     const roomUpdateReceiptId = 'sub-roomUpdate';
@@ -20,12 +22,11 @@ export default function useSubChatRooms() {
       chatStompRef.current.subscribe(
         '/user/queue/chatrooms',
         (msg: IMessage) => {
-          try {
-            const list = JSON.parse(msg.body);
-            setChatRooms(list.sort((a: Room, b: Room) => Number(a.roomId) - Number(b.roomId)));
-          } catch (e) {
-            console.error('채팅방 목록 불러오기 오류 ', e);
-          }
+          const list = JSON.parse(msg.body);
+          if (list.length < 1) return setInitRooms([]);
+          setInitRooms(
+            list.sort((a: IChatRoom, b: IChatRoom) => Number(a.roomId) - Number(b.roomId))
+          );
         },
         { receipt: roomReceiptId }
       );
@@ -35,20 +36,8 @@ export default function useSubChatRooms() {
         '/topic/chatrooms',
         (msg: IMessage) => {
           try {
-            const update = JSON.parse(msg.body);
-            switch (update.eventType) {
-              case 'CREATE': {
-                return setChatRooms((prev) => [...prev, update]);
-              }
-              case 'DELETE': {
-                return setChatRooms((prev) => prev.filter((room) => room.roomId !== update.roomId));
-              }
-              case 'UPDATE': {
-                return setChatRooms((prev) =>
-                  prev.map((room) => (room.roomId === update.roomId ? update : room))
-                );
-              }
-            }
+            const updateRoom = JSON.parse(msg.body);
+            setRooms(updateRoom);
           } catch (e) {
             console.error('방 변경 처리 오류', e);
           }
@@ -57,7 +46,5 @@ export default function useSubChatRooms() {
       );
       chatStompRef.current.publish({ destination: '/chat/enter', body: '입장' });
     }
-  }, []);
-
-  return chatRooms;
+  }, [isConnected]);
 }

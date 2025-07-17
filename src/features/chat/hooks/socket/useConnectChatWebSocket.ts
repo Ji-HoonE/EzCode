@@ -5,10 +5,12 @@ import { BASE_URL } from '@/constants/env';
 import { useEffect } from 'react';
 import useAccessToken from '@/shared/hooks/useAuthToken';
 import { sharedStompRef } from '@/shared/lib/stomp/sharedStompRef';
+import { useChatWebSocketActions } from '../../model/useChatWebSocketStore';
 
 export default function useConnectChatWebSocket() {
   const accessToken = useAccessToken();
   const chatStompRef = sharedStompRef;
+  const { setIsConnected } = useChatWebSocketActions();
 
   useEffect(() => {
     if (!accessToken) {
@@ -27,7 +29,7 @@ export default function useConnectChatWebSocket() {
       webSocketFactory: () => socket,
       reconnectDelay: 5000,
       onConnect: () => {
-        console.log('stomp Connected!!');
+        setIsConnected(true);
       },
     });
     chatStompRef.current = client;
@@ -37,6 +39,7 @@ export default function useConnectChatWebSocket() {
       console.log('Cleaning up Chat STOMP client');
       client.deactivate();
       chatStompRef.current = null;
+      setIsConnected(false);
     };
   }, [accessToken]);
 

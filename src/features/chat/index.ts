@@ -10,9 +10,5 @@ export { default as useConnectWebSocket } from './hooks/socket/useConnectChatWeb
 export { default as useJoinChatRoom } from './hooks/socket/useJoinChatRoom';
 export { default as useSubChatRooms } from './hooks/socket/useSubChatRooms';
 
-//types
-export type { StompInitialRoomsType } from './types/stomp';
-export type { StompChatMessageType } from './types/stomp';
-
 export type { ChatRoomId } from './types/index';
 export type { ChatRoomPageProps } from './types/index';

@@ -1,12 +1,12 @@
 'use client';
-import { Room } from '../types/stomp';
 import Link from 'next/link';
 import useChatRooms from '../hooks/useChatRooms';
 import { getChatRoomPath } from '@/constants/paths';
-import { BouncingDots } from '@/shared/ui/loading-indicators';
+import { IChatRoom } from '../model/useChatWebSocketStore.types';
+import { Button } from '@/components/ui/button';
 
-export default function ChatRoom({ room }: { room: Room }) {
-  const { deleteRoom, deletePending } = useChatRooms();
+export default function ChatRoom({ room }: { room: IChatRoom }) {
+  const { deleteRoom } = useChatRooms();
   const { roomId, title, headCount } = room;
   const path = getChatRoomPath(roomId);
 
@@ -16,9 +16,7 @@ export default function ChatRoom({ room }: { room: Room }) {
         <p>{title}</p>
         <p>{headCount}명</p>
       </Link>
-      <button onClick={() => deleteRoom(roomId)}>
-        {deletePending ? '방삭제' : <BouncingDots />}
-      </button>
+      <Button onClick={() => deleteRoom(roomId)}>삭제</Button>
     </li>
   );
 }

@@ -1,4 +1,4 @@
-import ChatPage from '@/app/(auth)/(navigationsBarLayout)/chat/page';
+import ChatRoomsPage from '@/app/(auth)/(navigationsBarLayout)/chat/page';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { ChatFooterNavigation } from '@/features/chat';
 import { DialogDescription } from '@radix-ui/react-dialog';
@@ -9,7 +9,7 @@ export default function ChatDialog() {
       <DialogContent>
         <DialogTitle>chatDialog</DialogTitle>
         <DialogDescription></DialogDescription>
-        <ChatPage />
+        <ChatRoomsPage />
         <ChatFooterNavigation />
       </DialogContent>
     </Dialog>
