@@ -1,15 +1,23 @@
 import { BASE_URL } from '@/constants/env';
+import { IApiResponseFormat } from '../interceptor/interceptor.interface';
+import { getSession } from 'next-auth/react';
 import { responseInterceptor } from '../interceptor/response.interceptor';
-import { requestInterceptor } from '../interceptor/request.interceptor';
+import { API_URL } from '../constants/api.constants';
+import {
+  requestClientInterceptor,
+  requestServerInterceptor,
+} from '../interceptor/request.interceptor';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/authOptions';
 
+export type ReqType = 'client' | 'server';
 interface RequestConfig extends RequestInit {
   params?: Record<string, string>;
+  reqType?: ReqType;
 }
 
 interface ApiResponse<T = unknown> {
-  status: number;
-  data: T;
-  error?: string;
+  data: IApiResponseFormat<T>;
 }
 
 /**
@@ -25,6 +33,87 @@ const buildUrl = (endpoint: string, params?: Record<string, string>): string => 
   return url.toString();
 };
 
+/**
+ * 기본 요청 설정
+ */
+const defaultConfig: Partial<RequestConfig> = {
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  reqType: 'client',
+};
+const refreshToken = async (refreshToken: string) => {
+  try {
+    const response = await fetch(`${BASE_URL}/api${API_URL.AUTH.REFRESH}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+      },
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error('Refresh failed');
+
+    return data.result.accessToken;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const request = async <T>(
+  endpoint: string,
+  config: RequestConfig & { method: string }
+): Promise<ApiResponse<T>> => {
+  const url = buildUrl(endpoint, config?.params);
+
+  try {
+    const interceptedConfig = await (config.reqType === 'server'
+      ? requestServerInterceptor(config)
+      : requestClientInterceptor(config));
+
+    const response = await fetch(url, interceptedConfig);
+
+    if (response.status === 401) {
+      const session =
+        config.reqType === 'server' ? await getServerSession(authOptions) : await getSession();
+
+      if (!session?.refreshToken) {
+        throw new Error('No refresh token');
+      }
+
+      try {
+        const newAccessToken = await refreshToken(session.refreshToken as string);
+
+        const retryConfig = await (config.reqType === 'server'
+          ? requestServerInterceptor({
+              ...config,
+              headers: {
+                ...config.headers,
+                Authorization: `Bearer ${newAccessToken}`,
+              },
+            })
+          : requestClientInterceptor({
+              ...config,
+              headers: {
+                ...config.headers,
+                Authorization: `Bearer ${newAccessToken}`,
+              },
+            }));
+
+        const retryResponse = await fetch(url, retryConfig);
+        return responseInterceptor<T>(retryResponse);
+      } catch (error) {
+        throw error;
+      }
+    }
+
+    return responseInterceptor<T>(response);
+  } catch (error) {
+    throw error;
+  }
+};
+
 const ApiHelper = {
   /**
    * GET 요청
@@ -33,55 +122,69 @@ const ApiHelper = {
    * @param {RequestConfig} [config] - 요청 설정
    * @returns {Promise<ApiResponse<T>>} API 응답
    */
-  async get<T>(endpoint: string, config?: RequestConfig): Promise<ApiResponse<T>> {
-    const url = buildUrl(endpoint, config?.params);
-    const interceptedConfig = requestInterceptor({
+  get: <T>(endpoint: string, config?: RequestConfig): Promise<ApiResponse<T>> => {
+    return request<T>(endpoint, {
       method: 'GET',
+      ...defaultConfig,
       ...config,
+      reqType: config?.reqType || 'client',
     });
-
-    const response = await fetch(url, interceptedConfig);
-    return responseInterceptor<T>(response);
   },
+
   /**
-     * POST 요청
-     * @template T 응답 데이터의 타입
-     * @param {string} endpoint - API 엔드포인트
-     * @param {unknown} [data] - 요청 본문 데이터
-     * @param {RequestConfig} [config] - 요청 설정
-     * @returns {Promise<ApiResponse<T>>} API 응답
-     */
-  async post<T>(endpoint: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>> {
-    const url = buildUrl(endpoint, config?.params);
-    const interceptedConfig = requestInterceptor({
+   * POST 요청
+   * @template T 응답 데이터의 타입
+   * @param {string} endpoint - API 엔드포인트
+   * @param {unknown} [data] - 요청 본문 데이터
+   * @param {RequestConfig} [config] - 요청 설정
+   * @returns {Promise<ApiResponse<T>>} API 응답
+   */
+  post: <T>(endpoint: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>> => {
+    return request<T>(endpoint, {
       method: 'POST',
       body: JSON.stringify(data),
+      ...defaultConfig,
       ...config,
+      reqType: config?.reqType || 'client',
     });
-
-    const response = await fetch(url, interceptedConfig);
-    return responseInterceptor<T>(response);
   },
 
   /**
-  * PUT 요청
-  * @template T 응답 데이터의 타입
-  * @param {string} endpoint - API 엔드포인트
-  * @param {unknown} [data] - 요청 본문 데이터
-  * @param {RequestConfig} [config] - 요청 설정
-  * @returns {Promise<ApiResponse<T>>} API 응답
-  */
-  async put<T>(endpoint: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>> {
-    const url = buildUrl(endpoint, config?.params);
-    const interceptedConfig = requestInterceptor({
+   * PUT 요청
+   * @template T 응답 데이터의 타입
+   * @param {string} endpoint - API 엔드포인트
+   * @param {unknown} [data] - 요청 본문 데이터
+   * @param {RequestConfig} [config] - 요청 설정
+   * @returns {Promise<ApiResponse<T>>} API 응답
+   */
+  put: <T>(endpoint: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>> => {
+    return request<T>(endpoint, {
       method: 'PUT',
       body: JSON.stringify(data),
+      ...defaultConfig,
       ...config,
+      reqType: config?.reqType || 'client',
     });
-
-    const response = await fetch(url, interceptedConfig);
-    return responseInterceptor<T>(response);
   },
+
+  /**
+   * PATCH 요청
+   * @template T 응답 데이터의 타입
+   * @param {string} endpoint - API 엔드포인트
+   * @param {unknown} [data] - 요청 본문 데이터
+   * @param {RequestConfig} [config] - 요청 설정
+   * @returns {Promise<ApiResponse<T>>} API 응답
+   */
+  patch: <T>(endpoint: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>> => {
+    return request<T>(endpoint, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+      ...defaultConfig,
+      ...config,
+      reqType: config?.reqType || 'client',
+    });
+  },
+
   /**
    * DELETE 요청
    * @template T 응답 데이터의 타입
@@ -89,15 +192,13 @@ const ApiHelper = {
    * @param {RequestConfig} [config] - 요청 설정
    * @returns {Promise<ApiResponse<T>>} API 응답
    */
-  async delete<T>(endpoint: string, config?: RequestConfig): Promise<ApiResponse<T>> {
-    const url = buildUrl(endpoint, config?.params);
-    const interceptedConfig = requestInterceptor({
+  delete: <T>(endpoint: string, config?: RequestConfig): Promise<ApiResponse<T>> => {
+    return request<T>(endpoint, {
       method: 'DELETE',
+      ...defaultConfig,
       ...config,
+      reqType: config?.reqType || 'client',
     });
-
-    const response = await fetch(url, interceptedConfig);
-    return responseInterceptor<T>(response);
   },
 };
 

@@ -7,7 +7,7 @@
   --color-primary: #10b981;
   --color-secondary: #34d399;
   --color-tertiary: #a3e635;
-
+  --color-background: #0d0d0d;
   --color-gradient: linear-gradient(
     90deg,
     rgba(14, 30, 3, 1) 0%,
@@ -25,17 +25,25 @@
 
 @layer {
   html {
-    height: 100dvw;
+    height: 100%;
   }
+
   body {
-    height: 100dvw;
+    height: 100%;
     font-family: 'NanumSquare';
     color: var(--color-white);
-    background-color: var(--color-black);
+    background-color: var(--color-background);
+  }
+  table,
+  th,
+  td {
+    font-family: 'NanumSquare';
   }
   button {
+    font-family: 'NanumSquare';
     cursor: pointer;
   }
+
   button:disabled {
     cursor: not-allowed;
   }
@@ -47,6 +55,7 @@
     -webkit-text-fill-color: var(--color-gray100) !important;
     caret-color: var(--color-gray100) !important;
   }
+
   .scrollbar-hidden::-webkit-scrollbar {
     display: none;
   }
