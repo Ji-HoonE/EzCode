@@ -1,10 +1,13 @@
 'use client';
 import { ChatRoom, CreateChatRoom, useSubChatRooms } from '@/features/chat';
 import useChatWebSocketStore from '@/features/chat/model/useChatWebSocketStore';
+import { useEffect } from 'react';
 
 export default function ChatRoomsPage() {
   useSubChatRooms();
   const { rooms } = useChatWebSocketStore();
+
+  useEffect(() => {}, [rooms]);
 
   return (
     <main className="w-full flex justify-center h-full pt-20">

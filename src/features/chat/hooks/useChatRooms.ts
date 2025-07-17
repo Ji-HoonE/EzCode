@@ -16,6 +16,7 @@ export default function useChatRooms() {
   const createRoom = () => {
     if (!title) return;
     createRoomMutation({ title: roomTitle });
+    setRoomTitle('');
   };
 
   const deleteRoom = (roomId: number) => {

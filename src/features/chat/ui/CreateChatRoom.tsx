@@ -5,6 +5,7 @@ import useChatRooms from '../hooks/useChatRooms';
 
 export default function CreateChatRoom() {
   const { roomTitle, handleChangeTitle, createRoom } = useChatRooms();
+
   return (
     <form
       onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
