@@ -5,13 +5,10 @@ export { default as ChatInput } from './ui/ChatInput';
 export { default as CreateChatRoom } from './ui/CreateChatRoom';
 export { default as ChatRoom } from './ui/ChatRoom';
 
-//constants
-export { getChatRoomPath } from './constants/path';
-
 //hooks
-export { default as useConnectWebSocket } from './hooks/useConnectWebSocket';
-export { default as useJoinChatRoom } from './hooks/useJoinChatRoom';
-export { default as useSubChatRooms } from './hooks/useSubChatRooms';
+export { default as useConnectWebSocket } from './hooks/socket/useConnectChatWebSocket';
+export { default as useJoinChatRoom } from './hooks/socket/useJoinChatRoom';
+export { default as useSubChatRooms } from './hooks/socket/useSubChatRooms';
 
 //types
 export type { StompInitialRoomsType } from './types/stomp';

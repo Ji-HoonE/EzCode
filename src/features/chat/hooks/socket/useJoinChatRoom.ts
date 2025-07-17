@@ -1,24 +1,22 @@
 'use client';
 import { IMessage } from '@stomp/stompjs';
 import { useState } from 'react';
-import { ChatRoomId } from '../types';
-import useConnectWebSocket from './useConnectWebSocket';
-import { StompChatMessageType } from '../types/stomp';
+import { ChatRoomId } from '../../types';
+import { StompChatMessageType } from '../../types/stomp';
+import { useConnectWebSocket } from '../..';
 
 export default function useJoinChatRoom(chatroomId: ChatRoomId) {
   const [messages, setMessages] = useState<StompChatMessageType[]>([]);
-  const stompRef = useConnectWebSocket();
+  const { chatStompRef } = useConnectWebSocket();
 
-  if (!stompRef?.current) return messages;
+  if (!chatStompRef?.current) return messages;
 
   const joinChatRoomReceiptId = 'sub-chatRoom';
   const chatMessageReceiptId = `sub-message-${chatroomId}-${Date.now()}	`;
 
-  stompRef.current.onConnect = () => {
-    if (!stompRef.current) return;
-
+  if (chatStompRef.current.connected) {
     // 채팅방 메시지 초기 구독
-    stompRef.current.subscribe(
+    chatStompRef.current.subscribe(
       '/user/queue/chat',
       (msg: IMessage) => {
         try {
@@ -32,7 +30,7 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
     );
 
     //실시간 메시지 수신 구독
-    stompRef.current.subscribe(
+    chatStompRef.current.subscribe(
       `/topic/chat/${chatroomId}`,
       (msg: IMessage) => {
         try {
@@ -49,11 +47,10 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
     );
 
     // 입장 메시지 전송
-    stompRef.current.publish({
+    chatStompRef.current.publish({
       destination: `/chat/rooms/${chatroomId}/enter`,
       body: String(chatroomId),
     });
-  };
-
+  }
   return messages;
 }
