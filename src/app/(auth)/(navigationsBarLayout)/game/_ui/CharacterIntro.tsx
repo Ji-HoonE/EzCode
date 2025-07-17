@@ -5,7 +5,10 @@ import StatusModal from './tab/StatusModal';
 import InventoriesModal from './tab/InventoriesModal';
 import SkillModal from './tab/SkillModal';
 import PvpMatchingModal from './tab/PvpMatchingModal';
-import PvpBattleModal from './tab/PvpBattleModal';
+import PvpBattleModal, { IBattleData } from './tab/PvpBattleModal';
+import PvpHistoryModal from './tab/PvpHistoryModal';
+import ItemSkillModal from './tab/ItemSkillModal';
+import AdventureModal from './tab/AdventureModal';
 
 const CharacterIntro = () => {
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
@@ -13,8 +16,11 @@ const CharacterIntro = () => {
   const [isSkillModalOpen, setIsSkillModalOpen] = useState(false);
   const [isPvpModalOpen, setIsPvpModalOpen] = useState(false);
   const [isPvpBattleModalOpen, setIsPvpBattleModalOpen] = useState(false);
-  const [battleData, setBattleData] = useState<any>(null);
-  const handlePvpAccept = (data: any) => {
+  const [isPvpHistoryModalOpen, setIsPvpHistoryModalOpen] = useState(false);
+  const [isItemModalOpen, setIsItemModalOpen] = useState(false);
+  const [isAdventureModalOpen, setIsAdventureModalOpen] = useState(false);
+  const [battleData, setBattleData] = useState<unknown>(null);
+  const handlePvpAccept = (data: unknown) => {
     setBattleData(data);
     setIsPvpBattleModalOpen(true); // 배틀 모달 열기
   };
@@ -32,6 +38,15 @@ const CharacterIntro = () => {
       <Button variant="outline" onClick={() => setIsPvpModalOpen(true)}>
         PVP 랜덤매칭
       </Button>
+      <Button variant="outline" onClick={() => setIsPvpHistoryModalOpen(true)}>
+        PVP 기록 확인
+      </Button>
+      <Button variant="outline" onClick={() => setIsItemModalOpen(true)}>
+        아이템 스킬 뽑기
+      </Button>
+      <Button variant="outline" onClick={() => setIsAdventureModalOpen(true)}>
+        어드벤처
+      </Button>
       <StatusModal isOpen={isStatusModalOpen} onClose={() => setIsStatusModalOpen(false)} />
       <InventoriesModal
         isOpen={isInventoriesModalOpen}
@@ -46,7 +61,16 @@ const CharacterIntro = () => {
       <PvpBattleModal
         isOpen={isPvpBattleModalOpen}
         onClose={() => setIsPvpBattleModalOpen(false)}
-        battleData={battleData}
+        battleData={battleData as IBattleData}
+      />
+      <PvpHistoryModal
+        isOpen={isPvpHistoryModalOpen}
+        onClose={() => setIsPvpHistoryModalOpen(false)}
+      />
+      <ItemSkillModal isOpen={isItemModalOpen} onClose={() => setIsItemModalOpen(false)} />
+      <AdventureModal
+        isOpen={isAdventureModalOpen}
+        onClose={() => setIsAdventureModalOpen(false)}
       />
     </div>
   );

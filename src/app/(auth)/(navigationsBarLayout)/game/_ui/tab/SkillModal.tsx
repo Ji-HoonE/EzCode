@@ -9,7 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { useGetGameCharactersSkillsQuery } from '@/query/game/game';
+import { useGetGameCharactersSkillsQuery } from '@/entities/game/model/query/game.query';
 
 interface SkillFormProps {
   isOpen: boolean;
@@ -25,7 +25,7 @@ const SkillModal = ({ isOpen, onClose }: SkillFormProps) => {
           <AlertDialogHeader>
             <AlertDialogTitle>스킬</AlertDialogTitle>
           </AlertDialogHeader>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 max-h-[600px] overflow-y-auto">
             {data?.data?.result && data?.data?.result?.length > 0 ? (
               data?.data?.result?.map((item) => {
                 return (

@@ -2,11 +2,18 @@ import ApiHelper, { ReqType } from '@/api/client/api';
 import {
   ICheckCharacterResponse,
   IEquipItemRequest,
+  IGetGameCharactersAdventureChoiceRequest,
+  IGetGameCharactersAdventureChoiceResponse,
+  IGetGameCharactersAdventureResponse,
   IGetGameCharactersInventoriesResponse,
+  IGetGameCharactersItemGamblingRequest,
+  IGetGameCharactersItemGamblingResponse,
+  IGetGameCharactersPvpHistoryResponse,
   IGetGameCharactersPvpMatchingAcceptRequest,
   IGetGameCharactersPvpMatchingAcceptResponse,
   IGetGameCharactersPvpMatchingResponse,
   IGetGameCharactersResponse,
+  IGetGameCharactersSkillGamblingResponse,
   IGetGameCharactersSkillsResponse,
 } from './game.interface';
 import { API_URL } from '@/api/constants/api.constants';
@@ -82,6 +89,49 @@ export const gameApi = {
   ) => {
     const response = await ApiHelper.post<IGetGameCharactersPvpMatchingAcceptResponse>(
       API_URL.GAME.GET_GAME_CHARACTERS_PVP_MATCHING_ACCEPT,
+      params,
+      { reqType: 'client' }
+    );
+    return response;
+  },
+  /** 방어 PVP 기록 조회 Api  */
+  getGameCharactersPvpHistory: async () => {
+    const response = await ApiHelper.get<IGetGameCharactersPvpHistoryResponse>(
+      API_URL.GAME.GET_GAME_CHARACTERS_PVP_HISTORY,
+      { reqType: 'client' }
+    );
+    return response;
+  },
+  /** 아이템 뽑기 Api */
+  getGameCharactersItemGambling: async (params: IGetGameCharactersItemGamblingRequest) => {
+    const response = await ApiHelper.post<IGetGameCharactersItemGamblingResponse>(
+      API_URL.GAME.GET_GAME_CHARACTERS_ITEM_GAMBLING,
+      params,
+      { reqType: 'client' }
+    );
+    return response;
+  },
+  /** 스킬 뽑기 Api */
+  getGameCharactersSkillGambling: async () => {
+    const response = await ApiHelper.post<IGetGameCharactersSkillGamblingResponse>(
+      API_URL.GAME.GET_GAME_CHARACTERS_SKILL_GAMBLING,
+      {},
+      { reqType: 'client' }
+    );
+    return response;
+  },
+  /** 어드벤처 Api */
+  getGameCharactersAdventure: async () => {
+    const response = await ApiHelper.get<IGetGameCharactersAdventureResponse>(
+      API_URL.GAME.GET_GAME_CHARACTERS_ADVENTURE,
+      { reqType: 'client' }
+    );
+    return response;
+  },
+  /** 어드벤처 선택지 결과 Api */
+  getGameCharactersAdventureChoice: async (params: IGetGameCharactersAdventureChoiceRequest) => {
+    const response = await ApiHelper.post<IGetGameCharactersAdventureChoiceResponse>(
+      API_URL.GAME.GET_GAME_CHARACTERS_ADVENTURE_CHOICE,
       params,
       { reqType: 'client' }
     );

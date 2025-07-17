@@ -37,6 +37,7 @@ export default function ProblemWorksSection({
     if (accessToken) {
       setAuth('token', accessToken);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionKey, accessToken]);
 
   return (

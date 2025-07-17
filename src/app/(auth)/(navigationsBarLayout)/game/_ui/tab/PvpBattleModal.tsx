@@ -10,7 +10,14 @@ import {
 interface IPvpBattleModalProps {
   isOpen: boolean;
   onClose: () => void;
-  battleData: any;
+  battleData: IBattleData;
+}
+
+export interface IBattleData {
+  enemyName: string;
+  playerNickName: string;
+  battleLog: string[];
+  isPlayerWin: boolean;
 }
 
 const PvpBattleModal = ({ isOpen, onClose, battleData }: IPvpBattleModalProps) => {
@@ -25,7 +32,7 @@ const PvpBattleModal = ({ isOpen, onClose, battleData }: IPvpBattleModalProps) =
           <div>플레이어: {battleData?.playerNickName}</div>
 
           <div>
-            {battleData?.battleLog?.map((log: any, idx: number) => <div key={idx}>{log}</div>)}
+            {battleData?.battleLog?.map((log: string, idx: number) => <div key={idx}>{log}</div>)}
           </div>
           <div>{battleData?.isPlayerWin ? '승리' : '패배'}</div>
         </div>

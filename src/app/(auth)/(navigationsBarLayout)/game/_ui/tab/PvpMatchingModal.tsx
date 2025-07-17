@@ -10,17 +10,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import {
-  useGetGameCharactersPvpMatchingAcceptQuery,
-  useGetGameCharactersPvpMatchingQuery,
-} from '@/query/game/game';
-import { useTimer } from '@/shared/hooks/useTimer';
+import { useGetGameCharactersPvpMatchingAcceptQuery } from '@/entities/game/model/mutation/game.mutation';
+import { useGetGameCharactersPvpMatchingQuery } from '@/entities/game/model/query/game.query';
 import { useCallback } from 'react';
 
 interface PvpMatchingModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAccept: (data: any) => void;
+  onAccept: (data: unknown) => void;
 }
 
 const PvpMatchingModal = ({ isOpen, onClose, onAccept }: PvpMatchingModalProps) => {

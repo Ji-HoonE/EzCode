@@ -1,19 +1,5 @@
 import { gameApi } from '@/api/service/game/game';
-import {
-  IEquipItemRequest,
-  IGetGameCharactersPvpMatchingAcceptRequest,
-} from '@/api/service/game/game.interface';
-import { useMutation, useQuery } from '@tanstack/react-query';
-
-/** 캐릭터 생성 뮤테이션 */
-export const useCreateCharacterMutation = () => {
-  return useMutation({
-    mutationFn: async () => {
-      const response = await gameApi.createCharacter();
-      return response;
-    },
-  });
-};
+import { useQuery } from '@tanstack/react-query';
 
 /** 캐릭터 스테이터스 조회 Api */
 export const useGetGameCharactersStatusQuery = (isOpen: boolean) => {
@@ -36,16 +22,6 @@ export const useGetGameCharactersInventoriesQuery = (isOpen: boolean) => {
       return response;
     },
     enabled: isOpen,
-  });
-};
-
-/** 캐릭터 아이템 장착 뮤테이션 */
-export const useGameCharacterEquipItemMutation = () => {
-  return useMutation({
-    mutationFn: async (param: IEquipItemRequest) => {
-      const response = await gameApi.equipItem(param);
-      return response;
-    },
   });
 };
 
@@ -73,12 +49,26 @@ export const useGetGameCharactersPvpMatchingQuery = (isOpen: boolean) => {
   });
 };
 
-/** 배틀 수락 Api*/
-export const useGetGameCharactersPvpMatchingAcceptQuery = () => {
-  return useMutation({
-    mutationFn: async (params: IGetGameCharactersPvpMatchingAcceptRequest) => {
-      const response = await gameApi.getGameCharactersPvpMatchingAccept(params);
+/** 방어 PVP 기록 조회 Api  */
+export const useGetGameCharactersPvpHistoryQuery = (isOpen: boolean) => {
+  return useQuery({
+    queryKey: ['characterPvpHistory'],
+    queryFn: async () => {
+      const response = await gameApi.getGameCharactersPvpHistory();
       return response;
     },
+    enabled: isOpen,
+  });
+};
+
+/** 어드벤처 Api */
+export const useGetGameCharactersAdventureQuery = (isOpen: boolean) => {
+  return useQuery({
+    queryKey: ['characterAdventure'],
+    queryFn: async () => {
+      const response = await gameApi.getGameCharactersAdventure();
+      return response;
+    },
+    enabled: isOpen,
   });
 };
