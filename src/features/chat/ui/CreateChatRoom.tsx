@@ -1,38 +1,25 @@
 'use client';
 
-import { BASE_URL } from '@/constants/env';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent } from 'react';
+import useChatRooms from '../hooks/useChatRooms';
 
 export default function CreateChatRoom() {
-  const [chatRoomTitle, setChatRoomTitle] = useState('');
-  const [accessToken, setAccessToken] = useState('');
-
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
-      setAccessToken(accessToken);
-    }
-  }, []);
-
-  const createChatRoom = async () => {
-    fetch(`${BASE_URL}/api/chatrooms`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + accessToken,
-      },
-      body: JSON.stringify({ title: chatRoomTitle }),
-    });
-  };
+  const { roomTitle, handleChangeTitle, createRoom } = useChatRooms();
 
   return (
-    <form onSubmit={createChatRoom}>
+    <form
+      onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        createRoom();
+      }}
+    >
       <input
-        onChange={(e: ChangeEvent<HTMLInputElement>) => setChatRoomTitle(e.target.value)}
-        value={chatRoomTitle}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => handleChangeTitle(e)}
+        value={roomTitle}
+        placeholder="채팅방 생성"
+        className="border"
       />
-      <button>채팅 생성버튼</button>
+      <button>채팅방 생성</button>
     </form>
   );
 }

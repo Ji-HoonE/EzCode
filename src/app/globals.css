@@ -47,7 +47,9 @@
   button:disabled {
     cursor: not-allowed;
   }
-
+  li {
+    list-style: none;
+  }
   input:-webkit-autofill {
     box-shadow: 0 0 0px 1000px var(--color-bg200) inset !important;
     -webkit-text-fill-color: var(--color-gray100) !important;

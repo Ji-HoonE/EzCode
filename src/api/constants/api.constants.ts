@@ -1,5 +1,5 @@
 import { ProblemId } from '@/shared';
-import { TGetProblemIdOptions } from '@/shared/types/pathOptions';
+import { TGetChatRoomIdOptions, TGetProblemIdOptions } from '@/shared/types/pathOptions';
 
 /** API 요청 주소 */
 export const API_URL = {
@@ -31,6 +31,9 @@ export const API_URL = {
   USER: {
     TOKEN_COUNT: '/users/review-token',
   },
+  CHAT: {
+    ROOMS: '/rooms',
+  },
 };
 
 /** API 요청 주소 */
@@ -44,4 +47,8 @@ export const API_CONSTANTS = {
 
 export const getProblemIdPath = (problemId: ProblemId, pathOption?: TGetProblemIdOptions) => {
   return `${API_URL.PROBLEM.GET_PROBLEMS}/${problemId}/${pathOption}`;
+};
+
+export const getChatRoomApiPath = (chatRoomId: number, pathOption?: TGetChatRoomIdOptions) => {
+  return `${API_URL.CHAT.ROOMS}/${chatRoomId}/${pathOption}`;
 };
