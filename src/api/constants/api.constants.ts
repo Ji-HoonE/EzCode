@@ -34,6 +34,9 @@ export const API_URL = {
   CHAT: {
     ROOMS: '/rooms',
   },
+  RANK: {
+    WEEKLY: '/rankings/weekly',
+  },
 };
 
 /** API 요청 주소 */
