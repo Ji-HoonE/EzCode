@@ -10,10 +10,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import {
-  useGameCharacterEquipItemMutation,
-  useGetGameCharactersInventoriesQuery,
-} from '@/query/game/game';
+import { useGameCharacterEquipItemMutation } from '@/entities/game/model/mutation/game.mutation';
+import { useGetGameCharactersInventoriesQuery } from '@/entities/game/model/query/game.query';
 import { useQueryClient } from '@tanstack/react-query';
 
 interface InventorieFormProps {
