@@ -45,6 +45,7 @@ export default function useConnectProblemWebSocket() {
       setStatus(false);
       clearMessages();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, clearMessages]);
 
   return { problemStompRef };

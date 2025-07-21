@@ -37,6 +37,7 @@ export default function ProblemTable({
     if (currentPage < pageGroupStart || currentPage >= pageGroupStart + PAGE_LIMIT) {
       setPageGroupStart(Math.floor((currentPage - 1) / PAGE_LIMIT) * PAGE_LIMIT + 1);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
   const pageNumbers = useMemo(() => {

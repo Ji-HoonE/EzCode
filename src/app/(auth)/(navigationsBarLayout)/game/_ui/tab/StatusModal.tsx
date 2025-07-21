@@ -11,7 +11,8 @@ import {
   AlertDialogPortal,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { useGetGameCharactersStatusQuery } from '@/query/game/game';
+import { useGetGameCharactersStatusQuery } from '@/entities/game/model/query/game.query';
+
 import { Util } from '@/shared/util/util';
 
 interface StatusFormProps {

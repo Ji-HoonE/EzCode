@@ -4,6 +4,7 @@ import { getWeeklyRankings } from '@/entities/rankings/actions/getRankings.actio
 import Rankings from '@/entities/rankings/ui/Rankings';
 import ChatTriggerButton from '@/features/chat/ui/ChatTriggerButton';
 // import { useLogoutMutation } from '@/query/auth/auth';
+
 import { StartButton } from '@/widgets/landingCTA';
 // import { useQueryClient } from '@tanstack/react-query';
 // import { signOut } from 'next-auth/react';

@@ -1,7 +1,7 @@
 'use client';
 
 import { API_CONSTANTS } from '@/api/constants/api.constants';
-import { useCreateCharacterMutation } from '@/query/game/game';
+import { useCreateCharacterMutation } from '@/entities/game/model/mutation/game.mutation';
 import { useRouter } from 'next/navigation';
 
 const CreateCharacter = () => {

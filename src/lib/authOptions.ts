@@ -1,5 +1,5 @@
 import ApiHelper from '@/api/client/api';
-import { ISignInResponse } from '@/query/auth/auth.interface';
+import { ISignInResponse } from '@/entities/auth/model/auth.interface';
 import { NextAuthOptions, User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 interface ExtendedUser extends User {
