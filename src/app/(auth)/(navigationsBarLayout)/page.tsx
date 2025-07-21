@@ -39,7 +39,7 @@ export default async function HomePage() {
   //   fetchUserInfo();
   // }, []);
 
-  const WeeklyRankings = await getWeeklyRankings();
+  const weeklyRankings = await getWeeklyRankings();
 
   return (
     <main className="w-full bg-gradient flex items-center h-full pt-20 flex-col">
@@ -62,7 +62,7 @@ export default async function HomePage() {
       <section>
         <h2>이번 주 랭킹 TOP 10</h2>
         <p>이번 주 가장 활발하게 문제를 해결한 개발자들</p>
-        <Rankings rankings={WeeklyRankings} />
+        <Rankings rankings={weeklyRankings} />
       </section>
     </main>
   );
