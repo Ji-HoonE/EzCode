@@ -20,7 +20,7 @@ export default function ChatRoomList({ selectedRoomId }: IChatRoomListProps) {
   // };
 
   return (
-    <div>
+    <section className="h-full w-full flex-1/5">
       <h1 className="text-xl font-semibold">채팅</h1>
       {/* <ChatSearchBar searchQuery={searchQuery} onSearch={handleSearchRoom} /> */}
       {rooms.length > 0 ? (
@@ -39,6 +39,6 @@ export default function ChatRoomList({ selectedRoomId }: IChatRoomListProps) {
         <div>생성된 채팅방이 없습니다.</div>
       )}
       <CreateChatRoomDialog />
-    </div>
+    </section>
   );
 }

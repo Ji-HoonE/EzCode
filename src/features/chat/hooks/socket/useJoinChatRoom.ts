@@ -11,7 +11,7 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
   const { isConnected } = useChatWebSocketStore();
 
   useEffect(() => {
-    if (chatroomId) return;
+    if (chatroomId === 0) return;
 
     if (!chatStompRef?.current) return;
     if (!isConnected) return;
@@ -25,6 +25,7 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
         (msg: IMessage) => {
           try {
             const chats = JSON.parse(msg.body);
+
             setInitMessages(chats);
           } catch (e) {
             console.error('채팅 내역 파싱 오류', e);

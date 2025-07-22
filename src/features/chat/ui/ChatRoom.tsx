@@ -1,49 +1,41 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { ChatInput, useJoinChatRoom } from '@/features/chat';
 import useChatWebSocketStore from '@/features/chat/model/useChatWebSocketStore';
-import useChatRooms from '../hooks/useChatRooms';
+import ChatRoomHeader from './ChatRoomHeader';
+import SystemMessage from './chatMessage/SystemMessage';
+import ChatMessage from './chatMessage/ChatMessage';
 
 interface ChatProps {
   roomId: string;
 }
+
 export default function ChatRoom({ roomId }: ChatProps) {
   useJoinChatRoom(Number(roomId));
   const { messages } = useChatWebSocketStore();
-  const { deleteRoom } = useChatRooms();
-
   return (
-    <main className="w-full flex justify-center h-full pt-20">
+    <section className="w-full flex h-full flex-col justify-center flex-4/5">
       {roomId !== '0' ? (
-        <div>
-          <Button onClick={() => deleteRoom(Number(roomId))}>삭제</Button>
+        <>
+          <ChatRoomHeader roomId={roomId} roomTitle={'roomTitle'} />
           {messages && (
-            <ul>
+            <ul className="flex-1">
               {messages.map((msg, i) => {
                 if (msg.name === '시스템') {
-                  return (
-                    <li key={i} className="bg-gray-400">
-                      <strong>{msg.name}</strong>: {msg.message}
-                    </li>
-                  );
+                  return <SystemMessage msg={msg} key={i} />;
                 }
-                return (
-                  <li key={i}>
-                    <strong>{msg.name}</strong>: {msg.message}
-                  </li>
-                );
+                return <ChatMessage msg={msg} key={i} />;
               })}
             </ul>
           )}
           <ChatInput chatRoomId={Number(roomId)} />
-        </div>
+        </>
       ) : (
         <div className="flex flex-col justify-center">
           <p className="text-white text-lg">채팅방을 선택해주세요</p>
           <p className="text-white text-sm">코딩 문제를 함께 해결해보세요!</p>
         </div>
       )}
-    </main>
+    </section>
   );
 }
