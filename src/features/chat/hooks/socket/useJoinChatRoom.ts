@@ -11,9 +11,10 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
   const { isConnected } = useChatWebSocketStore();
 
   useEffect(() => {
+    if (chatroomId) return;
+
     if (!chatStompRef?.current) return;
     if (!isConnected) return;
-
     const joinChatRoomReceiptId = 'sub-chatRoom';
     const chatMessageReceiptId = `sub-message-${chatroomId}-${Date.now()}	`;
 
@@ -57,5 +58,5 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
         body: String(chatroomId),
       });
     }
-  }, [isConnected, chatStompRef]);
+  }, [isConnected, chatStompRef, chatroomId]);
 }

@@ -1,9 +1,8 @@
 //ui
-export { default as ChatFooterNavigation } from './ui/ChatFooterNavigation';
 export { default as ChatTriggerButton } from './ui/ChatTriggerButton';
 export { default as ChatInput } from './ui/ChatInput';
-export { default as CreateChatRoom } from './ui/CreateChatRoom';
-export { default as ChatRoom } from './ui/ChatRoom';
+export { default as CreateChatRoom } from './ui/CreateChatRoomDialog';
+export { default as ChatRoom } from './ui/ChatRoomItem';
 
 //hooks
 export { default as useConnectWebSocket } from './hooks/socket/useConnectChatWebSocket';

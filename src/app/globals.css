@@ -4,10 +4,9 @@
 @theme {
   --color-black: #000000;
   --color-white: #ffffff;
-  --color-primary: #10b981;
-  --color-secondary: #34d399;
-  --color-tertiary: #a3e635;
-  --color-background: #0d0d0d;
+  --color-primary: #214d35;
+  --color-secondary: #00d084;
+  --color-background: #0c151c;
   --color-gradient: linear-gradient(
     90deg,
     rgba(14, 30, 3, 1) 0%,

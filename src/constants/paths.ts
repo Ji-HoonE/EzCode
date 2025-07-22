@@ -6,9 +6,6 @@ export const PATHS = {
   RANK: '/rank',
   CHAT: {
     BASE: '/chat',
-    SETTING: '/chat/setting',
-    HOME: '/chat/home',
+    SEARCHPARAMS: 'room_id',
   },
 };
-
-export const getChatRoomPath = (chatRoomId: number) => `${PATHS.CHAT.BASE}/${chatRoomId}`;
