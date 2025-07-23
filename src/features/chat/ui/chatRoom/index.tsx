@@ -20,7 +20,7 @@ export default function ChatRoom({ roomId, roomTitle }: ChatProps) {
         <>
           <ChatRoomHeader roomTitle={roomTitle} />
           {messages && (
-            <ul className="flex-1">
+            <ul className="flex-1 p-4 flex flex-col gap-4">
               {messages.map((msg, i) => {
                 if (msg.name === '시스템') {
                   return <SystemMessage msg={msg} key={i} />;

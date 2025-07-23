@@ -13,16 +13,12 @@ export default async function ChatDialog({ searchParams }: ChatDialogProps) {
   return (
     <Dialog open={!!roomId}>
       <DialogContent
-        className="max-w-[70vw] w-full h-[90vh] sm:max-w-[70vw]"
+        className="max-w-[70vw] w-full h-[90vh] sm:max-w-[70vw] flex justify-center px-0"
         showCloseButton={false}
       >
         <DialogTitle className="hidden" />
-        <main className="w-full flex h-full gap-5 ">
-          <div className="w-full flex gap-5 justify-center h-200">
-            <ChatRoomList selectedRoomId={roomId} />
-            <ChatRoom roomId={roomId} roomTitle={title} />
-          </div>
-        </main>
+        <ChatRoomList selectedRoomId={roomId} />
+        <ChatRoom roomId={roomId} roomTitle={title} />
       </DialogContent>
     </Dialog>
   );
