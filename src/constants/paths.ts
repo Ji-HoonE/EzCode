@@ -5,7 +5,7 @@ export const PATHS = {
   PROBLEMS: '/problems',
   RANK: '/rank',
   CHAT: {
-    SEARCHPARAMS_BASE: 'chat-open',
-    SEARCHPARAMS: 'room-id',
+    SEARCHPARAMS_ID: 'room-id',
+    SEARCHPARAMS_TITLE: 'title',
   },
 };

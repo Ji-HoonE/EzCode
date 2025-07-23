@@ -4,23 +4,23 @@ import ChatRoomList from '@/features/chat/ui/ChatRoomList';
 import ChatRoom from '@/features/chat/ui/chatRoom';
 
 interface ChatDialogProps {
-  searchParams: Promise<{ 'room-id': string; 'chat-open': boolean }>;
+  searchParams: Promise<{ 'room-id': string; title: string }>;
 }
 export default async function ChatDialog({ searchParams }: ChatDialogProps) {
   const roomId = (await searchParams)['room-id'];
-  const isChatOpen = (await searchParams)['chat-open'];
+  const title = (await searchParams)['title'];
 
   return (
-    <Dialog open={isChatOpen}>
+    <Dialog open={!!roomId}>
       <DialogContent
         className="max-w-[70vw] w-full h-[90vh] sm:max-w-[70vw]"
         showCloseButton={false}
       >
         <DialogTitle className="hidden" />
-        <main className="w-full flex h-full gap-5 px-20">
+        <main className="w-full flex h-full gap-5 ">
           <div className="w-full flex gap-5 justify-center h-200">
             <ChatRoomList selectedRoomId={roomId} />
-            <ChatRoom roomId={roomId} />
+            <ChatRoom roomId={roomId} roomTitle={title} />
           </div>
         </main>
       </DialogContent>
