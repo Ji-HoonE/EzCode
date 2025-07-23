@@ -12,8 +12,11 @@ export default async function ChatDialog({ searchParams }: ChatDialogProps) {
 
   return (
     <Dialog open={isChatOpen}>
-      <DialogContent className="w-full max-w-6xl h-[90vh]">
-        <DialogTitle></DialogTitle>
+      <DialogContent
+        className="max-w-[70vw] w-full h-[90vh] sm:max-w-[70vw]"
+        showCloseButton={false}
+      >
+        <DialogTitle className="hidden" />
         <main className="w-full flex h-full gap-5 px-20">
           <div className="w-full flex gap-5 justify-center h-200">
             <ChatRoomList selectedRoomId={roomId} />
