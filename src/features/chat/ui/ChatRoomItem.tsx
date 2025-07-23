@@ -23,8 +23,8 @@ export default function ChatRoomItem({ room, isSelected }: IChatRoomItemProps) {
   return (
     <li
       className={clsx(
-        'p-3 rounded-[10px] cursor-pointer transition-all duration-200 /8 w-full hover:bg-white/8 text-white',
-        isSelected ? 'bg-primary' : 'hover:text-secondary '
+        'p-3 rounded-[10px] cursor-pointer transition-all duration-200 w-full  text-white',
+        isSelected ? 'bg-primary' : 'hover:text-secondary hover:bg-white/8 '
       )}
       onClick={handleClickChatRoom}
     >

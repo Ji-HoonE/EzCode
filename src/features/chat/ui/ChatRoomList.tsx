@@ -1,6 +1,6 @@
 'use client';
 import useChatWebSocketStore from '../model/useChatWebSocketStore';
-import CreateChatRoomDialog from './CreateChatRoomDialog';
+// import CreateChatRoomDialog from './CreateChatRoomDialog';
 import ChatRoomItem from './ChatRoomItem';
 import useSubChatRooms from '../hooks/socket/useSubChatRooms';
 import ChatSearchBar from './ChatSearchBar';
@@ -43,7 +43,7 @@ export default function ChatRoomList({ selectedRoomId }: IChatRoomListProps) {
       ) : (
         <div>생성된 채팅방이 없습니다.</div>
       )}
-      <CreateChatRoomDialog />
+      {/* <CreateChatRoomDialog /> */}
     </section>
   );
 }

@@ -2,9 +2,9 @@
 
 import { ChatInput, useJoinChatRoom } from '@/features/chat';
 import useChatWebSocketStore from '@/features/chat/model/useChatWebSocketStore';
+import SystemMessage from '../chatMessage/SystemMessage';
+import ChatMessage from '../chatMessage/ChatMessage';
 import ChatRoomHeader from './ChatRoomHeader';
-import SystemMessage from './chatMessage/SystemMessage';
-import ChatMessage from './chatMessage/ChatMessage';
 
 interface ChatProps {
   roomId: string;
@@ -17,7 +17,7 @@ export default function ChatRoom({ roomId }: ChatProps) {
     <section className="w-full flex h-full flex-col justify-center flex-4/5">
       {roomId !== '0' ? (
         <>
-          <ChatRoomHeader roomId={roomId} roomTitle={'roomTitle'} />
+          <ChatRoomHeader roomTitle={'roomTitle'} />
           {messages && (
             <ul className="flex-1">
               {messages.map((msg, i) => {

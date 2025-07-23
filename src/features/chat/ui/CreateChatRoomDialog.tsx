@@ -3,8 +3,8 @@
 import { ChangeEvent } from 'react';
 import useChatRooms from '../hooks/useChatRooms';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import CreateChatRoomButton from './CreateChatRoomButton';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 export default function CreateChatRoomDialog() {
   const { roomTitle, handleChangeTitle, createRoom } = useChatRooms();
@@ -12,7 +12,9 @@ export default function CreateChatRoomDialog() {
   return (
     <Dialog>
       <DialogTrigger>
-        <CreateChatRoomButton />
+        <div className="flex justify-center items-center rounded-[999px] bg-secondary w-9 h-9">
+          <Image width={24} height={24} src="/icons/plus.svg" alt="생성하기 버튼" />
+        </div>
       </DialogTrigger>
       <DialogContent>
         <form
