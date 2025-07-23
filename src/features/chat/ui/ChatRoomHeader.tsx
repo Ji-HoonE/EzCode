@@ -10,7 +10,7 @@ export default function ChatRoomHeader({ roomId, roomTitle }: IChatRoomHeaderPro
   const { deleteRoom } = useChatRooms();
 
   return (
-    <div className="flex items-center justify-between p-4 border-b border-[#214d35]/20">
+    <div className="flex items-center justify-between p-4 border-b border-border_primary/20">
       <div className="flex items-center space-x-3">
         <Image
           src="/icons/group.svg"

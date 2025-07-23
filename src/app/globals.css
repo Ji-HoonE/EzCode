@@ -7,6 +7,7 @@
   --color-primary: #214d35;
   --color-secondary: #00d084;
   --color-background: #0c151c;
+  --color-border_primary: #214d35;
   --color-gradient: linear-gradient(
     90deg,
     rgba(14, 30, 3, 1) 0%,

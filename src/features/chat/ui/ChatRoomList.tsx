@@ -3,6 +3,8 @@ import useChatWebSocketStore from '../model/useChatWebSocketStore';
 import CreateChatRoomDialog from './CreateChatRoomDialog';
 import ChatRoomItem from './ChatRoomItem';
 import useSubChatRooms from '../hooks/socket/useSubChatRooms';
+import ChatSearchBar from './ChatSearchBar';
+import { useEffect, useState } from 'react';
 
 interface IChatRoomListProps {
   selectedRoomId: string;
@@ -10,22 +12,26 @@ interface IChatRoomListProps {
 export default function ChatRoomList({ selectedRoomId }: IChatRoomListProps) {
   useSubChatRooms();
   const { rooms } = useChatWebSocketStore();
-  // const [searchQuery, setSearchQuery] = useState('');
-  // const [filteredRoom, setFilteredRoom] = useState(rooms);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredRoom, setFilteredRoom] = useState(rooms);
 
-  // const handleSearchRoom = (value: string) => {
-  //   setSearchQuery(value);
-  //   const newRooms = rooms.filter((room) => room.title.includes(value));
-  //   setFilteredRoom(newRooms);
-  // };
+  const handleSearchRoom = (value: string) => {
+    setSearchQuery(value);
+    const newRooms = rooms.filter((room) => room.title.includes(value));
+    setFilteredRoom(newRooms);
+  };
+
+  useEffect(() => {
+    setFilteredRoom(rooms);
+  }, [rooms]);
 
   return (
-    <section className="h-full w-full flex-1/5">
+    <section className="h-full w-full flex-1/5 border-r border-border_primary/20">
       <h1 className="text-xl font-semibold">채팅</h1>
-      {/* <ChatSearchBar searchQuery={searchQuery} onSearch={handleSearchRoom} /> */}
+      <ChatSearchBar searchQuery={searchQuery} onSearch={handleSearchRoom} />
       {rooms.length > 0 ? (
         <ul>
-          {rooms.map((room) => {
+          {filteredRoom.map((room) => {
             return (
               <ChatRoomItem
                 key={room.roomId}
