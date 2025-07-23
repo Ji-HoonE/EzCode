@@ -1,7 +1,6 @@
 import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { ChatRoom, ChatRoomList } from '@/features/chat';
 import { DialogTitle } from '@radix-ui/react-dialog';
-import ChatRoomList from '@/features/chat/ui/ChatRoomList';
-import ChatRoom from '@/features/chat/ui/chatRoom';
 
 interface ChatDialogProps {
   searchParams: Promise<{ 'room-id': string; title: string }>;

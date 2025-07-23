@@ -1,12 +1,12 @@
 'use client';
-import useChatWebSocketStore from '../model/useChatWebSocketStore';
+import useChatWebSocketStore from '../../model/useChatWebSocketStore';
 // import CreateChatRoomDialog from './CreateChatRoomDialog';
 import ChatRoomItem from './ChatRoomItem';
-import useSubChatRooms from '../hooks/socket/useSubChatRooms';
+import useSubChatRooms from '../../hooks/socket/useSubChatRooms';
 import ChatSearchBar from './ChatSearchBar';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import useChatDialogTrigger from '../hooks/useChatDialogTrigger';
+import useChatDialogTrigger from '../../hooks/useChatDialogTrigger';
 
 interface IChatRoomListProps {
   selectedRoomId: string;

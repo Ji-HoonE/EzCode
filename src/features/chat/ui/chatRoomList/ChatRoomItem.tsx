@@ -1,7 +1,7 @@
 'use client';
-import { IChatRoom } from '../model/useChatWebSocketStore.types';
+import { IChatRoom } from '../../model/useChatWebSocketStore.types';
 import clsx from 'clsx';
-import useChatDialogTrigger from '../hooks/useChatDialogTrigger';
+import useChatDialogTrigger from '../../hooks/useChatDialogTrigger';
 
 interface IChatRoomItemProps {
   room: IChatRoom;
