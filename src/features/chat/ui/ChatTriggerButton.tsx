@@ -9,8 +9,9 @@ export default function ChatTriggerButton() {
 
   const chatDialogOpen = () => {
     const params = new URLSearchParams(searchParams.toString());
+    params.set(PATHS.CHAT.SEARCHPARAMS_BASE, 'true');
     params.set(PATHS.CHAT.SEARCHPARAMS, '0');
-    router.push(`${PATHS.CHAT.BASE}/?${params.toString()}`);
+    router.push(`?${params.toString()}`);
   };
 
   return <button onClick={chatDialogOpen}>이거 채팅버튼임</button>;

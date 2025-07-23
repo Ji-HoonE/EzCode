@@ -27,7 +27,6 @@ export default function ChatRoomList({ selectedRoomId }: IChatRoomListProps) {
 
   return (
     <section className="h-full w-full flex-1/5 border-r border-border_primary/20">
-      <h1 className="text-xl font-semibold">채팅</h1>
       <ChatSearchBar searchQuery={searchQuery} onSearch={handleSearchRoom} />
       {rooms.length > 0 ? (
         <ul>
