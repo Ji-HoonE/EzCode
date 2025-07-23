@@ -1,5 +1,4 @@
 import AuthProvider from '@/lib/AuthProvider';
-import { NavigationBar } from '@/widgets/navigation-bar';
 
 export default function RootLayout({
   children,
@@ -11,9 +10,8 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <div className="w-full h-full">
-        <NavigationBar />
         {chatDialog}
-        <div className="w-full h-full ">{children}</div>
+        <div className="w-full h-full">{children}</div>
       </div>
     </AuthProvider>
   );
