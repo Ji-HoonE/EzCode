@@ -1,6 +1,6 @@
 import ApiHelper from '@/api/client/api';
 import { API_URL } from '@/api/constants/api.constants';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   IFindPasswordRequest,
   IFindPasswordResponse,
@@ -13,6 +13,7 @@ import {
   IVerifyResetPasswordResponse,
 } from '@/entities/auth/model/auth.interface';
 import { BASE_URL } from '@/constants/env';
+import { signOut } from 'next-auth/react';
 
 /** 회원가입 뮤테이션 */
 export const useSignUpMutation = () => {
@@ -26,10 +27,18 @@ export const useSignUpMutation = () => {
 
 /** 로그아웃 뮤테이션 */
 export const useLogoutMutation = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async () => {
       const response = await ApiHelper.post<string>(API_URL.AUTH.LOGOUT, { reqType: 'client' });
       return response;
+    },
+    onSuccess: async () => {
+      await signOut({ redirect: true, callbackUrl: '/signin' });
+      // 로그아웃 시 내정보조회하는 api 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ['my-info'] });
+      queryClient.invalidateQueries({ queryKey: ['my-ranking'] });
+      queryClient.invalidateQueries({ queryKey: ['my-review'] });
     },
   });
 };
