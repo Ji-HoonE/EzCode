@@ -42,6 +42,7 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
             const parsedBody = JSON.parse(msg.body);
             setMessage({ ...parsedBody });
           } catch (e) {
+            console.error(e);
             setMessage({
               message: msg.body,
               tier: 'LV1',
@@ -59,5 +60,6 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
         body: String(chatroomId),
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, chatStompRef, chatroomId]);
 }

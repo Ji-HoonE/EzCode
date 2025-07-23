@@ -46,5 +46,6 @@ export default function useSubChatRooms() {
       );
       chatStompRef.current.publish({ destination: '/chat/enter', body: '입장' });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected]);
 }
