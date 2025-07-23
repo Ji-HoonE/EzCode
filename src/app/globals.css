@@ -8,12 +8,6 @@
   --color-secondary: #00d084;
   --color-background: #0c151c;
   --color-border_primary: #a4a1aa;
-  --color-gradient: linear-gradient(
-    90deg,
-    rgba(14, 30, 3, 1) 0%,
-    rgba(13, 12, 22, 1) 50%,
-    rgba(6, 34, 19, 1) 100%
-  );
 }
 
 @layer utilities {
