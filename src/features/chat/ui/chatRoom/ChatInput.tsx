@@ -1,8 +1,8 @@
 'use client';
 
 import { useRef } from 'react';
-import { ChatRoomId } from '../types';
-import useChatMessage from '../hooks/useChatMessage';
+import { ChatRoomId } from '../../types';
+import useChatMessage from '../../hooks/useChatMessage';
 import { Send } from 'lucide-react';
 
 export default function ChatInput({ chatRoomId }: { chatRoomId: ChatRoomId }) {

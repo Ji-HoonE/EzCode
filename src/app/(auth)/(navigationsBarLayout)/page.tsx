@@ -2,7 +2,7 @@
 // import { API_CONSTANTS } from '@/api/constants/api.constants';
 import { getWeeklyRankings } from '@/entities/rankings/actions/getRankings.actions';
 import Rankings from '@/entities/rankings/ui/Rankings';
-import ChatTriggerButton from '@/features/chat/ui/ChatTriggerButton';
+import ChatDialogOpenButton from '@/features/chat/ui/ChatDialogOpenButton';
 // import { useLogoutMutation } from '@/query/auth/auth';
 
 import { StartButton } from '@/widgets/landingCTA';
@@ -54,7 +54,7 @@ export default async function HomePage() {
               함께
             </p>
             <StartButton />
-            <ChatTriggerButton />
+            <ChatDialogOpenButton />
             {/* <button onClick={handleLogout}>로그아웃</button> */}
           </div>
         </div>
