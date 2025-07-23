@@ -46,7 +46,7 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
               message: msg.body,
               tier: 'LV1',
               name: '시스템',
-              time: Number(new Date()),
+              time: String(new Date()),
             });
           }
         },
