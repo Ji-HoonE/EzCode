@@ -41,8 +41,7 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
           try {
             const parsedBody = JSON.parse(msg.body);
             setMessage({ ...parsedBody });
-          } catch (e) {
-            console.error(e);
+          } catch {
             setMessage({
               message: msg.body,
               tier: 'LV1',
