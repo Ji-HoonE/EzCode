@@ -41,6 +41,7 @@ export default function useConnectChatWebSocket() {
       chatStompRef.current = null;
       setIsConnected(false);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken]);
 
   return { chatStompRef };

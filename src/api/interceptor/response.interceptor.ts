@@ -13,6 +13,7 @@ export const responseInterceptor = async <T>(response: Response): Promise<IApiRe
     const text = await response.text();
     data = text ? JSON.parse(text) : null;
   } catch (error) {
+    console.error(error);
     data = null;
   }
   if (!response.ok) {
