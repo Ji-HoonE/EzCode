@@ -13,7 +13,7 @@ export interface IChatMessage {
   message: string;
   name: string;
   tier: string;
-  time: number;
+  time: string;
 }
 
 /** setMessage 상태 인터페이스 */

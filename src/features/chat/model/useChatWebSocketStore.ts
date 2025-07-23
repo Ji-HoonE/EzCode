@@ -57,7 +57,7 @@ const useChatWebSocketStore = create<IChatWebSocketStore>()(
       setMessage: (message) => {
         set((state) => {
           const newMessages = [...(state.messages ?? []), message] as Array<IChatMessage>;
-          newMessages.sort((a, b) => a.time - b.time);
+          newMessages.sort((a, b) => Number(a.time) - Number(b.time));
           return {
             ...state,
             messages: newMessages as IChatMessage[],

@@ -1,22 +1,41 @@
 'use client';
-import Link from 'next/link';
-import useChatRooms from '../hooks/useChatRooms';
-import { getChatRoomPath } from '@/constants/paths';
-import { IChatRoom } from '../model/useChatWebSocketStore.types';
-import { Button } from '@/components/ui/button';
 
-export default function ChatRoom({ room }: { room: IChatRoom }) {
-  const { deleteRoom } = useChatRooms();
-  const { roomId, title, headCount } = room;
-  const path = getChatRoomPath(roomId);
+import { ChatInput, useJoinChatRoom } from '@/features/chat';
+import useChatWebSocketStore from '@/features/chat/model/useChatWebSocketStore';
+import ChatRoomHeader from './ChatRoomHeader';
+import SystemMessage from './chatMessage/SystemMessage';
+import ChatMessage from './chatMessage/ChatMessage';
 
+interface ChatProps {
+  roomId: string;
+}
+
+export default function ChatRoom({ roomId }: ChatProps) {
+  useJoinChatRoom(Number(roomId));
+  const { messages } = useChatWebSocketStore();
   return (
-    <li className="flex">
-      <Link href={path} key={roomId}>
-        <p>{title}</p>
-        <p>{headCount}명</p>
-      </Link>
-      <Button onClick={() => deleteRoom(roomId)}>삭제</Button>
-    </li>
+    <section className="w-full flex h-full flex-col justify-center flex-4/5">
+      {roomId !== '0' ? (
+        <>
+          <ChatRoomHeader roomId={roomId} roomTitle={'roomTitle'} />
+          {messages && (
+            <ul className="flex-1">
+              {messages.map((msg, i) => {
+                if (msg.name === '시스템') {
+                  return <SystemMessage msg={msg} key={i} />;
+                }
+                return <ChatMessage msg={msg} key={i} />;
+              })}
+            </ul>
+          )}
+          <ChatInput chatRoomId={Number(roomId)} />
+        </>
+      ) : (
+        <div className="flex flex-col justify-center">
+          <p className="text-white text-lg">채팅방을 선택해주세요</p>
+          <p className="text-white text-sm">코딩 문제를 함께 해결해보세요!</p>
+        </div>
+      )}
+    </section>
   );
 }
