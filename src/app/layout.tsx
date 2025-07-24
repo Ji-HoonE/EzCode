@@ -1,4 +1,4 @@
-import NavigationBar from '@/widgets/NavigationBar';
+import NavigationBar from '@/widgets/NavigationBar/ui';
 import './globals.css';
 import QueryProvider from '@/lib/QueryProvider';
 

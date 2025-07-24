@@ -1,9 +1,6 @@
 import { PATHS } from '@/constants/paths';
-import LinkedButton from '@/shared/ui/linkedButton';
 
-import Notifications from './Notifications';
-
-const NAVIGATE_ATTRIBUTE = {
+export const NAVIGATE_ATTRIBUTE = {
   root: {
     href: '/',
     content: 'CodeTest',
@@ -33,21 +30,7 @@ const NAVIGATE_ATTRIBUTE = {
   },
 };
 
-export default function NavigationBar() {
-  return (
-    <header className="border-b border-gray-800 bg-background/95 backdrop-blur-sm sticky top-0 z-50">
-      <nav className="flex w-full justify-around items-center h-full p-4">
-        <div className="flex items-center space-x-8">
-          <LinkedButton props={NAVIGATE_ATTRIBUTE.root} />
-          <LinkedButton props={NAVIGATE_ATTRIBUTE.problems} />
-          <LinkedButton props={NAVIGATE_ATTRIBUTE.rank} />
-          <Notifications />
-        </div>
-        <div className="flex items-center space-x-4">
-          <LinkedButton props={NAVIGATE_ATTRIBUTE.signup} />
-          <LinkedButton props={NAVIGATE_ATTRIBUTE.signin} />
-        </div>
-      </nav>
-    </header>
-  );
-}
+export const AUTH_ACTIONS_OPTIONS = [
+  { label: '마이페이지', value: 'mypage' },
+  { label: '로그아웃', value: 'logout' },
+];
