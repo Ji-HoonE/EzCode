@@ -25,6 +25,8 @@ const PAGE_LINK_ATTRIBUTE = {
 export default async function HomePage() {
   const weeklyRankings = await getWeeklyRankings();
 
+  console.log(weeklyRankings);
+
   return (
     <main className="w-full h-full py-20 bg-background text-white">
       <ChatDialogOpenButton />
