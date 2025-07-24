@@ -1,5 +1,5 @@
 import { PATHS } from '@/constants/paths';
-import { getWeeklyRankings } from '@/entities/rankings/actions/getRankings.actions';
+import { getAllTimeRankings } from '@/entities/rankings/actions/getRankings.actions';
 import Rankings from '@/entities/rankings/ui/Rankings';
 import ChatDialogOpenButton from '@/features/chat/ui/ChatDialogOpenButton';
 import LinkedButton from '@/shared/ui/linkedButton';
@@ -23,9 +23,7 @@ const PAGE_LINK_ATTRIBUTE = {
 };
 
 export default async function HomePage() {
-  const weeklyRankings = await getWeeklyRankings();
-
-  console.log(weeklyRankings);
+  const allTimeRanking = await getAllTimeRankings();
 
   return (
     <main className="w-full h-full py-20 bg-background text-white">
@@ -52,8 +50,7 @@ export default async function HomePage() {
           <LinkedButton props={PAGE_LINK_ATTRIBUTE.rank} />
         </div>
       </section>
-
-      <Rankings rankings={weeklyRankings} />
+      <Rankings rankings={allTimeRanking} />
     </main>
   );
 }

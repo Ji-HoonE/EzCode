@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { IRanking } from '../actions/getRankings.actions.types';
+import clsx from 'clsx';
 
 interface IRankingItem {
   ranking?: IRanking;
@@ -25,7 +26,10 @@ export default function RankingItem({ ranking, badge }: IRankingItem) {
   return (
     <li
       key={ranks}
-      className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors duration-200"
+      className={clsx(
+        'flex items-center justify-between p-4 hover:bg-white/5 transition-colors duration-200 ',
+        ranks === 10 ? 'border-none' : 'border-b border-border_primary'
+      )}
     >
       <div className="flex items-center space-x-4">
         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm">
