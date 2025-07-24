@@ -1,4 +1,4 @@
-export type TWeeklyRankings = IRanking[];
+export type TRankings = IRanking[];
 
 export interface IRanking {
   userId: number;

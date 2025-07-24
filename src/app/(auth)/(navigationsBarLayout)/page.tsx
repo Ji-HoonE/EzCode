@@ -1,69 +1,56 @@
-// import ApiHelper from '@/api/client/api';
-// import { API_CONSTANTS } from '@/api/constants/api.constants';
-import { getWeeklyRankings } from '@/entities/rankings/actions/getRankings.actions';
+import { PATHS } from '@/constants/paths';
+import { getAllTimeRankings } from '@/entities/rankings/actions/getRankings.actions';
 import Rankings from '@/entities/rankings/ui/Rankings';
 import ChatDialogOpenButton from '@/features/chat/ui/ChatDialogOpenButton';
-// import { useLogoutMutation } from '@/query/auth/auth';
-
-import { StartButton } from '@/widgets/landingCTA';
-// import { useQueryClient } from '@tanstack/react-query';
-// import { signOut } from 'next-auth/react';
+import LinkedButton from '@/shared/ui/linkedButton';
 import Image from 'next/image';
-// import { useEffect } from 'react';
+
+const PAGE_LINK_ATTRIBUTE = {
+  start: {
+    href: PATHS.PROBLEMS,
+    content: '지금 시작하기',
+    className:
+      'flex gap-2 bg-secondary text-black px-8 py-4 rounded-[20px] transition-all hover:scale-105 h-10 items-center',
+    image: { src: '/icons/target.svg', alt: '메인페이지 시작하기 버튼 이미지', w: 20, h: 20 },
+  },
+  rank: {
+    href: PATHS.RANK,
+    content: '랭킹 보기',
+    className:
+      'flex border border-primary text-secondary px-8 py-4 rounded-[20px] h-10 items-center gap-2 hover:scale-105 transition-all',
+    image: { src: '/icons/group.svg', alt: '메인페이지 랭킹버튼 로고', w: 20, h: 20 },
+  },
+};
 
 export default async function HomePage() {
-  // const { mutateAsync } = useLogoutMutation();
-  // const queryClient = useQueryClient();
-
-  // // TODO 로그아웃 api 임의연동
-  // const handleLogout = async () => {
-  //   try {
-  //     const res = await mutateAsync();
-  //     if (res.data.status === API_CONSTANTS.CODE.OK) {
-  //       await signOut({ redirect: true, callbackUrl: '/signin' });
-  //       // 로그아웃 시 내정보조회하는 api 캐시 무효화
-  //       queryClient.invalidateQueries({ queryKey: ['my-info'] });
-  //       queryClient.invalidateQueries({ queryKey: ['my-ranking'] });
-  //       queryClient.invalidateQueries({ queryKey: ['my-review'] });
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-  // // TODO 테스트 유저정보 api 임의연동
-  // useEffect(() => {
-  //   const fetchUserInfo = async () => {
-  //     const response = await ApiHelper.get('/users', { reqType: 'client' });
-  //     console.log('response', response);
-  //   };
-  //   fetchUserInfo();
-  // }, []);
-
-  const weeklyRankings = await getWeeklyRankings();
+  const allTimeRanking = await getAllTimeRankings();
 
   return (
-    <main className="w-full bg-gradient flex items-center h-full pt-20 flex-col">
-      <section>
-        <div className="flex items-center">
-          <Image src="/logo/EZMainLogo.svg" alt="EZ-MainLogo" width={603} height={603} priority />
-          <div className="flex flex-col">
-            <h4>EzCode [ez:code] 코딩을 쉽게, 성장은 빠르게</h4>
-            <p className="flex flex-col text-right">
-              코드가 쉬워지는 순간,
-              <Image src="/logo/EzCodeLogo.svg" alt="ezCodeLogo.svg" width={200} height={56} />와
-              함께
-            </p>
-            <StartButton />
-            <ChatDialogOpenButton />
-            {/* <button onClick={handleLogout}>로그아웃</button> */}
-          </div>
+    <main className="w-full h-full py-20 bg-background text-white">
+      <ChatDialogOpenButton />
+      {/* <button onClick={handleLogout}>로그아웃</button> */}
+
+      <section className="text-center container mx-auto px-4">
+        <div className="mb-8 flex items-center flex-col gap-6">
+          <Image src="/icons/code.svg" alt="메인페이지 로고" width={80} height={80} />
+          <h1 className="text-5xl md:text-6xl font-bold mb-6">
+            <span className="text-white">코딩 실력을</span>
+            <br />
+            <span className="text-secondary">한 단계 업그레이드</span>
+          </h1>
+          <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+            매일 새로운 문제로 도전하고, 전국 개발자들과 실력을 겨뤄보세요.
+            <br />
+            체계적인 학습과 실전 경험을 통해 코딩 테스트를 정복하세요.
+          </p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center font-semibold">
+          <LinkedButton props={PAGE_LINK_ATTRIBUTE.start} />
+          <LinkedButton props={PAGE_LINK_ATTRIBUTE.rank} />
         </div>
       </section>
-      <section>
-        <h2>이번 주 랭킹 TOP 10</h2>
-        <p>이번 주 가장 활발하게 문제를 해결한 개발자들</p>
-        <Rankings rankings={weeklyRankings} />
-      </section>
+      <Rankings rankings={allTimeRanking} />
     </main>
   );
 }

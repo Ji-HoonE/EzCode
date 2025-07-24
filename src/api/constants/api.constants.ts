@@ -43,6 +43,7 @@ export const API_URL = {
   },
   RANK: {
     WEEKLY: '/rankings/weekly',
+    ALL_TIME: '/rankings/all-time',
   },
   NOTIFICATIONS: '/notifications',
 };
