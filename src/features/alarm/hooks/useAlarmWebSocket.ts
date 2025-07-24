@@ -1,8 +1,7 @@
 'use client';
 
 import { BASE_URL } from '@/constants/env';
-import { useProblemWebSocketStoreActions } from '@/features/submitCode/submission/model/useProblemWebSocketStore';
-import { sharedStompRef } from '@/shared/lib/stomp/sharedStompRef';
+
 import { Client } from '@stomp/stompjs';
 import { useEffect, useState } from 'react';
 import SockJS from 'sockjs-client';

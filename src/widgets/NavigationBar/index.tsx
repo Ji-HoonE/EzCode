@@ -1,6 +1,6 @@
 import { PATHS } from '@/constants/paths';
 import LinkedButton from '@/shared/ui/linkedButton';
-import Image from 'next/image';
+
 import Notifications from '../navigation-bar/ui/Notifications';
 
 const NAVIGATE_ATTRIBUTE = {
