@@ -44,6 +44,7 @@ export const API_URL = {
   RANK: {
     WEEKLY: '/rankings/weekly',
   },
+  NOTIFICATIONS: '/notifications',
 };
 
 /** API 요청 주소 */

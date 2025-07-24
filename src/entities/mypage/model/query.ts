@@ -6,6 +6,7 @@ import {
   ChangePasswordRequest,
   DailySolved,
   IMyInfo,
+  Ranking,
   SubmissionsResonse,
 } from './types';
 import { TPeriod } from '@/shared/types/mypage.type';
@@ -27,7 +28,7 @@ export const useMyRankingQuery = (period: TPeriod) => {
   return useQuery({
     queryKey: ['my-ranking'],
     queryFn: async () => {
-      const response = await ApiHelper.get<IMyInfo>(`/rankings/me/around?period=${period}`);
+      const response = await ApiHelper.get<Ranking[]>(`/rankings/me/around?period=${period}`);
       return response;
     },
 
