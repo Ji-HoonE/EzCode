@@ -1,7 +1,7 @@
 import { PATHS } from '@/constants/paths';
 import LinkedButton from '@/shared/ui/linkedButton';
 
-import Notifications from '../navigation-bar/ui/Notifications';
+import Notifications from './Notifications';
 
 const NAVIGATE_ATTRIBUTE = {
   root: {
