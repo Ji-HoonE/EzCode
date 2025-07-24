@@ -1,21 +1,19 @@
 'use client';
 import Link from 'next/link';
-import { ReactNode, useState } from 'react';
+import { ButtonHTMLAttributes, ReactNode, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-interface PropsType {
+interface PropsType extends ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
   className?: string;
-  variant: 'primary' | 'secondary' | 'default' | 'danger' | 'outline';
+  variant?: 'primary' | 'secondary' | 'default' | 'danger' | 'outline';
   onClick?: () => void | Promise<void>;
   href?: string;
   size?: 'sm' | 'md' | 'lg';
   rounded?: 'sm' | 'md' | 'lg' | 'full';
   fullWidth?: boolean;
-  disabled?: boolean;
   loading?: boolean;
   icon?: ReactNode;
-  type?: 'button' | 'submit' | 'reset';
 }
 
 export const Button = ({
@@ -31,6 +29,7 @@ export const Button = ({
   icon,
   href,
   type = 'button',
+  ...rest
 }: PropsType) => {
   const [internalLoading, setInternalLoading] = useState(false);
   const isLoading = loading || internalLoading;
@@ -89,6 +88,7 @@ export const Button = ({
   } else {
     return (
       <button
+        {...rest}
         type={type}
         disabled={disabled || isLoading}
         className={mergedClassName}

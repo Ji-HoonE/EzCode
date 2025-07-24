@@ -1,6 +1,7 @@
 import { PATHS } from '@/constants/paths';
 import LinkedButton from '@/shared/ui/linkedButton';
-import Image from 'next/image';
+
+import Notifications from '../navigation-bar/ui/Notifications';
 
 const NAVIGATE_ATTRIBUTE = {
   root: {
@@ -40,13 +41,7 @@ export default function NavigationBar() {
           <LinkedButton props={NAVIGATE_ATTRIBUTE.root} />
           <LinkedButton props={NAVIGATE_ATTRIBUTE.problems} />
           <LinkedButton props={NAVIGATE_ATTRIBUTE.rank} />
-          <Image
-            src="/icons/notification-icon.svg"
-            width={20}
-            height={20}
-            alt="notification-icon"
-            priority
-          />
+          <Notifications />
         </div>
         <div className="flex items-center space-x-4">
           <LinkedButton props={NAVIGATE_ATTRIBUTE.signup} />

@@ -48,7 +48,7 @@ export const Mine = () => {
   const { data: heatmap } = useMyDailySolved();
   const myInfo = data?.data.result;
   const myRanking = ranking?.data.result;
-  console.log(myRanking);
+
   const aiReviewCnt = aiReview?.data.result.reviewToken;
   const [heatmapData, setHeatmapData] = useState<IHeatmapItem[]>([]);
   const levelCalculator = (count: number) => {
@@ -93,7 +93,10 @@ export const Mine = () => {
           </div>
           <div className="flex flex-col flex-1 gap-11 px-25 justify-center">
             <div className="flex flex-row justify-between px-10 w-full">
-              <SummaryStatItem title="랭킹" value="7" />
+              <SummaryStatItem
+                title="랭킹"
+                value={myRanking?.find((item) => item.isMe)?.ranks || 0}
+              />
               <SummaryStatItem title="푼 문제 수" value={myInfo?.totalSolvedCount || 0} />
               <SummaryStatItem title="남은 AI 리뷰 수" value={aiReviewCnt || 0} />
             </div>

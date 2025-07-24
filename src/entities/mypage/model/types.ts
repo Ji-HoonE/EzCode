@@ -56,3 +56,11 @@ export interface Submission {
   memoryUsage: number;
   submittedAt: string;
 }
+
+export interface Ranking  {
+      userId: number
+      nickname: string
+      ranks: number
+      score: number
+      isMe: boolean
+    }
