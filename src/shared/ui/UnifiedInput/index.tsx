@@ -1,3 +1,4 @@
+'use client';
 import { PLACEHOLDER } from '@/constants/placeholder';
 import { clsx } from 'clsx';
 import { InputHTMLAttributes, ReactNode } from 'react';
@@ -5,6 +6,7 @@ import * as S from './unifiedInput.default.style';
 import InputTypeFiled from './InputTypeFiled';
 import TextAreaTypeFiled from './TextAreaTypeFiled';
 import ImageTypeFiled from './ImageTypeFiled';
+import { useInputTypeFiledStatus } from '@/shared/hooks/UnifiedInput/useInputTypeFiledStatus';
 
 /**
  * @description name - placeholder,validate 파일에 의해 name에 따라 선택됩니다.
@@ -27,11 +29,14 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLTextAreaEleme
 }
 
 export default function UnifiedInput({ label, inputType, imageProps, name, ...props }: Props) {
+  const inputTypeFiledStatus = useInputTypeFiledStatus({});
+
   const renderInputFiled = () => {
     switch (inputType) {
       case 'input':
-        return <InputTypeFiled placeholder={PLACEHOLDER[name]} {...props} />;
-
+        return (
+          <InputTypeFiled placeholder={PLACEHOLDER[name]} {...props} {...inputTypeFiledStatus} />
+        );
       case 'textarea':
         return <TextAreaTypeFiled placeholder={PLACEHOLDER[name]} {...props} />;
 

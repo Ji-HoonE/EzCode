@@ -1,8 +1,9 @@
+/** 고정되어있음 */
 export const defaultLabel = 'text-sm font-medium text-gray-300';
+export const defaultErrorMessage = 'text-dangerous text-sm pl-2';
+export const defaultPlaceHolder = 'placeholder-gray-500';
 
-export const defaultPlaceHolder = '';
-
+/**className prop 으로 바꿀수 있는 스타일 */
 export const defaultTextArea = '';
-export const defaultInput = '';
-
-export const defaultErrorMessage = 'text-dangerous text-xs-rg pl-2';
+export const defaultInput =
+  'flex items-center gap-2 rounded-[10px] bg-gray-800/50  transition-all duration-200 text-white w-full px-2 py-3  border border-gray-700';

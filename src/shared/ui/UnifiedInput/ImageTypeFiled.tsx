@@ -1,3 +1,4 @@
+'use client';
 import clsx from 'clsx';
 import { useState } from 'react';
 
@@ -35,7 +36,7 @@ export default function ImageTypeFiled({ className, imageProps, ...props }: Prop
         className
       )}
     >
-      <input
+      {/* <input
         id={inputId}
         type="file"
         onChange={handleImageUpload}
@@ -51,15 +52,15 @@ export default function ImageTypeFiled({ className, imageProps, ...props }: Prop
             className="absolute top-[calc(50%-15px)] left-[calc(50%-54px)] flex h-15 w-27 flex-col items-center justify-center gap-[11px]"
           >
             {/* <ImageUploaderIcon className="text-white" /> */}
-            <p className="text-lg-bold text-white">이미지 변경하기</p>
+      {/* <p className="text-lg-bold text-white">이미지 변경하기</p>
           </label>
         </div>
-      ) : (
-        <label htmlFor={inputId} className="flex flex-col items-center justify-center gap-[11px]">
-          {/* <ImageUploaderIcon className="text-gray40" /> */}
-          <p className="text-lg-bold text-gray40">이미지 추가하기</p>
+      ) : ( */}
+      {/* <label htmlFor={inputId} className="flex flex-col items-center justify-center gap-[11px]"> */}
+      {/* <ImageUploaderIcon className="text-gray40" /> */}
+      {/* <p className="text-lg-bold text-gray40">이미지 추가하기</p>
         </label>
-      )}
+      )} */}
     </div>
   );
 }
