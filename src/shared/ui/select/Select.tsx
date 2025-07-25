@@ -53,7 +53,7 @@ export const Select = ({
         )}
         aria-expanded={dropdown}
       >
-        <span className="truncate">{value || title}</span>
+        <span className="truncate">{value || '전체'}</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className={twMerge(

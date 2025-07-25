@@ -4,7 +4,7 @@ import { ButtonHTMLAttributes, ReactNode, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface PropsType extends ButtonHTMLAttributes<HTMLButtonElement> {
-  label: string;
+  label: ReactNode;
   className?: string;
   variant?: 'primary' | 'secondary' | 'default' | 'danger' | 'outline';
   onClick?: () => void | Promise<void>;
