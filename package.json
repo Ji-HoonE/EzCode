@@ -13,6 +13,7 @@
     "@codemirror/lang-java": "^6.0.2",
     "@codemirror/lang-python": "^6.2.1",
     "@codemirror/language": "^6.11.2",
+    "@hookform/resolvers": "^5.1.1",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-select": "^2.2.5",
@@ -31,9 +32,11 @@
     "react": "^19.0.0",
     "react-activity-calendar": "^2.7.13",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.61.1",
     "sockjs-client": "1.6.1",
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.1",
+    "zod": "^4.0.10",
     "zustand": "^5.0.5"
   },
   "devDependencies": {
