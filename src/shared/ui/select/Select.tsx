@@ -1,15 +1,55 @@
 'use client';
 
-import { HTMLAttributes, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { HTMLAttributes, ReactNode, useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-
+interface OptionType {
+  label: ReactNode;
+  value: string | (() => void); // router면 string, api면 함수
+}
+/**
+ * Select 컴포넌트의 props
+ */
 interface PropsType extends HTMLAttributes<HTMLDivElement> {
-  option: { label: string; value: string }[];
+  /**
+   * Select에 표시할 옵션 배열
+   * - label: 보여줄 텍스트나 이미지 (ReactNode)
+   * - value: 선택될 값 (string 또는 함수 - api일 경우)
+   */
+  option: OptionType[];
+
+  /** Select 기본 표시 텍스트 */
+  title: string;
+
+  /** Tailwind 등 추가 클래스 */
+  className?: string;
+
+  /** 선택된 값을 상위에서 관리할 때 사용하는 setter */
+  setValue?: (value: string) => void;
+
+  /** 현재 선택된 값 */
+  value: string;
+
+  /** 컴포넌트 사이즈 (기본값: 'md') */
+  size?: 'sm' | 'md' | 'lg';
+
+  /**
+   * 동작 타입
+   * - 'setValue': value를 상태로 반영 (기본)
+   * - 'router': next/router로 이동
+   * - 'api': value가 함수일 경우 호출
+   */
+  type?: 'setValue' | 'router' | 'api';
+}
+interface PropsType extends HTMLAttributes<HTMLDivElement> {
+  option: OptionType[];
   title: string;
   className?: string;
-  setValue: (value: string) => void;
+  setValue?: (value: string) => void;
   value: string;
   size?: 'sm' | 'md' | 'lg';
+  type?: 'setValue' | 'router' | 'api';
+  entireOption?: boolean;
 }
 
 export const Select = ({
@@ -19,8 +59,11 @@ export const Select = ({
   setValue,
   value,
   size = 'md',
+  type = 'setValue',
+  entireOption = false,
   ...rest
 }: PropsType) => {
+  const router = useRouter();
   const selectRef = useRef<HTMLDivElement>(null);
   const [dropdown, setDropdown] = useState(false);
   const sizeMap = {
@@ -29,6 +72,25 @@ export const Select = ({
     lg: 'h-15 text-base w-100 px-4',
   };
   const sizeClass = sizeMap[size];
+
+  const handleSelectChange = (value: string | (() => void)) => {
+    // type 분기
+    if (type === 'setValue') {
+      if (typeof value === 'string' && setValue) {
+        setValue(value);
+      }
+    } else if (type === 'router') {
+      if (typeof value === 'string') {
+        router.push(value);
+      }
+    } else if (type === 'api') {
+      if (typeof value === 'function') {
+        value(); // 함수 실행
+      }
+    }
+    setDropdown(false);
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
@@ -73,30 +135,33 @@ export const Select = ({
 
       <div
         className={twMerge(
-          'max-h-[300px] w-full overflow-y-auto absolute top-11 flex flex-col bg-gray-800 border border-gray-700 rounded  z-10 transition-all duration-200 origin-top ',
+          'max-h-[300px] w-full overflow-y-auto absolute top-14 flex flex-col bg-gray-800 border border-gray-700 rounded  z-10 transition-all duration-200 origin-top ',
           dropdown ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
         )}
       >
-        <div
-          className="flex flex-row gap-2 items-center px-1 hover:bg-white hover:text-black cursor-pointer py-1 rounded "
-          onClick={() => {
-            setValue('');
-            setDropdown(false);
-          }}
-        >
-          <span className="ml-5 w-3">{'' === value && '✔'}</span>
-          <span className=" ">전체</span>
-        </div>
-        {option.map((item) => (
+        {entireOption && (
           <div
-            key={item.value}
             className="flex flex-row gap-2 items-center px-1 hover:bg-white hover:text-black cursor-pointer py-1 rounded "
             onClick={() => {
-              setValue(String(item.value)); // string으로 강제 형변환
+              if (setValue) setValue('');
               setDropdown(false);
             }}
           >
-            <span className="ml-5 w-3">{item.value === value && '✔'}</span>
+            <span className="ml-5 w-3">{'' === value && '✔'}</span>
+            <span className=" ">전체</span>
+          </div>
+        )}
+        {option.map((item, index) => (
+          <div
+            key={typeof item.value === 'string' ? item.value : `option-${index}`}
+            className="flex flex-row gap-2 items-center px-1 hover:bg-white hover:text-black cursor-pointer py-1 rounded "
+            onClick={() => {
+              handleSelectChange(item.value);
+            }}
+          >
+            <span className="ml-5 w-3">
+              {typeof item.value === 'string' && item.value === value && '✔'}
+            </span>
             <span>{item.label}</span>
           </div>
         ))}
