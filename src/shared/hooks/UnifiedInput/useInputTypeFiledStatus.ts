@@ -11,7 +11,7 @@ interface IUseInputTypeFiledStatus {
 
 export function useInputTypeFiledStatus({ ...props }: IUseInputTypeFiledStatus) {
   const [isFocused, setIsFocused] = useState(false);
-  const [isTouched, setIsTouched] = useState(false);
+  const [isBlur, setIsBlur] = useState(false);
 
   const { isSuccess, isFailure, onFocus, onBlur } = props;
 
@@ -26,18 +26,18 @@ export function useInputTypeFiledStatus({ ...props }: IUseInputTypeFiledStatus) 
   const handleBlur = useCallback(
     (e: React.FocusEvent<HTMLInputElement>) => {
       setIsFocused(false);
-      setIsTouched(true);
+      setIsBlur(true);
       onBlur?.(e);
     },
     [onBlur]
   );
 
-  const showSuccess = isTouched && isSuccess === true;
-  const showError = isTouched && isFailure === true;
+  const showSuccess = isBlur && isSuccess === true;
+  const showError = isBlur && isFailure === true;
 
   return {
     isFocused,
-    isTouched,
+    isBlur,
     showSuccess,
     showError,
     handleFocus,

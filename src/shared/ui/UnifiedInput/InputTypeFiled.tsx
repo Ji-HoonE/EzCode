@@ -1,32 +1,59 @@
 import clsx from 'clsx';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import * as S from './unifiedInput.default.style';
-import { IInputTypeFiledStatus } from '@/shared/hooks/UnifiedInput/useInputTypeFiledStatus';
+import { useInputTypeFiledStatus } from '@/shared/hooks/UnifiedInput/useInputTypeFiledStatus';
+import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import { TZodKey } from '@/lib/zod/types';
+import { TAuthSchemaRegister } from '@/entities/auth/model/authZodSchemas';
 
-interface IInputTypeFiledProps
-  extends React.InputHTMLAttributes<HTMLInputElement>,
-    IInputTypeFiledStatus {
+interface IInputTypeFiledProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'name'> {
+  name: TZodKey;
   leftSlot?: ReactNode;
   rightSlot?: ReactNode;
+  isError: boolean;
+  setValue: UseFormSetValue<TAuthSchemaRegister>;
+  register: UseFormRegister<TAuthSchemaRegister>;
 }
 
-export default function InputTypeFiled({ className, ...props }: IInputTypeFiledProps) {
-  const { isFocused, isTouched, showSuccess, handleFocus, handleBlur, ...rest } = props;
+export default function InputTypeFiled({
+  className,
+  name,
+  register,
+  isError,
+  setValue,
+  ...props
+}: IInputTypeFiledProps) {
+  const { leftSlot, rightSlot, ...rest } = props;
+  const { isFocused, showSuccess, handleFocus, handleBlur } = useInputTypeFiledStatus({});
+  const { onChange, onBlur, ref } = register(name);
 
   return (
     <div
-      className={clsx(S.defaultInput, (isFocused || showSuccess) && 'border-secondary', className)}
+      className={clsx(
+        S.defaultInput,
+        (isFocused || showSuccess) && 'border-secondary',
+        isError && 'border-dangerous',
+        className
+      )}
       tabIndex={0}
     >
-      {props.leftSlot && <>{props.leftSlot}</>}
+      {leftSlot && <>{leftSlot}</>}
       <input
+        ref={ref}
         placeholder={props.placeholder}
         className={clsx('w-full', S.defaultPlaceHolder)}
         onFocus={handleFocus}
-        onBlur={handleBlur}
+        onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+          onBlur(e);
+          handleBlur(e);
+        }}
+        onChange={(e) => {
+          onChange(e);
+          setValue(name, e.target.value, { shouldValidate: true });
+        }}
         {...rest}
       />
-      {props.rightSlot && <>{props.rightSlot}</>}
+      {rightSlot && <>{rightSlot}</>}
     </div>
   );
 }

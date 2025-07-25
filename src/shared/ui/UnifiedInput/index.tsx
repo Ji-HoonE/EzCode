@@ -6,36 +6,52 @@ import * as S from './unifiedInput.default.style';
 import InputTypeFiled from './InputTypeFiled';
 import TextAreaTypeFiled from './TextAreaTypeFiled';
 import ImageTypeFiled from './ImageTypeFiled';
-import { useInputTypeFiledStatus } from '@/shared/hooks/UnifiedInput/useInputTypeFiledStatus';
+import { TZodKey } from '@/lib/zod/types';
+import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import { TAuthSchemaRegister } from '@/entities/auth/model/authZodSchemas';
 
 /**
  * @description name - placeholder,validate 파일에 의해 name에 따라 선택됩니다.
  */
 
-interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
+interface Props extends Omit<InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>, 'name'> {
   inputType: 'textarea' | 'image' | 'input';
-  name: string;
-
+  name: TZodKey;
   label?: string;
   labelStyle?: string;
-
+  errorMessage?: string;
   leftSlot?: ReactNode;
   rightSlot?: ReactNode;
-
+  register: UseFormRegister<TAuthSchemaRegister>;
+  setValue: UseFormSetValue<TAuthSchemaRegister>;
   imageProps?: {
     previewImage: string;
     selectImage: (value: string) => void;
   };
 }
 
-export default function UnifiedInput({ label, inputType, imageProps, name, ...props }: Props) {
-  const inputTypeFiledStatus = useInputTypeFiledStatus({});
-
+export default function UnifiedInput({
+  label,
+  inputType,
+  errorMessage,
+  imageProps,
+  name,
+  setValue,
+  register,
+  ...props
+}: Props) {
   const renderInputFiled = () => {
     switch (inputType) {
       case 'input':
         return (
-          <InputTypeFiled placeholder={PLACEHOLDER[name]} {...props} {...inputTypeFiledStatus} />
+          <InputTypeFiled
+            placeholder={PLACEHOLDER[name]}
+            name={name}
+            setValue={setValue}
+            isError={!!errorMessage}
+            register={register}
+            {...props}
+          />
         );
       case 'textarea':
         return <TextAreaTypeFiled placeholder={PLACEHOLDER[name]} {...props} />;
@@ -53,7 +69,7 @@ export default function UnifiedInput({ label, inputType, imageProps, name, ...pr
       {label && <label className={clsx(S.defaultLabel, props.labelStyle)}>{label}</label>}
       <div className="flex h-full w-full flex-col gap-2">
         {renderInputFiled()}
-        {<p className={S.defaultErrorMessage}>{'에러메시지'}</p>}
+        {errorMessage && <p className={S.defaultErrorMessage}>{errorMessage}</p>}
       </div>
     </div>
   );
