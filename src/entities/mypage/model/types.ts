@@ -44,6 +44,7 @@ export interface SubmissionsResonse {
   problemId: number;
   problemTitle: string;
   problemDescription: string;
+  problemDifficulty : string;
   submissions: Submission[];
 }
 
@@ -55,6 +56,7 @@ export interface Submission {
   executionTime: number;
   memoryUsage: number;
   submittedAt: string;
+  language : string
 }
 
 export interface Ranking  {

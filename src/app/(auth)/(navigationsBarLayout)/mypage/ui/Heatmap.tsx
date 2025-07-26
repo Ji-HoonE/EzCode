@@ -2,6 +2,7 @@ import { ActivityCalendar } from 'react-activity-calendar';
 import { eachDayOfInterval, format, startOfYear, endOfYear } from 'date-fns';
 import { useMemo, useState } from 'react';
 import { IHeatmapItem } from '@/entities/mypage/model/types';
+import { Select } from '@/shared/ui/select/Select';
 
 export const Heatmap = ({ data }: { data: IHeatmapItem[] }) => {
   const currentYear = new Date().getFullYear();
@@ -36,10 +37,10 @@ export const Heatmap = ({ data }: { data: IHeatmapItem[] }) => {
   }, [tab, data]);
 
   return (
-    <div className="flex flex-row gap-4">
+    <div className="flex flex-row gap-10 flex-1">
       <ActivityCalendar
         hideTotalCount
-        blockSize={16}
+        blockSize={18}
         blockRadius={4}
         fontSize={16}
         theme={{
@@ -49,19 +50,16 @@ export const Heatmap = ({ data }: { data: IHeatmapItem[] }) => {
         data={fullYearData}
       />
 
-      <ul className="gap-4 flex flex-col">
-        {yearList.map((year) => (
-          <li
-            key={year}
-            onClick={() => setTab(year)}
-            className={`cursor-pointer px-3 py-1 rounded font-semibold transition-colors ${
-              tab === year ? 'bg-[#00A141] text-black' : 'text-white hover:text-[#00A141]'
-            }`}
-          >
-            {year}
-          </li>
-        ))}
-      </ul>
+      <Select
+        option={[
+          { label: '2025', value: '2025' },
+          { label: '2024', value: '2024' },
+          { label: '2023', value: '2023' },
+        ]}
+        title=""
+        value={tab}
+        setValue={(value) => setTab(value)}
+      />
     </div>
   );
 };

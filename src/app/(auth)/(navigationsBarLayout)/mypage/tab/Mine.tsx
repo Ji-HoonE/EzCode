@@ -1,42 +1,28 @@
-import { Button } from '@/components/ui/button';
-
 import { TPeriod } from '@/shared/types/mypage.type';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 import { Heatmap } from '../ui/Heatmap';
 import {
+  useEmailVerify,
   useMyAiReviewCheckQuery,
   useMyDailySolved,
   useMyInfoQuery,
   useMyRankingQuery,
 } from '@/entities/mypage/model/query';
 import { IHeatmapItem } from '@/entities/mypage/model/types';
+import { User } from 'lucide-react';
+import Mail from './../../../../../../public/icons/mypage/mail.svg';
+import Bookopen from './../../../../../../public/icons/mypage/bookopen.svg';
+import { Button } from '@/shared/ui/button/Button';
+import { BASE_URL } from '@/constants/env';
 
-const SummaryStatItem = ({ title, value }: { title: string; value: string | number }) => (
-  <div className="flex flex-col gap-2">
-    <span className="text-center font-bold text-[#EBEBEBAB] text-xs">{title}</span>
-    <span className="text-center font-bold text-white text-2xl">{value}</span>
-  </div>
-);
-
-const DetailInfoRow = ({
-  title,
-  value,
-  verify = false,
-}: {
-  title: string;
-  value: string;
-  verify?: boolean;
-}) => (
-  <div className="flex flex-row gap-4 items-center">
-    <span className="w-[90px] text-center font-bold text-[#EBEBEBAB] text-xs">{title}</span>
-    <span className="text-center font-bold text-[#FFFFFFD9] text-[20px] leading-[30px]">
+const DetailInfoRow = ({ title, value }: { title: string; value: string | number }) => (
+  <div className="bg-gray-800/50 p-3 rounded-lg flex flex-col">
+    <div className="text-sm text-gray-400">{title}</div>
+    <div className="text-lg font-bold" style={{ color: '#FFF' }}>
       {value}
-    </span>
-    {verify && (
-      <Button className="bg-[#00A141] text-bold text-[10px] leading-[30px]">이메일 인증</Button>
-    )}
+    </div>
   </div>
 );
 
@@ -46,6 +32,7 @@ export const Mine = () => {
   const { data: ranking } = useMyRankingQuery('all-time');
   const { data: aiReview } = useMyAiReviewCheckQuery();
   const { data: heatmap } = useMyDailySolved();
+  const { mutateAsync: emailVerfiy } = useEmailVerify(BASE_URL || '');
   const myInfo = data?.data.result;
   const myRanking = ranking?.data.result;
 
@@ -76,42 +63,65 @@ export const Mine = () => {
 
   return (
     <div className=" flex flex-col gap-10 h-full">
-      <section className="bg-[#004B1133] rounded-[25px] flex flex-col justify-center items-center px-[100px] pt-8 pb-[100px] gap-4">
-        <div className="flex justify-end w-full">
-          <Image src="/icons/mypage/modify.svg" alt="modify" width={27} height={27} />
+      <section className="rounded-lg flex flex-col gap-8 border bg-gray-900/50 border-gray-700/50 p-10">
+        <div className="flex flex-row gap-4 items-center">
+          <User size={24} style={{ color: '#00d084' }} />
+          <h2 className="font-bold text-2xl">프로필 정보</h2>
         </div>
-        <div className="flex flex-row gap-12 w-full">
-          <div className="flex flex-col gap-12">
-            {myInfo?.profileImageUrl ? (
-              <Image alt="my" width={270} height={270} src={myInfo.profileImageUrl} />
-            ) : (
-              <Image width={270} height={270} src="/icons/mypage/defaultImg.svg" alt="my" />
-            )}
-            <span className="text-center font-extrabold text-[40px] leading-[30px]">
-              {myInfo?.username}
-            </span>
-          </div>
-          <div className="flex flex-col flex-1 gap-11 px-25 justify-center">
-            <div className="flex flex-row justify-between px-10 w-full">
-              <SummaryStatItem
+        <div className="flex flex-row gap-4">
+          {myInfo?.profileImageUrl ? (
+            <Image alt="my" width={150} height={150} src={myInfo.profileImageUrl} />
+          ) : (
+            <Image width={150} height={150} src="/icons/mypage/defaultImg.svg" alt="my" />
+          )}
+          <div className="flex flex-col gap-3 flex-1">
+            <span className="font-bold text-2xl">{myInfo?.username}</span>
+            <div className="flex rounded-full px-2 py-4 items-center justify-center font-light bg-[#214d35] w-fit">
+              <span className="text-xs leading-0">{myInfo?.tier}</span>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full ">
+              <DetailInfoRow
                 title="랭킹"
-                value={myRanking?.find((item) => item.isMe)?.ranks || 0}
+                value={`# ${myRanking?.find((item) => item.isMe)?.ranks.toLocaleString() || 0}`}
               />
-              <SummaryStatItem title="푼 문제 수" value={myInfo?.totalSolvedCount || 0} />
-              <SummaryStatItem title="남은 AI 리뷰 수" value={aiReviewCnt || 0} />
-            </div>
-            <hr className="text-[#FFFFFF57]" />
-
-            <div className="flex flex-col w-full gap-8">
-              <DetailInfoRow title="티어" value={myInfo?.tier || ''} />
+              <DetailInfoRow title="푼 문제수" value={myInfo?.totalSolvedCount || 0} />
+              <DetailInfoRow title="남은 리뷰" value={aiReviewCnt || 0} />
               <DetailInfoRow title="아이디" value={myInfo?.nickname || ''} />
-              <DetailInfoRow title="이메일" value={myInfo?.email || ''} verify />
             </div>
           </div>
+        </div>
+        <div className="flex items-center justify-between p-4 bg-gray-800/30 rounded-lg">
+          <div className="flex items-center gap-3">
+            <Image src={Mail} width={20} height={20} alt="mail" />
+            <div>
+              <div className="text-sm text-gray-400">이메일</div>
+              <div className="text-white font-medium">{myInfo?.email}</div>
+            </div>
+          </div>
+
+          {myInfo?.verified ? (
+            <div className="flex items-center gap-2 text-green-400">
+              <span className="font-medium">✓ 인증 완료</span>
+            </div>
+          ) : (
+            <Button
+              variant="primary"
+              label="이메일 인증"
+              onClick={async () => {
+                const response = await emailVerfiy();
+                alert(response);
+              }}
+            />
+          )}
         </div>
       </section>
-
-      {heatmapData.length > 0 && <Heatmap data={heatmapData} />}
+      <section className="rounded-lg flex flex-col gap-8 border bg-gray-900/50 border-gray-700/50 p-10">
+        <div className="flex flex-row gap-2">
+          <Image src={Bookopen} alt="bookopen" width={30} height={30} />
+          <h2 className="font-bold text-2xl">문제 풀이 기록</h2>
+        </div>
+        {heatmapData.length > 0 && <Heatmap data={heatmapData} />}
+      </section>
     </div>
   );
 };

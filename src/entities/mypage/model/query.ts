@@ -67,8 +67,12 @@ export const useChangePassword = () => {
         `${API_URL.MYPAGE.CHANGE_PASSWORD}`,
         params
       );
-
-      if (response) return response;
+      console.log(response)
+      if (response.data.status === 200) {
+        return response.data.result.message;
+      } else {
+        return response.data.message
+      }
     },
   });
 };
@@ -83,3 +87,16 @@ export const useSubmissionList = () => {
     staleTime: 1000 * 60 * 5,
   });
 };
+
+export const useEmailVerify = (redirectUrl : string) =>{
+  return useMutation({
+    mutationFn : async () => {
+      const response = await ApiHelper.post<ChangePasswordRequest>(API_URL.MYPAGE.VERIFY_EMAIL, {redirectUrl : redirectUrl})
+         if (response.data.status === 200) {
+        return response.data.result.message;
+      } else {
+        return response.data.message
+      }
+    }
+  })
+}
