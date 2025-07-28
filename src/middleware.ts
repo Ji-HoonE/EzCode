@@ -2,16 +2,7 @@ import { getToken } from 'next-auth/jwt';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-
-const publicPaths = [
-    '/signin',
-    '/signup',
-    '/find/password',
-    '/find/api/auth/find-password-verify',
-
-];
-
-
+const publicPaths = ['/signin', '/find/password', '/find/api/auth/find-password-verify'];
 
 export async function middleware(request: NextRequest) {
   if (publicPaths.some((publicPath) => request.nextUrl.pathname.includes(publicPath))) {

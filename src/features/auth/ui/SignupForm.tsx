@@ -1,126 +1,125 @@
 'use client';
+import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import useSignUp from '../hooks/useSignUp';
-import Image from 'next/image';
-import { cn } from '@/lib/utils';
-
 const SignupForm = () => {
-  const { signUpInfo, handleChangeSignUpInfo, handleSignUpClick, handlePasswordVisible, handlePasswordConfirmVisible, showPassword, showPasswordConfirm, errorMessage } = useSignUp();
-
+  const {
+    signUpInfo,
+    handleChangeSignUpInfo,
+    handleSignUpClick,
+    handlePasswordVisible,
+    handlePasswordConfirmVisible,
+    showPassword,
+    showPasswordConfirm,
+    errorMessage,
+  } = useSignUp();
   return (
-    <div className='w-full h-full'>
-      <div className='bg-[#FFFFFFF6] w-full h-full rounded-[17px] py-[15px] px-[33px] flex flex-col items-center'>
-        <p className='text-[20px] font-[800] leading-[47px] text-black'>이메일 회원가입</p>
-        <div className='flex flex-col mt-[9px] w-full gap-[7px]'>
-          <p className='text-[15px] font-[700] text-black pl-[7px]'>이름</p>
-          <div className='flex flex-col gap-[6px]'>
-            <div className='bg-[#FFFFFFF6] text-black h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] relative'>
-              <Image src="/icons/mail.svg" alt="mail" width={16} height={16} priority className='absolute left-[11px] top-[9px]' />
-              <input
-                type={'text'}
-                data-slot="input"
-                className={cn(
-                  "bg-[#FFFFFFF6] text-black h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] w-full border-none",
-                  "h-full pl-[35px] pr-[35px]",
-                  "shadow-[inset_0_2px_2px_0_rgba(0,0,0,0.25)] text-[14px]"
-                )}
-                placeholder="이름을 입력해주세요"
-                id='name'
-                name="username"
-                value={signUpInfo.username}
-                onChange={handleChangeSignUpInfo}
-              />
-            </div>
-          </div>
-        </div>
-        <div className='flex flex-col mt-[40px] w-full gap-[7px]'>
-          <p className='text-[15px] font-[700] text-black pl-[7px]'>이메일</p>
-          <div className='flex flex-col gap-[6px]'>
-            <div className='bg-[#FFFFFFF6] text-black h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] relative'>
-              <Image src="/icons/mail.svg" alt="mail" width={16} height={16} priority className='absolute left-[11px] top-[9px]' />
-              <input
-                type={'text'}
-                data-slot="input"
-                className={cn(
-                  "bg-[#FFFFFFF6] text-black h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] w-full border-none",
-                  "h-full pl-[35px] pr-[35px]",
-                  "shadow-[inset_0_2px_2px_0_rgba(0,0,0,0.25)] text-[14px]"
-                )}
-                placeholder="이메일을 입력해주세요"
-                id='email'
-                name="email"
-                value={signUpInfo.email}
-                onChange={handleChangeSignUpInfo}
-              />
-            </div>
-          </div>
-        </div>
-        <div className='flex flex-col mt-[40px] w-full gap-[7px]'>
-          <p className='text-[15px] font-[700] text-black pl-[7px]'>비밀번호</p>
-          <div className='flex flex-col gap-[6px]'>
-            <div className='bg-[#FFFFFFF6] text-black h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] relative'>
-              <Image src="/icons/mail.svg" alt="mail" width={16} height={16} priority className='absolute left-[11px] top-[9px]' />
-              <input
-                type={showPassword ? 'text' : 'password'}
-                data-slot="input"
-                className={cn(
-                  "bg-[#FFFFFFF6] text-black h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] w-full border-none",
-                  "h-full pl-[35px] pr-[35px]",
-                  "shadow-[inset_0_2px_2px_0_rgba(0,0,0,0.25)] text-[14px]"
-                )}
-                placeholder="비밀번호를 입력해주세요."
-                id='password'
-                name="password"
-                value={signUpInfo.password}
-                onChange={handleChangeSignUpInfo}
-              />
-              <Image src={"/icons/eyeOff.svg"} alt="eyeOff" width={16} height={16} priority className='absolute right-[10px] top-[9px]' onClick={handlePasswordVisible} />
-            </div>
-          </div>
-          <div className='flex flex-col gap-[6px]'>
-            <div className='bg-[#FFFFFFF6] text-black h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] relative'>
-              <Image src="/icons/mail.svg" alt="mail" width={16} height={16} priority className='absolute left-[11px] top-[9px]' />
-              <input
-                type={showPasswordConfirm ? 'text' : 'password'}
-                data-slot="input"
-                className={cn(
-                  "bg-[#FFFFFFF6] text-black h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] w-full border-none",
-                  "h-full pl-[35px] pr-[35px]",
-                  "shadow-[inset_0_2px_2px_0_rgba(0,0,0,0.25)] text-[14px]"
-                )}
-                placeholder="비밀번호를 확인해주세요."
-                id='passwordConfirm'
-                name="passwordConfirm"
-                value={signUpInfo.passwordConfirm}
-                onChange={handleChangeSignUpInfo}
-              />
-              <Image src="/icons/eyeOff.svg" alt="eyeOff" width={16} height={16} priority className='absolute right-[10px] top-[9px]' onClick={handlePasswordConfirmVisible} />
-            </div>
-          </div>
-        </div>
-        <div className='w-full flex justify-start mt-[13px]'>
-          <div className='text-[9px] font-[400] text-black flex items-center'>
-            <p className='text-[#666766] text-[10px] font-[700] underline underline-offset-[2px]'>이용약관</p>
-            <p className='text-[10px] text-[#666766] font-[400] pl-[2px] pr-[2px]'>과</p>
-            <p className='text-[#666766] text-[10px] font-[700] underline underline-offset-[2px]'>개인정보 처리방침</p>
-            <p className='text-[10px] text-[#666766] font-[400] pl-[2px]'>에 동의하고 가입하기</p>
-          </div>
-        </div>
-        <div className='flex relative h-[15px] mt-[7px] w-full'>
-          {errorMessage && <div className='flex items-center gap-[4px] absolute'>
-            <Image src="/icons/alert.svg" alt="error" width={10} height={10} priority className='mb-[2px]' />
-            <span className='text-[10px] font-[700] text-[#EC3030]'>{errorMessage}</span>
-          </div>}
-        </div>
-        <div className='flex flex-col w-full gap-[6px] mt-[7px]'>
-          <button onClick={handleSignUpClick} className='h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] bg-[#969696] text-white text-[15px] font-[800]'>회원가입</button>
+    <div className="space-y-5">
+      <div>
+        <label className="block text-sm font-medium text-gray-300 mb-2">이름</label>
+        <div className="relative">
+          <User
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+            size={18}
+          />
+          <input
+            id="name"
+            name="username"
+            type="text"
+            value={signUpInfo.username}
+            onChange={handleChangeSignUpInfo}
+            placeholder="이름을 입력하세요"
+            className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-[10px] text-white placeholder-gray-500 focus:outline-none focus:border-[#00d084] focus:ring-1 focus:ring-[#00d084] transition-all duration-200"
+          />
         </div>
       </div>
-    </div >
-
+      <div>
+        <label className="block text-sm font-medium text-gray-300 mb-2">이메일</label>
+        <div className="relative">
+          <Mail
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+            size={18}
+          />
+          <input
+            id="email"
+            name="email"
+            type="email"
+            value={signUpInfo.email}
+            onChange={handleChangeSignUpInfo}
+            placeholder="이메일을 입력하세요"
+            className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-[10px] text-white placeholder-gray-500 focus:outline-none focus:border-[#00d084] focus:ring-1 focus:ring-[#00d084] transition-all duration-200"
+          />
+        </div>
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-300 mb-2">비밀번호</label>
+        <div className="relative">
+          <Lock
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+            size={18}
+          />
+          <input
+            id="password"
+            name="password"
+            value={signUpInfo.password}
+            onChange={handleChangeSignUpInfo}
+            type={showPassword ? 'text' : 'password'}
+            placeholder="비밀번호를 입력하세요"
+            className="w-full pl-10 pr-12 py-3 bg-gray-800/50 border border-gray-700 rounded-[10px] text-white placeholder-gray-500 focus:outline-none focus:border-[#00d084] focus:ring-1 focus:ring-[#00d084] transition-all duration-200"
+          />
+          <button
+            type="button"
+            onClick={handlePasswordVisible}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors duration-200"
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        </div>
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-300 mb-2">비밀번호 확인</label>
+        <div className="relative">
+          <Lock
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+            size={18}
+          />
+          <input
+            id="passwordConfirm"
+            name="passwordConfirm"
+            value={signUpInfo.passwordConfirm}
+            onChange={handleChangeSignUpInfo}
+            type={showPasswordConfirm ? 'text' : 'password'}
+            placeholder="비밀번호를 다시 입력하세요"
+            className="w-full pl-10 pr-12 py-3 bg-gray-800/50 border border-gray-700 rounded-[10px] text-white placeholder-gray-500 focus:outline-none focus:border-[#00d084] focus:ring-1 focus:ring-[#00d084] transition-all duration-200"
+          />
+          <button
+            type="button"
+            onClick={handlePasswordConfirmVisible}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors duration-200"
+          >
+            {showPasswordConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        </div>
+      </div>
+      {/* //TODO 약관 및 개인정보 처리방침 추후 추가 */}
+      {/* <div className="text-sm">
+        <label className="flex items-start text-gray-400">
+          <input type="checkbox" className="mr-2 mt-1 rounded" />
+          <span>
+            <span className="text-[#00d084]">이용약관</span> 및{' '}
+            <span className="text-[#00d084]">개인정보처리방침</span>에 동의합니다.
+          </span>
+        </label>
+      </div> */}
+      {errorMessage && <div className="text-red-500 text-sm">{errorMessage}</div>}
+      <button
+        type="submit"
+        className="w-full bg-[#214d35] text-white py-3 rounded-[10px] font-medium hover:bg-[#276e48] active:bg-[#1e3e2c] active:scale-[0.98] transition-all duration-200 shadow-lg hover:shadow-xl"
+        onClick={handleSignUpClick}
+      >
+        회원가입
+      </button>
+    </div>
   );
-}
+};
 
 export default SignupForm;
-
-
-
