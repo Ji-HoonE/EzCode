@@ -1,38 +1,33 @@
 'use client';
 
-import { BASE_URL } from "@/constants/env";
-import { Client } from "@stomp/stompjs";
-import { getSession } from "next-auth/react";
-import { useState, useEffect } from "react";
-import SockJS from "sockjs-client";
-import { sharedAlarmStompRef } from "../../store/sharedAlarmStompRef";
-import { useNotificationsStore } from "../../model/store";
-import ApiHelper from "@/api/client/api";
-import { API_URL } from "@/api/constants/api.constants";
-
-
+import { BASE_URL } from '@/constants/env';
+import { Client } from '@stomp/stompjs';
+import { getSession } from 'next-auth/react';
+import { useState, useEffect } from 'react';
+import SockJS from 'sockjs-client';
+import { sharedAlarmStompRef } from '../../store/sharedAlarmStompRef';
+import { useNotificationsStore } from '../../model/store';
+import ApiHelper from '@/api/client/api';
+import { API_URL } from '@/api/constants/api.constants';
 
 export default function useConnectAlarmWebSocket() {
-  const {setNotification} = useNotificationsStore()
-  const [accessToken, setAccessToken] = useState('')
-  useEffect(()=>{
-   const fetchSession = async () => {
-    const data = await getSession();
-    const rawToken = data?.accessToken || "";
-    // "Bearer " 접두어 제거 (있을 때만)
-    const cleanedToken = rawToken.startsWith("Bearer ")
-      ? rawToken.slice(7)
-      : rawToken;
-    setAccessToken(cleanedToken);
-  };
-   fetchSession();
-  },[])
+  const { setNotification } = useNotificationsStore();
+  const [accessToken, setAccessToken] = useState('');
+  useEffect(() => {
+    const fetchSession = async () => {
+      const data = await getSession();
+      const rawToken = data?.accessToken || '';
+      // "Bearer " 접두어 제거 (있을 때만)
+      const cleanedToken = rawToken.startsWith('Bearer ') ? rawToken.slice(7) : rawToken;
+      setAccessToken(cleanedToken);
+    };
+    fetchSession();
+  }, []);
   // console.log(session.then((data)=>console.log(encodeURI(data?.accessToken || ""))))
   const alarmStompRef = sharedAlarmStompRef;
 
   useEffect(() => {
-   
-      if (!accessToken) {
+    if (!accessToken) {
       console.log('No token, skipping WebSocket connection');
       return;
     }
@@ -41,10 +36,10 @@ export default function useConnectAlarmWebSocket() {
       console.log('🟡 Alarm STOMP already connected');
       return;
     }
-    console.log(accessToken)
+    console.log(accessToken);
     // 소켓 연결
     const socket = new SockJS(`${BASE_URL}/ws?token=${accessToken}`);
-    
+
     const client = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000,
@@ -55,12 +50,12 @@ export default function useConnectAlarmWebSocket() {
           try {
             const body = JSON.parse(message.body);
             console.log('📥 알림 수신:', body);
-            setNotification(body)
+            setNotification(body);
           } catch (e) {
             console.error('❌ 알림 파싱 실패', e);
           }
         });
-        ApiHelper.get(API_URL.NOTIFICATIONS)
+        ApiHelper.get(API_URL.NOTIFICATIONS);
       },
       onStompError: (frame) => {
         console.error('❌ STOMP Error', frame);
@@ -77,6 +72,7 @@ export default function useConnectAlarmWebSocket() {
       client.deactivate();
       alarmStompRef.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken]);
 
   return { alarmStompRef };

@@ -54,7 +54,6 @@ interface PropsType extends HTMLAttributes<HTMLDivElement> {
 
 export const Select = ({
   option,
-  title,
   className,
   setValue,
   value,
