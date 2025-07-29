@@ -1,7 +1,9 @@
+import { gameApi } from '@/api/service/game/game';
 import { PATHS } from '@/constants/paths';
 import { getAllTimeRankings } from '@/entities/rankings/actions/getRankings.actions';
 import Rankings from '@/entities/rankings/ui/Rankings';
 import ChatDialogOpenButton from '@/features/chat/ui/ChatDialogOpenButton';
+import GameModalButton from '@/features/game/ui/GameButton';
 import LinkedButton from '@/shared/ui/linkedButton';
 import Image from 'next/image';
 
@@ -24,7 +26,7 @@ const PAGE_LINK_ATTRIBUTE = {
 
 export default async function HomePage() {
   const allTimeRanking = await getAllTimeRankings();
-
+  const response = await gameApi.checkCharacter();
   return (
     <main className="w-full h-full py-20 bg-background text-white">
       <ChatDialogOpenButton />
@@ -49,6 +51,7 @@ export default async function HomePage() {
         </div>
       </section>
       <Rankings rankings={allTimeRanking} />
+      <GameModalButton hasCharacter={response.data.result.isCharacterExist} />
     </main>
   );
 }
