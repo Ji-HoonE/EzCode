@@ -9,6 +9,7 @@ import {
 } from '../interceptor/request.interceptor';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
+import { redirect } from 'next/navigation';
 
 export type ReqType = 'client' | 'server';
 interface RequestConfig extends RequestInit {
@@ -53,9 +54,12 @@ const refreshToken = async (refreshToken: string) => {
     });
 
     const data = await response.json();
-    if (!response.ok) throw new Error('Refresh failed');
-
-    return data.result.accessToken;
+    if (data.success === false && data.message?.includes('JWT expired')) {
+      redirect('/signin');
+    }
+    if (response.ok) {
+      return data.result.accessToken;
+    }
   } catch (error) {
     throw error;
   }
@@ -84,7 +88,6 @@ const request = async <T>(
 
       try {
         const newAccessToken = await refreshToken(session.refreshToken as string);
-
         const retryConfig = await (config.reqType === 'server'
           ? requestServerInterceptor({
               ...config,

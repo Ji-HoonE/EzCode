@@ -1,5 +1,3 @@
-'use client';
-
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
@@ -30,7 +28,6 @@ const useSocialLogin = () => {
   }, [searchParams, router]);
 
   const handleSocialLogin = async (provider: 'github' | 'google') => {
-    console.log(process.env.NEXT_PUBLIC_BASE_URL);
     try {
       window.location.href = `https://ezcode.my/api/oauth2/authorize/${provider}?redirect_uri=${process.env.NEXT_PUBLIC_BASE_URL}/signin`;
     } catch (error) {

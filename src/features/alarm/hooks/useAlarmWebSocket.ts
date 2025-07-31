@@ -50,6 +50,7 @@ export default function useConnectAlarmWebSocket() {
       client.deactivate();
       alarmStompRef.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { alarmStompRef, alarm };
