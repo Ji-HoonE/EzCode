@@ -5,6 +5,7 @@ import ReplyForm from './ReplyForm';
 import { IReply, useDeleteReplyMutation } from '@/entities/discussions';
 import UserImage from '@/shared/ui/userProfile/UserImage';
 import DiscussionFooter from '../../DiscussionFooter';
+import UserProfile from '@/shared/ui/userProfile';
 
 interface IReplyProps {
   reply: IReply;
@@ -26,12 +27,9 @@ export default function Reply({ reply, problemId }: IReplyProps) {
     <div className="flex flex-col">
       <div>
         {!isEdit ? (
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <UserImage profileImageUrl={userInfo.profileImageUrl} />
-              <span className="font-medium text-secondary text-sm">{userInfo.nickname}</span>
-            </div>
-            <p className="text-[#ccc] text-sm mb-2 ml-8">{content}</p>
+          <div className="flex flex-col gap-2">
+            <UserProfile profileImageUrl={userInfo.profileImageUrl} nickname={userInfo.nickname} />
+            <p className="text-[#ccc] text-sm ml-8">{content}</p>
             <DiscussionFooter
               content={reply}
               problemId={problemId}

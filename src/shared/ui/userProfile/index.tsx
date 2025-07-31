@@ -1,7 +1,7 @@
 import UserImage from './UserImage';
 
 interface IUserProfileProps {
-  profileImageUrl: string | undefined;
+  profileImageUrl: string | undefined | null;
   nickname: string | undefined;
 }
 export default function UserProfile({ profileImageUrl, nickname }: IUserProfileProps) {

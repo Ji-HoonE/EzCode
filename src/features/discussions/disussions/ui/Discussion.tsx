@@ -5,8 +5,8 @@ import { useDeleteDiscussionContent } from '@/entities/discussions';
 import Replies from '../../reply/ui/Replies';
 import { TDiscussionContentMutationResponse } from '@/entities/discussions/discussions/model/mutation/discussions.types';
 import { LANGUAGE } from '@/shared/types/problem.type';
-import UserImage from '@/shared/ui/userProfile/UserImage';
 import DiscussionFooter from '../../DiscussionFooter';
+import UserProfile from '@/shared/ui/userProfile';
 
 interface IDiscussionContentProps {
   discussion: TDiscussionContentMutationResponse;
@@ -33,15 +33,12 @@ export default function Discussion({ discussion }: IDiscussionContentProps) {
           changeEditMode={(status) => setIsEdit(status)}
         />
       ) : (
-        <div className="w-full mb-4">
+        <div className="w-full flex flex-col gap-2">
           <div className="flex items-center gap-3">
-            <UserImage className="size-8" profileImageUrl={userInfo.profileImageUrl} />
-            <>
-              <span className="font-medium text-[#00d084]">{userInfo.nickname}</span>
-              <span className="text-[#888] text-sm ml-2">{LANGUAGE[languageId]}</span>
-            </>
+            <UserProfile profileImageUrl={userInfo.profileImageUrl} nickname={userInfo.nickname} />
+            <span className="text-[#888] text-sm ml-2">{LANGUAGE[languageId]}</span>
           </div>
-          <p className="text-[#ccc] mb-4 leading-relaxed">{content}</p>
+          <p className="text-[#ccc] leading-relaxed">{content}</p>
           <DiscussionFooter
             content={discussion}
             problemId={String(problemId)}

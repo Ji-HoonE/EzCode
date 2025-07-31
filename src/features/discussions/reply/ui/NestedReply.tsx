@@ -4,6 +4,7 @@ import ReplyForm from './ReplyForm';
 import { IReply, useDeleteReplyMutation } from '@/entities/discussions';
 import UserImage from '@/shared/ui/userProfile/UserImage';
 import DiscussionFooter from '../../DiscussionFooter';
+import UserProfile from '@/shared/ui/userProfile';
 
 interface INestedReplyProps {
   nestedReply: IReply;
@@ -23,13 +24,11 @@ export default function NestedReply({ nestedReply, problemId }: INestedReplyProp
     <div className="flex flex-col">
       <div>
         {!isEdit ? (
-          <div className="bg-background rounded-[14px] p-3">
-            <div className="flex items-center gap-2 mb-2">
-              <UserImage profileImageUrl={nestedReply.userInfo.profileImageUrl} />
-              <span className="font-medium text-secondary text-xs">
-                {nestedReply.userInfo.nickname}
-              </span>
-            </div>
+          <div className="bg-background rounded-[14px] p-3 flex flex-col gap-2">
+            <UserProfile
+              profileImageUrl={nestedReply.userInfo.profileImageUrl}
+              nickname={nestedReply.userInfo.nickname}
+            />
             <p className="text-[#ccc] text-xs mb-2">{nestedReply.content}</p>
             <DiscussionFooter
               content={nestedReply}
