@@ -9,7 +9,7 @@ export default function UserImage({ profileImageUrl, className = 'size-8' }: IUs
   return (
     <div className={clsx('relative', className)}>
       <img
-        src={profileImageUrl ?? '/icons/user.svg'}
+        src={profileImageUrl || '/icons/user.svg'}
         alt="유저 이미지"
         className="rounded-full object-cover z-10 "
       />
