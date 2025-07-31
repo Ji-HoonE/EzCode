@@ -4,13 +4,25 @@ import Discussion from './Discussion';
 import { Spinner } from '@/shared/ui/loading-indicators';
 import DiscussionForm from './DiscussionForm';
 import { useDiscussionsQuery } from '@/entities/discussions';
+import { Select } from '@/shared/ui/select/Select';
+import { useState } from 'react';
 
 interface IDiscussionProps {
   problemId: ProblemId;
 }
-
+interface IPageAble {
+  page: string;
+  size: string;
+  sort: string;
+}
 export default function Discussions({ problemId }: IDiscussionProps) {
-  const { data: discussions, isPending } = useDiscussionsQuery(problemId);
+  const [pageAble, setPageAble] = useState<IPageAble>({ page: '0', size: '8', sort: '최신순' });
+  const { data: discussions, isPending } = useDiscussionsQuery(problemId, pageAble);
+
+  const sortOptions = [
+    { label: '최신순', value: '최신순' },
+    { label: '추천 많은 순', value: '추천 많은 순' },
+  ];
 
   if (isPending) {
     return (
@@ -27,7 +39,13 @@ export default function Discussions({ problemId }: IDiscussionProps) {
         {!discussions ? (
           <p>토론 목록을 불러오는데 실패했습니다.</p>
         ) : (
-          <>
+          <div className="flex flex-col w-full">
+            <Select
+              option={sortOptions}
+              title="정렬"
+              value={pageAble.sort}
+              setValue={(value) => setPageAble((prev) => ({ ...prev, sort: value }))}
+            />
             {discussions.length < 1 ? (
               <p>아직 토론이 없습니다.</p>
             ) : (
@@ -37,7 +55,7 @@ export default function Discussions({ problemId }: IDiscussionProps) {
                 })}
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
     </div>
