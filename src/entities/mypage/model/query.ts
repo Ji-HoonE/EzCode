@@ -41,7 +41,7 @@ export const useMyAiReviewCheckQuery = () => {
   return useQuery({
     queryKey: ['my-review'],
     queryFn: async () => {
-      const response = await ApiHelper.get<AiReview>(`/users/review-token`);
+      const response = await ApiHelper.get<AiReview>(`${API_URL.USER.TOKEN_COUNT}`);
       return response;
     },
 

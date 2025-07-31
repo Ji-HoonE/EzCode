@@ -11,6 +11,7 @@ export const getSessionKey = async (problemId: ProblemId) => {
 
   if (!res.data.success) {
     console.log('에러');
+    console.log(res);
     return;
   }
   return res.data.result.sessionKey;

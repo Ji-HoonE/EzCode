@@ -18,30 +18,28 @@ export default function Replies({ problemId, discussionId }: RepliesProps) {
   const isPending = queryResult?.isPending;
 
   if (isPending) {
-    return <Spinner />;
+    return (
+      <div className="w-full h-full flex justify-center mt-10">
+        <Spinner />
+      </div>
+    );
   }
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full h-full relative border-t border-primary pt-4 space-y-4">
       {!token && <ProtectedBlurBox />}
-      <div className="pl-8">
-        <div>
-          <ReplyForm
-            problemId={problemId}
-            discussionId={discussionId}
-            parentReplyId={null}
-            mode="create"
-            initialValue=""
-          />
+      <div className="ml-4 flex flex-col gap-4">
+        <ReplyForm
+          problemId={problemId}
+          discussionId={discussionId}
+          parentReplyId={null}
+          mode="create"
+          initialValue=""
+        />
+        <div className="flex flex-col gap-2">
+          {repliesData?.content.map((reply) => {
+            return <Reply key={reply.replyId} reply={reply} problemId={problemId} />;
+          })}
         </div>
-        {repliesData?.empty ? (
-          <p>아직 댓글이 없습니다.</p>
-        ) : (
-          <div className="flex flex-col gap-2">
-            {repliesData?.content.map((reply) => {
-              return <Reply key={reply.replyId} reply={reply} problemId={problemId} />;
-            })}
-          </div>
-        )}
       </div>
     </div>
   );

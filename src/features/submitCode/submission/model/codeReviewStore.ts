@@ -20,22 +20,11 @@ const useCodeReviewStore = create<ICodeReviewStore>()(
           isSubmittedReview: status,
         });
       },
-      setCodeReviewContent: (review) => {
-        const matches = [...review.matchAll(/(\*\*(.*?)\*\*)([^*]+)/g)];
-        const sections = matches.map(([_, _unused, key, content]) => ({
-          key,
-          content: content.trim(),
-        }));
-        set({
-          codeReviewContent: sections,
-        });
-      },
 
       //초기화
       clearCodeReviewStore: () => {
         set({
           isCorrect: false,
-          codeReviewContent: null,
           isSubmittedReview: false,
         });
       },
@@ -48,7 +37,6 @@ export function useCodeReviewStoreActions() {
   return useCodeReviewStore(
     useShallow((state) => ({
       setIsCorrect: state.actions.setIsCorrect,
-      setCodeReviewContent: state.actions.setCodeReviewContent,
       setIsSubmittedReview: state.actions.setIsSubmittedReview,
     }))
   );

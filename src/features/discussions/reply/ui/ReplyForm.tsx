@@ -2,6 +2,7 @@ import { ChangeEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { ProblemId } from '@/shared';
 import useReply from '../lib/useReply';
+import { Send } from 'lucide-react';
 
 interface ReplyFormProps {
   problemId: ProblemId;
@@ -28,19 +29,22 @@ export default function ReplyForm({
   );
 
   return (
-    <div className="flex ">
-      <input
-        placeholder="댓글 다는 임시 인풋"
+    <div className="flex gap-2 mt-4 w-full">
+      <textarea
         value={value}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => handleChangeValue(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleChangeValue(e.target.value)}
+        placeholder="댓글을 작성하세요..."
+        className="w-full p-2 bg-background border-border_primary rounded-[14px] resize-none min-h-[40px] text-sm"
       />
       <Button
+        size="sm"
+        className="bg-primary hover:bg-primary/80 rounded-[10px] px-4 py-2"
         onClick={() => {
           submitReply(mode);
           onClick?.();
         }}
       >
-        {mode === 'create' ? '생성' : '완료'}
+        {mode === 'create' ? <Send className="w-4 h-4" /> : '완료'}
       </Button>
     </div>
   );

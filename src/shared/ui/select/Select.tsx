@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { HTMLAttributes, ReactNode, useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-interface OptionType {
+export interface OptionType {
   label: ReactNode;
   value: string | (() => void); // router면 string, api면 함수
 }

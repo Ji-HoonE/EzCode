@@ -6,7 +6,7 @@ interface IShowChildReplies {
 }
 export default function ShowChildReplies({ onClick, replyCount }: IShowChildReplies) {
   return (
-    <button className="flex items-center" onClick={onClick}>
+    <button className="flex items-center gap-1" onClick={onClick}>
       <Image
         alt="댓글보기 아이콘"
         src="/icons/discussion/replies.icon.svg"

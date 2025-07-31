@@ -1,15 +1,14 @@
-import { useGetTokenCountQuery } from '@/entities/submitCode';
-import { useISubmissionForReviewMutation } from '@/entities/submitCode/submission/model/mutation/submitCode.mutation';
 import { ProblemId } from '@/shared';
 import useCodeReviewStore, { useCodeReviewStoreActions } from '../model/codeReviewStore';
-import { ISourceCode } from '@/entities/submitCode/submission/model/mutation/submitCode.mutation.type';
 import { useEffect, useState } from 'react';
+import { useMyAiReviewCheckQuery } from '@/entities/mypage/model/query';
+import { ISourceCode, useISubmissionForReviewMutation } from '@/entities/submitCode';
 
 export default function useSubmitForReview(problemId: ProblemId) {
   const [tokenCount, setTokenCount] = useState(0);
 
   /**코드리뷰를 위한 토큰 get 쿼리 */
-  const { data: reviewTokenData } = useGetTokenCountQuery();
+  const { data: reviewTokenData } = useMyAiReviewCheckQuery();
 
   /**코드리뷰 요청 뮤테이션 */
   const { mutateAsync, data: codeReview } = useISubmissionForReviewMutation(problemId);
@@ -25,8 +24,8 @@ export default function useSubmitForReview(problemId: ProblemId) {
   };
 
   useEffect(() => {
-    if (reviewTokenData?.reviewToken) {
-      setTokenCount(reviewTokenData?.reviewToken);
+    if (reviewTokenData?.data.result.reviewToken) {
+      setTokenCount(reviewTokenData?.data.result.reviewToken);
     }
   }, [reviewTokenData]);
 

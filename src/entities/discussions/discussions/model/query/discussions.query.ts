@@ -13,10 +13,15 @@ export const useDiscussionsQuery = (problemId: ProblemId) => {
   return useQuery({
     queryKey: ['discussions', problemId],
     queryFn: async () => {
-      const res = await ApiHelper.get<IDiscussionResponse>(`${path}`, {
-        params: queryParams,
-      });
-      return res.data;
+      try {
+        const res = await ApiHelper.get<IDiscussionResponse>(`${path}`, {
+          params: queryParams,
+        });
+        return res.data.result.content;
+      } catch {
+        console.error('토론 목록을 불러오는데 실패했습니다.');
+        return [];
+      }
     },
     staleTime: 1000 * 60 * 3,
   });

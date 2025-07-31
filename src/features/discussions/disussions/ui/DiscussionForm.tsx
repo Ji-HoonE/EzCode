@@ -1,3 +1,4 @@
+'use client';
 import { Button } from '@/components/ui/button';
 import {
   DISCUSSION_CREATE_VALUE,
@@ -7,14 +8,10 @@ import {
 } from '@/entities/discussions';
 import { TDiscussionContentMutationResponse } from '@/entities/discussions/discussions/model/mutation/discussions.types';
 
-import {
-  ILanguageSelectOption,
-  INITIAL_LANG,
-  LanguageSelector,
-  ProblemId,
-  ProblemLanguageType,
-} from '@/shared';
-import { LANGUAGE } from '@/shared/types/problem.type';
+import { INITIAL_LANG, ProblemId, ProblemLanguageType } from '@/shared';
+import { LANGUAGE_SELECTOR_OPTIONS } from '@/shared/lib/codemirror';
+import { LANGUAGE, LANGUAGE_ID } from '@/shared/types/problem.type';
+import { OptionType, Select } from '@/shared/ui/select/Select';
 import { ChangeEvent, useState } from 'react';
 
 interface ICreateDiscussionInputProps {
@@ -45,6 +42,7 @@ export default function DiscussionForm({
     discussion?.discussionId || 0
   );
   const buttonText = mode === 'create' ? '토론 생성' : '토론 수정';
+  const typedOptions = LANGUAGE_SELECTOR_OPTIONS as OptionType[];
 
   const submitDiscussionForm = () => {
     if (mode === 'create') {
@@ -57,14 +55,19 @@ export default function DiscussionForm({
     }
   };
 
+  const selectLanguage = (value: string) => {
+    const typedValue = value as ProblemLanguageType;
+    setCurrentLanguage(typedValue);
+    setContentForm((prev) => ({ ...prev, languageId: LANGUAGE_ID[typedValue] }));
+  };
+
   return (
     <div className="relative">
-      <LanguageSelector
-        currentLanguage={currentLanguage}
-        onSelect={(option: ILanguageSelectOption) => {
-          setCurrentLanguage(option.value);
-          setContentForm((prev) => ({ ...prev, languageId: option.id }));
-        }}
+      <Select
+        title="언어 선택"
+        value={currentLanguage}
+        option={typedOptions}
+        setValue={(value) => selectLanguage(value)}
       />
       <textarea
         className="border-1 w-full h-[100px]"

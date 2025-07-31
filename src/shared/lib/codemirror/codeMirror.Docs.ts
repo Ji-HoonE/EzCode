@@ -24,8 +24,8 @@ export const INITIAL_SOURCE_CODE_DATA: ISourceCode = {
 
 //언어 옵션
 export const LANGUAGE_SELECTOR_OPTIONS: ILanguageSelectOption[] = [
-  { value: 'Python', label: 'Python', id: LANGUAGE_ID.Python },
-  { value: 'Java', label: 'Java', id: LANGUAGE_ID.Java },
-  { value: 'Cpp', label: 'C++', id: LANGUAGE_ID.Cpp },
-  { value: 'C', label: 'C', id: LANGUAGE_ID.C },
+  { label: 'Python', value: 'Python' },
+  { label: 'Java', value: 'Java' },
+  { label: 'Cpp', value: 'Cpp' },
+  { label: 'C', value: 'C' },
 ];

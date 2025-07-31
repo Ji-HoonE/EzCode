@@ -1,6 +1,6 @@
 import ApiHelper from '@/api/client/api';
 import { API_URL } from '@/api/constants/api.constants';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   IGitPushAutoToggleRes,
   IGitRepoChoiceReq,
@@ -9,10 +9,14 @@ import {
 
 /**git push */
 export const useGitPushAutoToggleMutation = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async () => {
-      const response = await ApiHelper.put<IGitPushAutoToggleRes>(`${API_URL.Git}`);
+      const response = await ApiHelper.put<IGitPushAutoToggleRes>(`${API_URL.GIT}`);
       return response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['auto-git-push-status'] });
     },
   });
 };
@@ -21,7 +25,7 @@ export const useGitPushAutoToggleMutation = () => {
 export const useGitRepoChoice = () => {
   return useMutation({
     mutationFn: async (params: IGitRepoChoiceReq) => {
-      const response = await ApiHelper.post<IGitRepoChoiceRes>(`${API_URL.Git}`, params);
+      const response = await ApiHelper.post<IGitRepoChoiceRes>(`${API_URL.GIT}`, params);
       return response;
     },
   });

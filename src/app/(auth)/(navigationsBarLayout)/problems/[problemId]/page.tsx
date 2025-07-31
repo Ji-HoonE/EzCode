@@ -1,5 +1,5 @@
 import { getSessionKey } from '@/entities/problem/api/server/getSessionKey';
-import { getGitHubUrl } from '@/features/submitCode/gitPush/api/server/getGitHub';
+import { getGitHubUrl } from '@/entities/submitCode/gitpush/actions/getGitHub';
 import ProblemWorksSection from '@/features/submitCode/submission/ui/ProblemWorksSection';
 
 interface IProblemPageProps {

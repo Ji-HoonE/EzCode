@@ -23,13 +23,13 @@ export default function TerminalOutput({ mode, sourceCodeData }: ITerminalOutput
   }, [totalResult, setIsCorrect]);
 
   return (
-    <section className="flex flex-col w-full px-[14px] py-[22px]">
+    <section className="flex flex-col w-full h-full px-[14px] py-[22px]">
       {mode === 'result' ? (
         <CodeResultSummary />
       ) : mode === 'review' ? (
         <CodeReviewSummary problemId="1" sourceCodeData={sourceCodeData} />
       ) : (
-        <p>코드제출을 먼저 실행 해주세요</p>
+        <div className="text-[#ccc] text-sm">코드를 실행하려면 위 버튼을 클릭하세요.</div>
       )}
     </section>
   );

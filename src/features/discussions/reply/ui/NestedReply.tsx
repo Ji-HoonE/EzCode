@@ -1,10 +1,9 @@
-import { Button } from '@/components/ui/button';
 import { ProblemId } from '@/shared';
-import { BouncingDots } from '@/shared/ui/loading-indicators';
 import { useState } from 'react';
-import Vote from '../../vote/ui/Vote';
 import ReplyForm from './ReplyForm';
 import { IReply, useDeleteReplyMutation } from '@/entities/discussions';
+import UserImage from '@/shared/ui/user/UserImage';
+import DiscussionFooter from '../../DiscussionFooter';
 
 interface INestedReplyProps {
   nestedReply: IReply;
@@ -14,29 +13,31 @@ export default function NestedReply({ nestedReply, problemId }: INestedReplyProp
   const [isEdit, setIsEdit] = useState(false);
   const { discussionId, replyId, parentReplyId } = nestedReply;
 
-  const { mutateAsync: remove, isPending } = useDeleteReplyMutation(
+  const { mutateAsync: remove } = useDeleteReplyMutation(problemId, discussionId, replyId, [
+    'nestedReplies',
     problemId,
     discussionId,
-    replyId,
-    ['nestedReplies', problemId, discussionId]
-  );
+  ]);
 
   return (
     <div className="flex flex-col">
       <div>
         {!isEdit ? (
-          <div>
-            <h3>닉네임: {nestedReply.userInfo.nickname}</h3>
-            <p>{nestedReply.content}</p>
-            <div className="flex items-center">
-              <Vote problemId={problemId} content={nestedReply} replyId={nestedReply.replyId} />
+          <div className="bg-background rounded-[14px] p-3">
+            <div className="flex items-center gap-2 mb-2">
+              <UserImage profileImageUrl={nestedReply.userInfo.profileImageUrl} />
+              <span className="font-medium text-secondary text-xs">
+                {nestedReply.userInfo.nickname}
+              </span>
             </div>
-            <Button className="bg-gray-400" onClick={() => setIsEdit(true)}>
-              수정
-            </Button>
-            <Button className="bg-gray-400" onClick={() => remove()}>
-              {isPending ? <BouncingDots /> : '삭제'}
-            </Button>
+            <p className="text-[#ccc] text-xs mb-2">{nestedReply.content}</p>
+            <DiscussionFooter
+              content={nestedReply}
+              problemId={problemId}
+              replyId={nestedReply.replyId}
+              onDelete={() => remove()}
+              onEdit={() => setIsEdit(true)}
+            />
           </div>
         ) : (
           <ReplyForm

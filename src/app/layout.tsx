@@ -13,7 +13,7 @@ export default function RootLayout({
         <QueryProvider>
           <div className="w-full h-full">
             <NavigationBar />
-            {children}
+            <div className="w-full h-full px-15">{children}</div>
           </div>
         </QueryProvider>
       </body>

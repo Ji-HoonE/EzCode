@@ -18,29 +18,21 @@ export default function NestedReplies({ problemId, discussionId, parentReplyId }
   }
 
   if (!nestedReplies) {
-    return <div>불러오는데 실패! </div>;
+    return <div className="ml-2 mt-3 pl-4">댓글을 불러오는데 실패했습니다.</div>;
   }
 
   return (
-    <div>
-      <div>
-        <ReplyForm
-          problemId={problemId}
-          discussionId={discussionId}
-          mode="create"
-          initialValue=""
-          parentReplyId={parentReplyId}
-        />
-      </div>
-      {nestedReplies?.length < 1 ? (
-        <div>아직 댓글 없음</div>
-      ) : (
-        <>
-          {nestedReplies.map((reply) => {
-            return <NestedReply key={reply.replyId} nestedReply={reply} problemId={problemId} />;
-          })}
-        </>
-      )}
+    <div className="ml-2 mt-3 space-y-3 border-l-2 border-primary pl-4">
+      <ReplyForm
+        problemId={problemId}
+        discussionId={discussionId}
+        mode="create"
+        initialValue=""
+        parentReplyId={parentReplyId}
+      />
+      {nestedReplies.map((reply) => {
+        return <NestedReply key={reply.replyId} nestedReply={reply} problemId={problemId} />;
+      })}
     </div>
   );
 }

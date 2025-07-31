@@ -9,7 +9,7 @@ import {
 } from './submitCode.mutation.type';
 
 //문제 제출하기
-export const useSubmissionForResultMutationT = (problemId: ProblemId) => {
+export const useSubmissionForResultMutation = (problemId: ProblemId) => {
   const path = getProblemIdPath(problemId, 'submit-ready');
   return useMutation({
     mutationFn: async (params: ISubmitCodeRequest) => {

@@ -9,7 +9,7 @@ export interface IProblemStompResult {
 }
 
 //웹소켓 메시지로 받는 finalResult type - destination(/final)
-interface IProblemStompFinalResult {
+export interface IProblemStompFinalResult {
   totalCount: number;
   passedCount: number;
   isCorrect: boolean;
