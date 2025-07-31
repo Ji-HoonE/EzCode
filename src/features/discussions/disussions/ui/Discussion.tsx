@@ -5,7 +5,7 @@ import { useDeleteDiscussionContent } from '@/entities/discussions';
 import Replies from '../../reply/ui/Replies';
 import { TDiscussionContentMutationResponse } from '@/entities/discussions/discussions/model/mutation/discussions.types';
 import { LANGUAGE } from '@/shared/types/problem.type';
-import UserImage from '@/shared/ui/user/UserImage';
+import UserImage from '@/shared/ui/userProfile/UserImage';
 import DiscussionFooter from '../../DiscussionFooter';
 
 interface IDiscussionContentProps {

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import NestedReplies from './NestedReplies';
 import ReplyForm from './ReplyForm';
 import { IReply, useDeleteReplyMutation } from '@/entities/discussions';
-import UserImage from '@/shared/ui/user/UserImage';
+import UserImage from '@/shared/ui/userProfile/UserImage';
 import DiscussionFooter from '../../DiscussionFooter';
 
 interface IReplyProps {

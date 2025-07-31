@@ -28,7 +28,7 @@ interface PropsType extends HTMLAttributes<HTMLDivElement> {
   setValue?: (value: string) => void;
 
   /** 현재 선택된 값 */
-  value: string;
+  value: string | ReactNode;
 
   /** 컴포넌트 사이즈 (기본값: 'md') */
   size?: 'sm' | 'md' | 'lg';
@@ -46,7 +46,7 @@ interface PropsType extends HTMLAttributes<HTMLDivElement> {
   title: string;
   className?: string;
   setValue?: (value: string) => void;
-  value: string;
+  value: string | ReactNode;
   size?: 'sm' | 'md' | 'lg';
   type?: 'setValue' | 'router' | 'api';
   entireOption?: boolean;
