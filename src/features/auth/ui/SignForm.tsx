@@ -1,5 +1,5 @@
 'use client';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useState } from 'react';
 import SignupForm from './SignupForm';
 import SignInSocialLogin from './SignInSocialLogin';
 import SignInForm from './SigninForm';

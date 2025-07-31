@@ -1,30 +1,7 @@
 import { useSubmissionList } from '@/entities/mypage/model/query';
 import { History } from 'lucide-react';
 import { SubmissionsResonse } from '@/entities/mypage/model/types';
-
-const Badge = ({
-  color,
-  className,
-  text,
-}: {
-  color?: string;
-  className?: string;
-  text: string;
-}) => (
-  <div
-    className={className}
-    style={{
-      backgroundColor: color + '20',
-      color: color,
-      border: `1px solid ${color}40`,
-      borderRadius: '9999px',
-      padding: '2px 12px',
-      fontSize: '12px',
-    }}
-  >
-    {text}
-  </div>
-);
+import { Badge } from '@/shared/ui/badge/Badge';
 
 const getResultBadge = (result: string) => {
   if (result === '정답') {
