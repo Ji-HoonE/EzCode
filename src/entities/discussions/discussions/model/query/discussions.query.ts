@@ -2,31 +2,43 @@
 import ApiHelper from '@/api/client/api';
 import { getProblemIdPath } from '@/api/constants/api.constants';
 import { ProblemId } from '@/shared';
-import { useQuery } from '@tanstack/react-query';
-import { IDiscussionResponse } from './discussion.query.type';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { IDiscussionResponse, sortType } from './discussion.query.type';
 
-//토론 불러오기
-export const useDiscussionsQuery = (
+const formattedSort: Record<sortType, string> = {
+  인기순: 'best',
+  최신순: 'latest',
+  '추천 많은순': 'upvote',
+};
+
+export const useInfiniteDiscussionsQuery = (
   problemId: ProblemId,
-  pageable: { page: string; size: string; sort: string }
+  pageable: { page: string; size: string; sort: sortType }
 ) => {
-  const { page = '0', size = '8', sort } = pageable;
   const path = getProblemIdPath(problemId, 'discussions');
+  const { size = '8', sort } = pageable;
 
-  const formattedSort = sort === '최신순' ? 'latest' : 'best';
-
-  return useQuery({
-    queryKey: ['discussions', problemId, page, size, sort],
-    queryFn: async () => {
+  return useInfiniteQuery({
+    queryKey: ['infinite-discussions', problemId, size, formattedSort[sort]],
+    queryFn: async ({ pageParam }) => {
       try {
         const res = await ApiHelper.get<IDiscussionResponse>(`${path}`, {
-          params: { page, size, sort: formattedSort },
+          params: {
+            sortBy: formattedSort[sort],
+            page: String(pageParam),
+            size,
+            sort: formattedSort[sort],
+          },
         });
-        return res.data.result.content;
+        return res.data.result;
       } catch {
         console.error('토론 목록을 불러오는데 실패했습니다.');
-        return [];
+        return { content: [], last: true };
       }
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.last ? undefined : allPages.length;
     },
     staleTime: 1000 * 60 * 3,
   });

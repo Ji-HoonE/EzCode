@@ -18,7 +18,7 @@ export default async function ProblemPage({ params, searchParams }: IProblemPage
   }
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full overflow-scroll">
       {!isDiscussion ? (
         <DetailProblem detailProblem={detailProblem} />
       ) : (
