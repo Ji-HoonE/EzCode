@@ -4,6 +4,7 @@ import {
   useGitRepoChoice,
 } from '@/entities/submitCode';
 import { useAutoGitPushStatus } from '@/entities/submitCode/gitpush/model/query/gitpush.query';
+import { OptionType } from '@/shared/ui/select/Select';
 import { useEffect, useState } from 'react';
 
 export default function useGitPush() {
@@ -14,17 +15,24 @@ export default function useGitPush() {
   const { data: userRepos } = useGetGitHubRepo();
   const { data: autoPushStatus } = useAutoGitPushStatus();
 
+  const reposSelectOptions: OptionType[] = [];
+
   useEffect(() => {
     if (userRepos) {
       setCurrentRepo(userRepos[0].repoName);
+      for (const repo of userRepos) {
+        reposSelectOptions.push({ label: repo.repoName, value: repo.repoName });
+      }
+      // setCurrentRepo(reposSelectOptions[0].label);
     }
   }, [userRepos]);
 
   return {
     pushAutoToggle,
     choiceRepo,
-    userRepos,
+    reposSelectOptions,
     currentRepo,
+    userRepos,
     setCurrentRepo,
     autoPushStatus,
   };

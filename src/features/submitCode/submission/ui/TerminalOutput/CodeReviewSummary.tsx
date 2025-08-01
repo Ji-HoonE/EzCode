@@ -3,23 +3,19 @@ import { ISourceCode } from '@/entities/submitCode/submission/model/mutation/sub
 import useSubmitForReview from '../../hooks/useSubmitForReview';
 import { BouncingDots } from '@/shared/ui/loading-indicators';
 import useProblemWebSocketStore from '../../model/useProblemWebSocketStore';
-import { useRouter } from 'next/navigation';
-import { API_URL } from '@/api/constants/api.constants';
 
 interface ICodeReviewSummaryProps {
   problemId: ProblemId;
   sourceCodeData: ISourceCode;
 }
 export default function CodeReviewSummary({ problemId, sourceCodeData }: ICodeReviewSummaryProps) {
-  const router = useRouter();
   const { tokenCount, submitForReview, codeReview, isSubmittedReview } =
     useSubmitForReview(problemId);
-  const { token } = useProblemWebSocketStore();
+  const { isSubmitted } = useProblemWebSocketStore();
 
-  const submitCode = () => {
-    if (!token) return router.push(API_URL.AUTH.SIGN_IN);
-    submitForReview(sourceCodeData);
-  };
+  if (!isSubmitted) {
+    return <div className="text-[#ccc] text-sm">코드를 먼저 실행해주세요</div>;
+  }
   return (
     <div className="flex flex-col h-full">
       {isSubmittedReview ? (
@@ -48,7 +44,7 @@ export default function CodeReviewSummary({ problemId, sourceCodeData }: ICodeRe
             <span className="text-secondary"> {tokenCount} </span>개 입니다.
           </div>
           <button
-            onClick={submitCode}
+            onClick={() => submitForReview(sourceCodeData)}
             className="bg-primary hover:bg-hover-primary active:bg-active active:scale-[0.98] px-4 py-2 rounded-[10px] transition-all"
           >
             AI 리뷰 받기

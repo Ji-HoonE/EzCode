@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 import CodeResultSummary from './CodeResultSummary';
 import CodeReviewSummary from './CodeReviewSummary';
 import { ISourceCode } from '@/entities/submitCode/submission/model/mutation/submitCode.mutation.type';
-import { Mode } from 'fs';
 import { useCodeReviewStoreActions } from '../../model/codeReviewStore';
+import { Mode } from '../ProblemWorksSection';
 
 interface ITerminalOutputProps {
   mode: Mode;
@@ -29,7 +29,7 @@ export default function TerminalOutput({ mode, sourceCodeData }: ITerminalOutput
       ) : mode === 'review' ? (
         <CodeReviewSummary problemId="1" sourceCodeData={sourceCodeData} />
       ) : (
-        <div className="text-[#ccc] text-sm">코드를 실행하려면 위 버튼을 클릭하세요.</div>
+        <div className="text-[#ccc] text-sm">코드를 먼저 실행해주세요</div>
       )}
     </section>
   );

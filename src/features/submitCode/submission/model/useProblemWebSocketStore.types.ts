@@ -16,33 +16,38 @@ export interface IProblemStompFinalResult {
   message: string;
 }
 
-/** 메시지 키 타입 */
+/** setter 키 타입 */
 type MessageKey = 'results' | 'totalResult' | 'error' | 'git-status';
 type AuthKey = 'token' | 'sessionKey';
+type StatusKey = 'isConnected' | 'isSubmitted';
 
 /** setMessage 상태 인터페이스 */
 export interface IMessageInitialState {
-  isConnected: boolean;
   results: IProblemStompResult[] | [];
   totalResult: IProblemStompFinalResult | null;
   error?: unknown | null;
   gitStatus?: unknown | null;
 }
 
-/**setAuth 인터페이스 */
-
+/**setAuth 상태 인터페이스 */
 export interface IWebSocketAuth {
   token: string;
   sessionKey: string;
+}
+
+/**setStatus 상태 인터페이스 */
+export interface IWebSocketStatus {
+  isConnected: boolean;
+  isSubmitted: boolean;
 }
 
 /** 스토어 액션 인터페이스 */
 interface IMessageInitialAction {
   actions: {
     setAuth: (key: AuthKey, value: string) => void;
-    setStatus: (status: boolean) => void;
+    setStatus: (key: StatusKey, status: boolean) => void;
     setMessage: (key: MessageKey, message: unknown) => void;
-    clearMessages: () => void;
+    clearStore: () => void;
     clearResults: () => void;
   };
 }
@@ -51,6 +56,7 @@ export const INITIAL_STATE = {
   token: '',
   sessionKey: '',
   isConnected: false,
+  isSubmitted: false,
   results: [],
   totalResult: null,
   error: null,
@@ -58,4 +64,7 @@ export const INITIAL_STATE = {
 };
 
 /** 인증 스토어 타입 */
-export type IProblemWebSocketStore = IMessageInitialState & IWebSocketAuth & IMessageInitialAction;
+export type IProblemWebSocketStore = IMessageInitialState &
+  IWebSocketAuth &
+  IMessageInitialAction &
+  IWebSocketStatus;
