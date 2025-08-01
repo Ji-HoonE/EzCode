@@ -6,7 +6,7 @@ import DiscussionForm from './DiscussionForm';
 import { Select } from '@/shared/ui/select/Select';
 import { useEffect, useRef, useState } from 'react';
 import { sortType } from '@/entities/discussions/discussions/model/query/discussion.query.type';
-import { useInfiniteDiscussionsQuery } from '@/entities/discussions/discussions/model/query/discussions.query';
+import { useInfiniteDiscussionsQuery } from '@/entities/discussions';
 
 interface IDiscussionProps {
   problemId: ProblemId;
@@ -19,8 +19,10 @@ interface IPageAble {
 }
 export default function Discussions({ problemId }: IDiscussionProps) {
   const [pageAble, setPageAble] = useState<IPageAble>({ page: '0', size: '8', sort: '인기순' });
+
   const { data, isPending, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteDiscussionsQuery(problemId, pageAble);
+
   const discussions = data?.pages.flatMap((page) => page.content);
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
