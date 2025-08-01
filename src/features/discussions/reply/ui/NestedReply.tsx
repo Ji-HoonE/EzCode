@@ -2,8 +2,8 @@ import { ProblemId } from '@/shared';
 import { useState } from 'react';
 import ReplyForm from './ReplyForm';
 import { IReply, useDeleteReplyMutation } from '@/entities/discussions';
-import UserImage from '@/shared/ui/user/UserImage';
 import DiscussionFooter from '../../DiscussionFooter';
+import UserProfile from '@/shared/ui/userProfile';
 
 interface INestedReplyProps {
   nestedReply: IReply;
@@ -22,33 +22,33 @@ export default function NestedReply({ nestedReply, problemId }: INestedReplyProp
   return (
     <div className="flex flex-col">
       <div>
-        {!isEdit ? (
-          <div className="bg-background rounded-[14px] p-3">
-            <div className="flex items-center gap-2 mb-2">
-              <UserImage profileImageUrl={nestedReply.userInfo.profileImageUrl} />
-              <span className="font-medium text-secondary text-xs">
-                {nestedReply.userInfo.nickname}
-              </span>
-            </div>
-            <p className="text-[#ccc] text-xs mb-2">{nestedReply.content}</p>
-            <DiscussionFooter
-              content={nestedReply}
-              problemId={problemId}
-              replyId={nestedReply.replyId}
-              onDelete={() => remove()}
-              onEdit={() => setIsEdit(true)}
-            />
-          </div>
-        ) : (
-          <ReplyForm
-            problemId={problemId}
-            discussionId={discussionId}
-            mode="create"
-            parentReplyId={parentReplyId}
-            initialValue={nestedReply.content}
-            onClick={() => setIsEdit(true)}
+        <div className="bg-background rounded-[14px] p-3 flex flex-col gap-2">
+          <UserProfile
+            profileImageUrl={nestedReply.userInfo.profileImageUrl}
+            nickname={nestedReply.userInfo.nickname}
           />
-        )}
+          {!isEdit ? (
+            <>
+              <p className="text-[#ccc] text-xs mb-2">{nestedReply.content}</p>
+              <DiscussionFooter
+                content={nestedReply}
+                problemId={problemId}
+                replyId={nestedReply.replyId}
+                onDelete={() => remove()}
+                onEdit={() => setIsEdit(true)}
+              />
+            </>
+          ) : (
+            <ReplyForm
+              problemId={problemId}
+              discussionId={discussionId}
+              mode="edit"
+              parentReplyId={parentReplyId}
+              initialValue={nestedReply.content}
+              onClick={() => setIsEdit(false)}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

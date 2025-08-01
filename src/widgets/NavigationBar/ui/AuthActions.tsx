@@ -4,35 +4,52 @@ import LinkedButton from '@/shared/ui/linkedButton';
 import { AUTH_ACTIONS_OPTIONS, NAVIGATE_ATTRIBUTE } from '../navigateAttribute';
 import { Select } from '@/shared/ui/select/Select';
 import useAccessToken from '@/shared/hooks/useAuthToken';
+import { useEffect, useState } from 'react';
+import { useMyInfoQuery } from '@/entities/mypage/model/query';
+import UserProfile from '@/shared/ui/userProfile';
+import { useRouter } from 'next/navigation';
+import { PATHS } from '@/constants/paths';
+import { useLogoutMutation } from '@/entities/auth/model/mutation/auth.mutation';
+
+interface IUserInfo {
+  profileImage: string;
+  nickname: string;
+}
 
 export default function AuthActions() {
+  const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
   const accessToken = useAccessToken();
+  const { data } = useMyInfoQuery();
+  const router = useRouter();
+  const { mutateAsync } = useLogoutMutation();
+
+  useEffect(() => {
+    setUserInfo({
+      profileImage: data?.data.result.profileImageUrl || '',
+      nickname: data?.data.result.nickname || '',
+    });
+  }, [data?.data.result]);
+
+  const selectOption = (value: string) => {
+    if (value === 'mypage') return router.push(PATHS.MYPAGE);
+    if (value === 'logout') return mutateAsync();
+  };
 
   return (
     <div className="flex items-center space-x-4">
       {accessToken ? (
         <Select
           option={AUTH_ACTIONS_OPTIONS}
-          title="타이틀"
-          setValue={() => {}}
-          value="value"
+          title="사용자 메뉴"
+          setValue={(value) => {
+            selectOption(value);
+          }}
+          value={
+            <UserProfile profileImageUrl={userInfo?.profileImage} nickname={userInfo?.nickname} />
+          }
           className="text-white transition-all duration-200"
         />
       ) : (
-        /* <div>
-          <Button
-            variant="ghost"
-            className="text-white hover:text-secondary hover:bg-white/8 transition-all duration-200 hover:shadow-lg"
-          >
-            <Image src="/icons/user.svg" height={20} width={20} alt="유저 아이콘" />
-            계정
-            <p className="h-4 w-4 ml-2">\/</p>
-          </Button>
-        </div>
-        <ul className="bg-[#1a2332] border-gray-700 text-white hover:bg-white/8 hover:text-secondary">
-          <li>마이페이지</li>
-          <li>로그아웃</li>
-        </ul> */
         <>
           <LinkedButton props={NAVIGATE_ATTRIBUTE.signup} />
           <LinkedButton props={NAVIGATE_ATTRIBUTE.signin} />

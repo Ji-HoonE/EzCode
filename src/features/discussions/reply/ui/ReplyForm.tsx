@@ -36,16 +36,28 @@ export default function ReplyForm({
         placeholder="댓글을 작성하세요..."
         className="w-full p-2 bg-background border-border_primary rounded-[14px] resize-none min-h-[40px] text-sm"
       />
-      <Button
-        size="sm"
-        className="bg-primary hover:bg-primary/80 rounded-[10px] px-4 py-2"
-        onClick={() => {
-          submitReply(mode);
-          onClick?.();
-        }}
-      >
-        {mode === 'create' ? <Send className="w-4 h-4" /> : '완료'}
-      </Button>
+      <>
+        <Button
+          size="sm"
+          className="bg-primary hover:bg-primary/80 rounded-[10px] px-4 py-2"
+          onClick={() => {
+            submitReply(mode);
+            onClick?.();
+          }}
+        >
+          {mode === 'create' ? <Send className="w-4 h-4" /> : '완료'}
+        </Button>
+        {mode === 'edit' && (
+          <Button
+            size="sm"
+            variant="outline"
+            className="rounded-[10px] px-4 py-2"
+            onClick={onClick}
+          >
+            취소
+          </Button>
+        )}
+      </>
     </div>
   );
 }
