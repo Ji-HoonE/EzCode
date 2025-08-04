@@ -6,6 +6,16 @@ import { MenuType } from '../GameModal';
 import { useGameCharacterEquipItemMutation } from '@/entities/game/model/mutation/game.mutation';
 import { API_CONSTANTS } from '@/api/constants/api.constants';
 import { toast } from 'sonner';
+import {
+  getGradeBgColor,
+  getGradeBorderColor,
+  getGradeColor,
+  getGradeDisplayName,
+  getGradeGlowColor,
+  getGradeHoverBgColor,
+  getGradeHoverOverlayColor,
+  getGradeStarCount,
+} from '../../utils/gameUtil';
 interface CharacterInventoryProps {
   activeMenu: MenuType;
 }
@@ -37,7 +47,7 @@ const CharacterInventory = (props: CharacterInventoryProps) => {
     }
   };
 
-  const itemsPerPage = 6;
+  const itemsPerPage = 9;
 
   const { totalPages, currentItems } = useMemo(() => {
     const totalItems = data?.data?.result?.length ?? 0;
@@ -87,7 +97,11 @@ const CharacterInventory = (props: CharacterInventoryProps) => {
                   return (
                     <div
                       key={i}
-                      className="h-full bg-[#0c151c] border border-[#214d35] rounded-[10px] p-2 flex flex-col text-xs gap-1 relative group transition-all duration-200 hover:bg-[#0a0f14] hover:border-[#00d084]"
+                      className={`h-full max-h-[210px] rounded-[10px] p-2 flex flex-col text-xs gap-1 relative group transition-all duration-200 ${
+                        item
+                          ? `${getGradeBgColor(item.grade)} ${getGradeBorderColor(item.grade)} border ${getGradeGlowColor(item.grade)} shadow-lg ${getGradeHoverBgColor(item.grade)}`
+                          : 'bg-[#0c151c] border border-[#214d35] hover:bg-[#0a0f14]'
+                      }`}
                     >
                       {item ? (
                         <>
@@ -96,55 +110,124 @@ const CharacterInventory = (props: CharacterInventoryProps) => {
                             onClick={() => handleEquipItemClick(item.name)}
                           >
                             <div>
-                              <div className="text-white font-bold mb-1 truncate text-[14px]">
+                              <div
+                                className={`font-bold mb-1 truncate text-[14px] ${getGradeColor(item.grade)}`}
+                              >
                                 {item.name}
                               </div>
                               <div className="flex mb-1">
                                 {[...Array(5)].map((_, starIndex) => (
                                   <Star
                                     key={starIndex}
-                                    className={`w-2 h-2 fill-yellow-400 text-yellow-400`}
+                                    className={`w-2 h-2 ${
+                                      starIndex < getGradeStarCount(item.grade)
+                                        ? 'fill-yellow-400 text-yellow-400'
+                                        : 'text-gray-600'
+                                    }`}
                                   />
                                 ))}
                               </div>
+                              <div className={`mb-1 font-semibold ${getGradeColor(item.grade)}`}>
+                                {getGradeDisplayName(item.grade)}
+                              </div>
+                              <div className="text-[#ccc] mb-1">{item.itemCategory}</div>
                             </div>
                             <div>
-                              <div className="text-[#888] mb-1">{item.grade}</div>
-                              <div className="text-[#ccc] mb-1">{item.itemCategory}</div>
-                              <div className="text-[#ccc] mb-1">{item.description}</div>
-                              <div className="flex flex-col gap-1">
+                              <div className="text-[#ccc] mb-1 text-[11px]">{item.description}</div>
+                              <div className="flex flex-wrap gap-1">
                                 {item.itemCategory === 'WEAPON' && (
                                   <>
-                                    <div className="text-[#888]">ACCURACY: {item.accuracy}</div>
-                                    <div className="text-[#888]">ATK: {item.atk}</div>
-                                    <div className="text-[#888]">CRIT: {item.crit}</div>
-                                    <div className="text-[#888]">SPEED: {item.speed}</div>
-                                    <div className="text-[#888]">STUN: {item.stun}</div>
+                                    <div
+                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
+                                    >
+                                      ACCURACY: {item.accuracy}
+                                    </div>
+                                    <div
+                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
+                                    >
+                                      ATK: {item.atk}
+                                    </div>
+                                    <div
+                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
+                                    >
+                                      CRIT: {item.crit}
+                                    </div>
+                                    <div
+                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
+                                    >
+                                      SPEED: {item.speed}
+                                    </div>
+                                    <div
+                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
+                                    >
+                                      STUN: {item.stun}
+                                    </div>
                                   </>
                                 )}
                                 {item.itemCategory === 'DEFENCE' && (
                                   <>
-                                    <div className="text-[#888]">ACCURACY: {item.accuracy}</div>
-                                    <div className="text-[#888]">ATK: {item.atk}</div>
-                                    <div className="text-[#888]">CRIT: {item.crit}</div>
-                                    <div className="text-[#888]">SPEED: {item.speed}</div>
-                                    <div className="text-[#888]">STUN: {item.stun}</div>
+                                    <div
+                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
+                                    >
+                                      ACCURACY: {item.accuracy}
+                                    </div>
+                                    <div
+                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
+                                    >
+                                      ATK: {item.atk}
+                                    </div>
+                                    <div
+                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
+                                    >
+                                      CRIT: {item.crit}
+                                    </div>
+                                    <div
+                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
+                                    >
+                                      SPEED: {item.speed}
+                                    </div>
+                                    <div
+                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
+                                    >
+                                      STUN: {item.stun}
+                                    </div>
                                   </>
                                 )}
                                 {item.itemCategory === 'ACCESSORY' && (
                                   <>
-                                    <div className="text-[#888]">ACCURACY: {item.accuracy}</div>
-                                    <div className="text-[#888]">CRIT: {item.crit}</div>
-                                    <div className="text-[#888]">EVASION: {item.evasion}</div>
-                                    <div className="text-[#888]">SPEED: {item.speed}</div>
-                                    <div className="text-[#888]">STUN: {item.stun}</div>
+                                    <div
+                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
+                                    >
+                                      ACCURACY: {item.accuracy}
+                                    </div>
+                                    <div
+                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
+                                    >
+                                      CRIT: {item.crit}
+                                    </div>
+                                    <div
+                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
+                                    >
+                                      EVASION: {item.evasion}
+                                    </div>
+                                    <div
+                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
+                                    >
+                                      SPEED: {item.speed}
+                                    </div>
+                                    <div
+                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
+                                    >
+                                      STUN: {item.stun}
+                                    </div>
                                   </>
                                 )}
                               </div>
                             </div>
                           </div>
-                          {/* 호버 시 장착 버튼 */}
-                          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-[10px] opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          <div
+                            className={`absolute inset-0 flex items-center justify-center rounded-[10px] opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${getGradeHoverOverlayColor(item.grade)}`}
+                          >
                             <Button
                               onClick={() => handleEquipItemClick(item.name)}
                               className="bg-[#00d084] hover:bg-[#00b874] text-white font-bold px-4 py-2 rounded-[8px] transition-all duration-200"

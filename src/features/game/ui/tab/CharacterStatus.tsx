@@ -4,6 +4,14 @@ import { useGetGameCharactersStatusQuery } from '@/entities/game/model/query/gam
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { useState } from 'react';
 import { MenuType } from '../GameModal';
+import {
+  getGradeBgColor,
+  getGradeBorderColor,
+  getGradeColor,
+  getGradeDisplayName,
+  getGradeGlowColor,
+  getGradeStarCount,
+} from '../../utils/gameUtil';
 
 interface ICharacterStatusProps {
   activeMenu: MenuType;
@@ -13,8 +21,6 @@ const CharacterStatus = (props: ICharacterStatusProps) => {
   const { activeMenu } = props;
   const [statusPage, setStatusPage] = useState(0);
   const { data, isLoading } = useGetGameCharactersStatusQuery(activeMenu === 'status');
-
-  console.log(data);
 
   return (
     <div className="h-full flex flex-col relative">
@@ -46,13 +52,16 @@ const CharacterStatus = (props: ICharacterStatusProps) => {
             {statusPage === 0 && (
               <div className="space-y-6">
                 <div>
-                  <div className="space-y-2">
+                  <div className="grid grid-cols-3 gap-3">
                     {data?.data?.result?.stats &&
                       Object.keys(data.data.result.stats).length > 0 &&
                       Object.entries(data?.data?.result?.stats).map(([name, value]) => (
-                        <div key={name} className="flex justify-between">
-                          <span className="text-[#ccc]">{name}</span>
-                          <span className="text-white">{value}</span>
+                        <div
+                          key={name}
+                          className="flex justify-between bg-gradient-to-br from-[#1a2332] to-[#0c151c] p-3 rounded-[10px] border border-[#214d35] shadow-lg"
+                        >
+                          <span className="text-[#ccc] text-sm">{name}</span>
+                          <span className="text-white font-bold">{value}</span>
                         </div>
                       ))}
                   </div>
@@ -60,13 +69,16 @@ const CharacterStatus = (props: ICharacterStatusProps) => {
 
                 <div>
                   <h4 className="text-[#00d084] font-bold mb-3">게임 캐릭터 능력치</h4>
-                  <div className="space-y-2">
+                  <div className="grid grid-cols-4 gap-3">
                     {data?.data?.result?.realStat &&
                       Object.keys(data.data.result.realStat).length > 0 &&
                       Object.entries(data?.data?.result?.realStat).map(([name, value]) => (
-                        <div key={name} className="flex justify-between">
-                          <span className="text-[#ccc]">{name.toUpperCase()}</span>
-                          <span className="text-white">{value}</span>
+                        <div
+                          key={name}
+                          className="flex justify-between bg-gradient-to-br from-[#1a2332] to-[#0c151c] p-3 rounded-[10px] border border-[#214d35] shadow-lg"
+                        >
+                          <span className="text-[#ccc] text-sm">{name.toUpperCase()}</span>
+                          <span className="text-white font-bold">{value}</span>
                         </div>
                       ))}
                   </div>
@@ -87,19 +99,30 @@ const CharacterStatus = (props: ICharacterStatusProps) => {
                   <div className="space-y-3 h-full max-h-[340px] overflow-y-auto scrollbar-hidden">
                     {data?.data?.result?.items?.map((item, idx) => (
                       <div
-                        className="bg-[#0c151c] p-3 rounded-[10px] border border-[#214d35]"
+                        className={`p-3 rounded-[10px] border shadow-lg ${getGradeBgColor(item.grade)} ${getGradeBorderColor(item.grade)} ${getGradeGlowColor(item.grade)}`}
                         key={idx}
                       >
                         <div className="flex justify-between items-center mb-2">
-                          <span className="text-white font-bold">{item.name}</span>
+                          <span className={`font-bold ${getGradeColor(item.grade)}`}>
+                            {item.name}
+                          </span>
                           <div className="flex">
                             {[...Array(5)].map((_, i) => (
-                              <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                              <Star
+                                key={i}
+                                className={`w-3 h-3 ${
+                                  i < getGradeStarCount(item.grade)
+                                    ? 'fill-yellow-400 text-yellow-400'
+                                    : 'text-gray-600'
+                                }`}
+                              />
                             ))}
                           </div>
                         </div>
-                        <div className="text-sm text-[#ccc] mb-1">등급: {`${item.grade}`}</div>
-                        <div className="text-xs text-[#888]">{item.description}</div>
+                        <div className={`text-sm mb-1 font-semibold ${getGradeColor(item.grade)}`}>
+                          등급: {getGradeDisplayName(item.grade)}
+                        </div>
+                        <div className="text-xs text-[#ccc]">{item.description}</div>
                       </div>
                     ))}
                   </div>
@@ -117,16 +140,18 @@ const CharacterStatus = (props: ICharacterStatusProps) => {
                         <div className="flex items-center space-x-2">
                           <span className="text-[#888] text-sm">슬롯 1</span>
                           <div className="flex">
-                            {[...Array(3)].map((_, i) => (
-                              <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                            ))}
-                            {[...Array(2)].map((_, i) => (
-                              <Star key={i} className="w-3 h-3 text-gray-400" />
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`w-3 h-3 ${
+                                  i < 3 ? 'fill-yellow-400 text-yellow-400' : 'text-gray-600'
+                                }`}
+                              />
                             ))}
                           </div>
                         </div>
                       </div>
-                      <div className="text-sm text-[#ccc] mb-1">등급: 언커먼</div>
+                      <div className="text-sm text-blue-400 mb-1 font-semibold">등급: UNCOMMON</div>
                       <div className="text-xs text-[#888]">
                         강력한 화염구를 발사하여 적에게 큰 피해를 입힙니다.
                       </div>
@@ -138,16 +163,18 @@ const CharacterStatus = (props: ICharacterStatusProps) => {
                         <div className="flex items-center space-x-2">
                           <span className="text-[#888] text-sm">슬롯 2</span>
                           <div className="flex">
-                            {[...Array(2)].map((_, i) => (
-                              <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                            ))}
-                            {[...Array(3)].map((_, i) => (
-                              <Star key={i} className="w-3 h-3 text-gray-400" />
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`w-3 h-3 ${
+                                  i < 2 ? 'fill-yellow-400 text-yellow-400' : 'text-gray-600'
+                                }`}
+                              />
                             ))}
                           </div>
                         </div>
                       </div>
-                      <div className="text-sm text-[#ccc] mb-1">등급: 커먼</div>
+                      <div className="text-sm text-green-400 mb-1 font-semibold">등급: COMMON</div>
                       <div className="text-xs text-[#888]">
                         체력을 회복하여 전투 지속력을 높입니다.
                       </div>

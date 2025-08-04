@@ -118,6 +118,8 @@ export interface IGetGameCharactersItemGamblingItemResponse {
   stun: number;
   evasion: number;
   accuracy: number;
+  atk?: number;
+  def?: number;
 }
 
 /** 스킬 뽑기 응답 인터페이스 */

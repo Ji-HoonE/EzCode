@@ -1,4 +1,5 @@
 import { gameApi } from '@/api/service/game/game';
+import { IGetGameCharactersItemGamblingRequest } from '@/api/service/game/game.interface';
 import { useQuery } from '@tanstack/react-query';
 
 /** 캐릭터 스테이터스 조회 Api */
@@ -9,6 +10,8 @@ export const useGetGameCharactersStatusQuery = (isOpen: boolean) => {
       const response = await gameApi.getGameCharacters('client');
       return response;
     },
+    staleTime: 0,
+    gcTime: 0,
     enabled: isOpen,
   });
 };
@@ -21,6 +24,8 @@ export const useGetGameCharactersInventoriesQuery = (isOpen: boolean) => {
       const response = await gameApi.getGameCharactersInventories();
       return response;
     },
+    staleTime: 0,
+    gcTime: 0,
     enabled: isOpen,
   });
 };
@@ -70,5 +75,18 @@ export const useGetGameCharactersAdventureQuery = (isOpen: boolean) => {
       return response;
     },
     enabled: isOpen,
+    staleTime: 0,
+    gcTime: 0,
   });
 };
+
+// /** 스킬 뽑기 Api */
+// export const useGetGameCharactersSkillGamblingQuery = () => {
+//   return useQuery({
+//     queryKey: ['characterSkillGambling'],
+//     queryFn: async () => {
+//       const response = await gameApi.getGameCharactersSkillGambling();
+//       return response;
+//     },
+//   });
+// };

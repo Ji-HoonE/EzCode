@@ -2,22 +2,11 @@
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import {
-  X,
-  Sword,
-  Package,
-  Zap,
-  Users,
-  Gift,
-  Map,
-  Shield,
-  ChevronLeft,
-  ChevronRight,
-  Star,
-} from 'lucide-react';
+import { X, Sword, Package, Zap, Users, Gift, Map, Shield, User } from 'lucide-react';
 import CharacterStatus from './tab/CharacterStatus';
 import CharacterInventory from './tab/CharacterInventory';
 import ItemSkillGamble from './tab/ItemSkillGamble';
+import Adventure from './tab/Adventure';
 
 interface GameModalProps {
   isOpen: boolean;
@@ -30,9 +19,6 @@ export type MenuType = 'status' | 'inventory' | 'skills' | 'pvp' | 'gacha' | 'ad
 export function GameModal({ isOpen, onClose, hasCharacter }: GameModalProps) {
   const [activeMenu, setActiveMenu] = useState<MenuType>('status');
 
-  // 인벤토리 네비게이션
-  const [inventoryPage, setInventoryPage] = useState(0);
-
   // PVP 상태
   const [pvpSubMenu, setPvpSubMenu] = useState<'main' | 'battle' | 'defence'>('main');
   const [battleState, setBattleState] = useState<'searching' | 'found' | 'battle' | 'result'>(
@@ -41,18 +27,8 @@ export function GameModal({ isOpen, onClose, hasCharacter }: GameModalProps) {
   const [matchTimer, setMatchTimer] = useState(60);
   const [opponent, setOpponent] = useState<any>(null);
 
-  // 뽑기 상태
-  const [gachaState, setGachaState] = useState<'shop' | 'category' | 'result'>('shop');
-  const [selectedCategory, setSelectedCategory] = useState<
-    'weapon' | 'defense' | 'accessory' | null
-  >(null);
-
-  // 어드벤처 상태
-  const [adventureState, setAdventureState] = useState<'main' | 'choices' | 'result'>('main');
-  const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
-
   const menuItems = [
-    { id: 'status' as MenuType, label: '상태창 할인', icon: Sword },
+    { id: 'status' as MenuType, label: '상태창 확인', icon: Sword },
     { id: 'inventory' as MenuType, label: '인벤토리', icon: Package },
     { id: 'skills' as MenuType, label: '보유 스킬', icon: Zap },
     { id: 'pvp' as MenuType, label: 'PVP 랜덤매칭', icon: Users },
@@ -276,124 +252,10 @@ export function GameModal({ isOpen, onClose, hasCharacter }: GameModalProps) {
         );
 
       case 'gacha':
-        return <ItemSkillGamble activeMenu={activeMenu} />;
+        return <ItemSkillGamble />;
 
       case 'adventure':
-        return (
-          <div className="space-y-4">
-            <h3 className="text-[#00d084] text-lg font-bold">어드벤처</h3>
-
-            {adventureState === 'main' && (
-              <div className="space-y-4">
-                <div className="bg-[#0c151c] p-4 rounded-[10px] border border-[#214d35]">
-                  <h4 className="text-white mb-2">어드벤처 안내</h4>
-                  <p className="text-[#ccc] text-sm">
-                    신비로운 모험을 떠나보세요. 당신의 선택에 따라 다양한 결과를 얻을 수 있습니다.
-                  </p>
-                </div>
-
-                <Button
-                  onClick={() => setAdventureState('choices')}
-                  className="w-full bg-[#214d35] hover:bg-[#276e48] text-white rounded-[10px] p-4 transition-all duration-200"
-                >
-                  어드벤처 시작
-                </Button>
-              </div>
-            )}
-
-            {adventureState === 'choices' && (
-              <div className="space-y-4">
-                <Button
-                  onClick={() => setAdventureState('main')}
-                  className="text-[#00d084] hover:text-white bg-transparent hover:bg-[rgba(255,255,255,0.08)] rounded-[10px] p-2 transition-all duration-200"
-                >
-                  ← 뒤로가기
-                </Button>
-
-                <div className="bg-[#0c151c] p-4 rounded-[10px] border border-[#214d35]">
-                  <h4 className="text-white mb-3">상황</h4>
-                  <p className="text-[#ccc] text-sm mb-4">
-                    어두운 숲을 걷던 중 갈림길을 발견했습니다. 왼쪽 길에서는 이상한 빛이 나오고,
-                    오른쪽 길에서는 물소리가 들립니다.
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <Button
-                    onClick={() => {
-                      setSelectedChoice(1);
-                      setAdventureState('result');
-                    }}
-                    className="w-full bg-[#214d35] hover:bg-[#276e48] text-white rounded-[10px] p-4 transition-all duration-200 text-left"
-                  >
-                    <div>
-                      <div className="font-bold mb-1">선택지 1: 빛이 나는 왼쪽 길</div>
-                      <div className="text-sm text-[#ccc]">신비로운 빛을 따라가 본다</div>
-                    </div>
-                  </Button>
-
-                  <Button
-                    onClick={() => {
-                      setSelectedChoice(2);
-                      setAdventureState('result');
-                    }}
-                    className="w-full bg-[#214d35] hover:bg-[#276e48] text-white rounded-[10px] p-4 transition-all duration-200 text-left"
-                  >
-                    <div>
-                      <div className="font-bold mb-1">선택지 2: 물소리가 나는 오른쪽 길</div>
-                      <div className="text-sm text-[#ccc]">물소리를 따라 안전한 곳을 찾는다</div>
-                    </div>
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            {adventureState === 'result' && selectedChoice && (
-              <div className="space-y-4">
-                <div className="bg-[#0c151c] p-4 rounded-[10px] border border-[#214d35]">
-                  <h4 className="text-white mb-3">결과</h4>
-                  {selectedChoice === 1 ? (
-                    <div>
-                      <p className="text-[#ccc] text-sm mb-4">
-                        빛을 따라가니 고대 유적을 발견했습니다! 유적 안에서 신비로운 보물을
-                        획득했습니다.
-                      </p>
-                      <div className="bg-[#214d35] p-3 rounded-[10px]">
-                        <div className="text-[#00d084] font-bold">보상</div>
-                        <div className="text-white text-sm">+ 마법 크리스탈</div>
-                        <div className="text-white text-sm">+ 200 경험치</div>
-                        <div className="text-white text-sm">+ 150 골드</div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <p className="text-[#ccc] text-sm mb-4">
-                        물소리를 따라가니 맑은 샘을 발견했습니다. 샘물을 마시고 체력과 마나가 완전히
-                        회복되었습니다.
-                      </p>
-                      <div className="bg-[#214d35] p-3 rounded-[10px]">
-                        <div className="text-[#00d084] font-bold">보상</div>
-                        <div className="text-white text-sm">+ HP/MP 완전 회복</div>
-                        <div className="text-white text-sm">+ 100 경험치</div>
-                        <div className="text-white text-sm">+ 체력 포션 x3</div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <Button
-                  onClick={() => {
-                    setAdventureState('main');
-                    setSelectedChoice(null);
-                  }}
-                  className="w-full bg-[#214d35] hover:bg-[#276e48] text-white rounded-[10px] py-2 transition-all duration-200"
-                >
-                  다시 모험하기
-                </Button>
-              </div>
-            )}
-          </div>
-        );
+        return <Adventure activeMenu={activeMenu} />;
 
       default:
         return (
@@ -407,7 +269,7 @@ export function GameModal({ isOpen, onClose, hasCharacter }: GameModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose} modal={true}>
       <DialogContent
-        className="max-w-[50vw] w-full w-full h-[600px]  bg-[#0c151c] border border-[#214d35] p-0 overflow-hidden"
+        className="max-w-[60vw] w-full w-full h-[800px]  bg-[#0c151c] border border-[#214d35] p-0 overflow-hidden"
         pointerDownOutside={true}
       >
         <DialogTitle className="sr-only">게임 메뉴</DialogTitle> {/* 추가된 부분 */}
@@ -448,12 +310,7 @@ export function GameModal({ isOpen, onClose, hasCharacter }: GameModalProps) {
                   <>
                     <p className="text-[#00d084] font-bold mb-3">사용자 닉네임</p>
                     <div className="w-24 h-24 mx-auto bg-[#1a2332] rounded-[10px] border border-[#214d35] flex items-center justify-center overflow-hidden">
-                      <img
-                        src="/images/character-sprite.png"
-                        alt="캐릭터 스프라이트"
-                        className="w-16 h-16 pixelated"
-                        style={{ imageRendering: 'pixelated' }}
-                      />
+                      <User className="w-12 h-12 text-[#00d084]" />
                     </div>
                   </>
                 ) : (

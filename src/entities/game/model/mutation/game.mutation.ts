@@ -24,6 +24,7 @@ export const useGameCharacterEquipItemMutation = () => {
       const response = await gameApi.equipItem(param);
       return response;
     },
+    gcTime: 0,
   });
 };
 
@@ -42,8 +43,9 @@ export const useGetGameCharactersItemGamblingQuery = () => {
   return useMutation({
     mutationFn: async (params: IGetGameCharactersItemGamblingRequest) => {
       const response = await gameApi.getGameCharactersItemGambling(params);
-      return response;
+      return response.data;
     },
+    gcTime: 0,
   });
 };
 
