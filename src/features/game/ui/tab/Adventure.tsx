@@ -15,7 +15,7 @@ const Adventure = (props: IAdventureProps) => {
   const { activeMenu } = props;
   const [adventureStep, setAdventureStep] = useState<'main' | 'choices' | 'result'>('main');
   const [adventureResult, setAdventureResult] =
-    useState<IGetGameCharactersAdventureChoiceResponse>();
+    useState<IGetGameCharactersAdventureChoiceResponse | null>(null);
 
   const { data, isLoading } = useGetGameCharactersAdventureQuery(
     activeMenu === 'adventure' && adventureStep === 'choices'
@@ -121,7 +121,15 @@ const Adventure = (props: IAdventureProps) => {
                 )}
               </div>
             )}
-            {adventureStep === 'result' && adventureResult && <AdventureResult />}
+            {adventureStep === 'result' && adventureResult && (
+              <AdventureResult
+                adventureResult={adventureResult}
+                onBack={() => {
+                  setAdventureStep('main');
+                  setAdventureResult(null);
+                }}
+              />
+            )}
           </>
         )}
       </div>

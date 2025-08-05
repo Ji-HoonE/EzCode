@@ -39,6 +39,8 @@ export const useGetGameCharactersSkillsQuery = (isOpen: boolean) => {
       return response;
     },
     enabled: isOpen,
+    staleTime: 0,
+    gcTime: 0,
   });
 };
 

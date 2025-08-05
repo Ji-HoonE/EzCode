@@ -1,6 +1,16 @@
 import { Button } from '@/components/ui/button';
 import { useGetGameCharactersInventoriesQuery } from '@/entities/game/model/query/game.query';
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Star,
+  Zap,
+  Shield,
+  Heart,
+  Target,
+  TrendingUp,
+  Sword,
+} from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { MenuType } from '../GameModal';
 import { useGameCharacterEquipItemMutation } from '@/entities/game/model/mutation/game.mutation';
@@ -21,7 +31,6 @@ interface CharacterInventoryProps {
 }
 const CharacterInventory = (props: CharacterInventoryProps) => {
   const { activeMenu } = props;
-  // const queryClient = useQueryClient();
   const [inventoryPage, setInventoryPage] = useState(0);
   const { data, isLoading } = useGetGameCharactersInventoriesQuery(activeMenu === 'inventory');
   const { mutateAsync } = useGameCharacterEquipItemMutation();
@@ -30,8 +39,7 @@ const CharacterInventory = (props: CharacterInventoryProps) => {
     try {
       const response = await mutateAsync({ name: pName });
       if (response.data.status === API_CONSTANTS.CODE.OK) {
-        console.log(response.data);
-        toast.success('장착 성공!', {
+        toast.success(response.data.message, {
           richColors: false,
           style: {
             background: '#00d084',
@@ -115,7 +123,7 @@ const CharacterInventory = (props: CharacterInventoryProps) => {
                               >
                                 {item.name}
                               </div>
-                              <div className="flex mb-1">
+                              <div className="flex mb-2">
                                 {[...Array(5)].map((_, starIndex) => (
                                   <Star
                                     key={starIndex}
@@ -127,98 +135,136 @@ const CharacterInventory = (props: CharacterInventoryProps) => {
                                   />
                                 ))}
                               </div>
-                              <div className={`mb-1 font-semibold ${getGradeColor(item.grade)}`}>
-                                {getGradeDisplayName(item.grade)}
+                              <div className="flex items-center gap-3 justify-between mb-2">
+                                <div className={`font-semibold ${getGradeColor(item.grade)}`}>
+                                  {getGradeDisplayName(item.grade)}
+                                </div>
+                                <div className={`${getGradeColor(item.grade)}`}>
+                                  {item.itemType}
+                                </div>
+                                <div className={`${getGradeColor(item.grade)}`}>
+                                  {item.itemCategory}
+                                </div>
                               </div>
-                              <div className="text-[#ccc] mb-1">{item.itemCategory}</div>
                             </div>
                             <div>
-                              <div className="text-[#ccc] mb-1 text-[11px]">{item.description}</div>
+                              <div className="text-[#ccc] mb-2 text-[11px] mt-1">
+                                {item.description}
+                              </div>
                               <div className="flex flex-wrap gap-1">
                                 {item.itemCategory === 'WEAPON' && (
                                   <>
-                                    <div
-                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
-                                    >
-                                      ACCURACY: {item.accuracy}
+                                    <div className="flex items-center space-x-1 bg-[#0c151c] px-2 py-1 rounded-[8px] border border-[#214d35]">
+                                      <Target className="w-2 h-2 text-[#00d084]" />
+                                      <span
+                                        className={`text-[10px] font-medium ${getGradeColor(item.grade)}`}
+                                      >
+                                        ACC: {item.accuracy || 0}
+                                      </span>
                                     </div>
-                                    <div
-                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
-                                    >
-                                      ATK: {item.atk}
+                                    <div className="flex items-center space-x-1 bg-[#0c151c] px-2 py-1 rounded-[8px] border border-[#214d35]">
+                                      <Sword className="w-2 h-2 text-[#00d084]" />
+                                      <span
+                                        className={`text-[10px] font-medium ${getGradeColor(item.grade)}`}
+                                      >
+                                        ATK: {item.atk || 0}
+                                      </span>
                                     </div>
-                                    <div
-                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
-                                    >
-                                      CRIT: {item.crit}
+                                    <div className="flex items-center space-x-1 bg-[#0c151c] px-2 py-1 rounded-[8px] border border-[#214d35]">
+                                      <Star className="w-2 h-2 text-[#00d084]" />
+                                      <span
+                                        className={`text-[10px] font-medium ${getGradeColor(item.grade)}`}
+                                      >
+                                        CRIT: {item.crit || 0}
+                                      </span>
                                     </div>
-                                    <div
-                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
-                                    >
-                                      SPEED: {item.speed}
+                                    <div className="flex items-center space-x-1 bg-[#0c151c] px-2 py-1 rounded-[8px] border border-[#214d35]">
+                                      <TrendingUp className="w-2 h-2 text-[#00d084]" />
+                                      <span
+                                        className={`text-[10px] font-medium ${getGradeColor(item.grade)}`}
+                                      >
+                                        SPEED: {item.speed || 0}
+                                      </span>
                                     </div>
-                                    <div
-                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
-                                    >
-                                      STUN: {item.stun}
+                                    <div className="flex items-center space-x-1 bg-[#0c151c] px-2 py-1 rounded-[8px] border border-[#214d35]">
+                                      <Zap className="w-2 h-2 text-[#00d084]" />
+                                      <span
+                                        className={`text-[10px] font-medium ${getGradeColor(item.grade)}`}
+                                      >
+                                        STUN: {item.stun || 0}
+                                      </span>
                                     </div>
                                   </>
                                 )}
                                 {item.itemCategory === 'DEFENCE' && (
                                   <>
-                                    <div
-                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
-                                    >
-                                      ACCURACY: {item.accuracy}
+                                    <div className="flex items-center space-x-1 bg-[#0c151c] px-2 py-1 rounded-[8px] border border-[#214d35]">
+                                      <Shield className="w-2 h-2 text-[#00d084]" />
+                                      <span
+                                        className={`text-[10px] font-medium ${getGradeColor(item.grade)}`}
+                                      >
+                                        DEF: {item.def || 0}
+                                      </span>
                                     </div>
-                                    <div
-                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
-                                    >
-                                      ATK: {item.atk}
+                                    <div className="flex items-center space-x-1 bg-[#0c151c] px-2 py-1 rounded-[8px] border border-[#214d35]">
+                                      <Heart className="w-2 h-2 text-[#00d084]" />
+                                      <span
+                                        className={`text-[10px] font-medium ${getGradeColor(item.grade)}`}
+                                      >
+                                        EVA: {item.evasion || 0}
+                                      </span>
                                     </div>
-                                    <div
-                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
-                                    >
-                                      CRIT: {item.crit}
-                                    </div>
-                                    <div
-                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
-                                    >
-                                      SPEED: {item.speed}
-                                    </div>
-                                    <div
-                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
-                                    >
-                                      STUN: {item.stun}
+                                    <div className="flex items-center space-x-1 bg-[#0c151c] px-2 py-1 rounded-[8px] border border-[#214d35]">
+                                      <TrendingUp className="w-2 h-2 text-[#00d084]" />
+                                      <span
+                                        className={`text-[10px] font-medium ${getGradeColor(item.grade)}`}
+                                      >
+                                        SPEED: {item.speed || 0}
+                                      </span>
                                     </div>
                                   </>
                                 )}
                                 {item.itemCategory === 'ACCESSORY' && (
                                   <>
-                                    <div
-                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
-                                    >
-                                      ACCURACY: {item.accuracy}
+                                    <div className="flex items-center space-x-1 bg-[#0c151c] px-2 py-1 rounded-[8px] border border-[#214d35]">
+                                      <Target className="w-2 h-2 text-[#00d084]" />
+                                      <span
+                                        className={`text-[10px] font-medium ${getGradeColor(item.grade)}`}
+                                      >
+                                        ACC: {item.accuracy || 0}
+                                      </span>
                                     </div>
-                                    <div
-                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
-                                    >
-                                      CRIT: {item.crit}
+                                    <div className="flex items-center space-x-1 bg-[#0c151c] px-2 py-1 rounded-[8px] border border-[#214d35]">
+                                      <Star className="w-2 h-2 text-[#00d084]" />
+                                      <span
+                                        className={`text-[10px] font-medium ${getGradeColor(item.grade)}`}
+                                      >
+                                        CRIT: {item.crit || 0}
+                                      </span>
                                     </div>
-                                    <div
-                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
-                                    >
-                                      EVASION: {item.evasion}
+                                    <div className="flex items-center space-x-1 bg-[#0c151c] px-2 py-1 rounded-[8px] border border-[#214d35]">
+                                      <Heart className="w-2 h-2 text-[#00d084]" />
+                                      <span
+                                        className={`text-[10px] font-medium ${getGradeColor(item.grade)}`}
+                                      >
+                                        EVA: {item.evasion || 0}
+                                      </span>
                                     </div>
-                                    <div
-                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
-                                    >
-                                      SPEED: {item.speed}
+                                    <div className="flex items-center space-x-1 bg-[#0c151c] px-2 py-1 rounded-[8px] border border-[#214d35]">
+                                      <TrendingUp className="w-2 h-2 text-[#00d084]" />
+                                      <span
+                                        className={`text-[10px] font-medium ${getGradeColor(item.grade)}`}
+                                      >
+                                        SPEED: {item.speed || 0}
+                                      </span>
                                     </div>
-                                    <div
-                                      className={`text-[11px] font-medium ${getGradeColor(item.grade)}`}
-                                    >
-                                      STUN: {item.stun}
+                                    <div className="flex items-center space-x-1 bg-[#0c151c] px-2 py-1 rounded-[8px] border border-[#214d35]">
+                                      <Zap className="w-2 h-2 text-[#00d084]" />
+                                      <span
+                                        className={`text-[10px] font-medium ${getGradeColor(item.grade)}`}
+                                      >
+                                        STUN: {item.stun || 0}
+                                      </span>
                                     </div>
                                   </>
                                 )}

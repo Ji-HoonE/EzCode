@@ -1,7 +1,17 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { useGetGameCharactersStatusQuery } from '@/entities/game/model/query/game.query';
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Star,
+  Zap,
+  Shield,
+  Heart,
+  Target,
+  TrendingUp,
+  Sword,
+} from 'lucide-react';
 import { useState } from 'react';
 import { MenuType } from '../GameModal';
 import {
@@ -10,8 +20,12 @@ import {
   getGradeColor,
   getGradeDisplayName,
   getGradeGlowColor,
+  getGradeHoverOverlayColor,
   getGradeStarCount,
 } from '../../utils/gameUtil';
+import { useGameCharacterUnEquipSkillMutation } from '@/entities/game/model/mutation/game.mutation';
+import { API_CONSTANTS } from '@/api/constants/api.constants';
+import { toast } from 'sonner';
 
 interface ICharacterStatusProps {
   activeMenu: MenuType;
@@ -20,7 +34,41 @@ interface ICharacterStatusProps {
 const CharacterStatus = (props: ICharacterStatusProps) => {
   const { activeMenu } = props;
   const [statusPage, setStatusPage] = useState(0);
-  const { data, isLoading } = useGetGameCharactersStatusQuery(activeMenu === 'status');
+  const { data, isLoading, refetch } = useGetGameCharactersStatusQuery(activeMenu === 'status');
+  const { mutateAsync } = useGameCharacterUnEquipSkillMutation();
+
+  const handleUnEquipSkillClick = async (pName: string) => {
+    try {
+      const response = await mutateAsync({ name: pName });
+      if (response.data.status === API_CONSTANTS.CODE.OK) {
+        toast.success(response.data.message, {
+          richColors: false,
+          style: {
+            background: '#ff0000',
+            color: '#ffffff',
+            fontWeight: 'bold',
+            fontSize: '16px',
+            border: 'none',
+          },
+        });
+        refetch();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getStatIcon = (statName: string) => {
+    const iconMap: { [key: string]: any } = {
+      hp: Heart,
+      mp: Zap,
+      defense: Shield,
+      attack: Sword,
+      critical: Target,
+      speed: TrendingUp,
+    };
+    return iconMap[statName.toLowerCase()] || TrendingUp;
+  };
 
   return (
     <div className="h-full flex flex-col relative">
@@ -51,36 +99,63 @@ const CharacterStatus = (props: ICharacterStatusProps) => {
           <div className="flex-1 overflow-y-auto">
             {statusPage === 0 && (
               <div className="space-y-6">
-                <div>
-                  <div className="grid grid-cols-3 gap-3">
+                {/* 기본 스탯 */}
+                <div className="p-6 rounded-[15px] border border-[#214d35] shadow-xl">
+                  <h4 className="text-[#00d084] font-bold mb-4 flex items-center space-x-2">
+                    <Shield className="w-5 h-5" />
+                    <span>기본 스탯</span>
+                  </h4>
+                  <div className="grid grid-cols-3 gap-4">
                     {data?.data?.result?.stats &&
                       Object.keys(data.data.result.stats).length > 0 &&
-                      Object.entries(data?.data?.result?.stats).map(([name, value]) => (
-                        <div
-                          key={name}
-                          className="flex justify-between bg-gradient-to-br from-[#1a2332] to-[#0c151c] p-3 rounded-[10px] border border-[#214d35] shadow-lg"
-                        >
-                          <span className="text-[#ccc] text-sm">{name}</span>
-                          <span className="text-white font-bold">{value}</span>
-                        </div>
-                      ))}
+                      Object.entries(data?.data?.result?.stats).map(([name, value]) => {
+                        const IconComponent = getStatIcon(name);
+                        return (
+                          <div
+                            key={name}
+                            className="group bg-gradient-to-br from-[#1a2332] to-[#0c151c] p-4 rounded-[12px] border border-[#214d35] shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:border-[#00d084]"
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <IconComponent className="w-4 h-4 text-[#00d084]" />
+                              <span className="text-[#ccc] text-xs font-medium">{name}</span>
+                            </div>
+                            <span className="text-white font-bold text-lg group-hover:text-[#00d084] transition-colors duration-200">
+                              {value}
+                            </span>
+                          </div>
+                        );
+                      })}
                   </div>
                 </div>
 
-                <div>
-                  <h4 className="text-[#00d084] font-bold mb-3">게임 캐릭터 능력치</h4>
-                  <div className="grid grid-cols-4 gap-3">
+                {/* 게임 캐릭터 능력치 */}
+                <div className="bg-gradient-to-br from-[#0c151c] to-[#1a2332] p-6 rounded-[15px] border border-[#214d35] shadow-xl">
+                  <h4 className="text-[#00d084] font-bold mb-4 flex items-center space-x-2">
+                    <Target className="w-5 h-5" />
+                    <span>게임 캐릭터 능력치</span>
+                  </h4>
+                  <div className="grid grid-cols-4 gap-4">
                     {data?.data?.result?.realStat &&
                       Object.keys(data.data.result.realStat).length > 0 &&
-                      Object.entries(data?.data?.result?.realStat).map(([name, value]) => (
-                        <div
-                          key={name}
-                          className="flex justify-between bg-gradient-to-br from-[#1a2332] to-[#0c151c] p-3 rounded-[10px] border border-[#214d35] shadow-lg"
-                        >
-                          <span className="text-[#ccc] text-sm">{name.toUpperCase()}</span>
-                          <span className="text-white font-bold">{value}</span>
-                        </div>
-                      ))}
+                      Object.entries(data?.data?.result?.realStat).map(([name, value]) => {
+                        const IconComponent = getStatIcon(name);
+                        return (
+                          <div
+                            key={name}
+                            className="group bg-gradient-to-br from-[#1a2332] to-[#0c151c] p-3 rounded-[12px] border border-[#214d35] shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:border-[#00d084]"
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <IconComponent className="w-3 h-3 text-[#00d084]" />
+                              <span className="text-[#ccc] text-xs font-medium">
+                                {name.toUpperCase()}
+                              </span>
+                            </div>
+                            <span className="text-white font-bold text-base group-hover:text-[#00d084] transition-colors duration-200">
+                              {value}
+                            </span>
+                          </div>
+                        );
+                      })}
                   </div>
                 </div>
               </div>
@@ -132,61 +207,77 @@ const CharacterStatus = (props: ICharacterStatusProps) => {
             {statusPage === 2 && (
               <div className="space-y-6">
                 <div>
-                  <h4 className="text-[#00d084] font-bold mb-3">장착 스킬</h4>
+                  <h4 className="text-[#00d084] font-bold mb-3">
+                    장착 스킬
+                    <span className="text-xs text-[#888] ml-2">
+                      {data?.data?.result?.skills.length} / 3
+                    </span>
+                  </h4>
                   <div className="space-y-3">
-                    <div className="bg-[#0c151c] p-3 rounded-[10px] border border-[#214d35]">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-white font-bold">파이어볼</span>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-[#888] text-sm">슬롯 1</span>
-                          <div className="flex">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`w-3 h-3 ${
-                                  i < 3 ? 'fill-yellow-400 text-yellow-400' : 'text-gray-600'
-                                }`}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-sm text-blue-400 mb-1 font-semibold">등급: UNCOMMON</div>
-                      <div className="text-xs text-[#888]">
-                        강력한 화염구를 발사하여 적에게 큰 피해를 입힙니다.
-                      </div>
-                    </div>
+                    {[...Array(3)].map((_, idx) => {
+                      const skill = data?.data?.result?.skills?.[idx];
 
-                    <div className="bg-[#0c151c] p-3 rounded-[10px] border border-[#214d35]">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-white font-bold">힐링</span>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-[#888] text-sm">슬롯 2</span>
-                          <div className="flex">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`w-3 h-3 ${
-                                  i < 2 ? 'fill-yellow-400 text-yellow-400' : 'text-gray-600'
-                                }`}
-                              />
-                            ))}
+                      if (skill) {
+                        return (
+                          <div
+                            className={`relative group p-3 rounded-[10px] border shadow-lg ${getGradeBgColor(skill.grade)} ${getGradeBorderColor(skill.grade)} ${getGradeGlowColor(skill.grade)}`}
+                            key={idx}
+                          >
+                            <div className="transition-opacity duration-200 group-hover:opacity-30">
+                              <div className="flex justify-between items-center mb-2">
+                                <span className={`font-bold ${getGradeColor(skill.grade)}`}>
+                                  {skill.name}
+                                </span>
+                                <div className="flex items-center space-x-2">
+                                  <span className="text-[#888] text-sm">슬롯 {idx + 1}</span>
+                                  <div className="flex">
+                                    {[...Array(5)].map((_, i) => (
+                                      <Star
+                                        key={i}
+                                        className={`w-3 h-3 ${
+                                          i < getGradeStarCount(skill.grade)
+                                            ? 'fill-yellow-400 text-yellow-400'
+                                            : 'text-gray-600'
+                                        }`}
+                                      />
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                className={`text-sm mb-1 font-semibold ${getGradeColor(skill.grade)}`}
+                              >
+                                등급: {getGradeDisplayName(skill.grade)}
+                              </div>
+                              <div className="text-xs text-[#ccc]">{skill.skillDetails}</div>
+                            </div>
+                            <div
+                              className={`absolute inset-0 rounded-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${getGradeHoverOverlayColor(skill.grade)}`}
+                            >
+                              <Button
+                                onClick={() => handleUnEquipSkillClick(skill.name)}
+                                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold"
+                              >
+                                장착해제
+                              </Button>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                      <div className="text-sm text-green-400 mb-1 font-semibold">등급: COMMON</div>
-                      <div className="text-xs text-[#888]">
-                        체력을 회복하여 전투 지속력을 높입니다.
-                      </div>
-                    </div>
-
-                    <div className="bg-[#0c151c] p-3 rounded-[10px] border border-[#214d35] opacity-50">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-[#888]">빈 슬롯</span>
-                        <span className="text-[#888] text-sm">슬롯 3</span>
-                      </div>
-                      <div className="text-xs text-[#888]">스킬을 장착할 수 있습니다.</div>
-                    </div>
+                        );
+                      } else {
+                        return (
+                          <div
+                            className="bg-[#0c151c] p-3 rounded-[10px] border border-[#214d35] opacity-50"
+                            key={idx}
+                          >
+                            <div className="flex justify-between items-center mb-2">
+                              <span className="text-[#888]">빈 슬롯</span>
+                              <span className="text-[#888] text-sm">슬롯 {idx + 1}</span>
+                            </div>
+                            <div className="text-xs text-[#888]">스킬을 장착할 수 있습니다.</div>
+                          </div>
+                        );
+                      }
+                    })}
                   </div>
                 </div>
               </div>

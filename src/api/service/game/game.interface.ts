@@ -58,6 +58,13 @@ export interface IGetGameCharactersInventoriesResponse {
 export interface IEquipItemRequest {
   name: string;
 }
+
+/** 캐릭터 스킬 장착 요청 인터페이스 */
+export interface IEquipSkillRequest {
+  name: string;
+  slotNumber: number;
+}
+
 /** 캐릭터 스킬 조회 응답 인터페이스 */
 export interface IGetGameCharactersSkillsResponse {
   skillEffect: string;

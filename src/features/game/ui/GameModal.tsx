@@ -7,6 +7,7 @@ import CharacterStatus from './tab/CharacterStatus';
 import CharacterInventory from './tab/CharacterInventory';
 import ItemSkillGamble from './tab/ItemSkillGamble';
 import Adventure from './tab/Adventure';
+import CharacterSkill from './tab/CharacterSkill';
 
 interface GameModalProps {
   isOpen: boolean;
@@ -45,24 +46,7 @@ export function GameModal({ isOpen, onClose, hasCharacter }: GameModalProps) {
         return <CharacterInventory activeMenu={activeMenu} />;
 
       case 'skills':
-        return (
-          <div className="h-full flex flex-col">
-            <h3 className="text-[#00d084] text-lg font-bold mb-4">보유 스킬</h3>
-            <div className="flex-1 overflow-y-auto space-y-3">
-              {[...Array(10)].map((_, i) => (
-                <div key={i} className="bg-[#0c151c] p-3 rounded-[10px] border border-[#214d35]">
-                  <div className="flex justify-between items-center">
-                    <span className="text-white">스킬 {i + 1}</span>
-                    <span className="text-[#888] text-sm">
-                      Lv.{Math.floor(Math.random() * 5) + 1}
-                    </span>
-                  </div>
-                  <p className="text-[#ccc] text-xs mt-1">스킬 설명이 여기에 표시됩니다.</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
+        return <CharacterSkill activeMenu={activeMenu} />;
 
       case 'pvp':
         return (
