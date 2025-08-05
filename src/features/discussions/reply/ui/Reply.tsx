@@ -1,12 +1,10 @@
-import Vote from '../../vote/ui/Vote';
-import { Button } from '@/components/ui/button';
 import { ProblemId } from '@/shared';
 import { useState } from 'react';
-import { BouncingDots } from '@/shared/ui/loading-indicators';
 import NestedReplies from './NestedReplies';
 import ReplyForm from './ReplyForm';
-import ShowChildReplies from './ShowChildReplies';
 import { IReply, useDeleteReplyMutation } from '@/entities/discussions';
+import DiscussionFooter from '../../DiscussionFooter';
+import UserProfile from '@/shared/ui/userProfile';
 
 interface IReplyProps {
   reply: IReply;
@@ -18,55 +16,52 @@ export default function Reply({ reply, problemId }: IReplyProps) {
 
   const { content, discussionId, replyId, userInfo, childReplyCount } = reply;
 
-  const { mutateAsync: remove, isPending } = useDeleteReplyMutation(
+  const { mutateAsync: remove } = useDeleteReplyMutation(problemId, discussionId, replyId, [
+    'replies',
     problemId,
     discussionId,
-    replyId,
-    ['replies', problemId, discussionId]
-  );
+  ]);
 
   return (
     <div className="flex flex-col">
       <div>
-        {!isEdit ? (
-          <div>
-            <h3>닉네임: {userInfo.nickname}</h3>
-            <p>{content}</p>
-            <div className="flex items-center">
-              <Vote problemId={problemId} content={reply} replyId={replyId} />
-              <ShowChildReplies
-                onClick={() => {
+        <div className="flex flex-col gap-2">
+          <UserProfile profileImageUrl={userInfo.profileImageUrl} nickname={userInfo.nickname} />
+          {!isEdit ? (
+            <>
+              <p className="text-[#ccc] text-sm ml-8">{content}</p>
+              <DiscussionFooter
+                content={reply}
+                problemId={problemId}
+                replyId={replyId}
+                setChildRepliesOpen={() => {
                   setIsNestedRepliesOpen((prev) => !prev);
                 }}
                 replyCount={childReplyCount}
+                onDelete={() => remove()}
+                onEdit={() => setIsEdit(true)}
               />
-            </div>
-            <Button className="bg-gray-400" onClick={() => setIsEdit(true)}>
-              수정
-            </Button>
-            <Button className="bg-gray-400" onClick={() => remove()}>
-              {isPending ? <BouncingDots /> : '삭제'}
-            </Button>
-            <div className="pl-8">
-              {isNestedRepliesOpen && (
-                <NestedReplies
-                  problemId={problemId}
-                  discussionId={discussionId}
-                  parentReplyId={replyId}
-                />
-              )}
-            </div>
-          </div>
-        ) : (
-          <ReplyForm
-            problemId={problemId}
-            discussionId={discussionId}
-            parentReplyId={null}
-            mode="create"
-            initialValue=""
-            onClick={() => setIsEdit(false)}
-          />
-        )}
+              <div className="pl-8">
+                {isNestedRepliesOpen && (
+                  <NestedReplies
+                    problemId={problemId}
+                    discussionId={discussionId}
+                    parentReplyId={replyId}
+                  />
+                )}
+              </div>
+            </>
+          ) : (
+            <ReplyForm
+              problemId={problemId}
+              discussionId={discussionId}
+              parentReplyId={null}
+              mode="edit"
+              initialValue={content}
+              onClick={() => setIsEdit(false)}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

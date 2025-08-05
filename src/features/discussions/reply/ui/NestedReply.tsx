@@ -1,10 +1,9 @@
-import { Button } from '@/components/ui/button';
 import { ProblemId } from '@/shared';
-import { BouncingDots } from '@/shared/ui/loading-indicators';
 import { useState } from 'react';
-import Vote from '../../vote/ui/Vote';
 import ReplyForm from './ReplyForm';
 import { IReply, useDeleteReplyMutation } from '@/entities/discussions';
+import DiscussionFooter from '../../DiscussionFooter';
+import UserProfile from '@/shared/ui/userProfile';
 
 interface INestedReplyProps {
   nestedReply: IReply;
@@ -14,40 +13,42 @@ export default function NestedReply({ nestedReply, problemId }: INestedReplyProp
   const [isEdit, setIsEdit] = useState(false);
   const { discussionId, replyId, parentReplyId } = nestedReply;
 
-  const { mutateAsync: remove, isPending } = useDeleteReplyMutation(
+  const { mutateAsync: remove } = useDeleteReplyMutation(problemId, discussionId, replyId, [
+    'nestedReplies',
     problemId,
     discussionId,
-    replyId,
-    ['nestedReplies', problemId, discussionId]
-  );
+  ]);
 
   return (
     <div className="flex flex-col">
       <div>
-        {!isEdit ? (
-          <div>
-            <h3>닉네임: {nestedReply.userInfo.nickname}</h3>
-            <p>{nestedReply.content}</p>
-            <div className="flex items-center">
-              <Vote problemId={problemId} content={nestedReply} replyId={nestedReply.replyId} />
-            </div>
-            <Button className="bg-gray-400" onClick={() => setIsEdit(true)}>
-              수정
-            </Button>
-            <Button className="bg-gray-400" onClick={() => remove()}>
-              {isPending ? <BouncingDots /> : '삭제'}
-            </Button>
-          </div>
-        ) : (
-          <ReplyForm
-            problemId={problemId}
-            discussionId={discussionId}
-            mode="create"
-            parentReplyId={parentReplyId}
-            initialValue={nestedReply.content}
-            onClick={() => setIsEdit(true)}
+        <div className="bg-background rounded-[14px] p-3 flex flex-col gap-2">
+          <UserProfile
+            profileImageUrl={nestedReply.userInfo.profileImageUrl}
+            nickname={nestedReply.userInfo.nickname}
           />
-        )}
+          {!isEdit ? (
+            <>
+              <p className="text-[#ccc] text-xs mb-2">{nestedReply.content}</p>
+              <DiscussionFooter
+                content={nestedReply}
+                problemId={problemId}
+                replyId={nestedReply.replyId}
+                onDelete={() => remove()}
+                onEdit={() => setIsEdit(true)}
+              />
+            </>
+          ) : (
+            <ReplyForm
+              problemId={problemId}
+              discussionId={discussionId}
+              mode="edit"
+              parentReplyId={parentReplyId}
+              initialValue={nestedReply.content}
+              onClick={() => setIsEdit(false)}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

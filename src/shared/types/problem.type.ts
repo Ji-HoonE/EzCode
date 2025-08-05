@@ -27,7 +27,6 @@ export const LANGUAGE: Record<number, ProblemLanguageType> = {
 
 //언어 선택하는 셀렉트 옵션 타입
 export interface ILanguageSelectOption {
-  value: ProblemLanguageType;
-  label: string;
-  id: number;
+  label: ProblemLanguageType;
+  value: string;
 }

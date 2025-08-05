@@ -28,8 +28,6 @@ export default async function HomePage() {
   return (
     <main className="w-full h-full py-20 bg-background text-white">
       <ChatDialogOpenButton />
-      {/* <button onClick={handleLogout}>로그아웃</button> */}
-
       <section className="text-center container mx-auto px-4">
         <div className="mb-8 flex items-center flex-col gap-6">
           <Image src="/icons/code.svg" alt="메인페이지 로고" width={80} height={80} />

@@ -1,11 +1,9 @@
 'use client';
 import useLogin from '../hooks/useLogin';
 import { useRouter } from 'next/navigation';
-import { cn } from '@/lib/utils';
-import Image from 'next/image';
-import useSocialLogin from '../hooks/useSocialLogin';
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 
-const SigninForm = () => {
+const SignInForm = () => {
   const router = useRouter();
   const {
     loginInfo,
@@ -16,134 +14,77 @@ const SigninForm = () => {
     errorMessage,
   } = useLogin();
 
-  const { handleSocialLogin } = useSocialLogin();
-
   return (
-    <div className="w-full h-full">
-      <div className="bg-[#FFFFFFF6] w-full h-full rounded-[17px] py-[15px] px-[33px] flex flex-col items-center">
-        <p className="text-[20px] font-[800] leading-[47px] text-black">로그인</p>
-        <div className="flex flex-col mt-[9px] w-full gap-[6px]">
-          <div className="bg-[#FFFFFFF6] text-black h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] relative">
-            <Image
-              src="/icons/mail.svg"
-              alt="mail"
-              width={16}
-              height={16}
-              priority
-              className="absolute left-[11px] top-[9px]"
-            />
-            <input
-              type={'text'}
-              data-slot="input"
-              className={cn(
-                'bg-[#FFFFFFF6] text-black h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] w-full border-none',
-                'h-full pl-[35px] pr-[35px]',
-                'shadow-[inset_0_2px_2px_0_rgba(0,0,0,0.25)] text-[14px]'
-              )}
-              placeholder="이메일"
-              name="email"
-              value={loginInfo.email}
-              onChange={handleChangeLoginInfo}
-            />
-          </div>
-          <div className="bg-[#FFFFFFF6] text-black h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] relative">
-            <Image
-              src="/icons/lock.svg"
-              alt="lock"
-              width={16}
-              height={16}
-              priority
-              className="absolute left-[11px] top-[9px]"
-            />
-            <input
-              data-slot="input"
-              className={cn(
-                'bg-[#FFFFFFF6] text-black h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] w-full border-none',
-                'h-full pl-[35px] pr-[35px]',
-                'shadow-[inset_0_2px_2px_0_rgba(0,0,0,0.25)] text-[14px]'
-              )}
-              type={isPasswordVisible ? 'text' : 'password'}
-              placeholder="비밀번호"
-              name="password"
-              value={loginInfo.password}
-              onChange={handleChangeLoginInfo}
-            />
-            <Image
-              src="/icons/eyeOff.svg"
-              alt="eyeOff"
-              width={16}
-              height={16}
-              priority
-              className="absolute right-[10px] top-[9px]"
-              onClick={handlePasswordVisible}
-            />
-          </div>
-          {errorMessage && (
-            <div className="flex items-center gap-[4px]">
-              <Image
-                src="/icons/alert.svg"
-                alt="error"
-                width={10}
-                height={10}
-                priority
-                className="mb-[2px]"
-              />
-              <span className="text-[10px] font-[700] text-[#EC3030]">{errorMessage}</span>
-            </div>
-          )}{' '}
-          {/* 6->4, 15->10, 3->2, 15->10 */}
-        </div>
-        <div className="flex flex-col mt-[13px] w-full gap-[6px]">
-          <button
-            onClick={handleSignInClick}
-            className="h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] bg-[#969696] text-white text-[15px] font-[800]"
-          >
-            로그인
-          </button>
-          <button
-            className="text-black rounded-[7px] h-[37px] text-[15px] font-[800] border-[1px] border-[#6C6C6C]"
-            onClick={() => router.push('/signup')}
-          >
-            이메일 회원가입
-          </button>
-          <p
-            className="text-[10px] font-[400] text-[#6C6C6C] text-end decoration-black underline underline-offset-[2px]"
-            onClick={() => router.push('/find/password')}
-          >
-            비밀번호를 잊었어요.
-          </p>
-        </div>
-        <p className="text-[13px] font-[600] text-black leading-[47px]">SNS 계정으로 시작하기</p>
-        <div className="w-full flex justify-center gap-[46px]">
-          <div className="flex flex-col items-center">
-            <Image
-              src="/icons/google.svg"
-              alt="eye"
-              width={60}
-              height={60}
-              priority
-              onClick={() => handleSocialLogin('google')}
-            />
-            <p className="text-[11px] font-[800] text-black">Google</p>
-          </div>
-          <div className="flex flex-col items-center" onClick={() => handleSocialLogin('github')}>
-            <Image src="/icons/github.svg" alt="eye" width={60} height={60} priority />
-            <p className="text-[11px] font-[800] text-black">Github</p>
-          </div>
-        </div>
-        <div className="text-[9px] font-[400] text-black leading-[33px] flex justify-center">
-          <p className="text-[#666766] text-[10px] font-[700] underline underline-offset-[2px]">
-            이용약관
-          </p>
-          <p className="text-[10px] text-[#666766] font-[400] pl-[2px] pr-[2px]">과</p>
-          <p className="text-[#666766] text-[10px] font-[700] underline underline-offset-[2px]">
-            개인정보 처리방침
-          </p>
-          <p className="text-[10px] text-[#666766] font-[400] pl-[2px]">에 동의하고 가입하기</p>
+    <div className="space-y-5">
+      <div>
+        <label className="block text-sm font-medium text-gray-300 mb-2">이메일</label>
+        <div className="relative">
+          <Mail
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+            size={18}
+          />
+          <input
+            type="email"
+            placeholder="이메일을 입력하세요"
+            id="email"
+            name="email"
+            className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-[10px] text-white placeholder-gray-500 focus:outline-none focus:border-[#00d084] focus:ring-1 focus:ring-[#00d084] transition-all duration-200"
+            value={loginInfo.email}
+            onChange={handleChangeLoginInfo}
+          />
         </div>
       </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-300 mb-2">비밀번호</label>
+        <div className="relative">
+          <Lock
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+            size={18}
+          />
+          <input
+            type={isPasswordVisible ? 'text' : 'password'}
+            placeholder="비밀번호를 입력하세요"
+            className="w-full pl-10 pr-12 py-3 bg-gray-800/50 border border-gray-700 rounded-[10px] text-white placeholder-gray-500 focus:outline-none focus:border-[#00d084] focus:ring-1 focus:ring-[#00d084] transition-all duration-200"
+            id="password"
+            name="password"
+            value={loginInfo.password}
+            onChange={handleChangeLoginInfo}
+          />
+          <button
+            type="button"
+            onClick={handlePasswordVisible}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors duration-200"
+          >
+            {isPasswordVisible ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between text-sm">
+        <div></div>
+        {/* <label className="flex items-center text-gray-400">
+          <input type="checkbox" className="mr-2 rounded" />
+          로그인 상태 유지
+        </label> */}
+        <button
+          type="button"
+          className="text-[#00d084] hover:underline"
+          onClick={() => router.push('/find/password')}
+        >
+          비밀번호 찾기
+        </button>
+      </div>
+      {errorMessage && <div className="text-red-500 text-sm">{errorMessage}</div>}
+      <button
+        type="submit"
+        className="w-full bg-[#214d35] text-white py-3 rounded-[10px] font-medium hover:bg-[#276e48] active:bg-[#1e3e2c] active:scale-[0.98] transition-all duration-200 shadow-lg hover:shadow-xl"
+        onClick={handleSignInClick}
+      >
+        로그인
+      </button>
     </div>
   );
 };
 
-export default SigninForm;
+export default SignInForm;

@@ -7,6 +7,7 @@ import {
   DailySolved,
   IMyInfo,
   Ranking,
+  Report,
   SubmissionsResonse,
 } from './types';
 import { TPeriod } from '@/shared/types/mypage.type';
@@ -40,7 +41,7 @@ export const useMyAiReviewCheckQuery = () => {
   return useQuery({
     queryKey: ['my-review'],
     queryFn: async () => {
-      const response = await ApiHelper.get<AiReview>(`/users/review-token`);
+      const response = await ApiHelper.get<AiReview>(`${API_URL.USER.TOKEN_COUNT}`);
       return response;
     },
 
@@ -67,8 +68,12 @@ export const useChangePassword = () => {
         `${API_URL.MYPAGE.CHANGE_PASSWORD}`,
         params
       );
-
-      if (response) return response;
+      console.log(response);
+      if (response.data.status === 200) {
+        return response.data.result.message;
+      } else {
+        return response.data.message;
+      }
     },
   });
 };
@@ -78,6 +83,32 @@ export const useSubmissionList = () => {
     queryKey: ['submission'],
     queryFn: async () => {
       const response = await ApiHelper.get<SubmissionsResonse[]>(API_URL.MYPAGE.SUBMISSION);
+      return response.data;
+    },
+    staleTime: 1000 * 60 * 5,
+  });
+};
+
+export const useEmailVerify = (redirectUrl: string) => {
+  return useMutation({
+    mutationFn: async () => {
+      const response = await ApiHelper.post<ChangePasswordRequest>(API_URL.MYPAGE.VERIFY_EMAIL, {
+        redirectUrl: redirectUrl,
+      });
+      if (response.data.status === 200) {
+        return response.data.result.message;
+      } else {
+        return response.data.message;
+      }
+    },
+  });
+};
+
+export const useReportList = () => {
+  return useQuery({
+    queryKey: ['report'],
+    queryFn: async () => {
+      const response = await ApiHelper.get<Report[]>(API_URL.MYPAGE.REPORT);
       return response.data;
     },
     staleTime: 1000 * 60 * 5,

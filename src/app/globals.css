@@ -5,10 +5,13 @@
   --color-black: #000000;
   --color-white: #ffffff;
   --color-primary: #214d35;
+  --color-hover-primary: #276e48;
   --color-secondary: #00d084;
   --color-dangerous: red;
   --color-background: #0c151c;
+  --color-secondary-background: #1a2332;
   --color-border_primary: #a4a1aa;
+  --color-active: #1e3e2c;
 }
 
 @layer utilities {

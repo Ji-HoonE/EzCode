@@ -1,5 +1,6 @@
 import Discussions from '@/features/discussions/disussions/ui/Discussions';
 import { DetailProblem, getDetailProblem } from '@/entities/problem';
+import CollapsibleProblem from '@/entities/problem/ui/CollapsibleProblem';
 
 interface IProblemPageProps {
   params: Promise<{ problemId: string }>;
@@ -17,14 +18,12 @@ export default async function ProblemPage({ params, searchParams }: IProblemPage
   }
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full overflow-scroll">
       {!isDiscussion ? (
         <DetailProblem detailProblem={detailProblem} />
       ) : (
         <div className="flex flex-col gap-[10px]">
-          <div className=" top-0 bg-gray-400 h-[200px] overflow-scroll">
-            <DetailProblem detailProblem={detailProblem} />
-          </div>
+          <CollapsibleProblem detailProblem={detailProblem} />
           <Discussions problemId={problemId} />
         </div>
       )}

@@ -1,7 +1,6 @@
 /** 스토어 상태 인터페이스 */
 export interface ICodeReviewStoreState {
   isCorrect: boolean;
-  codeReviewContent: { key: string; content: string }[] | null;
   isSubmittedReview: boolean;
 }
 
@@ -9,7 +8,6 @@ export interface ICodeReviewStoreState {
 interface ICodeReviewInitialAction {
   actions: {
     setIsCorrect: (status: boolean) => void;
-    setCodeReviewContent: (review: string) => void;
     setIsSubmittedReview: (status: boolean) => void;
   };
 }

@@ -1,5 +1,5 @@
 /**discussions */
-export { useDiscussionsQuery } from './discussions/model/query/discussions.query';
+export { useInfiniteDiscussionsQuery } from './discussions/model/query/discussions.query';
 export { useCreateDiscussionContent } from './discussions/model/mutation/discussions.mutations';
 export { useEditDiscussionContent } from './discussions/model/mutation/discussions.mutations';
 export { useDeleteDiscussionContent } from './discussions/model/mutation/discussions.mutations';

@@ -3,6 +3,7 @@ export const PATHS = {
   SIGNUP: '/signup',
 
   PROBLEMS: '/problems',
+  MYPAGE: '/mypage',
   RANK: '/rank',
   CHAT: {
     SEARCHPARAMS_ID: 'room-id',

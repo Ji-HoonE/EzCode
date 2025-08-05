@@ -1,13 +1,12 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import ShowChildReplies from '../../reply/ui/ShowChildReplies';
 import DiscussionForm from './DiscussionForm';
 import { useDeleteDiscussionContent } from '@/entities/discussions';
-import { Vote } from '../../vote';
 import Replies from '../../reply/ui/Replies';
 import { TDiscussionContentMutationResponse } from '@/entities/discussions/discussions/model/mutation/discussions.types';
 import { LANGUAGE } from '@/shared/types/problem.type';
+import DiscussionFooter from '../../DiscussionFooter';
+import UserProfile from '@/shared/ui/userProfile';
 
 interface IDiscussionContentProps {
   discussion: TDiscussionContentMutationResponse;
@@ -25,47 +24,36 @@ export default function Discussion({ discussion }: IDiscussionContentProps) {
   );
 
   return (
-    <>
-      <div className="w-full flex flex-col">
-        <div>
-          {isEdit ? (
-            <DiscussionForm
-              problemId={String(problemId)}
-              mode="edit"
-              discussion={discussion}
-              changeEditMode={(status) => setIsEdit(status)}
-            />
-          ) : (
-            <div>
-              <p>언어 : {LANGUAGE[languageId]}</p>
-              <h3>닉네임: {userInfo.nickname}</h3>
-              <p>{content}</p>
-              <div className="flex items-center">
-                <Vote content={discussion} problemId={String(problemId)} />
-                <ShowChildReplies
-                  onClick={() => {
-                    setIsRepliesOpen((prev) => !prev);
-                  }}
-                  replyCount={replyCount}
-                />
-              </div>
-              {discussion.isAuthor && (
-                <>
-                  <Button
-                    onClick={() => {
-                      deleteMutate();
-                    }}
-                  >
-                    삭제
-                  </Button>
-                  <Button onClick={() => setIsEdit(true)}>{isEdit ? '완료' : '수정'}</Button>
-                </>
-              )}
-            </div>
-          )}
+    <div className="bg-secondary-background rounded-[10px] p-6 shadow-lg w-full flex flex-col">
+      <div className="w-full flex flex-col gap-2">
+        <div className="flex items-center gap-3">
+          <UserProfile profileImageUrl={userInfo.profileImageUrl} nickname={userInfo.nickname} />
+          <span className="text-[#888] text-sm ml-2">{LANGUAGE[languageId]}</span>
         </div>
-        {isRepliesOpen && <Replies problemId={String(problemId)} discussionId={discussionId} />}
+        {!isEdit ? (
+          <>
+            <p className="text-[#ccc] leading-relaxed">{content}</p>
+            <DiscussionFooter
+              content={discussion}
+              problemId={String(problemId)}
+              setChildRepliesOpen={() => {
+                setIsRepliesOpen((prev) => !prev);
+              }}
+              replyCount={replyCount}
+              onDelete={() => deleteMutate()}
+              onEdit={() => setIsEdit(true)}
+            />
+          </>
+        ) : (
+          <DiscussionForm
+            problemId={String(problemId)}
+            mode="edit"
+            discussion={discussion}
+            changeEditMode={(status) => setIsEdit(status)}
+          />
+        )}
       </div>
-    </>
+      {isRepliesOpen && <Replies problemId={String(problemId)} discussionId={discussionId} />}
+    </div>
   );
 }

@@ -1,3 +1,5 @@
+import { ReportReasonEnum, ReportStatusEnum } from './enum';
+
 export interface IMyInfo {
   username: string;
   email: string;
@@ -44,6 +46,7 @@ export interface SubmissionsResonse {
   problemId: number;
   problemTitle: string;
   problemDescription: string;
+  problemDifficulty: string;
   submissions: Submission[];
 }
 
@@ -55,12 +58,25 @@ export interface Submission {
   executionTime: number;
   memoryUsage: number;
   submittedAt: string;
+  language: string;
 }
 
-export interface Ranking  {
-      userId: number
-      nickname: string
-      ranks: number
-      score: number
-      isMe: boolean
-    }
+export interface Ranking {
+  userId: number;
+  nickname: string;
+  ranks: number;
+  score: number;
+  isMe: boolean;
+}
+
+export interface Report {
+  createdAt: string;
+  id: number;
+  imageUrl: string;
+  message: string;
+  reportStatus: ReportStatusEnum;
+  reportType: keyof typeof ReportReasonEnum;
+  resultMessage: string;
+  targetId: number;
+  targetType: string;
+}

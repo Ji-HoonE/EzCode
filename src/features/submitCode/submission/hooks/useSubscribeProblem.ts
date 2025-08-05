@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import useConnectProblemWebSocket from './useConnectProblemWebSocket';
 
 export default function useSubscribeProblem(sessionKey: string) {
-  const { setMessage, clearMessages } = useProblemWebSocketStoreActions();
+  const { setMessage, clearStore } = useProblemWebSocketStoreActions();
   const { problemStompRef } = useConnectProblemWebSocket();
   const { isConnected } = useProblemWebSocketStore();
 
@@ -33,13 +33,13 @@ export default function useSubscribeProblem(sessionKey: string) {
 
       // 에러 발생 시 스토어 초기화
       problemStompRef.current.onStompError = () => {
-        clearMessages();
+        clearStore();
       };
 
       // 클라이언트가 끊겼을때
       problemStompRef.current.onDisconnect = () => {
-        clearMessages();
+        clearStore();
       };
     }
-  }, [isConnected, setMessage, clearMessages, sessionKey, problemStompRef]);
+  }, [isConnected, setMessage, clearStore, sessionKey, problemStompRef]);
 }

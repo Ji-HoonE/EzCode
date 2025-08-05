@@ -1,19 +1,23 @@
 import { ProblemId } from '@/shared';
 import { useMutation } from '@tanstack/react-query';
-import { getProblemIdPath } from '@/api/constants/api.constants';
+import { API_CONSTANTS, getProblemIdPath } from '@/api/constants/api.constants';
 import ApiHelper from '@/api/client/api';
 import {
   ISubmissionReviewRequest,
   ISubmissionReviewResponse,
   ISubmitCodeRequest,
 } from './submitCode.mutation.type';
+import { useProblemWebSocketStoreActions } from '@/features/submitCode/submission/model/useProblemWebSocketStore';
 
 //문제 제출하기
-export const useSubmissionForResultMutationT = (problemId: ProblemId) => {
+export const useSubmissionForResultMutation = (problemId: ProblemId) => {
   const path = getProblemIdPath(problemId, 'submit-ready');
+  const { setStatus } = useProblemWebSocketStoreActions();
+
   return useMutation({
     mutationFn: async (params: ISubmitCodeRequest) => {
       const response = await ApiHelper.post(path, params);
+      if (response.data.status === API_CONSTANTS.CODE.OK) setStatus('isSubmitted', true);
       return response;
     },
   });

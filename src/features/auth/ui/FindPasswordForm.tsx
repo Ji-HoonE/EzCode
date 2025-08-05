@@ -1,56 +1,77 @@
 'use client';
-import { useFindInfo } from "@/features/auth/hooks/useFindInfo";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
-
+import { useFindInfo } from '@/features/auth/hooks/useFindInfo';
+import { Mail } from 'lucide-react';
 
 const FindPasswordForm = () => {
-    const { findEmail, handleFindPasswordClick, handleChangeFindPassword, errorMessage, successMessage } = useFindInfo();
-    return (
-        <div className="flex flex-col w-full h-full items-center pt-[150px] justify-between">
-            <div className="flex flex-col items-center gap-[63px]">
+  const {
+    findEmail,
+    handleFindPasswordClick,
+    handleChangeFindPassword,
+    errorMessage,
+    successMessage,
+  } = useFindInfo();
+  return (
+    <div className="min-h-screen flex">
+      <div className="hidden lg:flex relative overflow-hidden flex justify-center w-full">
+        <div className="flex flex-col justify-center px-12 py-16 relative z-10">
+          <div className="max-w-md">
+            <h1 className="text-4xl font-bold text-white mb-6">
+              비밀번호를
+              <br />
+              <span className="text-[#00d084]">잊으셨나요?</span>
+            </h1>
+            <p className="text-gray-400 text-lg mb-8 leading-relaxed">
+              이메일을 인증하고 비밀번호를 변경하세요.
+            </p>
+          </div>
+        </div>
+        <div className="absolute inset-0 opacity-5">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fillRule='evenodd'%3E%3Cg fill='%2300d084' fillOpacity='1'%3E%3Ccircle cx='7' cy='7' r='1'/%3E%3Ccircle cx='37' cy='37' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            }}
+          />
+        </div>
+      </div>
+      <div className="w-full flex items-center justify-start p-4 lg:p-8">
+        <div className="w-full max-w-[600px]">
+          <div className="border border-gray-700 rounded-[10px] shadow-2xl lg:bg-gray-600/30 lg:backdrop-blur-sm">
+            <div className="p-6">
+              <div className="space-y-5 min-h-[150px]">
                 <div>
-                    <p className="text-[32px] font-[500]">비밀번호를 잊으셨나요?</p>
-                    <p className="text-[22px] font-[500]">이메일을 인증하고 비밀번호를 변경하세요.</p>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">이메일</label>
+                  <div className="relative">
+                    <Mail
+                      className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                      size={18}
+                    />
+                    <input
+                      type="email"
+                      placeholder="이메일을 입력하세요"
+                      id="findEmail"
+                      name="findEmail"
+                      value={findEmail}
+                      onChange={handleChangeFindPassword}
+                      className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-[10px] text-white placeholder-gray-500 focus:outline-none focus:border-[#00d084] focus:ring-1 focus:ring-[#00d084] transition-all duration-200"
+                    />
+                  </div>
                 </div>
-                <div className='border-[5px] border-white/75 rounded-[31px] p-[17px] w-[391px] h-[260px]'>
-                    <div className="w-full h-full flex flex-col items-center bg-[#FFFFFFF6] rounded-[10px] py-[34px] px-[33px]">
-                        <p className='text-[20px] font-[800] text-black'>이메일 인증</p>
-                        <div className="flex justify-start w-full">
-                            <p className='text-[15px] font-[500] text-black'>이메일</p>
-                        </div>
-                        <div className='flex flex-col w-full gap-[6px]'>
-                            <div className='bg-[#FFFFFFF6] text-black h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] relative'>
-                                <Image src="/icons/mailBlack.svg" alt="mail" width={16} height={16} priority className='absolute left-[11px] top-[9px]' />
-                                <input
-                                    type={'text'}
-                                    data-slot="input"
-                                    className={cn(
-                                        "bg-[#FFFFFFF6] text-black h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] w-full border-none",
-                                        "h-full pl-[35px] pr-[35px]",
-                                        "shadow-[inset_0_2px_2px_0_rgba(0,0,0,0.25)] text-[14px]"
-                                    )}
-                                    placeholder="이메일을 입력해주세요"
-                                    id="findEmail"
-                                    name="findEmail"
-                                    value={findEmail}
-                                    onChange={handleChangeFindPassword}
-                                />
-                            </div>
-                            {errorMessage && <div className='flex items-center gap-[4px]'><Image src="/icons/alert.svg" alt="error" width={10} height={10} priority className='mb-[2px]' /><span className='text-[12px] font-[700] text-[#EC3030]'>{errorMessage}</span></div>}
-                            {successMessage && <div className='flex items-center gap-[4px]'><span className='text-[10px] font-[700] text-[#00E35B]'>{successMessage}</span></div>}
-                            <button className='h-[37px] border-[1px] border-[#DEDEDE] rounded-[7px] bg-[#969696] text-white text-[15px] font-[800]' onClick={handleFindPasswordClick}>인증 메일 보내기</button>
-                        </div>
-                    </div>
-                </div>
+                {errorMessage && <div className="text-red-500 text-sm">{errorMessage}</div>}
+                {successMessage && <div className="text-green-500 text-sm">{successMessage}</div>}
+                <button
+                  className="w-full bg-[#214d35] text-white py-3 rounded-[10px] font-medium hover:bg-[#276e48] active:bg-[#1e3e2c] active:scale-[0.98] transition-all duration-200 shadow-lg hover:shadow-xl"
+                  onClick={handleFindPasswordClick}
+                >
+                  인증 메일 전송
+                </button>
+              </div>
             </div>
-            <div className='w-full flex justify-center items-center gap-[47px]'>
-                <p className='text-[13px] font-[400] text-[#FFFFFF] leading-[33px]'>이용약관</p>
-                <p className='text-[13px] font-[400] text-[#FFFFFF] leading-[33px]'>개인정보 처리방침</p>
-                <p className='text-[13px] font-[400] text-[#FFFFFF] leading-[33px] underline underline-offset-[2px]'>FAQ/문의</p>
-            </div>
-        </div >
-    )
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default FindPasswordForm;

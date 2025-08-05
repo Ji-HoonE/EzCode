@@ -45,21 +45,25 @@ export default function Vote({ content, problemId, replyId }: IVoteProps) {
   }, [data]);
 
   return (
-    <div className="flex items-center">
-      <UpVoteIcon
-        status={voteStatus}
-        onClick={() => {
-          changeVoteStatus('UP');
-        }}
-      />
-      {voteCount.upvoteCount}
-      <DownVoteIcon
-        status={voteStatus}
-        onClick={() => {
-          changeVoteStatus('DOWN');
-        }}
-      />
-      {voteCount.downvoteCount}
-    </div>
+    <>
+      <div className="flex items-center gap-1">
+        <UpVoteIcon
+          status={voteStatus}
+          onClick={() => {
+            changeVoteStatus('UP');
+          }}
+        />
+        {voteCount.upvoteCount}
+      </div>
+      <div className="flex items-center gap-1">
+        <DownVoteIcon
+          status={voteStatus}
+          onClick={() => {
+            changeVoteStatus('DOWN');
+          }}
+        />
+        {voteCount.downvoteCount}
+      </div>
+    </>
   );
 }

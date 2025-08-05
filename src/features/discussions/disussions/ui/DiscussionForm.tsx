@@ -1,3 +1,4 @@
+'use client';
 import { Button } from '@/components/ui/button';
 import {
   DISCUSSION_CREATE_VALUE,
@@ -7,14 +8,11 @@ import {
 } from '@/entities/discussions';
 import { TDiscussionContentMutationResponse } from '@/entities/discussions/discussions/model/mutation/discussions.types';
 
-import {
-  ILanguageSelectOption,
-  INITIAL_LANG,
-  LanguageSelector,
-  ProblemId,
-  ProblemLanguageType,
-} from '@/shared';
-import { LANGUAGE } from '@/shared/types/problem.type';
+import { INITIAL_LANG, ProblemId, ProblemLanguageType } from '@/shared';
+import { LANGUAGE_SELECTOR_OPTIONS } from '@/shared/lib/codemirror';
+import { LANGUAGE, LANGUAGE_ID } from '@/shared/types/problem.type';
+import { OptionType, Select } from '@/shared/ui/select/Select';
+import clsx from 'clsx';
 import { ChangeEvent, useState } from 'react';
 
 interface ICreateDiscussionInputProps {
@@ -45,6 +43,7 @@ export default function DiscussionForm({
     discussion?.discussionId || 0
   );
   const buttonText = mode === 'create' ? '토론 생성' : '토론 수정';
+  const typedOptions = LANGUAGE_SELECTOR_OPTIONS as OptionType[];
 
   const submitDiscussionForm = () => {
     if (mode === 'create') {
@@ -57,25 +56,40 @@ export default function DiscussionForm({
     }
   };
 
+  const selectLanguage = (value: string) => {
+    const typedValue = value as ProblemLanguageType;
+    setCurrentLanguage(typedValue);
+    setContentForm((prev) => ({ ...prev, languageId: LANGUAGE_ID[typedValue] }));
+  };
+
   return (
-    <div className="relative">
-      <LanguageSelector
-        currentLanguage={currentLanguage}
-        onSelect={(option: ILanguageSelectOption) => {
-          setCurrentLanguage(option.value);
-          setContentForm((prev) => ({ ...prev, languageId: option.id }));
-        }}
+    <div className="relative flex flex-col gap-3">
+      <Select
+        title="언어 선택"
+        value={currentLanguage}
+        option={typedOptions}
+        setValue={(value) => selectLanguage(value)}
       />
       <textarea
-        className="border-1 w-full h-[100px]"
+        className={clsx(
+          'w-full h-[100px] resize-none',
+          mode === 'create' ? 'border-1 ' : 'border-none'
+        )}
         value={contentForm.content}
         onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
           setContentForm((prev) => ({ ...prev, content: e.target.value }))
         }
       />
-      <Button className="absolute right-4 top-5" onClick={() => submitDiscussionForm()}>
-        {buttonText}
-      </Button>
+      <div className="absolute right-4 top-[calc(50%-5px)] flex gap-2">
+        <Button className="" onClick={() => submitDiscussionForm()}>
+          {buttonText}
+        </Button>
+        {mode === 'edit' && (
+          <Button className="" onClick={() => changeEditMode?.(false)}>
+            취소
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,12 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
 import CodeEditor from './CodeEditor';
-import { INITIAL_SOURCE_CODE_DATA } from '@/shared/lib/codemirror/codeMirror.Docs';
 import { useProblemWebSocketStoreActions } from '../model/useProblemWebSocketStore';
-import { ISourceCode } from '@/entities/submitCode/submission/model/mutation/submitCode.mutation.type';
 import TerminalOutput from './TerminalOutput';
 import TerminalPanel from './TerminalPanel';
-import useAccessToken from '@/shared/hooks/useAuthToken';
+import { INITIAL_SOURCE_CODE_DATA, useAccessToken } from '@/shared';
+import { ISourceCode } from '@/entities/submitCode';
 
 interface IProblemWorksSectionProps {
   problemId: string;
@@ -41,20 +40,17 @@ export default function ProblemWorksSection({
   }, [sessionKey, accessToken]);
 
   return (
-    <section className="flex flex-col">
+    <section className="flex flex-col gap-10 h-full">
       <CodeEditor onChangeSourceCodeData={handleChangeSourceCodeData} />
-      <div className="h-[1px] w-full bg-white" />
-      <div className="flex flex-1">
-        <>
-          <TerminalOutput mode={mode} sourceCodeData={sourceCodeData} />
-          <TerminalPanel
-            problemId={problemId}
-            sourceCodeData={sourceCodeData}
-            setMode={(mode) => setMode(mode)}
-            mode={mode}
-            githubUrl={githubUrl}
-          />
-        </>
+      <div className="flex flex-1 flex-col bg-secondary-background rounded-[10px] shadow-lg ">
+        <TerminalPanel
+          problemId={problemId}
+          sourceCodeData={sourceCodeData}
+          setMode={(mode) => setMode(mode)}
+          mode={mode}
+          githubUrl={githubUrl}
+        />
+        <TerminalOutput mode={mode} sourceCodeData={sourceCodeData} />
       </div>
     </section>
   );

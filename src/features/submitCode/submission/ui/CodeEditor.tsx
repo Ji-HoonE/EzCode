@@ -5,12 +5,13 @@ import { useState } from 'react';
 import {
   CODEMIRROR_EXTENSIONS,
   CodeMirrorBasicSetup,
-  ILanguageSelectOption,
   INITIAL_LANG,
   INITIAL_VALUE,
-  LanguageSelector,
   ProblemLanguageType,
 } from '@/shared';
+import { OptionType, Select } from '@/shared/ui/select/Select';
+import { LANGUAGE_ID } from '@/shared/types/problem.type';
+import { LANGUAGE_SELECTOR_OPTIONS } from '@/shared/lib/codemirror';
 
 interface ICodeEditorProps {
   onChangeSourceCodeData: (key: string, value: string | number) => void;
@@ -19,19 +20,22 @@ interface ICodeEditorProps {
 export default function CodeEditor({ onChangeSourceCodeData }: ICodeEditorProps) {
   const [currentLanguage, setCurrentLanguage] = useState<ProblemLanguageType>(INITIAL_LANG);
 
-  const changeSourceCodeData = (option: ILanguageSelectOption) => {
-    setCurrentLanguage(option.value);
-    onChangeSourceCodeData('languageId', option.id);
-    onChangeSourceCodeData('sourceCode', INITIAL_VALUE[option.value as keyof typeof INITIAL_VALUE]);
+  const typedOptions = LANGUAGE_SELECTOR_OPTIONS as OptionType[];
+  const changeSourceCodeData = (value: string) => {
+    const typedValue = value as ProblemLanguageType;
+
+    setCurrentLanguage(typedValue);
+    onChangeSourceCodeData('languageId', LANGUAGE_ID[typedValue]);
+    onChangeSourceCodeData('sourceCode', INITIAL_VALUE[typedValue]);
   };
 
   return (
-    <section className="flex-1 h-full">
-      <LanguageSelector
-        currentLanguage={currentLanguage}
-        onSelect={(option) => {
-          changeSourceCodeData(option);
-        }}
+    <section className="flex-1 flex flex-col h-full gap-4">
+      <Select
+        title="언어 선택"
+        value={currentLanguage}
+        option={typedOptions}
+        setValue={(value) => changeSourceCodeData(value)}
       />
       <CodeMirror
         basicSetup={CodeMirrorBasicSetup}
