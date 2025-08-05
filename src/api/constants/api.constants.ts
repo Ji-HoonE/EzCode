@@ -46,6 +46,8 @@ export const API_URL = {
   RANK: {
     WEEKLY: '/rankings/weekly',
     ALL_TIME: '/rankings/all-time',
+    LASTWEEK: '/rankings/last-week',
+    AROUNDEME: '/rankings/me/around',
   },
   NOTIFICATIONS: '/notifications',
 };
