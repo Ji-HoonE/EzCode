@@ -37,3 +37,7 @@ export const AUTH_ZOD_SCHEMA = z
     path: ['passwordCheck'],
     message: M.AUTH.INCORRECT_PASSWORD_CHECK,
   });
+
+export const TEST_SCHEMA = z.object({
+  email: z.string().nonempty(M.AUTH.EMPTY_EMAIL).email(M.AUTH.INVALID_EMAIL_FORMAT),
+});

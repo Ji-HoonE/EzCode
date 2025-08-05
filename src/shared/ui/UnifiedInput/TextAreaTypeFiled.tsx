@@ -1,10 +1,9 @@
 import { defaultTextArea } from './unifiedInput.default.style';
-import { PLACEHOLDER } from '@/constants/placeholder';
-import { TZodKey } from '@/lib/zod/types';
+import { NO_SCHEMA_PLACEHOLDER } from '@/constants/placeholder';
 import { twMerge } from 'tailwind-merge';
 
 interface Props extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  name: TZodKey;
+  name: string;
 }
 
 export default function TextAreaTypeFiled({ ...props }: Props) {
@@ -14,7 +13,7 @@ export default function TextAreaTypeFiled({ ...props }: Props) {
       name={name}
       value={value}
       onChange={onChange}
-      placeholder={PLACEHOLDER[name]}
+      placeholder={NO_SCHEMA_PLACEHOLDER[name]}
       className={twMerge(defaultTextArea, className)}
       {...rest}
     />

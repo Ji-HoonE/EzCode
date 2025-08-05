@@ -1,59 +1,56 @@
 import clsx from 'clsx';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import * as S from './unifiedInput.default.style';
-import { useInputTypeFiledStatus } from '@/shared/hooks/UnifiedInput/useInputTypeFiledStatus';
-import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import { useInputTypeFiledStatus } from '@/shared/hooks/unifiedInput/useInputTypeFiledStatus';
+import { useFormContext } from 'react-hook-form';
 import { TZodKey } from '@/lib/zod/types';
-import { TAuthSchemaRegister } from '@/entities/auth/model/authZodSchemas';
+import { SCHEMA_PLACEHOLDER } from '@/constants/placeholder';
 
 interface IInputTypeFiledProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'name'> {
-  name: TZodKey;
+  name: TZodKey | string;
   leftSlot?: ReactNode;
   rightSlot?: ReactNode;
-  isError: boolean;
-  setValue: UseFormSetValue<TAuthSchemaRegister>;
-  register: UseFormRegister<TAuthSchemaRegister>;
 }
 
-export default function InputTypeFiled({
-  className,
-  name,
-  register,
-  isError,
-  setValue,
-  ...props
-}: IInputTypeFiledProps) {
-  const { leftSlot, rightSlot, ...rest } = props;
+export default function InputTypeFiled({ leftSlot, rightSlot, ...props }: IInputTypeFiledProps) {
+  const { name, className, ...rest } = props;
   const { isFocused, showSuccess, handleFocus, handleBlur } = useInputTypeFiledStatus({});
-  const { onChange, onBlur, ref } = register(name);
+  // const { onChange, onBlur, ref } = register?.(name as TZodKey);
+
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+  const error = errors[name]?.message as string | undefined;
 
   return (
-    <div
-      className={clsx(
-        S.defaultInput,
-        (isFocused || showSuccess) && 'border-secondary',
-        isError && 'border-dangerous',
-        className
-      )}
-      tabIndex={0}
-    >
-      {leftSlot && <>{leftSlot}</>}
-      <input
-        ref={ref}
-        placeholder={props.placeholder}
-        className={clsx('w-full', S.defaultPlaceHolder)}
-        onFocus={handleFocus}
-        onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-          onBlur(e);
-          handleBlur(e);
-        }}
-        onChange={(e) => {
-          onChange(e);
-          setValue(name, e.target.value, { shouldValidate: true });
-        }}
-        {...rest}
-      />
-      {rightSlot && <>{rightSlot}</>}
+    <div>
+      <div
+        className={clsx(
+          S.defaultInput,
+          (isFocused || showSuccess) && 'border-secondary',
+          // isError && 'border-dangerous',
+          className
+        )}
+        tabIndex={0}
+      >
+        {leftSlot && <>{leftSlot}</>}
+        <input
+          // ref={ref}
+          id={name}
+          placeholder={SCHEMA_PLACEHOLDER[name]}
+          {...register(name)}
+          className={clsx(S.defaultPlaceHolder, error ? 'border-red-500' : 'border-gray-300')}
+          // onFocus={handleFocus}
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            // onBlur(e);
+            handleBlur(e);
+          }}
+          {...rest}
+        />
+        {rightSlot && <>{rightSlot}</>}
+      </div>
+      {errors && <p className={S.defaultErrorMessage}>{error}</p>}
     </div>
   );
 }
