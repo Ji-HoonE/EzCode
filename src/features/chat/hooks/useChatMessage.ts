@@ -5,7 +5,7 @@ export default function useChatMessage(roomId: number) {
   const [value, setValue] = useState('');
   const { mutateAsync: createMessageMutation } = useCreateChatMessage(roomId);
 
-  const handleChangeMessage = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeMessage = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
   };
 

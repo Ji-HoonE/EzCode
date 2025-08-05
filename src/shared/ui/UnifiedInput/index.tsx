@@ -22,8 +22,8 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement | HTMLTextArea
   errorMessage?: string;
   leftSlot?: ReactNode;
   rightSlot?: ReactNode;
-  register: UseFormRegister<TAuthSchemaRegister>;
-  setValue: UseFormSetValue<TAuthSchemaRegister>;
+  register?: UseFormRegister<TAuthSchemaRegister>;
+  setValue?: UseFormSetValue<TAuthSchemaRegister>;
   imageProps?: {
     previewImage: string;
     selectImage: (value: string) => void;
@@ -44,17 +44,17 @@ export default function UnifiedInput({
     switch (inputType) {
       case 'input':
         return (
-          <InputTypeFiled
-            placeholder={PLACEHOLDER[name]}
-            name={name}
-            setValue={setValue}
-            isError={!!errorMessage}
-            register={register}
-            {...props}
-          />
+          // <InputTypeFiled
+          //   name={name}
+          //   setValue={setValue}
+          //   isError={!!errorMessage}
+          //   register={register}
+          //   {...props}
+          // />
+          <input />
         );
       case 'textarea':
-        return <TextAreaTypeFiled placeholder={PLACEHOLDER[name]} {...props} />;
+        return <TextAreaTypeFiled name={name} {...props} />;
 
       case 'image':
         return <ImageTypeFiled imageProps={imageProps} className={props.className} />;
