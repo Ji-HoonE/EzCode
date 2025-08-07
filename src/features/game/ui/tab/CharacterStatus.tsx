@@ -11,6 +11,7 @@ import {
   Target,
   TrendingUp,
   Sword,
+  LucideIcon,
 } from 'lucide-react';
 import { useState } from 'react';
 import { MenuType } from '../GameModal';
@@ -59,7 +60,7 @@ const CharacterStatus = (props: ICharacterStatusProps) => {
   };
 
   const getStatIcon = (statName: string) => {
-    const iconMap: { [key: string]: any } = {
+    const iconMap: { [key: string]: LucideIcon } = {
       hp: Heart,
       mp: Zap,
       defense: Shield,

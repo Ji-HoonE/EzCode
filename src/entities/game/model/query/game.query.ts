@@ -1,5 +1,4 @@
 import { gameApi } from '@/api/service/game/game';
-import { IGetGameCharactersItemGamblingRequest } from '@/api/service/game/game.interface';
 import { useQuery } from '@tanstack/react-query';
 
 /** 캐릭터 스테이터스 조회 Api */
@@ -53,6 +52,8 @@ export const useGetGameCharactersPvpMatchingQuery = (isOpen: boolean) => {
       return response;
     },
     enabled: isOpen,
+    staleTime: 0,
+    gcTime: 0,
   });
 };
 
@@ -65,6 +66,8 @@ export const useGetGameCharactersPvpHistoryQuery = (isOpen: boolean) => {
       return response;
     },
     enabled: isOpen,
+    staleTime: 0,
+    gcTime: 0,
   });
 };
 

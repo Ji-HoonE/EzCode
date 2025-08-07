@@ -9,10 +9,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  useGetGameCharactersItemGamblingQuery,
-  useGetGameCharactersSkillGamblingQuery,
-} from '@/entities/game/model/mutation/game.mutation';
+import { useGetGameCharactersSkillGamblingQuery } from '@/entities/game/model/mutation/game.mutation';
 import {
   IGetGameCharactersItemGamblingResponse,
   IGetGameCharactersSkillGamblingResponse,
@@ -24,20 +21,20 @@ interface ItemSkillModalProps {
 }
 
 const ItemSkillModal = ({ isOpen, onClose }: ItemSkillModalProps) => {
-  const { mutateAsync } = useGetGameCharactersItemGamblingQuery();
+  // const { mutateAsync } = useGetGameCharactersItemGamblingQuery();
   const { mutateAsync: mutateAsyncSkill } = useGetGameCharactersSkillGamblingQuery();
 
   const [result, setResult] = useState<IGetGameCharactersItemGamblingResponse | null>(null);
   const [resultSkill, setResultSkill] = useState<IGetGameCharactersSkillGamblingResponse>();
 
-  const handleGamble = async (itemCategory: string) => {
-    try {
-      const response = await mutateAsync({ itemCategory: itemCategory });
-      setResult(response?.data?.result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleGamble = async () => {
+  //   try {
+  //     // const response = await mutateAsync({ itemCategory: itemCategory });
+  //     // setResult(response?.data?.result);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleGambleSkill = async () => {
     try {
@@ -62,15 +59,9 @@ const ItemSkillModal = ({ isOpen, onClose }: ItemSkillModalProps) => {
         <div className="flex flex-col gap-2">상점 설명</div>
         <div className="flex flex-col gap-2">
           Choose Category
-          <Button variant="outline" onClick={() => handleGamble('WEAPON')}>
-            WEAPON
-          </Button>
-          <Button variant="outline" onClick={() => handleGamble('DEFENCE')}>
-            DEFENSE
-          </Button>
-          <Button variant="outline" onClick={() => handleGamble('ACCESSORY')}>
-            ACCESSORY
-          </Button>
+          <Button variant="outline">WEAPON</Button>
+          <Button variant="outline">DEFENSE</Button>
+          <Button variant="outline">ACCESSORY</Button>
         </div>
         <div className="flex flex-col gap-2">
           Skill GAMBLE

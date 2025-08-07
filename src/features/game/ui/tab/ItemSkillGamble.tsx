@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Shield, Zap } from 'lucide-react';
 import { Star } from 'lucide-react';
 import { Sword } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   IGetGameCharactersItemGamblingResponse,
   IGetGameCharactersSkillGamblingResponse,

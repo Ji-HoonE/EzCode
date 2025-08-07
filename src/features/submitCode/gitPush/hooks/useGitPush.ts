@@ -25,6 +25,7 @@ export default function useGitPush() {
       }
       // setCurrentRepo(reposSelectOptions[0].label);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userRepos]);
 
   return {

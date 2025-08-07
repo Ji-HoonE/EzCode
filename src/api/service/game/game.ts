@@ -111,7 +111,7 @@ export const gameApi = {
   },
   /** 방어 PVP 기록 조회 Api  */
   getGameCharactersPvpHistory: async () => {
-    const response = await ApiHelper.get<IGetGameCharactersPvpHistoryResponse>(
+    const response = await ApiHelper.get<IGetGameCharactersPvpHistoryResponse[]>(
       API_URL.GAME.GET_GAME_CHARACTERS_PVP_HISTORY,
       { reqType: 'client' }
     );
