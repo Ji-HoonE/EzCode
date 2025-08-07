@@ -11,7 +11,7 @@ const GameModalButton = ({ hasCharacter }: { hasCharacter: boolean }) => {
     <>
       <Button
         onClick={() => setIsGameModalOpen(true)}
-        className="fixed bottom-6 right-6 bg-[#214d35] hover:bg-[#276e48] text-white rounded-full w-14 h-14 p-0 shadow-lg hover:shadow-xl transition-all duration-200"
+        className="bg-[#214d35] hover:bg-[#276e48] text-white rounded-full w-14 h-14 p-0 shadow-lg hover:shadow-xl transition-all duration-200"
       >
         <Gamepad2 className="w-6 h-6" />
       </Button>
