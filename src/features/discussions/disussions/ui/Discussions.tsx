@@ -48,6 +48,7 @@ export default function Discussions({ problemId }: IDiscussionProps) {
         observer.disconnect();
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchNextPage, hasNextPage]);
 
   if (isPending) {

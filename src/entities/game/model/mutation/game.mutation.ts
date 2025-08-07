@@ -1,6 +1,7 @@
 import { gameApi } from '@/api/service/game/game';
 import {
   IEquipItemRequest,
+  IEquipSkillRequest,
   IGetGameCharactersAdventureChoiceRequest,
   IGetGameCharactersItemGamblingRequest,
   IGetGameCharactersPvpMatchingAcceptRequest,
@@ -27,6 +28,25 @@ export const useGameCharacterEquipItemMutation = () => {
   });
 };
 
+/** 캐릭터 스킬 장착 뮤테이션 */
+export const useGameCharacterEquipSkillMutation = () => {
+  return useMutation({
+    mutationFn: async (param: IEquipSkillRequest) => {
+      const response = await gameApi.equipSkill(param);
+      return response;
+    },
+  });
+};
+
+/** 캐릭터 스킬 해제 뮤테이션 */
+export const useGameCharacterUnEquipSkillMutation = () => {
+  return useMutation({
+    mutationFn: async (param: IEquipItemRequest) => {
+      const response = await gameApi.unEquipSkill(param);
+      return response;
+    },
+  });
+};
 /** 배틀 수락 Api*/
 export const useGetGameCharactersPvpMatchingAcceptQuery = () => {
   return useMutation({
@@ -42,8 +62,9 @@ export const useGetGameCharactersItemGamblingQuery = () => {
   return useMutation({
     mutationFn: async (params: IGetGameCharactersItemGamblingRequest) => {
       const response = await gameApi.getGameCharactersItemGambling(params);
-      return response;
+      return response.data;
     },
+    gcTime: 0,
   });
 };
 
