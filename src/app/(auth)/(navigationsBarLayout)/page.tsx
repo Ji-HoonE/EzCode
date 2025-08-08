@@ -1,6 +1,5 @@
 import { PATHS } from '@/constants/paths';
-import { getAllTimeRankings } from '@/entities/rankings/actions/getRankings.actions';
-import Rankings from '@/entities/rankings/ui/Rankings';
+import { getAllTimeTop3Rankings, HomePageRanking } from '@/entities/rank';
 import LinkedButton from '@/shared/ui/linkedButton';
 import Image from 'next/image';
 
@@ -22,7 +21,7 @@ const PAGE_LINK_ATTRIBUTE = {
 };
 
 export default async function HomePage() {
-  const allTimeRanking = await getAllTimeRankings();
+  const allTimeTop3Ranking = await getAllTimeTop3Rankings();
   return (
     <main className="w-full h-full py-20 bg-background text-white">
       <section className="text-center container mx-auto px-4">
@@ -45,7 +44,7 @@ export default async function HomePage() {
           <LinkedButton props={PAGE_LINK_ATTRIBUTE.rank} />
         </div>
       </section>
-      <Rankings rankings={allTimeRanking} />
+      <HomePageRanking rankings={allTimeTop3Ranking} />
     </main>
   );
 }

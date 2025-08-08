@@ -1,25 +1,14 @@
 import Image from 'next/image';
-import { IRanking } from '../actions/getRankings.actions.types';
 import clsx from 'clsx';
+import { IRanking } from '../types';
+import { getRankIcon } from '../utils/getRankIcon';
 
 interface IRankingItem {
-  ranking?: IRanking;
-  badge?: string;
+  ranking: IRanking;
 }
 
-export default function RankingItem({ ranking, badge }: IRankingItem) {
-  if (!ranking) {
-    return (
-      <li className="flex items-center  p-4  transition-colors duration-200 space-x-4">
-        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm">
-          !
-        </div>
-        <div className="flex items-center space-x-2">
-          <span className="font-semibold text-white text-center w-full">아직 랭킹이 없습니다.</span>
-        </div>
-      </li>
-    );
-  }
+export default function RankingItem({ ranking }: IRankingItem) {
+  const badge = getRankIcon(ranking?.ranks);
 
   const { ranks, nickname, score } = ranking;
 
@@ -28,13 +17,10 @@ export default function RankingItem({ ranking, badge }: IRankingItem) {
       key={ranks}
       className={clsx(
         'flex items-center justify-between p-4 hover:bg-white/5 transition-colors duration-200 ',
-        ranks === 10 ? 'border-none' : 'border-b border-border_primary'
+        ranks === 3 ? 'border-none' : 'border-b border-border_primary'
       )}
     >
       <div className="flex items-center space-x-4">
-        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm">
-          {ranks}
-        </div>
         <div className="flex items-center space-x-2">
           {badge && <span className="text-lg">{badge}</span>}
           <span className="font-semibold text-white">{nickname}</span>

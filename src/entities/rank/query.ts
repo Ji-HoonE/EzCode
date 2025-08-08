@@ -1,8 +1,7 @@
 import ApiHelper from '@/api/client/api';
 import { API_URL } from '@/api/constants/api.constants';
 import { useQuery } from '@tanstack/react-query';
-import { TRankings } from '../rankings/actions/getRankings.actions.types';
-import { TAroundRanking } from './types';
+import { TAroundRanking, TRankings } from './types';
 
 export const useGetRankAlltime = () => {
   return useQuery({
