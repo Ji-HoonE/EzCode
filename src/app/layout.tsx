@@ -1,6 +1,7 @@
 import NavigationBar from '@/widgets/NavigationBar/ui';
 import './globals.css';
 import QueryProvider from '@/lib/QueryProvider';
+import { Toaster } from 'sonner';
 
 export default function RootLayout({
   children,
@@ -15,6 +16,7 @@ export default function RootLayout({
             <NavigationBar />
             <div className="w-full h-full px-15">{children}</div>
           </div>
+          <Toaster />
         </QueryProvider>
       </body>
     </html>

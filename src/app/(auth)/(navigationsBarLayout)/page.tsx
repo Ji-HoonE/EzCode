@@ -1,7 +1,6 @@
 import { PATHS } from '@/constants/paths';
 import { getAllTimeRankings } from '@/entities/rankings/actions/getRankings.actions';
 import Rankings from '@/entities/rankings/ui/Rankings';
-import ChatDialogOpenButton from '@/features/chat/ui/ChatDialogOpenButton';
 import LinkedButton from '@/shared/ui/linkedButton';
 import Image from 'next/image';
 
@@ -24,10 +23,8 @@ const PAGE_LINK_ATTRIBUTE = {
 
 export default async function HomePage() {
   const allTimeRanking = await getAllTimeRankings();
-
   return (
     <main className="w-full h-full py-20 bg-background text-white">
-      <ChatDialogOpenButton />
       <section className="text-center container mx-auto px-4">
         <div className="mb-8 flex items-center flex-col gap-6">
           <Image src="/icons/code.svg" alt="메인페이지 로고" width={80} height={80} />

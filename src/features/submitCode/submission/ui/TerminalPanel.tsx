@@ -7,10 +7,10 @@ import useProblemWebSocketStore, {
 } from '../model/useProblemWebSocketStore';
 import useSubscribeProblem from '../hooks/useSubscribeProblem';
 import GitPushDialog from '../../gitPush/ui/GitPushDialog';
-import { useRouter } from 'next/navigation';
-import { API_URL } from '@/api/constants/api.constants';
 import { ISourceCode, useSubmissionForResultMutation } from '@/entities/submitCode';
 import PanelButton from './PanelButton';
+import RequireLoginDialog from '@/shared/ui/LoginRequiredUi/RequireLoginDialog';
+import { useState } from 'react';
 
 interface TerminalPanelProps {
   problemId: ProblemId;
@@ -27,17 +27,16 @@ export default function TerminalPanel({
   githubUrl,
   sourceCodeData,
 }: TerminalPanelProps) {
-  const { sessionKey } = useProblemWebSocketStore();
-  const router = useRouter();
+  const [isRequiredDialogOpen, setIsRequiredDialogOpen] = useState(false);
+  const { sessionKey, token } = useProblemWebSocketStore();
 
   useSubscribeProblem(sessionKey);
 
   const { mutateAsync } = useSubmissionForResultMutation(problemId);
   const { clearResults } = useProblemWebSocketStoreActions();
-  const { token } = useProblemWebSocketStore();
 
   const submitForResult = () => {
-    if (!token) return router.push(API_URL.AUTH.SIGN_IN);
+    if (!token) return setIsRequiredDialogOpen(true);
     clearResults();
     mutateAsync({ ...sourceCodeData, sessionKey: sessionKey || '' });
     setMode('result');
@@ -71,6 +70,10 @@ export default function TerminalPanel({
         </PanelButton>
       </div>
       <GitPushDialog githubUrl={githubUrl} />
+      <RequireLoginDialog
+        isOpen={isRequiredDialogOpen}
+        onClose={() => setIsRequiredDialogOpen(false)}
+      />
     </div>
   );
 }
