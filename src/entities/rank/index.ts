@@ -1,2 +1,2 @@
-export { default as Rankings } from '@/entities/rank/ui/Rankings';
-export { getAllTimeRankings } from '@/entities/rank/actions/getRankings.actions';
+export { default as HomePageRanking } from '@/entities/rank/ui/HomePageRanking';
+export { getAllTimeTop3Rankings } from '@/entities/rank/actions/getRankings.actions';
