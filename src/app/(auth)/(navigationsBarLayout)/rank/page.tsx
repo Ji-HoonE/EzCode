@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Trophy, Medal, Award, Crown } from 'lucide-react';
+import { Trophy } from 'lucide-react';
 
 import {
   useGetRankAlltime,
@@ -12,17 +12,11 @@ import {
 import { Button } from '@/shared/ui/button/Button';
 
 import { TAroundRanking } from '@/entities/rank/types';
+import { getRankIcon } from '@/entities/rank/utils/getRankIcon';
 
 // 이번주 랭킹 데이터
 
 // 역대 랭킹 데이터
-
-const getRankIcon = (rank: number) => {
-  if (rank === 1) return <Crown className="w-6 h-6 text-yellow-400" />;
-  if (rank === 2) return <Medal className="w-6 h-6 text-gray-300" />;
-  if (rank === 3) return <Award className="w-6 h-6 text-amber-600" />;
-  return <span className="text-lg font-bold text-[#00d084]">#{rank}</span>;
-};
 
 // const getTierColor = (tier: string) => {
 //   switch (tier) {

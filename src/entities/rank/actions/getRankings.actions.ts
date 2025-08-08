@@ -2,16 +2,7 @@
 
 import ApiHelper from '@/api/client/api';
 import { API_URL } from '@/api/constants/api.constants';
-import { TRankings } from './getRankings.actions.types';
-
-/**이번주 랭킹*/
-export const getWeeklyRankings = async () => {
-  const res = await ApiHelper.get<TRankings>(API_URL.RANK.WEEKLY, {
-    reqType: 'server',
-    cache: 'force-cache',
-  });
-  return res.data.result;
-};
+import { TRankings } from '../types';
 
 /**종합 랭킹*/
 export const getAllTimeRankings = async () => {
@@ -19,5 +10,5 @@ export const getAllTimeRankings = async () => {
     reqType: 'server',
     cache: 'force-cache',
   });
-  return res.data.result;
+  return res.data.result.slice(0, 3);
 };
