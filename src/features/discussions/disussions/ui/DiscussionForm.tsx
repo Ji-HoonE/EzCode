@@ -12,7 +12,7 @@ import { INITIAL_LANG, ProblemId, ProblemLanguageType } from '@/shared';
 import { LANGUAGE_SELECTOR_OPTIONS } from '@/shared/lib/codemirror';
 import { LANGUAGE, LANGUAGE_ID } from '@/shared/types/problem.type';
 import { OptionType, Select } from '@/shared/ui/select/Select';
-import UnifiedInput from '@/shared/ui/unifiedInput';
+import UnifiedInput from '@/shared/ui/InputFiled';
 import { ChangeEvent, useState } from 'react';
 
 interface ICreateDiscussionInputProps {

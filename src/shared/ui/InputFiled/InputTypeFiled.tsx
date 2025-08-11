@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import { ReactNode } from 'react';
 import * as S from './unifiedInput.default.style';
-import { useInputTypeFiledStatus } from '@/shared/hooks/unifiedInput/useInputTypeFiledStatus';
 import { useFormContext } from 'react-hook-form';
 import { TZodKey } from '@/lib/zod/types';
 import { SCHEMA_PLACEHOLDER } from '@/constants/placeholder';
+import { useInputTypeFiledStatus } from '@/shared/hooks/UnifiedInput/useInputTypeFiledStatus';
 
 interface IInputTypeFiledProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'name'> {
   name: TZodKey | string;

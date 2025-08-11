@@ -3,7 +3,7 @@
 import { ChatRoomId } from '../../types';
 import useChatMessage from '../../hooks/useChatMessage';
 import { Send } from 'lucide-react';
-import UnifiedInput from '@/shared/ui/unifiedInput';
+import UnifiedInput from '@/shared/ui/InputFiled';
 
 export default function ChatInput({ chatRoomId }: { chatRoomId: ChatRoomId }) {
   const { value, handleChangeMessage, createMessage, handleKeyPress } = useChatMessage(

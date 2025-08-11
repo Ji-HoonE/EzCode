@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { ProblemId } from '@/shared';
 import useReply from '../lib/useReply';
 import { Send } from 'lucide-react';
-import UnifiedInput from '@/shared/ui/unifiedInput';
+import UnifiedInput from '@/shared/ui/InputFiled';
 
 interface ReplyFormProps {
   problemId: ProblemId;
