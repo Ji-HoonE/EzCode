@@ -4,7 +4,6 @@ import { useState, useCallback } from 'react';
 interface IUseInputTypeFiledStatus {
   isSuccess?: boolean;
   isFailure?: boolean;
-  // isSubmit?: boolean;
   onFocus?: React.FocusEventHandler<HTMLInputElement>;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
 }

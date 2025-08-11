@@ -1,4 +1,5 @@
-import { M } from '@/lib/zod/schema_message';
+import { M } from '@/shared/lib/zod/messages';
+import { EMAIL, ID, Name, PASSWORD, PASSWORD_CHECK } from '@/shared/lib/zod/primitives';
 import z from 'zod';
 
 /**자동 타입 추론 */
@@ -9,35 +10,18 @@ export type TAuthSchemaRegister = z.infer<typeof AUTH_ZOD_SCHEMA>;
 
 export const AUTH_ZOD_SCHEMA = z
   .object({
-    name: z
-      .string()
-      .min(1, { message: M.AUTH.EMPTY_NAME })
-      .max(10, { message: M.AUTH.OVER_LENGTH_NAME }),
-
-    userId: z
-      .string()
-      .nonempty(M.AUTH.EMPTY_ID)
-      .regex(/^[a-z0-9]{4,30}$/, M.AUTH.INVALID_ID_FORMAT),
-
-    email: z.string().nonempty(M.AUTH.EMPTY_EMAIL).email(M.AUTH.INVALID_EMAIL_FORMAT),
-
-    password: z
-      .string()
-      .nonempty(M.AUTH.EMPTY_PASSWORD)
-      .regex(
-        /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/,
-        M.AUTH.INVALID_PASSWORD_FORMAT
-      ),
-
-    passwordCheck: z.string().nonempty(M.AUTH.EMPTY_PASSWORD_CHECK),
-
-    age: z.number().min(20, { message: M.AUTH.AGE_LIMIT }),
+    name: Name,
+    userId: ID,
+    email: EMAIL,
+    password: PASSWORD,
+    passwordCheck: PASSWORD_CHECK,
   })
   .refine((data) => data.password === data.passwordCheck, {
     path: ['passwordCheck'],
-    message: M.AUTH.INCORRECT_PASSWORD_CHECK,
+    message: M.PASSWORD_CHECK.INCORRECT_PASSWORD_CHECK,
   });
 
 export const TEST_SCHEMA = z.object({
-  email: z.string().nonempty(M.AUTH.EMPTY_EMAIL).email(M.AUTH.INVALID_EMAIL_FORMAT),
+  email: EMAIL,
+  password: PASSWORD,
 });

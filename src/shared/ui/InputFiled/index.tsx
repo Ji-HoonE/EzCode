@@ -1,11 +1,11 @@
 'use client';
-import { clsx } from 'clsx';
 import { InputHTMLAttributes, ReactNode } from 'react';
 import * as S from './unifiedInput.default.style';
 import InputTypeFiled from './InputTypeFiled';
 import TextAreaTypeFiled from './TextAreaTypeFiled';
 import ImageTypeFiled from './ImageTypeFiled';
-import { TZodKey } from '@/lib/zod/types';
+import { TZodKey } from '@/shared/lib/zod/types';
+import { cn } from '@/lib/utils';
 
 /**
  * @description name - placeholder,validate 파일에 의해 name에 따라 선택됩니다.
@@ -45,8 +45,8 @@ export default function UnifiedInput({ inputType, label, errorMessage, ...props 
   };
 
   return (
-    <div className={clsx('flex h-full w-full flex-col items-start gap-2')}>
-      {label && <label className={clsx(S.defaultLabel, props.labelStyle)}>{label}</label>}
+    <div className={cn('flex h-full w-full flex-col items-start gap-2')}>
+      {label && <label className={cn(S.defaultLabel, props.labelStyle)}>{label}</label>}
       <div className="flex h-full w-full flex-col gap-2">{renderInputFiled()}</div>
     </div>
   );

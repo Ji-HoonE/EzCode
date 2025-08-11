@@ -1,4 +1,4 @@
-import { TZodKey } from '@/lib/zod/types';
+import { TZodKey } from '@/shared/lib/zod/types';
 
 /**스카미가 존재하는 플레이스홀더 */
 export const SCHEMA_PLACEHOLDER: Record<TZodKey | string, string> = {
