@@ -9,6 +9,8 @@ export const useGetGameCharactersStatusQuery = (isOpen: boolean) => {
       const response = await gameApi.getGameCharacters('client');
       return response;
     },
+    staleTime: 0,
+    gcTime: 0,
     enabled: isOpen,
   });
 };
@@ -21,6 +23,8 @@ export const useGetGameCharactersInventoriesQuery = (isOpen: boolean) => {
       const response = await gameApi.getGameCharactersInventories();
       return response;
     },
+    staleTime: 0,
+    gcTime: 0,
     enabled: isOpen,
   });
 };
@@ -34,6 +38,8 @@ export const useGetGameCharactersSkillsQuery = (isOpen: boolean) => {
       return response;
     },
     enabled: isOpen,
+    staleTime: 0,
+    gcTime: 0,
   });
 };
 
@@ -46,6 +52,8 @@ export const useGetGameCharactersPvpMatchingQuery = (isOpen: boolean) => {
       return response;
     },
     enabled: isOpen,
+    staleTime: 0,
+    gcTime: 0,
   });
 };
 
@@ -58,6 +66,8 @@ export const useGetGameCharactersPvpHistoryQuery = (isOpen: boolean) => {
       return response;
     },
     enabled: isOpen,
+    staleTime: 0,
+    gcTime: 0,
   });
 };
 
@@ -70,5 +80,18 @@ export const useGetGameCharactersAdventureQuery = (isOpen: boolean) => {
       return response;
     },
     enabled: isOpen,
+    staleTime: 0,
+    gcTime: 0,
   });
 };
+
+// /** 스킬 뽑기 Api */
+// export const useGetGameCharactersSkillGamblingQuery = () => {
+//   return useQuery({
+//     queryKey: ['characterSkillGambling'],
+//     queryFn: async () => {
+//       const response = await gameApi.getGameCharactersSkillGambling();
+//       return response;
+//     },
+//   });
+// };

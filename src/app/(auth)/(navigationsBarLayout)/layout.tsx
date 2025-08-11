@@ -1,4 +1,5 @@
 import AuthProvider from '@/lib/AuthProvider';
+import { GlobalFloatingWidget } from '@/widgets/globalFloatingWidget/ui';
 
 export default function RootLayout({
   children,
@@ -12,6 +13,7 @@ export default function RootLayout({
       <div className="w-full h-full">
         {chatDialog}
         <div className="w-full h-full">{children}</div>
+        <GlobalFloatingWidget />
       </div>
     </AuthProvider>
   );

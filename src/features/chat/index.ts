@@ -1,5 +1,5 @@
 //ui
-export { default as ChatTriggerButton } from './ui/ChatDialogOpenButton';
+export { default as ChatTriggerButton } from '../../widgets/globalFloatingWidget/ui/ChatDialogOpenButton';
 export { default as ChatInput } from './ui/chatRoom/ChatInput';
 export { default as CreateChatRoom } from './ui/CreateChatRoomDialog';
 export { default as ChatRoom } from './ui/chatRoom/index';

@@ -2,6 +2,7 @@ import ApiHelper, { ReqType } from '@/api/client/api';
 import {
   ICheckCharacterResponse,
   IEquipItemRequest,
+  IEquipSkillRequest,
   IGetGameCharactersAdventureChoiceRequest,
   IGetGameCharactersAdventureChoiceResponse,
   IGetGameCharactersAdventureResponse,
@@ -63,6 +64,20 @@ export const gameApi = {
     });
     return response;
   },
+  /** 캐릭터 스킬 장착 Api */
+  equipSkill: async (param: IEquipSkillRequest) => {
+    const response = await ApiHelper.patch<ICodeResponse>(API_URL.GAME.EQUIP_SKILL, param, {
+      reqType: 'client',
+    });
+    return response;
+  },
+  /** 캐릭터 스킬 해제 Api */
+  unEquipSkill: async (param: IEquipItemRequest) => {
+    const response = await ApiHelper.patch<ICodeResponse>(API_URL.GAME.UN_EQUIP_SKILL, param, {
+      reqType: 'client',
+    });
+    return response;
+  },
   /** 캐릭터 스킬 조회 Api */
   getGameCharactersSkills: async () => {
     const response = await ApiHelper.get<IGetGameCharactersSkillsResponse[]>(
@@ -96,7 +111,7 @@ export const gameApi = {
   },
   /** 방어 PVP 기록 조회 Api  */
   getGameCharactersPvpHistory: async () => {
-    const response = await ApiHelper.get<IGetGameCharactersPvpHistoryResponse>(
+    const response = await ApiHelper.get<IGetGameCharactersPvpHistoryResponse[]>(
       API_URL.GAME.GET_GAME_CHARACTERS_PVP_HISTORY,
       { reqType: 'client' }
     );

@@ -1,4 +1,4 @@
-export type TRankings = IRanking[];
+export type TAroundRanking = IRanking & { isMe: boolean };
 
 export interface IRanking {
   userId: number;
@@ -6,3 +6,5 @@ export interface IRanking {
   ranks: number;
   score: number;
 }
+
+export type TRankings = IRanking[];
