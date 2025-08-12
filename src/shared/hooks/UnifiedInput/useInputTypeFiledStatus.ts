@@ -1,37 +1,29 @@
 'use client';
 import { useState, useCallback } from 'react';
+import { FieldErrors } from 'react-hook-form';
 
 interface IUseInputTypeFiledStatus {
-  isSuccess?: boolean;
-  isFailure?: boolean;
-  onFocus?: React.FocusEventHandler<HTMLInputElement>;
-  onBlur?: React.FocusEventHandler<HTMLInputElement>;
+  errors: FieldErrors;
+  name: string;
 }
 
-export function useInputTypeFiledStatus({ ...props }: IUseInputTypeFiledStatus) {
+export function useInputTypeFiledStatus({ errors, name }: IUseInputTypeFiledStatus) {
   const [isFocused, setIsFocused] = useState(false);
   const [isBlur, setIsBlur] = useState(false);
 
-  const { isSuccess, isFailure, onFocus, onBlur } = props;
+  const isFailure = !!(errors[name]?.message as string | undefined);
 
-  const handleFocus = useCallback(
-    (e: React.FocusEvent<HTMLInputElement>) => {
-      setIsFocused(true);
-      onFocus?.(e);
-    },
-    [onFocus]
-  );
+  const handleFocus = useCallback(() => {
+    setIsFocused(true);
+    setIsBlur(false);
+  }, []);
 
-  const handleBlur = useCallback(
-    (e: React.FocusEvent<HTMLInputElement>) => {
-      setIsFocused(false);
-      setIsBlur(true);
-      onBlur?.(e);
-    },
-    [onBlur]
-  );
+  const handleBlur = useCallback(() => {
+    setIsFocused(false);
+    setIsBlur(true);
+  }, []);
 
-  const showSuccess = isBlur && isSuccess === true;
+  const showSuccess = isBlur && !isFailure === true;
   const showError = isBlur && isFailure === true;
 
   return {
@@ -42,12 +34,4 @@ export function useInputTypeFiledStatus({ ...props }: IUseInputTypeFiledStatus) 
     handleFocus,
     handleBlur,
   };
-}
-export interface IInputTypeFiledStatus {
-  isFocused: boolean;
-  isTouched: boolean;
-  showSuccess: boolean;
-  showError: boolean;
-  handleFocus: (e: React.FocusEvent<HTMLInputElement>) => void;
-  handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
 }

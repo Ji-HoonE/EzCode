@@ -35,7 +35,6 @@ export default function UnifiedInput({ inputType, label, errorMessage, ...props 
         return <InputTypeFiled name={name} {...rest} />;
       case 'textarea':
         return <TextAreaTypeFiled name={name} {...rest} />;
-
       case 'image':
         return <ImageTypeFiled imageProps={imageProps} className={props.className} />;
 

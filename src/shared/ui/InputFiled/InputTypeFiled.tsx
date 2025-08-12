@@ -19,9 +19,11 @@ export default function InputTypeFiled({ leftSlot, rightSlot, ...props }: IInput
     formState: { errors },
   } = useFormContext();
 
-  const { isFocused, showSuccess, showError, handleFocus, handleBlur } = useInputTypeFiledStatus({
-    ...register,
-  });
+  const { isFocused, isBlur, showSuccess, showError, handleFocus, handleBlur } =
+    useInputTypeFiledStatus({
+      errors,
+      name,
+    });
 
   const error = errors[name]?.message as string | undefined;
 
@@ -31,6 +33,7 @@ export default function InputTypeFiled({ leftSlot, rightSlot, ...props }: IInput
         className={cn(
           S.defaultInputArea,
           (isFocused || showSuccess) && 'border-secondary',
+          isBlur && 'border-gray-700',
           showError && 'border-dangerous',
           className
         )}
@@ -43,8 +46,8 @@ export default function InputTypeFiled({ leftSlot, rightSlot, ...props }: IInput
           {...register(name)}
           className={cn(S.defaultInput, error ? 'border-red-500' : 'border-gray-300')}
           onFocus={handleFocus}
-          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-            handleBlur(e);
+          onBlur={() => {
+            handleBlur();
           }}
           {...rest}
         />
