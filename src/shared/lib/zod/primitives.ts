@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { M } from './messages';
 
+/**@description 각각의 validate를 작성하고, z.object로 스키마 생성시에는 여기서 import 해서 사용합니다. */
 export const Name = z
   .string()
   .min(1, { message: M.NAME.EMPTY_NAME })

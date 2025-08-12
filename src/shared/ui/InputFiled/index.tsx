@@ -7,16 +7,11 @@ import ImageTypeFiled from './ImageTypeFiled';
 import { TZodKey } from '@/shared/lib/zod/types';
 import { cn } from '@/lib/utils';
 
-/**
- * @description name - placeholder,validate 파일에 의해 name에 따라 선택됩니다.
- */
-
 interface Props extends Omit<InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>, 'name'> {
   inputType: 'textarea' | 'image' | 'input';
   name: TZodKey | string;
   label?: string;
   labelStyle?: string;
-  errorMessage?: string;
   leftSlot?: ReactNode;
   rightSlot?: ReactNode;
 
@@ -26,8 +21,8 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement | HTMLTextArea
   };
 }
 
-export default function UnifiedInput({ inputType, label, errorMessage, ...props }: Props) {
-  const { name, imageProps, ...rest } = props;
+export default function UnifiedInput({ inputType, label, ...props }: Props) {
+  const { name, imageProps, labelStyle, ...rest } = props;
 
   const renderInputFiled = () => {
     switch (inputType) {
@@ -36,7 +31,7 @@ export default function UnifiedInput({ inputType, label, errorMessage, ...props 
       case 'textarea':
         return <TextAreaTypeFiled name={name} {...rest} />;
       case 'image':
-        return <ImageTypeFiled imageProps={imageProps} className={props.className} />;
+        return <ImageTypeFiled imageProps={imageProps} className={rest.className} />;
 
       default:
         return null;
@@ -45,7 +40,7 @@ export default function UnifiedInput({ inputType, label, errorMessage, ...props 
 
   return (
     <div className={cn('flex h-full w-full flex-col items-start gap-2')}>
-      {label && <label className={cn(S.defaultLabel, props.labelStyle)}>{label}</label>}
+      {label && <label className={cn(S.defaultLabel, labelStyle)}>{label}</label>}
       <div className="flex h-full w-full flex-col gap-2">{renderInputFiled()}</div>
     </div>
   );

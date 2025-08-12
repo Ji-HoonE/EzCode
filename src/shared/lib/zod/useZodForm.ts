@@ -12,6 +12,7 @@ export const useZodForm = (schemaName: z.ZodObject, names: TZodKey[]) => {
   const dynamicDefaultValue: Record<string, string | number> = {};
 
   for (let el of names) {
+    if (names.length < 1) throw new Error('useZodForm의 names를 넘겨주세요');
     dynamicDefaultValue[el] = ZOD_DEFAULT_VALUES[el];
   }
 

@@ -1,4 +1,5 @@
 /**@notice e.g.) import {M} from './...' 해서 사용해주세요! */
+/**@notice 에러 메시지 상수파일 입니다. */
 
 /**이름 */
 const NAME = {
