@@ -29,7 +29,7 @@ export default function Discussions({ problemId }: IDiscussionProps) {
   const sortOptions = [
     { label: '인기순', value: '인기순' },
     { label: '최신순', value: '최신순' },
-    { label: '추천 많은 순', value: '추천 많은 순' },
+    { label: '추천순', value: '추천순' },
   ];
 
   useEffect(() => {

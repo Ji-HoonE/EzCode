@@ -8,7 +8,7 @@ import { IDiscussionResponse, sortType } from './discussion.query.type';
 const formattedSort: Record<sortType, string> = {
   인기순: 'best',
   최신순: 'latest',
-  '추천 많은순': 'upvote',
+  추천순: 'upvote',
 };
 
 export const useInfiniteDiscussionsQuery = (
