@@ -44,7 +44,7 @@ export default function InputTypeFiled({ leftSlot, rightSlot, ...props }: IInput
           id={name}
           placeholder={SCHEMA_PLACEHOLDER[name]}
           {...register(name)}
-          className={cn(S.defaultInput, error ? 'border-red-500' : 'border-gray-300')}
+          className={S.defaultInput}
           onFocus={handleFocus}
           onBlur={() => {
             handleBlur();
