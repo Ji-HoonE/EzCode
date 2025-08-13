@@ -1,6 +1,6 @@
 /** 고정되어있음 */
 export const defaultLabel = 'text-sm font-medium text-gray-300';
-export const defaultErrorMessage = 'text-dangerous text-sm pl-2';
+export const defaultErrorMessage = 'text-danger text-sm pl-2';
 
 /**className prop 으로 바꿀수 있는 스타일 */
 export const defaultTextArea =

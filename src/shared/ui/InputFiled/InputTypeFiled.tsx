@@ -34,7 +34,7 @@ export default function InputTypeFiled({ leftSlot, rightSlot, ...props }: IInput
           S.defaultInputArea,
           (isFocused || showSuccess) && 'border-secondary',
           isBlur && 'border-gray-700',
-          showError && 'border-dangerous',
+          showError && 'border-danger',
           className
         )}
         tabIndex={0}
