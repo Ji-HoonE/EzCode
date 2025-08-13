@@ -3,28 +3,25 @@ import ApiHelper from '@/api/client/api';
 import { getProblemIdPath } from '@/api/constants/api.constants';
 import { ProblemId } from '@/shared';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { IDiscussionResponse, sortType } from './discussion.query.type';
+import { IDiscussionResponse } from './discussion.query.type';
+import { formattedSort, paramsQueryKeys } from '@/shared/model/query/paramsQueryKey';
+import { useDiscussionParams } from '@/features/discussions/disussions/model/Discussion.sort.context';
 
-const formattedSort: Record<sortType, string> = {
-  인기순: 'best',
-  최신순: 'latest',
-  '추천 많은순': 'upvote',
-};
-
-export const useInfiniteDiscussionsQuery = (
-  problemId: ProblemId,
-  pageable: { page: string; size: string; sort: sortType }
-) => {
+export const useInfiniteDiscussionsQuery = (problemId: ProblemId) => {
   const path = getProblemIdPath(problemId, 'discussions');
-  const { size = '8', sort } = pageable;
+  const { params } = useDiscussionParams();
+
+  const { size = '8', sort, sortBy } = params;
+
+  const queryKey = paramsQueryKeys.key('infinite-discussions', problemId, params);
 
   return useInfiniteQuery({
-    queryKey: ['infinite-discussions', problemId, size, formattedSort[sort]],
+    queryKey: queryKey,
     queryFn: async ({ pageParam }) => {
       try {
         const res = await ApiHelper.get<IDiscussionResponse>(`${path}`, {
           params: {
-            sortBy: formattedSort[sort],
+            sortBy: formattedSort[sortBy],
             page: String(pageParam),
             size,
             sort: formattedSort[sort],
