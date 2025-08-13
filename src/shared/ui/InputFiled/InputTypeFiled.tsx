@@ -42,6 +42,7 @@ export default function InputTypeFiled({ leftSlot, rightSlot, ...props }: IInput
         {leftSlot && <>{leftSlot}</>}
         <input
           id={name}
+          type={name === 'password' || 'passwordCheck' ? 'password' : 'text'}
           placeholder={SCHEMA_PLACEHOLDER[name]}
           {...register(name)}
           className={S.defaultInput}
