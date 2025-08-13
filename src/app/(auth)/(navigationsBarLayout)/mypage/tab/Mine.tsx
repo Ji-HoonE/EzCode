@@ -1,4 +1,3 @@
-import { TPeriod } from '@/shared/types/mypage.type';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -27,7 +26,6 @@ const DetailInfoRow = ({ title, value }: { title: string; value: string | number
 );
 
 export const Mine = () => {
-  const [_unused, _setUnused] = useState<TPeriod>('all-time');
   const { data } = useMyInfoQuery();
   const { data: ranking } = useMyRankingQuery('all-time');
   const { data: aiReview } = useMyAiReviewCheckQuery();
