@@ -46,7 +46,7 @@ export default function CodeEditor({ onChangeSourceCodeData }: ICodeEditorProps)
         aria-autocomplete="none"
         autoCapitalize="off"
         height="100%"
-        className="h-[450px] overflow-scroll "
+        className="h-[450px] overflow-y-scroll"
       />
     </section>
   );
