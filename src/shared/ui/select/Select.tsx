@@ -60,8 +60,9 @@ export const Select = ({
   size = 'md',
   type = 'setValue',
   entireOption = false,
+  id,
   ...rest
-}: PropsType) => {
+}: PropsType & { id?: string }) => {
   const router = useRouter();
   const selectRef = useRef<HTMLDivElement>(null);
   const [dropdown, setDropdown] = useState(false);
@@ -106,6 +107,7 @@ export const Select = ({
   return (
     <div className="relative" ref={selectRef} {...rest}>
       <button
+        id={id}
         onClick={() => {
           setDropdown((prev) => !prev);
         }}

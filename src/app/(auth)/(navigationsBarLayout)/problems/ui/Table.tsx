@@ -11,6 +11,7 @@ import { Button } from '@/shared/ui/button/Button';
 const PAGE_LIMIT = 15;
 
 const getLevelColorClass = (levelStr: string): string => {
+  if (!levelStr) return '';
   const level = parseInt(levelStr.replace(/[^0-9]/g, ''), 10);
   if (level <= 2) return 'text-orange-300 font-semibold';
   if (level <= 4) return 'text-yellow-500 font-semibold';

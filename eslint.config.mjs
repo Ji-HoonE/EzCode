@@ -11,6 +11,9 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  {
+    ignores: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+  },
   ...compat.extends('next/core-web-vitals', 'next/typescript', 'plugin:react-hooks/recommended'),
   eslintConfigPrettier,
   {
