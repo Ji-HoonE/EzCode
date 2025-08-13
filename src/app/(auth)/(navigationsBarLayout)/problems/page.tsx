@@ -56,18 +56,24 @@ const ProblemsList = () => {
           <section className="mb-6 p-6 bg-gray-900/50 rounded-[10px] border border-gray-800">
             <div className="flex flex-row gap-4 items-center w-full">
               <FilterSelect>
-                <label className="text-base">카테고리 </label>
+                <label htmlFor="category" className="text-base">
+                  카테고리{' '}
+                </label>
                 <Select
                   className="w-full"
                   title="카테고리"
                   option={categoryCodeOptions}
                   setValue={(value) => setCategoryCode(value)}
                   value={categoryCode}
+                  id="category"
                 />
               </FilterSelect>
               <FilterSelect>
-                <label className="text-base">난이도 </label>
+                <label htmlFor="difficulty" className="text-base">
+                  난이도{' '}
+                </label>
                 <Select
+                  id="difficulty"
                   className="w-full"
                   title="난이도"
                   option={difficultyOptions}
@@ -92,6 +98,7 @@ const ProblemsList = () => {
                   />
 
                   <Button
+                    aria-label="검색"
                     onClick={() => {
                       setSearch(keyword);
                       setCurrentPage(1);
@@ -117,7 +124,11 @@ const ProblemsList = () => {
             </div>
           </section>
           {(categoryCode !== '전체' || difficulty !== '전체') && (
-            <div className="flex flex-row gap-8">
+            <div
+              data-testid="selected-filters"
+              aria-label="선택된 필터"
+              className="flex flex-row gap-8"
+            >
               {categoryCode !== '전체' && categoryCode && (
                 <div className="flex flex-row gap-1 items-center">
                   <span>{categoryCode}</span>
