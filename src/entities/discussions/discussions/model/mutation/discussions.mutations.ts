@@ -6,11 +6,16 @@ import {
   IDiscussionContentMutationRequest,
   TDiscussionContentMutationResponse,
 } from './discussions.types';
+import { useDiscussionParams } from '@/features/discussions/disussions/model/Discussion.sort.context';
+import { paramsQueryKeys } from '@/shared/model/query/paramsQueryKey';
 
 /** 토론글 생성 뮤테이션 */
 export const useCreateDiscussionContent = (problemId: ProblemId) => {
   const path = getProblemIdPath(problemId, 'discussions');
   const queryClient = useQueryClient();
+  const { params } = useDiscussionParams();
+
+  const queryKey = paramsQueryKeys.key('infinite-discussions', problemId, params);
 
   return useMutation({
     mutationFn: async (params: IDiscussionContentMutationRequest) => {
@@ -18,7 +23,7 @@ export const useCreateDiscussionContent = (problemId: ProblemId) => {
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['discussions', problemId] });
+      queryClient.invalidateQueries({ queryKey: queryKey });
     },
   });
 };
@@ -28,6 +33,9 @@ export const useEditDiscussionContent = (problemId: ProblemId, discussionId: num
   const path = getProblemIdPath(problemId, 'discussions');
   const queryClient = useQueryClient();
 
+  const { params } = useDiscussionParams();
+
+  const queryKey = paramsQueryKeys.key('infinite-discussions', problemId, params);
   return useMutation({
     mutationFn: async (params: IDiscussionContentMutationRequest) => {
       const response = await ApiHelper.put<TDiscussionContentMutationResponse>(
@@ -37,7 +45,7 @@ export const useEditDiscussionContent = (problemId: ProblemId, discussionId: num
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['discussions', problemId] });
+      queryClient.invalidateQueries({ queryKey: queryKey });
     },
   });
 };
@@ -47,13 +55,17 @@ export const useDeleteDiscussionContent = (problemId: ProblemId, discussionId: n
   const path = getProblemIdPath(problemId, 'discussions');
   const queryClient = useQueryClient();
 
+  const { params } = useDiscussionParams();
+
+  const queryKey = paramsQueryKeys.key('infinite-discussions', problemId, params);
+
   return useMutation({
     mutationFn: async () => {
       const response = await ApiHelper.delete(`${path}/${discussionId}`);
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['discussions', problemId] });
+      queryClient.invalidateQueries({ queryKey: queryKey });
     },
   });
 };
