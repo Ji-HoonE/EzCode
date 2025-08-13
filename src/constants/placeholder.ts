@@ -3,11 +3,11 @@ import { TZodKey } from '@/shared/lib/zod/types';
 /**스카미가 존재하는 플레이스홀더 */
 export const SCHEMA_PLACEHOLDER: Record<TZodKey | string, string> = {
   email: '이메일을 입력해 주세요',
-  name: '이메일을 입력해 주세요',
-  userId: '아이디',
-  password: '이메일을 입력해 주세요',
-  passwordCheck: '이메일을 입력해 주세요',
-  age: '이메일을 입력해 주세요',
+  name: '이름을 입력해 주세요',
+  userId: '아이디를 입력해 주세요',
+  password: '비밀번호를 입력해 주세요',
+  passwordCheck: '비밀번호를 다시한번 입력해 주세요',
+  age: '나이를 입력해 주세요',
 };
 
 /**스키마가 존재하지 않는 플레이스 홀더 */
