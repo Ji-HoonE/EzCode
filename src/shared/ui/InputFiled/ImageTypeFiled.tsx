@@ -9,6 +9,6 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export default function ImageTypeFiled({ className, imageProps }: Props) {
-  const _ = { className, imageProps }; // 미사용 변수 경고 방지
+  console.log(className, imageProps);
   return <div></div>;
 }
