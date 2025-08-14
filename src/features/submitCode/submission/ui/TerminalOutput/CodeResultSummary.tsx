@@ -13,7 +13,7 @@ export default function CodeResultSummary() {
         <>
           <h2 className="text-lg font-bold">채점 결과</h2>
           {results && (
-            <ul className="flex flex-col gap-2">
+            <ul className="flex flex-col gap-2 p-3 rounded-xl border border-gray-600">
               {results.map((res, i) => (
                 <ResultItem key={res.testcaseId} res={res} index={i} />
               ))}

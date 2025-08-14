@@ -12,12 +12,12 @@ export default function ResultItem({ res, index }: ResultItemProps) {
   return (
     <div
       className={clsx(
-        'flex py-2 px-2 border-[1px] rounded-xl',
+        'flex py-2 px-2 border-[1px] rounded-xl text-gray-300',
         isPassed ? 'border-secondary/30 bg-secondary/20' : 'border-red-600/30 bg-red-600/20'
       )}
     >
-      <p className={clsx(isPassed ? 'text-secondary/80' : 'text-red-600/80')}>
-        case {index + 1} : {message} {executionTime}ms {memoryUsage}KB
+      <p>
+        [ {index + 1} ] {message} ({executionTime}ms, {memoryUsage}KB)
       </p>
     </div>
   );
