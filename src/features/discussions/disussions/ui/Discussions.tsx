@@ -4,24 +4,19 @@ import Discussion from './Discussion';
 import { BouncingDots, Spinner } from '@/shared/ui/loading-indicators';
 import DiscussionForm from './DiscussionForm';
 import { Select } from '@/shared/ui/select/Select';
-import { useEffect, useRef, useState } from 'react';
-import { sortType } from '@/entities/discussions/discussions/model/query/discussion.query.type';
+import { useEffect, useRef } from 'react';
 import { useInfiniteDiscussionsQuery } from '@/entities/discussions';
+import { sortType } from '@/shared/model/query/paramsQueryKey';
+import { useDiscussionParams } from '../model/Discussion.sort.context';
 
 interface IDiscussionProps {
   problemId: ProblemId;
 }
 
-interface IPageAble {
-  page: string;
-  size: string;
-  sort: sortType;
-}
 export default function Discussions({ problemId }: IDiscussionProps) {
-  const [pageAble, setPageAble] = useState<IPageAble>({ page: '0', size: '8', sort: '인기순' });
-
+  const { params, setParams } = useDiscussionParams();
   const { data, isPending, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteDiscussionsQuery(problemId, pageAble);
+    useInfiniteDiscussionsQuery(problemId);
 
   const discussions = data?.pages.flatMap((page) => page.content);
   const loaderRef = useRef<HTMLDivElement | null>(null);
@@ -29,7 +24,7 @@ export default function Discussions({ problemId }: IDiscussionProps) {
   const sortOptions = [
     { label: '인기순', value: '인기순' },
     { label: '최신순', value: '최신순' },
-    { label: '추천 많은 순', value: '추천 많은 순' },
+    { label: '추천순', value: '추천순' },
   ];
 
   useEffect(() => {
@@ -69,10 +64,10 @@ export default function Discussions({ problemId }: IDiscussionProps) {
             <Select
               option={sortOptions}
               title="정렬"
-              value={pageAble.sort}
+              value={params.sort}
               setValue={(value) => {
                 const typedValue = value as sortType;
-                setPageAble((prev) => ({ ...prev, sort: typedValue }));
+                setParams((prev) => ({ ...prev, sort: typedValue, sortBy: typedValue }));
               }}
             />
             {discussions.length < 1 ? (

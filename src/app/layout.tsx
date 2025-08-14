@@ -14,7 +14,7 @@ export default function RootLayout({
         <QueryProvider>
           <div className="w-full h-full">
             <NavigationBar />
-            <div className="w-full h-full px-15">{children}</div>
+            <div className="w-full h-[calc(100vh-72px)] px-15">{children}</div>
           </div>
           <Toaster />
         </QueryProvider>
