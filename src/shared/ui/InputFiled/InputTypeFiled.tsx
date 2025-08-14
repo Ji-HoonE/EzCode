@@ -24,8 +24,7 @@ export default function InputTypeFiled({ leftSlot, rightSlot, ...props }: IInput
       errors,
       name,
     });
-
-  const error = errors[name]?.message as string | undefined;
+  const error = errors[name]?.message ? String(errors[name]?.message) : undefined;
 
   return (
     <div className="flex flex-col gap-1">
@@ -37,24 +36,21 @@ export default function InputTypeFiled({ leftSlot, rightSlot, ...props }: IInput
           showError && 'border-danger',
           className
         )}
-        tabIndex={0}
       >
         {leftSlot && <>{leftSlot}</>}
         <input
           id={name}
-          type={name === 'password' || 'passwordCheck' ? 'password' : 'text'}
+          type={name === 'password' ? 'password' : 'text'}
           placeholder={SCHEMA_PLACEHOLDER[name]}
           {...register(name)}
           className={S.defaultInput}
           onFocus={handleFocus}
-          onBlur={() => {
-            handleBlur();
-          }}
+          onBlur={handleBlur}
           {...rest}
         />
         {rightSlot && <>{rightSlot}</>}
       </div>
-      {errors && <p className={S.defaultErrorMessage}>{error}</p>}
+      {error && <p className={S.defaultErrorMessage}>{error}</p>}
     </div>
   );
 }

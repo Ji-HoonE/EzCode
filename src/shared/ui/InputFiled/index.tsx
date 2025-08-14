@@ -40,7 +40,11 @@ export default function UnifiedInput({ inputType, label, ...props }: Props) {
 
   return (
     <div className={cn('flex h-full w-full flex-col items-start gap-2')}>
-      {label && <label className={cn(S.defaultLabel, labelStyle)}>{label}</label>}
+      {label && (
+        <label htmlFor={name} className={cn(S.defaultLabel, labelStyle)}>
+          {label}
+        </label>
+      )}
       <div className="flex h-full w-full flex-col gap-2">{renderInputFiled()}</div>
     </div>
   );

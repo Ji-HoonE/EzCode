@@ -1,8 +1,8 @@
-/** 고정되어있음 */
+/** Fixed defaults style */
 export const defaultLabel = 'text-sm font-medium text-gray-300';
 export const defaultErrorMessage = 'text-danger text-sm pl-2';
 
-/**className prop 으로 바꿀수 있는 스타일 */
+/** dynamic defaults style with className prop */
 export const defaultTextArea =
   'bg-background min-h-25 rounded-[4px] h-fit w-full resize-none border border-1 p-2 border-border_primary';
 export const defaultInputArea =

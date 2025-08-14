@@ -10,6 +10,7 @@ export default function TextAreaTypeFiled({ ...props }: Props) {
   const { name, value, onChange, className, ...rest } = props;
   return (
     <textarea
+      id={name}
       name={name}
       value={value}
       onChange={onChange}

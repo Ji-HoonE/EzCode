@@ -24,7 +24,7 @@ export function useInputTypeFiledStatus({ errors, name }: IUseInputTypeFiledStat
   }, []);
 
   const showSuccess = isBlur && !isFailure === true;
-  const showError = isBlur && isFailure === true;
+  const showError = isFailure === true;
 
   return {
     isFocused,
