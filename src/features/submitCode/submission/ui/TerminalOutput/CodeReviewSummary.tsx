@@ -19,8 +19,7 @@ export default function CodeReviewSummary({ problemId, sourceCodeData }: ICodeRe
   return (
     <div className="flex flex-col h-full">
       {isSubmittedReview ? (
-        <div>
-          코드리뷰:
+        <div className="flex flex-col gap-2">
           {codeReview ? (
             <div>
               {codeReview.split('\n').map((line, idx) => (
@@ -34,7 +33,13 @@ export default function CodeReviewSummary({ problemId, sourceCodeData }: ICodeRe
               ))}
             </div>
           ) : (
-            <BouncingDots />
+            <div className="w-full rounded-xl bg-background items-center flex flex-col p-3">
+              <div className="flex gap-3 items-center">
+                코드리뷰 받는중
+                <BouncingDots />
+              </div>
+              <p className="text-sm text-gray-500">최대 1분 정도 소요될 수 있습니다.</p>
+            </div>
           )}
         </div>
       ) : (
