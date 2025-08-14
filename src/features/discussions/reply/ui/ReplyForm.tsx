@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { ProblemId } from '@/shared';
 import useReply from '../lib/useReply';
 import { Send } from 'lucide-react';
+import UnifiedInput from '@/shared/ui/InputFiled';
 
 interface ReplyFormProps {
   problemId: ProblemId;
@@ -30,11 +31,12 @@ export default function ReplyForm({
 
   return (
     <div className="flex gap-2 mt-4 w-full">
-      <textarea
+      <UnifiedInput
+        inputType="textarea"
+        name="reply"
         value={value}
         onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleChangeValue(e.target.value)}
-        placeholder="댓글을 작성하세요..."
-        className="w-full p-2 bg-background border-border_primary rounded-[14px] resize-none min-h-[40px] text-sm"
+        className="rounded-[12px] min-h-10 text-sm"
       />
       <>
         <Button

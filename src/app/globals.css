@@ -7,6 +7,7 @@
   --color-primary: #214d35;
   --color-hover-primary: #276e48;
   --color-secondary: #00d084;
+  --color-danger: #ef4444;
   --color-background: #0c151c;
   --color-secondary-background: #1a2332;
   --color-border_primary: #a4a1aa;
@@ -39,6 +40,11 @@
   button {
     font-family: 'NanumSquare';
     cursor: pointer;
+  }
+
+  input:focus-visible {
+    outline: 0px solid var(--color-secondary);
+    outline-offset: 2px;
   }
 
   button:disabled {
