@@ -1,6 +1,6 @@
 import { M } from '@/shared/lib/zod/messages';
-import { EMAIL, ID, Name, PASSWORD, PASSWORD_CHECK } from '@/shared/lib/zod/primitives';
-import z from 'zod';
+import { EMAIL, Name, PASSWORD, PASSWORD_CHECK } from '@/shared/lib/zod/primitives';
+import { z } from 'zod';
 
 /**자동 타입 추론 */
 export type TAuthSchemaRegister = z.infer<typeof AUTH_ZOD_SCHEMA>;
@@ -11,7 +11,6 @@ export type TAuthSchemaRegister = z.infer<typeof AUTH_ZOD_SCHEMA>;
 export const AUTH_ZOD_SCHEMA = z
   .object({
     name: Name,
-    userId: ID,
     email: EMAIL,
     password: PASSWORD,
     passwordCheck: PASSWORD_CHECK,

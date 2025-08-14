@@ -1,1 +1,1 @@
-export type TZodKey = 'email' | 'name' | 'userId' | 'password' | 'passwordCheck' | 'age';
+export type TZodKey = 'email' | 'name' | 'password' | 'passwordCheck' | 'age';

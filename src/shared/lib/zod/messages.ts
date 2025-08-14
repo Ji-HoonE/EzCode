@@ -1,17 +1,13 @@
-/**@notice e.g.) import {M} from './...' 해서 사용해주세요! */
-/**@notice 에러 메시지 상수파일 입니다. */
+/**
++ * 에러 메시지 상수 파일입니다.
++ * @example
++ * import { M } from './messages';
++ */
 
 /**이름 */
 const NAME = {
   EMPTY_NAME: '이름을 입력해 주세요',
-  OVER_LENGTH_NAME: '이름은 10글자까지 가능합니다.',
-  DUPLICATED_NAME: '이미 존재하는 이름입니다.',
-};
-
-/**아이디 */
-const ID = {
-  EMPTY_ID: '아이디를 입력해주세요',
-  INVALID_ID_FORMAT: '아이디 형식 맞춰주세요',
+  OVER_LENGTH_NAME: '이름은 15글자까지 가능합니다.',
 };
 
 /**이메일 */
@@ -23,7 +19,7 @@ const EMAIL = {
 /**비번 */
 const PASSWORD = {
   EMPTY_PASSWORD: '비밀번호를 입력해 주세요',
-  INVALID_PASSWORD_FORMAT: '비번 형식 맞춰주세요',
+  INVALID_PASSWORD_FORMAT: '비밀번호는 8-20자의 영문, 숫자, 특수문자를 포함해야 합니다.)',
 };
 
 /**비번 확인 */
@@ -44,7 +40,6 @@ const ADMIN = {
 
 export const M = {
   NAME,
-  ID,
   EMAIL,
   PASSWORD,
   PASSWORD_CHECK,
