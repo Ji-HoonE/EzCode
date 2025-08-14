@@ -40,7 +40,7 @@ export default function ProblemWorksSection({
   }, [sessionKey, accessToken]);
 
   return (
-    <section className="flex flex-col gap-10 h-full">
+    <section className="flex flex-col gap-5 h-full">
       <CodeEditor onChangeSourceCodeData={handleChangeSourceCodeData} />
       <div className="flex flex-1 flex-col bg-secondary-background rounded-[10px] shadow-lg ">
         <TerminalPanel

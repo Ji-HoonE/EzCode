@@ -23,7 +23,7 @@ export default function TerminalOutput({ mode, sourceCodeData }: ITerminalOutput
   }, [totalResult, setIsCorrect]);
 
   return (
-    <section className="flex flex-col w-full h-full px-[14px] py-[22px]">
+    <section className="flex flex-col w-full h-full px-[14px] py-[22px] overflow-y-scroll">
       {mode === 'result' ? (
         <CodeResultSummary />
       ) : mode === 'review' ? (
