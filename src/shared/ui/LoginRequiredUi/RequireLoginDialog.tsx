@@ -10,7 +10,7 @@ interface IRequireLoginDialogProps {
 export default function RequireLoginDialog({ isOpen, onClose }: IRequireLoginDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="w-110 p-0">
         <DialogTitle className="hidden"></DialogTitle>
         <SignForm />
       </DialogContent>

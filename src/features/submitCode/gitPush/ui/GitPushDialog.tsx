@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogDescription,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import {
   Select,
@@ -18,19 +17,49 @@ import {
 import { Icon } from '@/shared';
 import useGitPush from '../hooks/useGitPush';
 import { Switch } from '@/components/ui/switch';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useEffect, useState } from 'react';
+import { TGitPushStatus } from '../model/useGitPushStatus.store.type';
 
 interface GitPushDialogProps {
   githubUrl: string | null;
 }
 export default function GitPushDialog({ githubUrl }: GitPushDialogProps) {
-  const { pushAutoToggle, choiceRepo, userRepos, currentRepo, setCurrentRepo, autoPushStatus } =
-    useGitPush();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [gitPushStatus, setGitPushStatus] = useState<TGitPushStatus>(null);
+  const [isToolTipOpen, setIsToolTipOpen] = useState<true | undefined>(undefined);
+
+  const {
+    pushAutoToggle,
+    choiceRepo,
+    userRepos,
+    currentRepo,
+    setCurrentRepo,
+    autoPushStatus,
+    webSocketGitPushStatus,
+  } = useGitPush();
+
+  useEffect(() => {
+    setGitPushStatus(webSocketGitPushStatus);
+    setIsToolTipOpen(true);
+  }, [webSocketGitPushStatus]);
+
+  const tooltipContent = !githubUrl
+    ? 'github 연동이 안되어 있어요!'
+    : !autoPushStatus
+      ? 'auto push 기능이 꺼져 있어요'
+      : 'auto push가 켜져 있어요';
 
   return (
-    <Dialog>
-      <DialogTrigger disabled={!githubUrl}>
-        <Icon.TerminalGitHubIcon hasGitHubUrl={!!githubUrl} />
-      </DialogTrigger>
+    <Dialog open={isDialogOpen}>
+      <Tooltip open={isToolTipOpen}>
+        <TooltipTrigger disabled={!githubUrl} onClick={() => setIsDialogOpen(true)}>
+          <Icon.TerminalGitHubIcon isOnAutoPush={autoPushStatus} hasGitGubUrl={!!githubUrl} />
+        </TooltipTrigger>
+        <TooltipContent>
+          {!!gitPushStatus ? <p>{gitPushStatus}</p> : <p>{tooltipContent}</p>}
+        </TooltipContent>
+      </Tooltip>
       <DialogContent className="w-[425px] bg-secondary-background border-[#333]">
         <DialogHeader>
           <DialogTitle>GitHub 연동</DialogTitle>
@@ -81,7 +110,10 @@ export default function GitPushDialog({ githubUrl }: GitPushDialogProps) {
           </div>
           <div className="flex gap-2">
             <Button
-              onClick={() => choiceRepo({ repositoryName: currentRepo })}
+              onClick={() => {
+                choiceRepo({ repositoryName: currentRepo });
+                setIsDialogOpen(false);
+              }}
               className="bg-[#214d35] hover:bg-[#276e48] text-white flex-1"
               disabled={!!currentRepo && !autoPushStatus}
             >

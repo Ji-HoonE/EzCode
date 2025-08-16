@@ -6,9 +6,11 @@ import useProblemWebSocketStore, {
 } from '@/features/submitCode/submission/model/useProblemWebSocketStore';
 import { useEffect } from 'react';
 import useConnectProblemWebSocket from './useConnectProblemWebSocket';
+import useGitPushStatusStoreActions from '../../gitPush/model/useGitPushStatus.store';
 
 export default function useSubscribeProblem(sessionKey: string) {
   const { setMessage, clearStore } = useProblemWebSocketStoreActions();
+  const { setGitPushStatus } = useGitPushStatusStoreActions();
   const { problemStompRef } = useConnectProblemWebSocket();
   const { isConnected } = useProblemWebSocketStore();
 
@@ -28,7 +30,7 @@ export default function useSubscribeProblem(sessionKey: string) {
         setMessage('error', JSON.parse(msg.body))
       );
       problemStompRef.current.subscribe(`${base}/git-status`, (msg: IMessage) => {
-        setMessage('git-status', JSON.parse(msg.body));
+        setGitPushStatus(JSON.parse(msg.body).pushStatus);
       });
 
       // 에러 발생 시 스토어 초기화

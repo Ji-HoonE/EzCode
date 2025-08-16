@@ -6,6 +6,7 @@ import {
 import { useAutoGitPushStatus } from '@/entities/submitCode/gitpush/model/query/gitpush.query';
 import { OptionType } from '@/shared/ui/select/Select';
 import { useEffect, useState } from 'react';
+import useGitPushStatusStore from '../model/useGitPushStatus.store';
 
 export default function useGitPush() {
   const [currentRepo, setCurrentRepo] = useState('');
@@ -14,6 +15,7 @@ export default function useGitPush() {
   const { mutateAsync: choiceRepo } = useGitRepoChoice();
   const { data: userRepos } = useGetGitHubRepo();
   const { data: autoPushStatus } = useAutoGitPushStatus();
+  const { gitPushStatus: webSocketGitPushStatus } = useGitPushStatusStore();
 
   const reposSelectOptions: OptionType[] = [];
 
@@ -36,5 +38,6 @@ export default function useGitPush() {
     userRepos,
     setCurrentRepo,
     autoPushStatus,
+    webSocketGitPushStatus,
   };
 }
