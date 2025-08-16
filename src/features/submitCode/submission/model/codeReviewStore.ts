@@ -1,14 +1,12 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { useShallow } from 'zustand/shallow';
-import { ICodeReviewStore } from './codeReviewStore.types';
+import { ICodeReviewStore, INITIAL_STATE } from './codeReviewStore.types';
 
 /** 인증 스토어 */
 const useCodeReviewStore = create<ICodeReviewStore>()(
   devtools((set) => ({
-    isCorrect: false,
-    isSubmittedReview: false,
-    codeReviewContent: null,
+    ...INITIAL_STATE,
     actions: {
       setIsCorrect: (status) => {
         set({
@@ -20,12 +18,20 @@ const useCodeReviewStore = create<ICodeReviewStore>()(
           isSubmittedReview: status,
         });
       },
-
+      setCodeReview: (status) => {
+        set({
+          codeReview: status,
+        });
+      },
+      clearCodeReview: () => {
+        set({
+          codeReview: null,
+        });
+      },
       //초기화
       clearCodeReviewStore: () => {
         set({
-          isCorrect: false,
-          isSubmittedReview: false,
+          ...INITIAL_STATE,
         });
       },
     },
@@ -38,6 +44,8 @@ export function useCodeReviewStoreActions() {
     useShallow((state) => ({
       setIsCorrect: state.actions.setIsCorrect,
       setIsSubmittedReview: state.actions.setIsSubmittedReview,
+      setCodeReview: state.actions.setCodeReview,
+      clearCodeReview: state.actions.clearCodeReview,
     }))
   );
 }
