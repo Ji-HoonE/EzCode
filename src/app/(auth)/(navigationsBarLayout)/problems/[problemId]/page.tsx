@@ -1,4 +1,4 @@
-import { getSessionKey } from '@/entities/problem/api/server/getSessionKey';
+import { getSubmitPrepareData } from '@/entities/problem';
 import { getGitHubUrl } from '@/entities/submitCode/gitpush/actions/getGitHub';
 import ProblemWorksSection from '@/features/submitCode/submission/ui/ProblemWorksSection';
 
@@ -7,10 +7,14 @@ interface IProblemPageProps {
 }
 export default async function ProblemPage({ params }: IProblemPageProps) {
   const problemId = (await params).problemId;
-  const sessionKey = await getSessionKey(problemId);
+  const submitPrepareData = await getSubmitPrepareData(problemId);
   const githubUrl = await getGitHubUrl();
 
   return (
-    <ProblemWorksSection problemId={problemId} githubUrl={githubUrl} sessionKey={sessionKey} />
+    <ProblemWorksSection
+      problemId={problemId}
+      githubUrl={githubUrl}
+      submitPrepareData={submitPrepareData}
+    />
   );
 }

@@ -41,18 +41,24 @@ export interface IWebSocketStatus {
   isSubmitted: boolean;
 }
 
+export interface ITestCaseIds {
+  testCaseIds: number[];
+}
 /** 스토어 액션 인터페이스 */
 interface IMessageInitialAction {
   actions: {
     setAuth: (key: AuthKey, value: string) => void;
     setStatus: (key: StatusKey, status: boolean) => void;
     setMessage: (key: MessageKey, message: unknown) => void;
+    setTestCaseIds: (ids: number[]) => void;
     clearStore: () => void;
     clearResults: () => void;
   };
 }
 
 export const INITIAL_STATE = {
+  testCaseIds: [],
+
   token: '',
   sessionKey: '',
   isConnected: false,
@@ -67,4 +73,5 @@ export const INITIAL_STATE = {
 export type IProblemWebSocketStore = IMessageInitialState &
   IWebSocketAuth &
   IMessageInitialAction &
+  ITestCaseIds &
   IWebSocketStatus;

@@ -28,6 +28,10 @@ const useProblemWebSocketStore = create<IProblemWebSocketStore>()(
           return { ...state, [key]: status };
         });
       },
+      setTestCaseIds: (ids) => {
+        set({ testCaseIds: ids });
+      },
+
       setMessage: (key, message) => {
         set((state: IMessageInitialState) => {
           if (key === 'results') {
@@ -67,6 +71,7 @@ export function useProblemWebSocketStoreActions() {
       setAuth: state.actions.setAuth,
       setStatus: state.actions.setStatus,
       setMessage: state.actions.setMessage,
+      setTestCaseIds: state.actions.setTestCaseIds,
       clearStore: state.actions.clearStore,
       clearResults: state.actions.clearResults,
     }))
