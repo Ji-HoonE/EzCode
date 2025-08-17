@@ -19,7 +19,7 @@ export const NAVIGATE_ATTRIBUTE = {
     image: { src: '/icons/trophy.svg', alt: '헤더의 랭킹 네비의 로고', w: 16, h: 16 },
   },
   signup: {
-    href: PATHS.SIGNUP,
+    href: PATHS.SIGNIN,
     content: '회원가입',
     className: 'hover:bg-white/8 px-3 py-2 rounded-lg border-gray-600 text-gray-300 border',
   },

@@ -9,6 +9,11 @@ import ItemSkillGamble from './tab/ItemSkillGamble';
 import Adventure from './tab/Adventure';
 import CharacterSkill from './tab/CharacterSkill';
 import PvpMatch from './tab/PvpMatch';
+import { useCreateCharacterMutation } from '@/entities/game/model/mutation/game.mutation';
+import { API_CONSTANTS } from '@/api/constants/api.constants';
+import { useGetGameCharactersStatusQuery } from '@/entities/game/model/query/game.query';
+import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface GameModalProps {
   isOpen: boolean;
@@ -19,7 +24,11 @@ interface GameModalProps {
 export type MenuType = 'status' | 'inventory' | 'skills' | 'pvp' | 'gacha' | 'adventure' | null;
 
 export function GameModal({ isOpen, onClose, hasCharacter }: GameModalProps) {
+  const queryClient = useQueryClient();
   const [activeMenu, setActiveMenu] = useState<MenuType>('status');
+  const { data, refetch } = useGetGameCharactersStatusQuery(activeMenu === 'status');
+
+  const { mutateAsync } = useCreateCharacterMutation();
 
   const menuItems = [
     { id: 'status' as MenuType, label: '상태창 확인', icon: Sword },
@@ -29,6 +38,29 @@ export function GameModal({ isOpen, onClose, hasCharacter }: GameModalProps) {
     { id: 'gacha' as MenuType, label: '아이템/스킬뽑기', icon: Gift },
     { id: 'adventure' as MenuType, label: '어드벤처', icon: Map },
   ];
+
+  const handleCreateCharacter = async () => {
+    try {
+      const response = await mutateAsync();
+      if (response.data.status === API_CONSTANTS.CODE.CREATED) {
+        toast.success('캐릭터 생성 완료', {
+          richColors: false,
+          style: {
+            background: '#00d084',
+            color: '#ffffff',
+            fontWeight: 'bold',
+            fontSize: '16px',
+            border: 'none',
+          },
+        });
+        refetch();
+        queryClient.invalidateQueries({ queryKey: ['checkCharacter'] });
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const renderDetailContent = () => {
     switch (activeMenu) {
@@ -101,14 +133,14 @@ export function GameModal({ isOpen, onClose, hasCharacter }: GameModalProps) {
               <div className="bg-[#0c151c] rounded-[10px] p-4 text-center flex flex-col items-center">
                 {hasCharacter ? (
                   <>
-                    <p className="text-[#00d084] font-bold mb-3">사용자 닉네임</p>
+                    <p className="text-[#00d084] font-bold mb-3">{data?.data?.result?.name}</p>
                     <div className="w-24 h-24 mx-auto bg-[#1a2332] rounded-[10px] border border-[#214d35] flex items-center justify-center overflow-hidden">
                       <User className="w-12 h-12 text-[#00d084]" />
                     </div>
                   </>
                 ) : (
                   <Button
-                    onClick={() => {}}
+                    onClick={handleCreateCharacter}
                     className={`bg-[#214d35] hover:bg-[#214d35] text-white rounded-[10px] p-6 transition-all duration-200 flex flex-col items-start`}
                   >
                     캐릭터 생성

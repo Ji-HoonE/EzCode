@@ -2,8 +2,10 @@
 import useLogin from '../hooks/useLogin';
 import { useRouter } from 'next/navigation';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
-
-const SignInForm = () => {
+interface SignInFormProps {
+  onLoginSuccess?: () => void;
+}
+const SignInForm = ({ onLoginSuccess }: SignInFormProps) => {
   const router = useRouter();
   const {
     loginInfo,
@@ -12,7 +14,7 @@ const SignInForm = () => {
     handlePasswordVisible,
     isPasswordVisible,
     errorMessage,
-  } = useLogin();
+  } = useLogin(onLoginSuccess);
 
   return (
     <div className="space-y-5">
