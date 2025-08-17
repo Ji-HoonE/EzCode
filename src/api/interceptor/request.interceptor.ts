@@ -10,11 +10,18 @@ import { authOptions } from '@/lib/authOptions';
 export const requestClientInterceptor = async (config: IRequestConfig): Promise<IRequestConfig> => {
   const session = await getSession();
   const token = session?.accessToken;
+
   const headers = new Headers(config.headers);
-  headers.set('Content-Type', 'application/json');
+
+  // FormData인 경우 Content-Type을 건드리지 않음
+  if (!(config.body instanceof FormData)) {
+    headers.set('Content-Type', 'application/json');
+  }
+
   if (token) {
     headers.set('Authorization', `${token}`);
   }
+
   return {
     ...config,
     headers,

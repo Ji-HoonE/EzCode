@@ -4,38 +4,53 @@ import { useEffect, useState } from 'react';
 import { Heatmap } from '../ui/Heatmap';
 import {
   useEmailVerify,
+  useModifyInfo,
   useMyAiReviewCheckQuery,
   useMyDailySolved,
   useMyInfoQuery,
   useMyRankingQuery,
 } from '@/entities/mypage/model/query';
-import { IHeatmapItem } from '@/entities/mypage/model/types';
-import { User } from 'lucide-react';
-import Mail from './../../../../../../public/icons/mypage/mail.svg';
+import { IHeatmapItem, IMyInfo } from '@/entities/mypage/model/types';
+import { Check, User } from 'lucide-react';
+
 import Bookopen from './../../../../../../public/icons/mypage/bookopen.svg';
 import { Button } from '@/shared/ui/button/Button';
 import { BASE_URL } from '@/constants/env';
+import { ModifyForm } from '../ui/ModifyForm';
 
-const DetailInfoRow = ({ title, value }: { title: string; value: string | number }) => (
-  <div className="bg-gray-800/50 p-3 rounded-lg flex flex-col">
-    <div className="text-sm text-gray-400">{title}</div>
-    <div className="text-lg font-bold" style={{ color: '#FFF' }}>
-      {value}
-    </div>
-  </div>
-);
+import { useQueryClient } from '@tanstack/react-query';
+import { Badge } from '@/shared/ui/badge/Badge';
 
 export const Mine = () => {
+  const queryClient = useQueryClient();
+  const [tab, setTab] = useState<'info' | 'modify'>('info');
+  const [editForm, setEditForm] = useState<IMyInfo>({
+    nickname: '',
+    githubUrl: '',
+    blogUrl: '',
+    profileImageUrl: '',
+    tier: '',
+    introduction: '',
+    age: 0,
+    email: '',
+    totalSolvedCount: 0,
+    username: '',
+    userRole: '',
+    verified: false,
+  });
+  const [info, setInfo] = useState<IMyInfo>(Object);
+  const [heatmapData, setHeatmapData] = useState<IHeatmapItem[]>([]);
   const { data } = useMyInfoQuery();
   const { data: ranking } = useMyRankingQuery('all-time');
   const { data: aiReview } = useMyAiReviewCheckQuery();
   const { data: heatmap } = useMyDailySolved();
   const { mutateAsync: emailVerfiy } = useEmailVerify(BASE_URL || '');
+  const { mutateAsync: modify } = useModifyInfo();
+
   const myInfo = data?.data.result;
   const myRanking = ranking?.data.result;
 
   const aiReviewCnt = aiReview?.data.result.reviewToken;
-  const [heatmapData, setHeatmapData] = useState<IHeatmapItem[]>([]);
   const levelCalculator = (count: number) => {
     if (count === 0) {
       return 0;
@@ -59,59 +74,163 @@ export const Mine = () => {
     setHeatmapData(newData);
   }, [heatmap]);
 
+  useEffect(() => {
+    if (!myInfo) return;
+    setInfo(myInfo);
+  }, [myInfo]);
+
   return (
     <div className=" flex flex-col gap-10 h-full">
       <section className="rounded-lg flex flex-col gap-8 border bg-gray-900/50 border-gray-700/50 p-10">
-        <div className="flex flex-row gap-4 items-center">
-          <User size={24} style={{ color: '#00d084' }} />
-          <h2 className="font-bold text-2xl">프로필 정보</h2>
-        </div>
-        <div className="flex flex-row gap-4">
-          {myInfo?.profileImageUrl ? (
-            <Image alt="my" width={150} height={150} src={myInfo.profileImageUrl} />
-          ) : (
-            <Image width={150} height={150} src="/icons/mypage/defaultImg.svg" alt="my" />
-          )}
-          <div className="flex flex-col gap-3 flex-1">
-            <span className="font-bold text-2xl">{myInfo?.username}</span>
-            <div className="flex rounded-full px-2 py-4 items-center justify-center font-light bg-[#214d35] w-fit">
-              <span className="text-xs leading-0">{myInfo?.tier}</span>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full ">
-              <DetailInfoRow
-                title="랭킹"
-                value={`# ${myRanking?.find((item) => item.isMe)?.ranks.toLocaleString() || 0}`}
-              />
-              <DetailInfoRow title="푼 문제수" value={myInfo?.totalSolvedCount || 0} />
-              <DetailInfoRow title="남은 리뷰" value={aiReviewCnt || 0} />
-              <DetailInfoRow title="아이디" value={myInfo?.nickname || ''} />
-            </div>
+        <div className="flex flex-row w-full justify-between">
+          <div className="flex flex-row gap-4 items-center">
+            <User size={24} style={{ color: '#00d084' }} />
+            <h2 className="font-bold text-2xl">프로필 정보</h2>
           </div>
-        </div>
-        <div className="flex items-center justify-between p-4 bg-gray-800/30 rounded-lg">
-          <div className="flex items-center gap-3">
-            <Image src={Mail} width={20} height={20} alt="mail" />
-            <div>
-              <div className="text-sm text-gray-400">이메일</div>
-              <div className="text-white font-medium">{myInfo?.email}</div>
-            </div>
-          </div>
-
-          {myInfo?.verified ? (
-            <div className="flex items-center gap-2 text-green-400">
-              <span className="font-medium">✓ 인증 완료</span>
-            </div>
-          ) : (
+          <div className="flex flex-row gap-2">
             <Button
-              variant="primary"
-              label="이메일 인증"
+              label={tab === 'info' ? '수정' : '저장'}
               onClick={async () => {
-                const response = await emailVerfiy();
-                alert(response);
+                if (tab === 'info') {
+                  setTab('modify');
+                } else {
+                  if (editForm.nickname.length < 1) {
+                    alert('닉네임을 확인해주세요.');
+                  } else {
+                    const response = await modify(editForm);
+                    alert(response.message);
+                    if (response.status === 200) {
+                      queryClient.invalidateQueries({ queryKey: ['my-info'] });
+                    }
+                  }
+                }
               }}
             />
-          )}
+            {tab === 'modify' && (
+              <Button
+                label="취소"
+                onClick={() => {
+                  setTab('info');
+                  setEditForm(info);
+                }}
+              />
+            )}
+          </div>
         </div>
+        {tab === 'info' ? (
+          <>
+            <div className="flex items-start gap-8">
+              {/* 프로필 정보 - 세로 배치 (너비 2배 확장) */}
+              <div className="flex flex-col items-center space-y-4 w-52">
+                {/* 프로필 사진 */}
+
+                {myInfo?.profileImageUrl ? (
+                  <Image alt="my" width={150} height={150} src={myInfo.profileImageUrl} />
+                ) : (
+                  <Image width={150} height={150} src="/icons/mypage/defaultImg.svg" alt="my" />
+                )}
+
+                {/* 닉네임 */}
+                <h2 className="text-2xl font-bold text-white text-center">{myInfo?.nickname}</h2>
+
+                {/* 티어 */}
+                <Badge className="text-white font-medium bg-[#214d35]" text={myInfo?.tier || ''} />
+
+                {/* 자기소개 */}
+                {myInfo?.introduction && (
+                  <p className="text-white text-sm text-center leading-relaxed">
+                    {myInfo.introduction}
+                  </p>
+                )}
+
+                {/* 소셜 링크 아이콘들 */}
+                <div className="flex items-center gap-4 mt-4">
+                  {myInfo?.githubUrl && (
+                    <a
+                      href={
+                        myInfo.githubUrl.startsWith('http')
+                          ? myInfo.githubUrl
+                          : `https://${myInfo.githubUrl}`
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-400 hover:text-white transition-colors duration-200"
+                      title="GitHub"
+                    >
+                      <Image src="/icons/mypage/github.svg" alt="github" width={20} height={20} />
+                    </a>
+                  )}
+                  {myInfo?.blogUrl && (
+                    <a
+                      href={
+                        myInfo.blogUrl.startsWith('http')
+                          ? myInfo.blogUrl
+                          : `https://${myInfo.blogUrl}`
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-400 hover:text-white transition-colors duration-200"
+                      title="blog"
+                    >
+                      <Image src="/icons/mypage/blog.svg" alt="blog" width={20} height={20} />
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              {/* 통계 정보 - 세로 중앙 배치로 변경 */}
+              <div className="flex-1 flex flex-col justify-center space-y-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="bg-gray-800/50 p-4 rounded-lg">
+                    <div className="text-sm text-gray-400">랭킹</div>
+                    <div className="text-xl font-bold text-white">
+                      #{myRanking?.filter((item) => item.isMe)[0].ranks}
+                    </div>
+                  </div>
+                  <div className="bg-gray-800/50 p-4 rounded-lg">
+                    <div className="text-sm text-gray-400">푼 문제 수</div>
+                    <div className="text-xl font-bold" style={{ color: '#00d084' }}>
+                      {myInfo?.totalSolvedCount}
+                    </div>
+                  </div>
+                  <div className="bg-gray-800/50 p-4 rounded-lg">
+                    <div className="text-sm text-gray-400">남은 리뷰</div>
+                    <div className="text-xl font-bold text-white">{aiReviewCnt}</div>
+                  </div>
+                </div>
+
+                {/* 이메일 정보를 오른쪽 섹션으로 이동 */}
+                <div className="flex items-center justify-between p-4 bg-gray-800/30 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    {/* <Mail size={20} className="text-gray-400" /> */}
+                    <div>
+                      <div className="text-sm text-gray-400">이메일</div>
+                      <div className="text-white font-medium">{myInfo?.email}</div>
+                    </div>
+                  </div>
+
+                  {myInfo?.verified ? (
+                    <div className="flex items-center gap-2 text-green-400">
+                      <Check size={20} />
+                      <span className="font-medium">인증 완료</span>
+                    </div>
+                  ) : (
+                    <Button
+                      variant="primary"
+                      label="이메일 인증"
+                      onClick={async () => {
+                        const response = await emailVerfiy();
+                        alert(response);
+                      }}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <ModifyForm myInfo={info} editForm={editForm} setEditForm={setEditForm} />
+        )}
       </section>
       <section className="rounded-lg flex flex-col gap-8 border bg-gray-900/50 border-gray-700/50 p-10">
         <div className="flex flex-row gap-2">

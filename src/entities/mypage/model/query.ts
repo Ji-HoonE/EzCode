@@ -6,7 +6,7 @@ import {
   ChangePasswordRequest,
   DailySolved,
   IMyInfo,
-  Ranking,
+    Ranking,
   Report,
   SubmissionsResonse,
 } from './types';
@@ -112,5 +112,36 @@ export const useReportList = () => {
       return response.data;
     },
     staleTime: 1000 * 60 * 5,
+  });
+};
+
+export const useModifyInfo = () => {
+  return useMutation({
+    mutationFn : async (data : IMyInfo)=> {
+      const response =await ApiHelper.put(API_URL.MYPAGE.MODIFY_INFO , data)
+       return response.data
+    }
+  })
+}
+
+export const useChangeProfileImg = (image : string) => {
+  return useMutation({
+    mutationFn : async () => {
+      const response = await ApiHelper.put(API_URL.MYPAGE.UPLOAD_IMG,image)
+      return response.data
+    }
+  })
+}
+
+export const useUploadImage = () => {
+  return useMutation({
+    mutationFn: async (file: File) => {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const response = await ApiHelper.put<{message : string}>(API_URL.MYPAGE.UPLOAD_IMG, formData);
+  
+      return response.data;
+    },
   });
 };
