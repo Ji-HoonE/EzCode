@@ -54,7 +54,10 @@ export default function GitPushDialog({ githubUrl }: GitPushDialogProps) {
           {!!gitPushStatus ? <p>{gitPushStatus}</p> : <p>{tooltipContent}</p>}
         </TooltipContent>
       </Tooltip>
-      <DialogContent className="w-[425px] bg-secondary-background border-[#333]">
+      <DialogContent
+        className="w-[425px] bg-secondary-background border-[#333]"
+        showCloseButton={false}
+      >
         <DialogHeader>
           <DialogTitle>GitHub 연동</DialogTitle>
           <DialogDescription className="text-sm font-medium text-[#ccc] mb-2 block">
@@ -81,10 +84,18 @@ export default function GitPushDialog({ githubUrl }: GitPushDialogProps) {
                 choiceRepo({ repositoryName: currentRepo });
                 setIsDialogOpen(false);
               }}
-              className="bg-[#214d35] hover:bg-[#276e48] text-white flex-1"
+              className="bg-primary  hover:bg-hover-primary flex-3"
               disabled={!!currentRepo && !autoPushStatus}
             >
               연동하기
+            </Button>
+            <Button
+              onClick={() => {
+                setIsDialogOpen(false);
+              }}
+              className="bg-gray-500 flex-1"
+            >
+              닫기
             </Button>
           </div>
         </div>
