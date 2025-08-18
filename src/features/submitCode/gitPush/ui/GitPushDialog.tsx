@@ -7,19 +7,13 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@/components/ui/dialog';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Icon } from '@/shared';
 import useGitPush from '../hooks/useGitPush';
 import { Switch } from '@/components/ui/switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useEffect, useState } from 'react';
 import { TGitPushStatus } from '../model/useGitPushStatus.store.type';
+import { Select } from '@/shared/ui/select/Select';
 
 interface GitPushDialogProps {
   githubUrl: string | null;
@@ -32,7 +26,7 @@ export default function GitPushDialog({ githubUrl }: GitPushDialogProps) {
   const {
     pushAutoToggle,
     choiceRepo,
-    userRepos,
+    reposOptions,
     currentRepo,
     setCurrentRepo,
     autoPushStatus,
@@ -71,34 +65,7 @@ export default function GitPushDialog({ githubUrl }: GitPushDialogProps) {
         <div className="space-y-4">
           <>
             <label className="text-sm font-medium text-[#ccc] mb-2 block">레포지토리 선택</label>
-
-            <Select value={currentRepo}>
-              <SelectTrigger
-                className="bg-background border-[#333] text-white"
-                disabled={!userRepos}
-              >
-                <SelectValue
-                  placeholder={userRepos ? '레포지토리를 선택하세요' : '불러오기 실패'}
-                />
-              </SelectTrigger>
-              <SelectContent className="bg-secondary-background border-[#333]">
-                {userRepos ? (
-                  <ul className="overflow-y-auto max-h-60">
-                    {userRepos.map((repo, idx) => (
-                      <SelectItem
-                        key={idx}
-                        value={repo.repoName}
-                        onClick={() => setCurrentRepo(repo.repoName)}
-                        className="text-white hover:primary flex justify-between"
-                      >
-                        <p className="text-secondary text-md"> {repo.repoName}</p>
-                        <p className="text-xs text-[#ccc]">branch : {repo.defaultBranch}</p>
-                      </SelectItem>
-                    ))}
-                  </ul>
-                ) : null}
-              </SelectContent>
-            </Select>
+            <Select option={reposOptions} value={currentRepo} title="" setValue={setCurrentRepo} />
           </>
           <div className="flex items-center justify-between">
             <label className="text-sm font-medium text-[#ccc]">자동 푸시</label>
