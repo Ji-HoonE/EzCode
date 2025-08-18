@@ -12,7 +12,6 @@ import useGitPush from '../hooks/useGitPush';
 import { Switch } from '@/components/ui/switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useEffect, useState } from 'react';
-import { TGitPushStatus } from '../model/useGitPushStatus.store.type';
 import { Select } from '@/shared/ui/select/Select';
 
 interface GitPushDialogProps {
@@ -20,7 +19,7 @@ interface GitPushDialogProps {
 }
 export default function GitPushDialog({ githubUrl }: GitPushDialogProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [gitPushStatus, setGitPushStatus] = useState<TGitPushStatus>(null);
+  const [gitPushStatus, setGitPushStatus] = useState<string | null>(null);
   const [isToolTipOpen, setIsToolTipOpen] = useState<true | undefined>(undefined);
 
   const {
@@ -35,7 +34,7 @@ export default function GitPushDialog({ githubUrl }: GitPushDialogProps) {
 
   useEffect(() => {
     setGitPushStatus(webSocketGitPushStatus);
-    setIsToolTipOpen(true);
+    setIsToolTipOpen(webSocketGitPushStatus ? true : undefined);
   }, [webSocketGitPushStatus]);
 
   const tooltipContent = !githubUrl

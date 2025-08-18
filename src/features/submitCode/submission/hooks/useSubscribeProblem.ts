@@ -6,7 +6,7 @@ import useProblemWebSocketStore, {
 } from '@/features/submitCode/submission/model/useProblemWebSocketStore';
 import { useEffect } from 'react';
 import useConnectProblemWebSocket from './useConnectProblemWebSocket';
-import useGitPushStatusStoreActions from '../../gitPush/model/useGitPushStatus.store';
+import { useGitPushStatusStoreActions } from '../../gitPush/model/useGitPushStatus.store';
 
 export default function useSubscribeProblem(sessionKey: string) {
   const { setMessage, clearStore } = useProblemWebSocketStoreActions();
@@ -30,6 +30,7 @@ export default function useSubscribeProblem(sessionKey: string) {
         setMessage('error', JSON.parse(msg.body))
       );
       problemStompRef.current.subscribe(`${base}/git-status`, (msg: IMessage) => {
+        console.log(msg.body);
         setGitPushStatus(JSON.parse(msg.body).pushStatus);
       });
 

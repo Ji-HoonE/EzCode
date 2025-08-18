@@ -8,6 +8,12 @@ import { useEffect, useState } from 'react';
 import useGitPushStatusStore from '../model/useGitPushStatus.store';
 import { OptionType } from '@/shared/ui/select/Select';
 
+const gitPushStatusToKor: Record<string, string> = {
+  STARTED: '해당 repo에 push 중... ',
+  SUCCESS: 'push에 성공했습니다!',
+  FAILED: 'push에 실패 했습니다',
+};
+
 export default function useGitPush() {
   const [currentRepo, setCurrentRepo] = useState('');
   const [reposOptions, setReposOptions] = useState<OptionType[]>([]);
@@ -16,7 +22,7 @@ export default function useGitPush() {
   const { mutateAsync: choiceRepo } = useGitRepoChoice();
   const { data: userRepos } = useGetGitHubRepo();
   const { data: autoPushStatus } = useAutoGitPushStatus();
-  const { gitPushStatus: webSocketGitPushStatus } = useGitPushStatusStore();
+  const { gitPushStatus } = useGitPushStatusStore();
 
   useEffect(() => {
     if (userRepos) {
@@ -30,12 +36,13 @@ export default function useGitPush() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userRepos]);
 
+  const webSocketGitPushStatus = gitPushStatus ? gitPushStatusToKor[gitPushStatus] : null;
+
   return {
     pushAutoToggle,
     choiceRepo,
     reposOptions,
     currentRepo,
-
     setCurrentRepo,
     autoPushStatus,
     webSocketGitPushStatus,

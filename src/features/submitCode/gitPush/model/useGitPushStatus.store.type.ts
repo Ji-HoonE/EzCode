@@ -7,7 +7,8 @@ export interface IGitPushStatusStoreState {
 /** 스토어 액션 인터페이스 */
 interface IGitPushStatusStoreAction {
   actions: {
-    setStatus: (status: TGitPushStatus) => void;
+    setGitPushStatus: (status: TGitPushStatus) => void;
+    clearStore: () => void;
   };
 }
 

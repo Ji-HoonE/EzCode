@@ -58,6 +58,7 @@ const useProblemWebSocketStore = create<IProblemWebSocketStore>()(
       clearResults: () => {
         set({
           results: [],
+          totalResult: null,
         });
       },
     },

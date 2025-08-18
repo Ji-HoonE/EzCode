@@ -8,10 +8,9 @@ const useGitPushStatusStore = create<TGitStatusStore>()(
   devtools((set) => ({
     ...INITIAL_STATE,
     actions: {
-      setStatus: (status) => {
+      setGitPushStatus: (status) => {
         set({ gitPushStatus: status });
       },
-
       clearStore: () => {
         set({
           ...INITIAL_STATE,
@@ -25,7 +24,8 @@ const useGitPushStatusStore = create<TGitStatusStore>()(
 export function useGitPushStatusStoreActions() {
   return useGitPushStatusStore(
     useShallow((state) => ({
-      setGitPushStatus: state.actions.setStatus,
+      setGitPushStatus: state.actions.setGitPushStatus,
+      clearStore: state.actions.clearStore,
     }))
   );
 }
