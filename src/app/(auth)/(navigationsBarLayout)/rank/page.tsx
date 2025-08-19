@@ -13,8 +13,6 @@ import { Button } from '@/shared/ui/button/Button';
 
 import { TAroundRanking } from '@/entities/rank/types';
 import { getRankIcon } from '@/entities/rank/utils/getRankIcon';
-import { useSession } from 'next-auth/react';
-
 // 이번주 랭킹 데이터
 
 // 역대 랭킹 데이터
