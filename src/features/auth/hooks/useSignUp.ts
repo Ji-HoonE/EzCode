@@ -1,7 +1,6 @@
 'use client';
 import { API_CONSTANTS } from '@/api/constants/api.constants';
 import { useSignUpMutation } from '@/entities/auth/model/mutation/auth.mutation';
-import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 import { useAuthStore } from '../store/authSlice';
 import { useShallow } from 'zustand/shallow';
@@ -19,8 +18,6 @@ const useSignUp = () => {
   );
   /** 로그인 Api 요청 mutation */
   const { mutateAsync } = useSignUpMutation();
-
-  const router = useRouter();
 
   /** 회원가입 정보 */
   const [signUpInfo, setSignUpInfo] = useState({

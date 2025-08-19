@@ -29,7 +29,7 @@ const useSocialLogin = (onLoginSuccess?: () => void) => {
       });
       return;
     }
-  }, [searchParams, router]);
+  }, [searchParams, router, onLoginSuccess]);
 
   const handleSocialLogin = async (provider: 'github' | 'google') => {
     try {
