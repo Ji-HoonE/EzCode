@@ -1,18 +1,17 @@
 import { ActivityCalendar } from 'react-activity-calendar';
 import { eachDayOfInterval, format, startOfYear, endOfYear } from 'date-fns';
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { IHeatmapItem } from '@/entities/mypage/model/types';
 import { Select } from '@/shared/ui/select/Select';
 
 export const Heatmap = ({ data }: { data: IHeatmapItem[] }) => {
   const currentYear = new Date().getFullYear();
-
-  // 최근 3년 (올해 포함)
   const yearList = [0, 1, 2].map((i) => (currentYear - i).toString());
+  const [tab, setTab] = useState(yearList[0]);
 
-  const [tab, setTab] = useState(yearList[0]); // 최신 연도부터 시작
+  const [hoverData, setHoverData] = useState<IHeatmapItem | null>(null);
+  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
 
-  // 연도별 데이터 생성
   const fullYearData = useMemo(() => {
     const year = Number(tab);
     const allDatesOfYear = eachDayOfInterval({
@@ -37,10 +36,39 @@ export const Heatmap = ({ data }: { data: IHeatmapItem[] }) => {
   }, [tab, data]);
 
   return (
-    <div className="flex flex-row gap-10 flex-1">
+    <div
+      className="flex flex-row gap-10 flex-1 relative"
+      onMouseLeave={() => {
+        setHoverData(null);
+        setTooltipPos(null);
+      }}
+    >
       <ActivityCalendar
+        renderBlock={(blockElement, blockProps) => {
+          return React.cloneElement(blockElement, {
+            onMouseEnter: (e: React.MouseEvent) => {
+              const rect = (e.target as HTMLElement).getBoundingClientRect();
+              const containerRect = (e.currentTarget as HTMLElement)
+                .closest('div')!
+                .getBoundingClientRect();
+              setHoverData(blockProps as IHeatmapItem);
+              setTooltipPos({
+                x: rect.left - containerRect.left + rect.width / 2,
+                y: rect.top - containerRect.top, // 블록 위쪽
+              });
+            },
+            onMouseLeave: () => {
+              setHoverData(null);
+              setTooltipPos(null);
+            },
+            style: {
+              ...blockElement.props.style,
+              cursor: 'pointer',
+            },
+          });
+        }}
         hideTotalCount
-        blockSize={18}
+        blockSize={17}
         blockRadius={4}
         fontSize={16}
         theme={{
@@ -50,12 +78,24 @@ export const Heatmap = ({ data }: { data: IHeatmapItem[] }) => {
         data={fullYearData}
       />
 
+      {/* 툴팁 */}
+      {hoverData && tooltipPos && (
+        <div
+          className="absolute px-2 py-1 bg-black text-white text-xs rounded pointer-events-none"
+          style={{
+            left: tooltipPos.x,
+            top: tooltipPos.y - 30, // 블록 위 30px
+            transform: 'translateX(-50%)',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          <div>{hoverData.date}</div>
+          <div>{hoverData.count} 문제</div>
+        </div>
+      )}
+
       <Select
-        option={[
-          { label: '2025', value: '2025' },
-          { label: '2024', value: '2024' },
-          { label: '2023', value: '2023' },
-        ]}
+        option={yearList.map((y) => ({ label: y, value: y }))}
         title=""
         value={tab}
         setValue={(value) => setTab(value)}

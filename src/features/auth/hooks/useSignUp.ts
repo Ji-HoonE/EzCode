@@ -1,18 +1,23 @@
 'use client';
 import { API_CONSTANTS } from '@/api/constants/api.constants';
 import { useSignUpMutation } from '@/entities/auth/model/mutation/auth.mutation';
-import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
+import { useAuthStore } from '../store/authSlice';
+import { useShallow } from 'zustand/shallow';
+import { toast } from 'sonner';
 
 /**
  * @description 회원가입 상태 관리 hook
  * @returns
  */
 const useSignUp = () => {
+  const { setActiveTab } = useAuthStore(
+    useShallow((state) => ({
+      setActiveTab: state.setActiveTab,
+    }))
+  );
   /** 로그인 Api 요청 mutation */
   const { mutateAsync } = useSignUpMutation();
-
-  const router = useRouter();
 
   /** 회원가입 정보 */
   const [signUpInfo, setSignUpInfo] = useState({
@@ -49,13 +54,30 @@ const useSignUp = () => {
     try {
       setErrorMessage('');
       const response = await mutateAsync(signUpInfo);
-      console.log('response', response);
       if (response.data.status !== API_CONSTANTS.CODE.CREATED) {
         handleSignUpError(response.data.message);
         return;
       }
       if (response.data.status === API_CONSTANTS.CODE.CREATED) {
-        router.push('/signin');
+        setSignUpInfo({
+          email: '',
+          password: '',
+          passwordConfirm: '',
+          username: '',
+          nickname: '',
+          age: 0,
+        });
+        toast.success('회원가입에 완료', {
+          richColors: false,
+          style: {
+            background: '#00d084',
+            color: '#ffffff',
+            fontWeight: 'bold',
+            fontSize: '16px',
+            border: 'none',
+          },
+        });
+        setActiveTab('login');
       }
     } catch (err) {
       console.error(err);

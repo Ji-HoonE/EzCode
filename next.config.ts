@@ -3,7 +3,14 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: false, // Strict Mode 비활성화
-
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ezcode-s3.s3.ap-northeast-2.amazonaws.com',
+      },
+    ],
+  },
   webpack(config) {
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule: any) => rule.test?.test?.('.svg'));

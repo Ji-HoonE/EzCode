@@ -80,3 +80,4 @@ export interface Report {
   targetId: number;
   targetType: string;
 }
+

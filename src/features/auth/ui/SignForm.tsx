@@ -1,13 +1,19 @@
 'use client';
-import { Suspense, useState } from 'react';
+import { Suspense } from 'react';
 import SignupForm from './SignupForm';
 import SignInSocialLogin from './SignInSocialLogin';
 import SignInForm from './SigninForm';
-
-type activeTabType = 'login' | 'signup';
+import { useAuthStore } from '../store/authSlice';
+import { useShallow } from 'zustand/shallow';
 
 const SignForm = () => {
-  const [activeTab, setActiveTab] = useState<activeTabType>('login');
+  const { activeTab, setActiveTab } = useAuthStore(
+    useShallow((state) => ({
+      activeTab: state.activeTab,
+      setActiveTab: state.setActiveTab,
+    }))
+  );
+
   return (
     <div className="w-full flex items-center justify-start p-4 lg:p-8">
       <div className="w-full max-w-[600px]">

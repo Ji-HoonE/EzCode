@@ -6,7 +6,7 @@ import { useEffect } from 'react';
  * @description 소셜로그인 상태 관리 hook
  * @returns
  */
-const useSocialLogin = () => {
+const useSocialLogin = (onLoginSuccess?: () => void) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -20,12 +20,16 @@ const useSocialLogin = () => {
         redirect: false,
       }).then((response) => {
         if (response?.ok) {
-          router.replace('/');
+          if (onLoginSuccess) {
+            onLoginSuccess();
+          } else {
+            router.replace('/');
+          }
         }
       });
       return;
     }
-  }, [searchParams, router]);
+  }, [searchParams, router, onLoginSuccess]);
 
   const handleSocialLogin = async (provider: 'github' | 'google') => {
     try {

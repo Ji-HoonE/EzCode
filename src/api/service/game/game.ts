@@ -26,7 +26,7 @@ import { ICodeResponse } from '@/api/interface/api.interface';
 export const gameApi = {
   checkCharacter: async () => {
     const response = await ApiHelper.get<ICheckCharacterResponse>(API_URL.GAME.CHECK_CHARACTER, {
-      reqType: 'server',
+      reqType: 'client',
     });
     return response;
   },

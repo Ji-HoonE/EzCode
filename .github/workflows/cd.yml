@@ -20,4 +20,10 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/frontend
-            ../deploy.sh
+            if ../deploy.sh; then
+              echo "[INFO] Deploy succeeded. Running docker prune..."
+              docker system prune -af
+            else
+              echo "[ERROR] Deploy failed. Skipping prune."
+              exit 1
+            fi

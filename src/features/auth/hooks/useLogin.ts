@@ -7,7 +7,7 @@ import { signIn } from 'next-auth/react';
  * @description 로그인 상태 관리 hook
  * @returns
  */
-const useLogin = () => {
+const useLogin = (onLoginSuccess?: () => void) => {
   const router = useRouter();
   /** 로그인 정보 */
   const [loginInfo, setLoginInfo] = useState({
@@ -51,7 +51,11 @@ const useLogin = () => {
         return;
       }
       if (result?.ok) {
-        router.replace('/');
+        if (onLoginSuccess) {
+          onLoginSuccess();
+        } else {
+          router.replace('/');
+        }
       }
     } catch (err) {
       console.error(err);

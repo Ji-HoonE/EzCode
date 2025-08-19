@@ -1,8 +1,11 @@
 'use client';
 import useSocialLogin from '../hooks/useSocialLogin';
 
-const SignInSocialLogin = () => {
-  const { handleSocialLogin } = useSocialLogin();
+interface SignInSocialLoginProps {
+  onLoginSuccess?: () => void;
+}
+const SignInSocialLogin = ({ onLoginSuccess }: SignInSocialLoginProps) => {
+  const { handleSocialLogin } = useSocialLogin(onLoginSuccess);
   return (
     <div className="space-y-3">
       <button
