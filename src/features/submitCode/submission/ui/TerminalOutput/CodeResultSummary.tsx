@@ -3,30 +3,42 @@ import { Spinner } from '@/shared/ui/loading-indicators';
 import useProblemWebSocketStore from '../../model/useProblemWebSocketStore';
 import ResultItem from './ResultItem';
 import TotalResultBox from './TotalResultBox';
+import PendingResultItem from './PendingResultItem';
 
 export default function CodeResultSummary() {
-  const { results, totalResult, isSubmitted } = useProblemWebSocketStore();
+  const { results, totalResult, isSubmitted, testCaseIds } = useProblemWebSocketStore();
+
+  console.log(testCaseIds);
 
   return (
     <div className="flex flex-col gap-4">
       {isSubmitted ? (
         <>
           <h2 className="text-lg font-bold">채점 결과</h2>
-          {results && (
-            <ul className="flex flex-col gap-2">
-              {results.map((res, i) => (
-                <ResultItem key={res.testcaseId} res={res} index={i} />
-              ))}
-            </ul>
-          )}
-          <div className="flex flex-col justify-between h-full">
-            {totalResult ? (
-              <TotalResultBox totalResult={totalResult} />
-            ) : (
-              <div className="flex gap-2 items-center">
-                <Spinner className="size-8 text-green-900" /> 채점중 입니다
-              </div>
+          <div className="overflow-y-scroll h-fit scrollbar-hidden flex flex-col gap-3">
+            {testCaseIds && (
+              <ul className="flex flex-col gap-2 h-full p-3 rounded-xl border border-gray-600 ">
+                {testCaseIds.map((testCaseId, i) => {
+                  const filteredTestCase = results.find(
+                    (result) => result.testcaseId === testCaseId
+                  );
+                  if (filteredTestCase) {
+                    return <ResultItem key={testCaseId} res={filteredTestCase} index={i} />;
+                  } else {
+                    return <PendingResultItem index={i} key={testCaseId} />;
+                  }
+                })}
+              </ul>
             )}
+            <div className="flex flex-col justify-between">
+              {totalResult ? (
+                <TotalResultBox totalResult={totalResult} />
+              ) : (
+                <div className="flex gap-2 items-center">
+                  <Spinner className="size-8 text-green-900" /> 채점중 입니다
+                </div>
+              )}
+            </div>
           </div>
         </>
       ) : (

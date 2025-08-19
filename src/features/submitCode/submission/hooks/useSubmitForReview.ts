@@ -11,11 +11,11 @@ export default function useSubmitForReview(problemId: ProblemId) {
   const { data: reviewTokenData } = useMyAiReviewCheckQuery();
 
   /**코드리뷰 요청 뮤테이션 */
-  const { mutateAsync, data: codeReview } = useISubmissionForReviewMutation(problemId);
+  const { mutateAsync, data: codeReviewData } = useISubmissionForReviewMutation(problemId);
 
-  /**다 맞추었을때, isCorrect 상태를 담은 store*/
-  const { isCorrect, isSubmittedReview } = useCodeReviewStore();
-  const { setIsSubmittedReview } = useCodeReviewStoreActions();
+  /**store*/
+  const { isCorrect, isSubmittedReview, codeReview } = useCodeReviewStore();
+  const { setIsSubmittedReview, setCodeReview } = useCodeReviewStoreActions();
 
   const submitForReview = (sourceCodeData: ISourceCode) => {
     mutateAsync({ ...sourceCodeData, isCorrect: isCorrect });
@@ -27,7 +27,10 @@ export default function useSubmitForReview(problemId: ProblemId) {
     if (reviewTokenData?.data.result.reviewToken) {
       setTokenCount(reviewTokenData?.data.result.reviewToken);
     }
-  }, [reviewTokenData]);
+    if (codeReviewData) {
+      setCodeReview(codeReviewData);
+    }
+  }, [reviewTokenData, codeReviewData]);
 
   return {
     tokenCount,

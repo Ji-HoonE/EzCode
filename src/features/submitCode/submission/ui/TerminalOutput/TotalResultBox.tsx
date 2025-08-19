@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import { IProblemStompFinalResult } from '../../model/useProblemWebSocketStore.types';
 
 interface ITotalResultBoxProps {
@@ -10,13 +11,20 @@ export default function TotalResultBox({ totalResult }: ITotalResultBoxProps) {
     ? ((totalResult.passedCount / totalResult.totalCount) * 100).toFixed(2)
     : '00.00';
 
-  const totalResultText = isCorrect ? ' 통과 ' : ' 실패 ';
+  const totalResultText = isCorrect ? '통과' : '실패';
 
   return (
-    <div className="bg-background w-full text-5 h-[70px] rounded-[10px] flex  items-center justify-center">
+    <div
+      className={cn(
+        'bg-background w-full h-18 rounded-xl flex items-center justify-center  border-[2px] gap-1',
+        isCorrect ? 'border-secondary' : 'border-danger'
+      )}
+    >
       최종 테스트
-      <span className={isCorrect ? 'text-secondary' : 'text-red-600'}>{totalResultText}</span>|
-      통과율 {accuracy}%, ({passedCount}/{totalCount})
+      <strong className={isCorrect ? 'text-secondary' : 'text-red-600'}>{totalResultText}</strong>
+      <p>
+        | 통과율 {accuracy}%, ({passedCount}/{totalCount})
+      </p>
     </div>
   );
 }

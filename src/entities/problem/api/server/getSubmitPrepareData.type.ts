@@ -1,4 +1,4 @@
-export interface IUseSubmitQueryResponse {
+export interface ISubmitPrepareData {
   sessionKey: string;
   testcaseIds: number[];
 }

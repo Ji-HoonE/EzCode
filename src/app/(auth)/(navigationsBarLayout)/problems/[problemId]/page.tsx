@@ -1,4 +1,5 @@
-import { getSessionKey } from '@/entities/problem/api/server/getSessionKey';
+import { getSubmitPrepareData } from '@/entities/problem';
+import { ISubmitPrepareData } from '@/entities/problem/api/server/getSubmitPrepareData.type';
 import { getGitHubUrl } from '@/entities/submitCode/gitpush/actions/getGitHub';
 import ProblemWorksSection from '@/features/submitCode/submission/ui/ProblemWorksSection';
 import { authOptions } from '@/lib/authOptions';
@@ -12,12 +13,13 @@ export default async function ProblemPage({ params }: IProblemPageProps) {
   const session = await getServerSession(authOptions);
   const accessToken = session?.accessToken;
 
-  let sessionKey: string | undefined;
+  let submitPrepareData: ISubmitPrepareData | undefined;
   let githubUrl: string | null = null;
 
   if (accessToken) {
     try {
-      sessionKey = await getSessionKey(problemId);
+      submitPrepareData = await getSubmitPrepareData(problemId);
+
       githubUrl = await getGitHubUrl();
     } catch (error) {
       console.error(error);
@@ -25,6 +27,10 @@ export default async function ProblemPage({ params }: IProblemPageProps) {
   }
 
   return (
-    <ProblemWorksSection problemId={problemId} githubUrl={githubUrl} sessionKey={sessionKey} />
+    <ProblemWorksSection
+      problemId={problemId}
+      githubUrl={githubUrl}
+      submitPrepareData={submitPrepareData}
+    />
   );
 }
