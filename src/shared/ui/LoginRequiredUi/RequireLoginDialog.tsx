@@ -15,11 +15,14 @@ export default function RequireLoginDialog({
   onLoginSuccess,
 }: IRequireLoginDialogProps) {
   if (!isOpen) return null;
+
   const handleLoginSuccess = () => {
-    if (onLoginSuccess) {
-      onLoginSuccess();
-    }
+    onLoginSuccess?.();
+    setTimeout(() => {
+      onClose();
+    }, 50);
   };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
       <div className="w-full flex items-center justify-center p-4 lg:p-8">
