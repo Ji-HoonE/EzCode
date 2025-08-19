@@ -3,13 +3,13 @@
 import LinkedButton from '@/shared/ui/linkedButton';
 import { AUTH_ACTIONS_OPTIONS, NAVIGATE_ATTRIBUTE } from '../navigateAttribute';
 import { Select } from '@/shared/ui/select/Select';
-import useAccessToken from '@/shared/hooks/useAuthToken';
 import { useEffect, useState } from 'react';
 import { useMyInfoQuery } from '@/entities/mypage/model/query';
 import UserProfile from '@/shared/ui/userProfile';
 import { useRouter } from 'next/navigation';
 import { PATHS } from '@/constants/paths';
 import { useLogoutMutation } from '@/entities/auth/model/mutation/auth.mutation';
+import { useSession } from 'next-auth/react';
 
 interface IUserInfo {
   profileImage: string;
@@ -18,7 +18,7 @@ interface IUserInfo {
 
 export default function AuthActions() {
   const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
-  const accessToken = useAccessToken();
+  const { data: session } = useSession();
   const { data } = useMyInfoQuery();
   const router = useRouter();
   const { mutateAsync } = useLogoutMutation();
@@ -30,10 +30,14 @@ export default function AuthActions() {
     });
   }, [data?.data.result]);
 
+  const accessToken = session?.accessToken?.split(' ')[1] as string;
+
   const selectOption = (value: string) => {
     if (value === 'mypage') return router.push(PATHS.MYPAGE);
     if (value === 'logout') return mutateAsync();
   };
+
+  console.log('accessToken', accessToken);
 
   return (
     <div className="flex items-center space-x-4">
@@ -51,7 +55,7 @@ export default function AuthActions() {
         />
       ) : (
         <>
-          <LinkedButton props={NAVIGATE_ATTRIBUTE.signup} />
+          {/* <LinkedButton props={NAVIGATE_ATTRIBUTE.signup} /> */}
           <LinkedButton props={NAVIGATE_ATTRIBUTE.signin} />
         </>
       )}

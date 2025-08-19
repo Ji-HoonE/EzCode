@@ -83,11 +83,11 @@ const request = async <T>(
         config.reqType === 'server' ? await getServerSession(authOptions) : await getSession();
 
       if (!session?.refreshToken) {
-        throw new Error('No refresh token');
+        redirect('/signin');
       }
 
       try {
-        const newAccessToken = await refreshToken(session.refreshToken as string);
+        const newAccessToken = await refreshToken(session?.refreshToken as string);
         const retryConfig = await (config.reqType === 'server'
           ? requestServerInterceptor({
               ...config,
@@ -161,30 +161,30 @@ const ApiHelper = {
    * @returns {Promise<ApiResponse<T>>} API 응답
    */
   put: <T>(endpoint: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>> => {
-  const isFormData = data instanceof FormData;
+    const isFormData = data instanceof FormData;
 
-  // defaultConfig + config 합치기
-  const mergedConfig = {
-    ...defaultConfig,
-    ...config,
-  };
+    // defaultConfig + config 합치기
+    const mergedConfig = {
+      ...defaultConfig,
+      ...config,
+    };
 
- // headers 합치기 (HeadersInit 안전 처리)
-const headers = new Headers(mergedConfig.headers as HeadersInit);
+    // headers 합치기 (HeadersInit 안전 처리)
+    const headers = new Headers(mergedConfig.headers as HeadersInit);
 
-// FormData이면 Content-Type 제거 (대소문자 무시)
-if (isFormData) {
-  headers.delete('Content-Type');
-}
+    // FormData이면 Content-Type 제거 (대소문자 무시)
+    if (isFormData) {
+      headers.delete('Content-Type');
+    }
 
-return request<T>(endpoint, {
-  ...mergedConfig,
-  method: 'PUT',
-  body: isFormData ? (data as FormData) : JSON.stringify(data),
-  headers,
-  reqType: mergedConfig.reqType || 'client',
-});
-},
+    return request<T>(endpoint, {
+      ...mergedConfig,
+      method: 'PUT',
+      body: isFormData ? (data as FormData) : JSON.stringify(data),
+      headers,
+      reqType: mergedConfig.reqType || 'client',
+    });
+  },
 
   /**
    * PATCH 요청

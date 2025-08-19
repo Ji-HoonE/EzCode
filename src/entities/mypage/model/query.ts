@@ -6,21 +6,24 @@ import {
   ChangePasswordRequest,
   DailySolved,
   IMyInfo,
-    Ranking,
+  Ranking,
   Report,
   SubmissionsResonse,
 } from './types';
 import { TPeriod } from '@/shared/types/mypage.type';
 import { API_URL } from '@/api/constants/api.constants';
+import { useSession } from 'next-auth/react';
 
 export const useMyInfoQuery = () => {
+  const { data: session } = useSession();
+  const accessToken = session?.accessToken?.split(' ')[1] as string;
   return useQuery({
     queryKey: ['my-info'],
     queryFn: async () => {
       const response = await ApiHelper.get<IMyInfo>('/users');
       return response;
     },
-
+    enabled: !!accessToken,
     staleTime: 1000 * 60 * 5,
   });
 };
@@ -32,7 +35,6 @@ export const useMyRankingQuery = (period: TPeriod) => {
       const response = await ApiHelper.get<Ranking[]>(`/rankings/me/around?period=${period}`);
       return response;
     },
-
     staleTime: 1000 * 60 * 5,
   });
 };
@@ -117,21 +119,21 @@ export const useReportList = () => {
 
 export const useModifyInfo = () => {
   return useMutation({
-    mutationFn : async (data : IMyInfo)=> {
-      const response =await ApiHelper.put(API_URL.MYPAGE.MODIFY_INFO , data)
-       return response.data
-    }
-  })
-}
+    mutationFn: async (data: IMyInfo) => {
+      const response = await ApiHelper.put(API_URL.MYPAGE.MODIFY_INFO, data);
+      return response.data;
+    },
+  });
+};
 
-export const useChangeProfileImg = (image : string) => {
+export const useChangeProfileImg = (image: string) => {
   return useMutation({
-    mutationFn : async () => {
-      const response = await ApiHelper.put(API_URL.MYPAGE.UPLOAD_IMG,image)
-      return response.data
-    }
-  })
-}
+    mutationFn: async () => {
+      const response = await ApiHelper.put(API_URL.MYPAGE.UPLOAD_IMG, image);
+      return response.data;
+    },
+  });
+};
 
 export const useUploadImage = () => {
   return useMutation({
@@ -139,8 +141,11 @@ export const useUploadImage = () => {
       const formData = new FormData();
       formData.append('image', file);
 
-      const response = await ApiHelper.put<{message : string}>(API_URL.MYPAGE.UPLOAD_IMG, formData);
-  
+      const response = await ApiHelper.put<{ message: string }>(
+        API_URL.MYPAGE.UPLOAD_IMG,
+        formData
+      );
+
       return response.data;
     },
   });

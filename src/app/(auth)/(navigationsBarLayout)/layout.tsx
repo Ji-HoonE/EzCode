@@ -1,7 +1,7 @@
-import AuthProvider from '@/lib/AuthProvider';
+import AuthGuard from '@/lib/AuthGuard';
 import { GlobalFloatingWidget } from '@/widgets/globalFloatingWidget/ui';
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
   chatDialog,
 }: Readonly<{
@@ -9,12 +9,11 @@ export default function RootLayout({
   chatDialog: React.ReactNode;
 }>) {
   return (
-    <AuthProvider>
-      <div className="w-full h-full">
-        {chatDialog}
-        <div className="w-full h-full">{children}</div>
-        <GlobalFloatingWidget />
-      </div>
-    </AuthProvider>
+    <div className="w-full h-full">
+      {chatDialog}
+      <div className="w-full h-full">{children}</div>
+      <GlobalFloatingWidget />
+      <AuthGuard />
+    </div>
   );
 }

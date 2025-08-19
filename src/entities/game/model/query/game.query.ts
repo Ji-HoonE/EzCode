@@ -1,6 +1,19 @@
 import { gameApi } from '@/api/service/game/game';
 import { useQuery } from '@tanstack/react-query';
 
+/** 캐릭터 보유 여부 조회 Api */
+export const useCheckCharacterQuery = (isOpen: boolean) => {
+  return useQuery({
+    queryKey: ['checkCharacter'],
+    queryFn: async () => {
+      const response = await gameApi.checkCharacter();
+      return response;
+    },
+    enabled: isOpen,
+    staleTime: 0,
+    gcTime: 0,
+  });
+};
 /** 캐릭터 스테이터스 조회 Api */
 export const useGetGameCharactersStatusQuery = (isOpen: boolean) => {
   return useQuery({
