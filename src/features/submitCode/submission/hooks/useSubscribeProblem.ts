@@ -32,7 +32,6 @@ export default function useSubscribeProblem() {
         (msg: IMessage) => setResults('error', JSON.parse(msg.body))
       );
       problemStompRef.current.subscribe(`${base}/git-status`, (msg: IMessage) => {
-        console.log(msg.body);
         setGitPushStatus(JSON.parse(msg.body).pushStatus);
       });
 

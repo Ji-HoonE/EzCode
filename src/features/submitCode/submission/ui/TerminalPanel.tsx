@@ -1,5 +1,5 @@
 'use client';
-import { ProblemId, Icon, useAccessToken } from '@/shared';
+import { ProblemId, Icon } from '@/shared';
 import clsx from 'clsx';
 import { Mode } from './ProblemWorksSection';
 import useProblemWebSocketStore, {
