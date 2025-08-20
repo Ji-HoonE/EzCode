@@ -6,7 +6,6 @@ import {
   INITIAL_STATE,
   IProblemStompResult,
   IProblemWebSocketStore,
-  IWebSocketStatus,
 } from './useProblemWebSocketStore.types';
 
 /** 인증 스토어 */
@@ -14,9 +13,14 @@ const useProblemWebSocketStore = create<IProblemWebSocketStore>()(
   devtools((set) => ({
     ...INITIAL_STATE,
     actions: {
-      setStatus: (key, status) => {
-        set((state: IWebSocketStatus) => {
-          return { ...state, [key]: status };
+      setIsConnected: (status) => {
+        set({
+          isConnected: status,
+        });
+      },
+      setIsSubmitted: (status) => {
+        set({
+          isSubmitted: status,
         });
       },
       setPrepareData: (data) => {
@@ -61,7 +65,8 @@ const useProblemWebSocketStore = create<IProblemWebSocketStore>()(
 export function useProblemWebSocketStoreActions() {
   return useProblemWebSocketStore(
     useShallow((state) => ({
-      setStatus: state.actions.setStatus,
+      setIsConnected: state.actions.setIsConnected,
+      setIsSubmitted: state.actions.setIsSubmitted,
       setPrepareData: state.actions.setPrepareData,
       setResults: state.actions.setResults,
       clearStore: state.actions.clearStore,

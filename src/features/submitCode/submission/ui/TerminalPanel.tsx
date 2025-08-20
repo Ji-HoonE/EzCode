@@ -5,12 +5,13 @@ import { Mode } from './ProblemWorksSection';
 import useProblemWebSocketStore, {
   useProblemWebSocketStoreActions,
 } from '../model/useProblemWebSocketStore';
-import useSubscribeProblem from '../hooks/useSubscribeProblem';
 import GitPushDialog from '../../gitPush/ui/GitPushDialog';
 import { ISourceCode, useSubmissionForResultMutation } from '@/entities/submitCode';
 import PanelButton from './PanelButton';
 import { useGetSubmitPrepareData } from '@/entities/submitCode/submission/model/query/submitCode.query';
 import { useRouter, useSearchParams } from 'next/navigation';
+import useSubscribeProblem from '../hooks/useSubscribeProblem';
+import { useSession } from 'next-auth/react';
 
 interface TerminalPanelProps {
   problemId: ProblemId;
@@ -29,7 +30,9 @@ export default function TerminalPanel({
 }: TerminalPanelProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = useAccessToken();
+
+  const { data: session } = useSession();
+  const token = session?.accessToken?.split(' ')[1] as string;
   useGetSubmitPrepareData(problemId);
   const { submitPrepareData } = useProblemWebSocketStore();
 
@@ -38,9 +41,7 @@ export default function TerminalPanel({
     params.set('auth-guard', 'true');
     router.push(`?${params.toString()}`);
   };
-
   useSubscribeProblem();
-
   const { mutateAsync } = useSubmissionForResultMutation(problemId);
   const { clearResults } = useProblemWebSocketStoreActions();
 

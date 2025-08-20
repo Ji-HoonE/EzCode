@@ -1,10 +1,6 @@
 import { ISubmitPrepareData } from '@/entities/submitCode/submission/model/query/submitCode.query.type';
 
 /**웹소켓 연결 상태, 제출 상태 인터페이스 */
-export interface IWebSocketStatus {
-  isConnected: boolean;
-  isSubmitted: boolean;
-}
 
 //웹소켓 메시지로 받는 results type - destination(/testcase)
 export interface IProblemStompResult {
@@ -26,11 +22,11 @@ export interface IProblemStompFinalResult {
 
 /** setter 키 타입 */
 type MessageKey = 'results' | 'totalResult' | 'error';
-type StatusKey = 'isConnected' | 'isSubmitted';
 
 /** 스토어 초기 값 */
 export interface IInitialState {
-  webSocketStatus: IWebSocketStatus;
+  isConnected: boolean;
+  isSubmitted: boolean;
   submitPrepareData: ISubmitPrepareData;
   results: IProblemStompResult[] | [];
   totalResult: IProblemStompFinalResult | null;
@@ -41,7 +37,8 @@ export interface IInitialState {
 interface IMessageInitialAction {
   actions: {
     setPrepareData: (data: ISubmitPrepareData) => void;
-    setStatus: (key: StatusKey, status: boolean) => void;
+    setIsConnected: (status: boolean) => void;
+    setIsSubmitted: (status: boolean) => void;
     setResults: (key: MessageKey, message: unknown) => void;
     clearResults: () => void;
     clearStore: () => void;
@@ -49,10 +46,8 @@ interface IMessageInitialAction {
 }
 
 export const INITIAL_STATE: IInitialState = {
-  webSocketStatus: {
-    isConnected: false,
-    isSubmitted: false,
-  },
+  isConnected: false,
+  isSubmitted: false,
   submitPrepareData: {
     sessionKey: null,
     testcaseIds: null,
@@ -63,4 +58,4 @@ export const INITIAL_STATE: IInitialState = {
 };
 
 /** 인증 스토어 타입 */
-export type IProblemWebSocketStore = IInitialState & IMessageInitialAction & IWebSocketStatus;
+export type IProblemWebSocketStore = IInitialState & IMessageInitialAction;

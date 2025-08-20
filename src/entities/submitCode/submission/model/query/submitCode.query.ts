@@ -5,11 +5,13 @@ import { ProblemId } from '@/shared';
 import { useQuery } from '@tanstack/react-query';
 import { ISubmitPrepareData } from './submitCode.query.type';
 import { useProblemWebSocketStoreActions } from '@/features/submitCode/submission/model/useProblemWebSocketStore';
-import { getSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
 /**코드 제출시 필요한 세션키, initcaseIds 를 리스폰스로 받음 */
 
 export const useGetSubmitPrepareData = (problemId: ProblemId) => {
+  const { data: session } = useSession();
+  const accessToken = session?.accessToken?.split(' ')[1] as string;
   const { setPrepareData } = useProblemWebSocketStoreActions();
 
   const path = getProblemIdPath(problemId, 'submit-prepare');
@@ -17,14 +19,11 @@ export const useGetSubmitPrepareData = (problemId: ProblemId) => {
   return useQuery({
     queryKey: ['submit-prepare'],
     queryFn: async () => {
-      const session = await getSession();
-      const token = session?.accessToken;
-
       try {
-        if (!token) return { sessionKey: null, testcaseIds: null };
         const res = await ApiHelper.post<ISubmitPrepareData>(`${path}`);
-        const prepareData = res.data.result;
-        if (prepareData) {
+        if (res.data.result) {
+          //이미 채점이 진행중일때는 result 가 없으므로, query에서 undefined 호출 방지를 위한 로직
+          const prepareData = res.data.result;
           setPrepareData(prepareData);
           return prepareData;
         }
@@ -33,5 +32,6 @@ export const useGetSubmitPrepareData = (problemId: ProblemId) => {
         return { sessionKey: null, testcaseIds: null };
       }
     },
+    enabled: !!accessToken,
   });
 };

@@ -12,11 +12,12 @@ export default function useSubscribeProblem() {
   const { setResults, clearStore } = useProblemWebSocketStoreActions();
   const { setGitPushStatus } = useGitPushStatusStoreActions();
   const { problemStompRef } = useConnectProblemWebSocket();
-  const { webSocketStatus, submitPrepareData } = useProblemWebSocketStore();
+  const { isConnected, submitPrepareData } = useProblemWebSocketStore();
 
   useEffect(() => {
     if (!problemStompRef.current) return;
     if (!submitPrepareData.sessionKey) return;
+
     const base = `/user/queue/submission/${submitPrepareData.sessionKey}`;
 
     if (problemStompRef.current.connected) {
@@ -46,10 +47,10 @@ export default function useSubscribeProblem() {
       };
     }
   }, [
-    webSocketStatus.isConnected,
+    isConnected,
     setResults,
     clearStore,
     submitPrepareData.sessionKey,
-    problemStompRef,
+    problemStompRef.current?.connected,
   ]);
 }
