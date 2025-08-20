@@ -5,9 +5,7 @@ import { Client } from '@stomp/stompjs';
 import { BASE_URL } from '@/constants/env';
 import { sharedStompRef } from '@/shared/lib/stomp/sharedStompRef';
 import { useEffect } from 'react';
-import useProblemWebSocketStore, {
-  useProblemWebSocketStoreActions,
-} from '../model/useProblemWebSocketStore';
+import { useProblemWebSocketStoreActions } from '../model/useProblemWebSocketStore';
 import { useAccessToken } from '@/shared';
 
 export default function useConnectProblemWebSocket() {

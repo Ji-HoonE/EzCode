@@ -30,9 +30,9 @@ export default function TerminalPanel({
 }: TerminalPanelProps) {
   const [isRequiredDialogOpen, setIsRequiredDialogOpen] = useState(false);
   const token = useAccessToken();
-  useGetSubmitPrepareData(problemId, token);
+  useGetSubmitPrepareData(problemId);
 
-  const { sessionKey } = useProblemWebSocketStore();
+  const { submitPrepareData } = useProblemWebSocketStore();
 
   useSubscribeProblem();
 
@@ -42,7 +42,7 @@ export default function TerminalPanel({
   const submitForResult = () => {
     if (!token) return setIsRequiredDialogOpen(true);
     clearResults();
-    mutateAsync({ ...sourceCodeData, sessionKey: sessionKey || '' });
+    mutateAsync({ ...sourceCodeData, sessionKey: submitPrepareData.sessionKey || '' });
     setMode('result');
   };
 
