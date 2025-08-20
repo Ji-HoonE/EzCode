@@ -26,7 +26,7 @@ export const useAutoGitPushStatus = () => {
     queryKey: ['auto-git-push-status'],
     queryFn: async () => {
       const response = await ApiHelper.get<IGitPushAutoToggleResponse>(`${API_URL.GIT}/status`);
-      return response.data.result.gitPushStatus;
+      return response.data.result;
     },
     enabled: !!accessToken,
   });

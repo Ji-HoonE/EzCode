@@ -21,12 +21,16 @@ export default function useGitPush() {
   const { mutateAsync: pushAutoToggle } = useGitPushAutoToggleMutation();
   const { mutateAsync: choiceRepo } = useGitRepoChoice();
   const { data: userRepos } = useGetGitHubRepo();
-  const { data: autoPushStatus } = useAutoGitPushStatus();
+  const { data: currentGitPushStatus } = useAutoGitPushStatus();
   const { gitPushStatus } = useGitPushStatusStore();
 
   useEffect(() => {
     if (userRepos) {
-      setCurrentRepo(userRepos[0].repoName);
+      if (currentGitPushStatus?.githubRepoName) {
+        setCurrentRepo(currentGitPushStatus.githubRepoName);
+      } else {
+        setCurrentRepo(userRepos[0].repoName);
+      }
       const options: OptionType[] = userRepos.map((repo) => ({
         label: `${repo.repoName} - default : ${repo.defaultBranch}`,
         value: repo.repoName,
@@ -34,7 +38,7 @@ export default function useGitPush() {
       setReposOptions(options);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userRepos]);
+  }, [userRepos, currentGitPushStatus]);
 
   const webSocketGitPushStatus = gitPushStatus ? gitPushStatusToKor[gitPushStatus] : null;
 
@@ -44,7 +48,7 @@ export default function useGitPush() {
     reposOptions,
     currentRepo,
     setCurrentRepo,
-    autoPushStatus,
+    currentGitPushStatus,
     webSocketGitPushStatus,
   };
 }
