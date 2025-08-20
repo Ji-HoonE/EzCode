@@ -2,8 +2,6 @@
 
 import SignInForm from '@/features/auth/ui/SigninForm';
 import SignInSocialLogin from '@/features/auth/ui/SignInSocialLogin';
-import { useQueryClient } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
 import { Suspense } from 'react';
 
 interface IRequireLoginDialogProps {
@@ -17,21 +15,6 @@ export default function RequireLoginDialog({
   onLoginSuccess,
 }: IRequireLoginDialogProps) {
   if (!isOpen) return null;
-  const { update } = useSession();
-
-  const queryClient = useQueryClient();
-
-  const handleLoginSuccess = async () => {
-    if (onLoginSuccess) {
-      return onLoginSuccess();
-    }
-    queryClient.invalidateQueries();
-    const value = await update();
-    console.log(value);
-    setTimeout(() => {
-      onClose();
-    }, 50);
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
@@ -40,7 +23,7 @@ export default function RequireLoginDialog({
           <div className="border border-[#214d35] rounded-[10px] shadow-2xl bg-[#0c151c]">
             <div className="p-6">
               <div className="flex mb-8 rounded-[12px] p-1.5">로그인</div>
-              <SignInForm onLoginSuccess={handleLoginSuccess} />
+              <SignInForm onLoginSuccess={onLoginSuccess} />
               <div className="mt-6 pt-6 border-t border-[#214d35]">
                 <p className="text-center text-gray-400 text-sm mb-4">또는</p>
                 <Suspense fallback={<></>}>

@@ -28,6 +28,7 @@ export const useGetSubmitPrepareData = (problemId: ProblemId) => {
           setPrepareData(prepareData);
           return prepareData;
         }
+        return { sessionKey: null, testcaseIds: null };
       } catch {
         return { sessionKey: null, testcaseIds: null };
       }
