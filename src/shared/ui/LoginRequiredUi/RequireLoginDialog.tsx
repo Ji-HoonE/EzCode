@@ -2,6 +2,8 @@
 
 import SignInForm from '@/features/auth/ui/SigninForm';
 import SignInSocialLogin from '@/features/auth/ui/SignInSocialLogin';
+import { useQueryClient } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 import { Suspense } from 'react';
 
 interface IRequireLoginDialogProps {
@@ -15,9 +17,17 @@ export default function RequireLoginDialog({
   onLoginSuccess,
 }: IRequireLoginDialogProps) {
   if (!isOpen) return null;
+  const { update } = useSession();
 
-  const handleLoginSuccess = () => {
-    onLoginSuccess?.();
+  const queryClient = useQueryClient();
+
+  const handleLoginSuccess = async () => {
+    if (onLoginSuccess) {
+      return onLoginSuccess();
+    }
+    queryClient.invalidateQueries();
+    const value = await update();
+    console.log(value);
     setTimeout(() => {
       onClose();
     }, 50);

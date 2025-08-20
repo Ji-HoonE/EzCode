@@ -1,5 +1,5 @@
 'use client';
-import { ProblemId, Icon } from '@/shared';
+import { ProblemId, Icon, useAccessToken } from '@/shared';
 import clsx from 'clsx';
 import { Mode } from './ProblemWorksSection';
 import useProblemWebSocketStore, {
@@ -11,6 +11,7 @@ import { ISourceCode, useSubmissionForResultMutation } from '@/entities/submitCo
 import PanelButton from './PanelButton';
 import RequireLoginDialog from '@/shared/ui/LoginRequiredUi/RequireLoginDialog';
 import { useState } from 'react';
+import { useGetSubmitPrepareData } from '@/entities/submitCode/submission/model/query/submitCode.query';
 
 interface TerminalPanelProps {
   problemId: ProblemId;
@@ -28,9 +29,12 @@ export default function TerminalPanel({
   sourceCodeData,
 }: TerminalPanelProps) {
   const [isRequiredDialogOpen, setIsRequiredDialogOpen] = useState(false);
-  const { sessionKey, token } = useProblemWebSocketStore();
+  const token = useAccessToken();
+  useGetSubmitPrepareData(problemId, token);
 
-  useSubscribeProblem(sessionKey);
+  const { sessionKey } = useProblemWebSocketStore();
+
+  useSubscribeProblem();
 
   const { mutateAsync } = useSubmissionForResultMutation(problemId);
   const { clearResults } = useProblemWebSocketStoreActions();

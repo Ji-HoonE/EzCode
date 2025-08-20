@@ -8,12 +8,13 @@ import { useEffect } from 'react';
 import useProblemWebSocketStore, {
   useProblemWebSocketStoreActions,
 } from '../model/useProblemWebSocketStore';
+import { useAccessToken } from '@/shared';
 
 export default function useConnectProblemWebSocket() {
   const problemStompRef = sharedStompRef;
 
   const { clearStore, setStatus } = useProblemWebSocketStoreActions();
-  const { token: accessToken } = useProblemWebSocketStore();
+  const accessToken = useAccessToken();
 
   useEffect(() => {
     if (!accessToken) {

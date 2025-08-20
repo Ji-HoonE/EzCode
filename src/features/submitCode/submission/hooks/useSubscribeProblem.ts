@@ -8,15 +8,15 @@ import { useEffect } from 'react';
 import useConnectProblemWebSocket from './useConnectProblemWebSocket';
 import { useGitPushStatusStoreActions } from '../../gitPush/model/useGitPushStatus.store';
 
-export default function useSubscribeProblem(sessionKey: string) {
+export default function useSubscribeProblem() {
   const { setMessage, clearStore } = useProblemWebSocketStoreActions();
   const { setGitPushStatus } = useGitPushStatusStoreActions();
   const { problemStompRef } = useConnectProblemWebSocket();
-  const { isConnected } = useProblemWebSocketStore();
+  const { isConnected, sessionKey } = useProblemWebSocketStore();
 
   useEffect(() => {
     if (!problemStompRef.current) return;
-
+    if (!sessionKey) return;
     const base = `/user/queue/submission/${sessionKey}`;
 
     if (problemStompRef.current.connected) {
