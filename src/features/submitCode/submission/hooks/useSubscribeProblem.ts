@@ -8,29 +8,30 @@ import { useEffect } from 'react';
 import useConnectProblemWebSocket from './useConnectProblemWebSocket';
 import { useGitPushStatusStoreActions } from '../../gitPush/model/useGitPushStatus.store';
 
-export default function useSubscribeProblem(sessionKey: string) {
-  const { setMessage, clearStore } = useProblemWebSocketStoreActions();
+export default function useSubscribeProblem() {
+  const { setResults, clearStore } = useProblemWebSocketStoreActions();
   const { setGitPushStatus } = useGitPushStatusStoreActions();
   const { problemStompRef } = useConnectProblemWebSocket();
-  const { isConnected } = useProblemWebSocketStore();
+  const { isConnected, submitPrepareData } = useProblemWebSocketStore();
 
   useEffect(() => {
     if (!problemStompRef.current) return;
+    if (!submitPrepareData.sessionKey) return;
 
-    const base = `/user/queue/submission/${sessionKey}`;
+    const base = `/user/queue/submission/${submitPrepareData.sessionKey}`;
 
     if (problemStompRef.current.connected) {
       problemStompRef.current.subscribe(`${base}/case`, (msg: IMessage) => {
-        setMessage('results', JSON.parse(msg.body));
+        setResults('results', JSON.parse(msg.body));
       });
       problemStompRef.current.subscribe(`${base}/final`, (msg: IMessage) =>
-        setMessage('totalResult', JSON.parse(msg.body))
+        setResults('totalResult', JSON.parse(msg.body))
       );
-      problemStompRef.current.subscribe(`/topic/submission/${sessionKey}/error`, (msg: IMessage) =>
-        setMessage('error', JSON.parse(msg.body))
+      problemStompRef.current.subscribe(
+        `/topic/submission/${submitPrepareData.sessionKey}/error`,
+        (msg: IMessage) => setResults('error', JSON.parse(msg.body))
       );
       problemStompRef.current.subscribe(`${base}/git-status`, (msg: IMessage) => {
-        console.log(msg.body);
         setGitPushStatus(JSON.parse(msg.body).pushStatus);
       });
 
@@ -44,5 +45,11 @@ export default function useSubscribeProblem(sessionKey: string) {
         clearStore();
       };
     }
-  }, [isConnected, setMessage, clearStore, sessionKey, problemStompRef]);
+  }, [
+    isConnected,
+    setResults,
+    clearStore,
+    submitPrepareData.sessionKey,
+    problemStompRef.current?.connected,
+  ]);
 }

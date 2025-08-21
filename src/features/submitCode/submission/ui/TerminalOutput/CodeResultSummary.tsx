@@ -6,9 +6,7 @@ import TotalResultBox from './TotalResultBox';
 import PendingResultItem from './PendingResultItem';
 
 export default function CodeResultSummary() {
-  const { results, totalResult, isSubmitted, testCaseIds } = useProblemWebSocketStore();
-
-  console.log(testCaseIds);
+  const { results, totalResult, isSubmitted, submitPrepareData } = useProblemWebSocketStore();
 
   return (
     <div className="flex flex-col gap-4">
@@ -16,9 +14,9 @@ export default function CodeResultSummary() {
         <>
           <h2 className="text-lg font-bold">채점 결과</h2>
           <div className="overflow-y-scroll h-fit scrollbar-hidden flex flex-col gap-3">
-            {testCaseIds && (
+            {submitPrepareData.testcaseIds && (
               <ul className="flex flex-col gap-2 h-full p-3 rounded-xl border border-gray-600 ">
-                {testCaseIds.map((testCaseId, i) => {
+                {submitPrepareData.testcaseIds.map((testCaseId, i) => {
                   const filteredTestCase = results.find(
                     (result) => result.testcaseId === testCaseId
                   );

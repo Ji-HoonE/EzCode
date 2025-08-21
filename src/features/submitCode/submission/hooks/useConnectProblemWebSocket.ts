@@ -5,15 +5,15 @@ import { Client } from '@stomp/stompjs';
 import { BASE_URL } from '@/constants/env';
 import { sharedStompRef } from '@/shared/lib/stomp/sharedStompRef';
 import { useEffect } from 'react';
-import useProblemWebSocketStore, {
-  useProblemWebSocketStoreActions,
-} from '../model/useProblemWebSocketStore';
+import { useProblemWebSocketStoreActions } from '../model/useProblemWebSocketStore';
+import { useSession } from 'next-auth/react';
 
 export default function useConnectProblemWebSocket() {
   const problemStompRef = sharedStompRef;
 
-  const { clearStore, setStatus } = useProblemWebSocketStoreActions();
-  const { token: accessToken } = useProblemWebSocketStore();
+  const { clearStore, setIsConnected } = useProblemWebSocketStoreActions();
+  const { data: session } = useSession();
+  const accessToken = session?.accessToken?.split(' ')[1] as string;
 
   useEffect(() => {
     if (!accessToken) {
@@ -31,7 +31,7 @@ export default function useConnectProblemWebSocket() {
       webSocketFactory: () => socket,
       reconnectDelay: 5000,
       onConnect: () => {
-        setStatus('isConnected', true);
+        setIsConnected(true);
       },
     });
 

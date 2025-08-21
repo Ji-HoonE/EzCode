@@ -18,7 +18,6 @@ export function DiscussionsParamsProvider({
 }) {
   const [params, setParams] = useState<IParams>(initialParams);
   const value = useMemo(() => ({ params, setParams }), [params]);
-  console.log(params);
   return <SortContext.Provider value={value}>{children}</SortContext.Provider>;
 }
 export function useDiscussionParams() {

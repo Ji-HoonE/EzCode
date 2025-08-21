@@ -34,7 +34,7 @@ export const useLogoutMutation = () => {
       return response;
     },
     onSuccess: async () => {
-      await signOut({ redirect: true, callbackUrl: '/signin' });
+      await signOut({ redirect: true, callbackUrl: '/' });
       // 로그아웃 시 내정보조회하는 api 캐시 무효화
       queryClient.invalidateQueries({ queryKey: ['my-info'] });
       queryClient.invalidateQueries({ queryKey: ['my-ranking'] });
