@@ -17,6 +17,7 @@ const gitPushStatusToKor: Record<string, string> = {
 export default function useGitPush() {
   const [currentRepo, setCurrentRepo] = useState('');
   const [reposOptions, setReposOptions] = useState<OptionType[]>([]);
+  const [isGitPushPending, setIsGitPushPending] = useState(false);
 
   const { mutateAsync: pushAutoToggle } = useGitPushAutoToggleMutation();
   const { mutateAsync: choiceRepo } = useGitRepoChoice();
@@ -40,7 +41,18 @@ export default function useGitPush() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userRepos, currentGitPushData]);
 
-  const webSocketGitPushStatus = gitPushStatus ? gitPushStatusToKor[gitPushStatus] : null;
+  useEffect(() => {
+    if (gitPushStatus) {
+      setIsGitPushPending(true);
+      if (gitPushStatus !== 'STARTED') {
+        const timer = setTimeout(() => setIsGitPushPending(false), 2000);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [gitPushStatus]);
+
+  const webSocketGitPushStatus =
+    gitPushStatus && isGitPushPending ? gitPushStatusToKor[gitPushStatus] : null;
 
   return {
     pushAutoToggle,
