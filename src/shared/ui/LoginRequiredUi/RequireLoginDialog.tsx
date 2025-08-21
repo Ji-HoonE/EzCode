@@ -15,11 +15,7 @@ export default function RequireLoginDialog({
   onLoginSuccess,
 }: IRequireLoginDialogProps) {
   if (!isOpen) return null;
-  const handleLoginSuccess = () => {
-    if (onLoginSuccess) {
-      onLoginSuccess();
-    }
-  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
       <div className="w-full flex items-center justify-center p-4 lg:p-8">
@@ -27,7 +23,7 @@ export default function RequireLoginDialog({
           <div className="border border-[#214d35] rounded-[10px] shadow-2xl bg-[#0c151c]">
             <div className="p-6">
               <div className="flex mb-8 rounded-[12px] p-1.5">로그인</div>
-              <SignInForm onLoginSuccess={handleLoginSuccess} />
+              <SignInForm onLoginSuccess={onLoginSuccess} />
               <div className="mt-6 pt-6 border-t border-[#214d35]">
                 <p className="text-center text-gray-400 text-sm mb-4">또는</p>
                 <Suspense fallback={<></>}>

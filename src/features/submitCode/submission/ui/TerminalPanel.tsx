@@ -5,12 +5,13 @@ import { Mode } from './ProblemWorksSection';
 import useProblemWebSocketStore, {
   useProblemWebSocketStoreActions,
 } from '../model/useProblemWebSocketStore';
-import useSubscribeProblem from '../hooks/useSubscribeProblem';
 import GitPushDialog from '../../gitPush/ui/GitPushDialog';
 import { ISourceCode, useSubmissionForResultMutation } from '@/entities/submitCode';
 import PanelButton from './PanelButton';
-import RequireLoginDialog from '@/shared/ui/LoginRequiredUi/RequireLoginDialog';
-import { useState } from 'react';
+import { useGetSubmitPrepareData } from '@/entities/submitCode/submission/model/query/submitCode.query';
+import { useRouter, useSearchParams } from 'next/navigation';
+import useSubscribeProblem from '../hooks/useSubscribeProblem';
+import { useSession } from 'next-auth/react';
 
 interface TerminalPanelProps {
   problemId: ProblemId;
@@ -27,18 +28,27 @@ export default function TerminalPanel({
   githubUrl,
   sourceCodeData,
 }: TerminalPanelProps) {
-  const [isRequiredDialogOpen, setIsRequiredDialogOpen] = useState(false);
-  const { sessionKey, token } = useProblemWebSocketStore();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  useSubscribeProblem(sessionKey);
+  const { data: session } = useSession();
+  const token = session?.accessToken?.split(' ')[1] as string;
+  useGetSubmitPrepareData(problemId);
+  const { submitPrepareData } = useProblemWebSocketStore();
 
+  const authGuardTrigger = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('auth-guard', 'true');
+    router.push(`?${params.toString()}`);
+  };
+  useSubscribeProblem();
   const { mutateAsync } = useSubmissionForResultMutation(problemId);
   const { clearResults } = useProblemWebSocketStoreActions();
 
   const submitForResult = () => {
-    if (!token) return setIsRequiredDialogOpen(true);
+    if (!token) return authGuardTrigger();
     clearResults();
-    mutateAsync({ ...sourceCodeData, sessionKey: sessionKey || '' });
+    mutateAsync({ ...sourceCodeData, sessionKey: submitPrepareData.sessionKey || '' });
     setMode('result');
   };
 
@@ -70,10 +80,6 @@ export default function TerminalPanel({
         </PanelButton>
       </div>
       <GitPushDialog githubUrl={githubUrl} />
-      <RequireLoginDialog
-        isOpen={isRequiredDialogOpen}
-        onClose={() => setIsRequiredDialogOpen(false)}
-      />
     </div>
   );
 }

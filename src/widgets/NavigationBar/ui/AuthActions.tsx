@@ -37,8 +37,6 @@ export default function AuthActions() {
     if (value === 'logout') return mutateAsync();
   };
 
-  console.log('accessToken', accessToken);
-
   return (
     <div className="flex items-center space-x-4">
       {accessToken ? (

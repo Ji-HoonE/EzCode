@@ -2,12 +2,10 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { useShallow } from 'zustand/shallow';
 import {
-  IMessageInitialState,
+  IInitialState,
   INITIAL_STATE,
   IProblemStompResult,
   IProblemWebSocketStore,
-  IWebSocketAuth,
-  IWebSocketStatus,
 } from './useProblemWebSocketStore.types';
 
 /** 인증 스토어 */
@@ -15,25 +13,23 @@ const useProblemWebSocketStore = create<IProblemWebSocketStore>()(
   devtools((set) => ({
     ...INITIAL_STATE,
     actions: {
-      setAuth: (key, value) => {
-        set((state: IWebSocketAuth) => {
-          return {
-            ...state,
-            [key]: value,
-          };
+      setIsConnected: (status) => {
+        set({
+          isConnected: status,
         });
       },
-      setStatus: (key, status) => {
-        set((state: IWebSocketStatus) => {
-          return { ...state, [key]: status };
+      setIsSubmitted: (status) => {
+        set({
+          isSubmitted: status,
         });
       },
-      setTestCaseIds: (ids) => {
-        set({ testCaseIds: ids });
+      setPrepareData: (data) => {
+        set({
+          submitPrepareData: data,
+        });
       },
-
-      setMessage: (key, message) => {
-        set((state: IMessageInitialState) => {
+      setResults: (key, message) => {
+        set((state: IInitialState) => {
           if (key === 'results') {
             const newResults = [...(state.results ?? []), message] as Array<IProblemStompResult>;
             newResults.sort((a, b) => a.testcaseId - b.testcaseId);
@@ -45,7 +41,7 @@ const useProblemWebSocketStore = create<IProblemWebSocketStore>()(
           return {
             ...state,
             [key]: message,
-          } as Partial<IMessageInitialState>;
+          } as Partial<IInitialState>;
         });
       },
 
@@ -69,10 +65,10 @@ const useProblemWebSocketStore = create<IProblemWebSocketStore>()(
 export function useProblemWebSocketStoreActions() {
   return useProblemWebSocketStore(
     useShallow((state) => ({
-      setAuth: state.actions.setAuth,
-      setStatus: state.actions.setStatus,
-      setMessage: state.actions.setMessage,
-      setTestCaseIds: state.actions.setTestCaseIds,
+      setIsConnected: state.actions.setIsConnected,
+      setIsSubmitted: state.actions.setIsSubmitted,
+      setPrepareData: state.actions.setPrepareData,
+      setResults: state.actions.setResults,
       clearStore: state.actions.clearStore,
       clearResults: state.actions.clearResults,
     }))

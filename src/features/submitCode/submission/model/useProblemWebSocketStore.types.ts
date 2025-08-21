@@ -1,3 +1,7 @@
+import { ISubmitPrepareData } from '@/entities/submitCode/submission/model/query/submitCode.query.type';
+
+/**웹소켓 연결 상태, 제출 상태 인터페이스 */
+
 //웹소켓 메시지로 받는 results type - destination(/testcase)
 export interface IProblemStompResult {
   testcaseId: number;
@@ -17,61 +21,41 @@ export interface IProblemStompFinalResult {
 }
 
 /** setter 키 타입 */
-type MessageKey = 'results' | 'totalResult' | 'error' | 'git-status';
-type AuthKey = 'token' | 'sessionKey';
-type StatusKey = 'isConnected' | 'isSubmitted';
+type MessageKey = 'results' | 'totalResult' | 'error';
 
-/** setMessage 상태 인터페이스 */
-export interface IMessageInitialState {
+/** 스토어 초기 값 */
+export interface IInitialState {
+  isConnected: boolean;
+  isSubmitted: boolean;
+  submitPrepareData: ISubmitPrepareData;
   results: IProblemStompResult[] | [];
   totalResult: IProblemStompFinalResult | null;
   error?: unknown | null;
-  gitStatus?: unknown | null;
 }
 
-/**setAuth 상태 인터페이스 */
-export interface IWebSocketAuth {
-  token: string;
-  sessionKey: string;
-}
-
-/**setStatus 상태 인터페이스 */
-export interface IWebSocketStatus {
-  isConnected: boolean;
-  isSubmitted: boolean;
-}
-
-export interface ITestCaseIds {
-  testCaseIds: number[];
-}
 /** 스토어 액션 인터페이스 */
 interface IMessageInitialAction {
   actions: {
-    setAuth: (key: AuthKey, value: string) => void;
-    setStatus: (key: StatusKey, status: boolean) => void;
-    setMessage: (key: MessageKey, message: unknown) => void;
-    setTestCaseIds: (ids: number[]) => void;
-    clearStore: () => void;
+    setPrepareData: (data: ISubmitPrepareData) => void;
+    setIsConnected: (status: boolean) => void;
+    setIsSubmitted: (status: boolean) => void;
+    setResults: (key: MessageKey, message: unknown) => void;
     clearResults: () => void;
+    clearStore: () => void;
   };
 }
 
-export const INITIAL_STATE = {
-  testCaseIds: [],
-
-  token: '',
-  sessionKey: '',
+export const INITIAL_STATE: IInitialState = {
   isConnected: false,
   isSubmitted: false,
+  submitPrepareData: {
+    sessionKey: null,
+    testcaseIds: null,
+  },
   results: [],
   totalResult: null,
   error: null,
-  gitStatus: null,
 };
 
 /** 인증 스토어 타입 */
-export type IProblemWebSocketStore = IMessageInitialState &
-  IWebSocketAuth &
-  IMessageInitialAction &
-  ITestCaseIds &
-  IWebSocketStatus;
+export type IProblemWebSocketStore = IInitialState & IMessageInitialAction;

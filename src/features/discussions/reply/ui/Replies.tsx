@@ -4,8 +4,8 @@ import { Spinner } from '@/shared/ui/loading-indicators';
 import Reply from './Reply';
 import ReplyForm from './ReplyForm';
 import { useRepliesQuery } from '@/entities/discussions';
-import useProblemWebSocketStore from '@/features/submitCode/submission/model/useProblemWebSocketStore';
 import ProtectedBlurBox from '@/shared/ui/LoginRequiredUi/ProtectedBlurBox';
+import { useSession } from 'next-auth/react';
 
 interface RepliesProps {
   problemId: ProblemId;
@@ -13,7 +13,9 @@ interface RepliesProps {
 }
 export default function Replies({ problemId, discussionId }: RepliesProps) {
   const queryResult = useRepliesQuery(problemId, discussionId);
-  const { token } = useProblemWebSocketStore();
+  const { data } = useSession();
+  const token = data?.accessToken;
+
   const repliesData = queryResult?.data?.result;
   const isPending = queryResult?.isPending;
 

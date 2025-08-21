@@ -12,12 +12,12 @@ import { useProblemWebSocketStoreActions } from '@/features/submitCode/submissio
 //문제 제출하기
 export const useSubmissionForResultMutation = (problemId: ProblemId) => {
   const path = getProblemIdPath(problemId, 'submit-ready');
-  const { setStatus } = useProblemWebSocketStoreActions();
+  const { setIsSubmitted } = useProblemWebSocketStoreActions();
 
   return useMutation({
     mutationFn: async (params: ISubmitCodeRequest) => {
       const response = await ApiHelper.post(path, params);
-      if (response.data.status === API_CONSTANTS.CODE.OK) setStatus('isSubmitted', true);
+      if (response.data.status === API_CONSTANTS.CODE.OK) setIsSubmitted(true);
       return response;
     },
   });
