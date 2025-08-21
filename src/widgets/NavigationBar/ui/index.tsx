@@ -1,6 +1,5 @@
 import LinkedButton from '@/shared/ui/linkedButton';
 
-import Notifications from './Notifications';
 import { NAVIGATE_ATTRIBUTE } from '../navigateAttribute';
 import AuthActions from './AuthActions';
 
@@ -12,7 +11,6 @@ export default async function NavigationBar() {
           <LinkedButton props={NAVIGATE_ATTRIBUTE.root} />
           <LinkedButton props={NAVIGATE_ATTRIBUTE.problems} />
           <LinkedButton props={NAVIGATE_ATTRIBUTE.rank} />
-          <Notifications />
         </div>
         <div className="flex items-center space-x-4">
           <AuthActions />
