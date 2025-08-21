@@ -28,7 +28,7 @@ export default function GitPushDialog({ githubUrl }: GitPushDialogProps) {
     reposOptions,
     currentRepo,
     setCurrentRepo,
-    autoPushStatus,
+    currentGitPushData,
     webSocketGitPushStatus,
   } = useGitPush();
 
@@ -39,7 +39,7 @@ export default function GitPushDialog({ githubUrl }: GitPushDialogProps) {
 
   const tooltipContent = !githubUrl
     ? 'github 연동이 안되어 있어요!'
-    : !autoPushStatus
+    : !currentGitPushData?.gitPushStatus
       ? 'auto push 기능이 꺼져 있어요'
       : 'auto push가 켜져 있어요';
 
@@ -47,7 +47,10 @@ export default function GitPushDialog({ githubUrl }: GitPushDialogProps) {
     <Dialog open={isDialogOpen}>
       <Tooltip open={isToolTipOpen}>
         <TooltipTrigger disabled={!githubUrl} onClick={() => setIsDialogOpen(true)}>
-          <Icon.TerminalGitHubIcon isOnAutoPush={autoPushStatus} hasGitGubUrl={!!githubUrl} />
+          <Icon.TerminalGitHubIcon
+            isOnAutoPush={currentGitPushData?.gitPushStatus}
+            hasGitGubUrl={!!githubUrl}
+          />
         </TooltipTrigger>
         <TooltipContent>
           {!!gitPushStatus ? <p>{gitPushStatus}</p> : <p>{tooltipContent}</p>}
@@ -72,7 +75,7 @@ export default function GitPushDialog({ githubUrl }: GitPushDialogProps) {
           <div className="flex items-center justify-between">
             <label className="text-sm font-medium text-[#ccc]">자동 푸시</label>
             <Switch
-              checked={autoPushStatus}
+              checked={currentGitPushData?.gitPushStatus}
               onCheckedChange={() => pushAutoToggle()}
               className="data-[state=checked]:bg-[#00d084] text-white data-[state=unchecked]:bg-gray-500"
             />
@@ -84,7 +87,7 @@ export default function GitPushDialog({ githubUrl }: GitPushDialogProps) {
                 setIsDialogOpen(false);
               }}
               className="bg-primary  hover:bg-hover-primary flex-3"
-              disabled={!!currentRepo && !autoPushStatus}
+              disabled={!!currentRepo && !currentGitPushData?.gitPushStatus}
             >
               연동하기
             </Button>

@@ -8,4 +8,6 @@ interface IGitRepo {
 export interface IGitPushAutoToggleResponse {
   message: string;
   gitPushStatus: boolean;
+  githubRepoName: string;
+  branch: string;
 }

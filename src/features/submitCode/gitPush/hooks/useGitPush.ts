@@ -17,16 +17,21 @@ const gitPushStatusToKor: Record<string, string> = {
 export default function useGitPush() {
   const [currentRepo, setCurrentRepo] = useState('');
   const [reposOptions, setReposOptions] = useState<OptionType[]>([]);
+  const [isGitPushPending, setIsGitPushPending] = useState(false);
 
   const { mutateAsync: pushAutoToggle } = useGitPushAutoToggleMutation();
   const { mutateAsync: choiceRepo } = useGitRepoChoice();
   const { data: userRepos } = useGetGitHubRepo();
-  const { data: autoPushStatus } = useAutoGitPushStatus();
+  const { data: currentGitPushData } = useAutoGitPushStatus();
   const { gitPushStatus } = useGitPushStatusStore();
 
   useEffect(() => {
     if (userRepos) {
-      setCurrentRepo(userRepos[0].repoName);
+      if (currentGitPushData?.githubRepoName) {
+        setCurrentRepo(currentGitPushData.githubRepoName);
+      } else {
+        setCurrentRepo(userRepos[0].repoName);
+      }
       const options: OptionType[] = userRepos.map((repo) => ({
         label: `${repo.repoName} - default : ${repo.defaultBranch}`,
         value: repo.repoName,
@@ -34,9 +39,20 @@ export default function useGitPush() {
       setReposOptions(options);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userRepos]);
+  }, [userRepos, currentGitPushData]);
 
-  const webSocketGitPushStatus = gitPushStatus ? gitPushStatusToKor[gitPushStatus] : null;
+  useEffect(() => {
+    if (gitPushStatus) {
+      setIsGitPushPending(true);
+      if (gitPushStatus !== 'STARTED') {
+        const timer = setTimeout(() => setIsGitPushPending(false), 2000);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [gitPushStatus]);
+
+  const webSocketGitPushStatus =
+    gitPushStatus && isGitPushPending ? gitPushStatusToKor[gitPushStatus] : null;
 
   return {
     pushAutoToggle,
@@ -44,7 +60,7 @@ export default function useGitPush() {
     reposOptions,
     currentRepo,
     setCurrentRepo,
-    autoPushStatus,
+    currentGitPushData,
     webSocketGitPushStatus,
   };
 }
