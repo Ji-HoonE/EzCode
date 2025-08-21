@@ -43,6 +43,8 @@ export default function useConnectAlarmWebSocket() {
     const client = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000,
+      heartbeatIncoming: 10000, // 10초마다 서버로부터 ping 체크
+      heartbeatOutgoing: 10000, // 10초마다 클라이언트 -> 서버 ping 전송
       onConnect: () => {
         console.log('✅ Alarm WebSocket connected');
 

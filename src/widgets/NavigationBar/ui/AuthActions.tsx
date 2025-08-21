@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { PATHS } from '@/constants/paths';
 import { useLogoutMutation } from '@/entities/auth/model/mutation/auth.mutation';
 import { useSession } from 'next-auth/react';
+import Notifications from './Notifications';
 
 interface IUserInfo {
   profileImage: string;
@@ -40,17 +41,20 @@ export default function AuthActions() {
   return (
     <div className="flex items-center space-x-4">
       {accessToken ? (
-        <Select
-          option={AUTH_ACTIONS_OPTIONS}
-          title="사용자 메뉴"
-          setValue={(value) => {
-            selectOption(value);
-          }}
-          value={
-            <UserProfile profileImageUrl={userInfo?.profileImage} nickname={userInfo?.nickname} />
-          }
-          className="text-white transition-all duration-200"
-        />
+        <div className="flex flex-row gap-4">
+          <Notifications />
+          <Select
+            option={AUTH_ACTIONS_OPTIONS}
+            title="사용자 메뉴"
+            setValue={(value) => {
+              selectOption(value);
+            }}
+            value={
+              <UserProfile profileImageUrl={userInfo?.profileImage} nickname={userInfo?.nickname} />
+            }
+            className="text-white transition-all duration-200"
+          />
+        </div>
       ) : (
         <>
           {/* <LinkedButton props={NAVIGATE_ATTRIBUTE.signup} /> */}

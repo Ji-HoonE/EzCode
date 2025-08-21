@@ -10,6 +10,7 @@ export default function useAccessToken() {
   useEffect(() => {
     const fetchToken = async () => {
       const session = await getSession();
+      console.log('session', session);
       if (session?.accessToken) {
         setToken(session.accessToken.split(' ')[1] as string);
       }
