@@ -21,13 +21,13 @@ export default function useGitPush() {
   const { mutateAsync: pushAutoToggle } = useGitPushAutoToggleMutation();
   const { mutateAsync: choiceRepo } = useGitRepoChoice();
   const { data: userRepos } = useGetGitHubRepo();
-  const { data: currentGitPushStatus } = useAutoGitPushStatus();
+  const { data: currentGitPushData } = useAutoGitPushStatus();
   const { gitPushStatus } = useGitPushStatusStore();
 
   useEffect(() => {
     if (userRepos) {
-      if (currentGitPushStatus?.githubRepoName) {
-        setCurrentRepo(currentGitPushStatus.githubRepoName);
+      if (currentGitPushData?.githubRepoName) {
+        setCurrentRepo(currentGitPushData.githubRepoName);
       } else {
         setCurrentRepo(userRepos[0].repoName);
       }
@@ -38,7 +38,7 @@ export default function useGitPush() {
       setReposOptions(options);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userRepos, currentGitPushStatus]);
+  }, [userRepos, currentGitPushData]);
 
   const webSocketGitPushStatus = gitPushStatus ? gitPushStatusToKor[gitPushStatus] : null;
 
@@ -48,7 +48,7 @@ export default function useGitPush() {
     reposOptions,
     currentRepo,
     setCurrentRepo,
-    currentGitPushStatus,
+    currentGitPushData,
     webSocketGitPushStatus,
   };
 }
