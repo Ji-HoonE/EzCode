@@ -7,6 +7,9 @@ import { useRouter } from 'next/navigation';
 import { SkeletonBox } from '@/shared/ui/loading-indicators';
 import { ProblemsContent } from '@/entities/problems/model/types';
 import { Button } from '@/shared/ui/button/Button';
+import { useSubmissionList } from '@/entities/mypage/model/query';
+import { useSession } from 'next-auth/react';
+import { CheckCircle } from 'lucide-react';
 
 const PAGE_LIMIT = 15;
 
@@ -49,6 +52,16 @@ export default function ProblemTable({
 }) {
   const router = useRouter();
   const [pageGroupStart, setPageGroupStart] = useState(1);
+  const [myProblemsList, setMyProblemsList] = useState<number[]>([]);
+  const { data: myProblems } = useSubmissionList();
+  const { data: session } = useSession();
+  useEffect(() => {
+    setMyProblemsList([]);
+    if (!session) return;
+    if (!myProblems) return;
+
+    myProblems.result.map((item) => setMyProblemsList((prev) => [...prev, item.problemId]));
+  }, [myProblems]);
 
   useEffect(() => {
     if (currentPage < pageGroupStart || currentPage >= pageGroupStart + PAGE_LIMIT) {
@@ -118,21 +131,28 @@ export default function ProblemTable({
                       ? 0
                       : Math.round((item.correctSubmissions / item.totalSubmissions) * 100 * 10) /
                         10;
-
+                  const isSolved = myProblemsList.includes(item.id);
                   return (
                     <tr
                       key={item.id}
-                      className="border-b border-gray-800 hover:bg-white/[0.08] cursor-pointer"
+                      className={`border-b border-gray-800/50 hover:bg-white/[0.08] transition-colors duration-200 cursor-pointer ${
+                        isSolved ? 'bg-[#214d35]/10 border-l-4 border-l-[#00d084]' : ''
+                      }`}
                       onClick={() => router.push(`/problems/${item.id}`)}
                     >
                       <td className="px-6 py-4 text-sm text-center text-gray-300">{item.id}</td>
                       <td className="px-6 py-4">
-                        <div>
-                          <div className="text-center text-sm font-medium text-white hover:text-[#00d084] transition-colors">
-                            {item.title}
-                          </div>
-                          <div className="text-center text-xs text-gray-400 mt-1">
-                            {item.categories}
+                        <div className="flex flex-row gap-4 justify-center items-center">
+                          {isSolved && (
+                            <CheckCircle className="w-4 h-4 text-[#00d084] flex-shrink-0" />
+                          )}
+                          <div>
+                            <div className="text-center text-sm font-medium text-white hover:text-[#00d084] transition-colors">
+                              {item.title}
+                            </div>
+                            <div className="text-center text-xs text-gray-400 mt-1">
+                              {item.categories}
+                            </div>
                           </div>
                         </div>
                       </td>
