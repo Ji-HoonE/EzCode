@@ -151,7 +151,7 @@ export default function ProblemTable({
                               {item.title}
                             </div>
                             <div className="text-center text-xs text-gray-400 mt-1">
-                              {item.categories}
+                              {item.categories.join(', ')}
                             </div>
                           </div>
                         </div>
