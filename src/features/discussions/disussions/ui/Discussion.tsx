@@ -10,9 +10,11 @@ import UserProfile from '@/shared/ui/userProfile';
 
 interface IDiscussionContentProps {
   discussion: TDiscussionContentMutationResponse;
+  id: string;
 }
 
-export default function Discussion({ discussion }: IDiscussionContentProps) {
+export default function Discussion({ discussion, id }: IDiscussionContentProps) {
+  console.log('id', id);
   const [isEdit, setIsEdit] = useState(false);
   const [isRepliesOpen, setIsRepliesOpen] = useState(false);
 
@@ -24,7 +26,10 @@ export default function Discussion({ discussion }: IDiscussionContentProps) {
   );
 
   return (
-    <div className="bg-secondary-background rounded-[10px] p-6 shadow-lg w-full flex flex-col">
+    <div
+      className="bg-secondary-background rounded-[10px] p-6 shadow-lg w-full flex flex-col"
+      id={id}
+    >
       <div className="w-full flex flex-col gap-2">
         <div className="flex items-center gap-3">
           <UserProfile profileImageUrl={userInfo.profileImageUrl} nickname={userInfo.nickname} />

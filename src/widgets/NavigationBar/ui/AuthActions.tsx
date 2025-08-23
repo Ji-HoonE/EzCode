@@ -41,7 +41,7 @@ export default function AuthActions() {
   return (
     <div className="flex items-center space-x-4">
       {accessToken ? (
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row gap-4 items-center">
           <Notifications />
           <Select
             option={AUTH_ACTIONS_OPTIONS}

@@ -1,3 +1,5 @@
+import { NotificationTypeEnum } from "@/entities/notifications/enum"
+
 export interface NotificationPayload {
   "@type": string
   authorId: number
@@ -14,7 +16,7 @@ export interface Notification {
   message: string
   isRead: boolean
   createdAt: string
-  notificationType: string
+  notificationType: NotificationTypeEnum
   payload: NotificationPayload
   redirectUrl: string
 }

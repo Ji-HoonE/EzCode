@@ -4,21 +4,26 @@ import Discussion from './Discussion';
 import { BouncingDots, Spinner } from '@/shared/ui/loading-indicators';
 import DiscussionForm from './DiscussionForm';
 import { Select } from '@/shared/ui/select/Select';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useInfiniteDiscussionsQuery } from '@/entities/discussions';
 import { sortType } from '@/shared/model/query/paramsQueryKey';
 import { useDiscussionParams } from '../model/Discussion.sort.context';
+import { useSearchParams } from 'next/navigation';
 
 interface IDiscussionProps {
   problemId: ProblemId;
 }
 
 export default function Discussions({ problemId }: IDiscussionProps) {
+  const searchParams = useSearchParams();
+  const discussionId = searchParams.get('discussionId');
+  const [targetId, setTargetId] = useState<string | null>(null);
   const { params, setParams } = useDiscussionParams();
   const { data, isPending, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteDiscussionsQuery(problemId);
 
   const discussions = data?.pages.flatMap((page) => page.content);
+
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
   const sortOptions = [
@@ -45,6 +50,27 @@ export default function Discussions({ problemId }: IDiscussionProps) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchNextPage, hasNextPage]);
+
+  useEffect(() => {
+    if (discussionId) {
+      setTargetId(discussionId);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (!targetId) return;
+
+    const el = document.getElementById(targetId);
+
+    if (el) {
+      // 이미 DOM에 있으면 스크롤
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTargetId(null); // 한 번만 실행
+    } else if (hasNextPage && !isFetchingNextPage) {
+      // 없으면 다음 페이지 요청
+      fetchNextPage();
+    }
+  }, [targetId, discussions, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (isPending) {
     return (
@@ -78,7 +104,13 @@ export default function Discussions({ problemId }: IDiscussionProps) {
               <div className="space-y-4 transition-transform duration-300 transform translate-y-4 w-full ">
                 {discussions &&
                   discussions.map((content) => {
-                    return <Discussion discussion={content} key={content.discussionId} />;
+                    return (
+                      <Discussion
+                        id={String(content.discussionId)}
+                        discussion={content}
+                        key={content.discussionId}
+                      />
+                    );
                   })}
                 <div ref={loaderRef} style={{ height: 1 }} />
                 {isFetchingNextPage && (
