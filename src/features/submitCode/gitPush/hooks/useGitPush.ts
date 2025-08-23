@@ -14,15 +14,15 @@ const gitPushStatusToKor: Record<string, string> = {
   FAILED: 'push에 실패 했습니다',
 };
 
-export default function useGitPush() {
+export default function useGitPush(githubUrl: string | null) {
   const [currentRepo, setCurrentRepo] = useState('');
   const [reposOptions, setReposOptions] = useState<OptionType[]>([]);
   const [isGitPushPending, setIsGitPushPending] = useState(false);
 
   const { mutateAsync: pushAutoToggle } = useGitPushAutoToggleMutation();
   const { mutateAsync: choiceRepo } = useGitRepoChoice();
-  const { data: userRepos } = useGetGitHubRepo();
-  const { data: currentGitPushData } = useAutoGitPushStatus();
+  const { data: userRepos } = useGetGitHubRepo(githubUrl);
+  const { data: currentGitPushData } = useAutoGitPushStatus(githubUrl);
   const { gitPushStatus } = useGitPushStatusStore();
 
   useEffect(() => {

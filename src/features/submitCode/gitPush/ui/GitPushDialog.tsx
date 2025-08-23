@@ -30,7 +30,7 @@ export default function GitPushDialog({ githubUrl }: GitPushDialogProps) {
     setCurrentRepo,
     currentGitPushData,
     webSocketGitPushStatus,
-  } = useGitPush();
+  } = useGitPush(githubUrl);
 
   useEffect(() => {
     setGitPushStatus(webSocketGitPushStatus);
