@@ -2,10 +2,9 @@
 import { formatDate } from '@/shared/util/formatDate';
 import { IChatMessageProps } from './SystemMessage';
 
-export default function ChatMessage({ msg }: IChatMessageProps) {
-  const isOwn = true;
+export default function ChatMessage({ msg, userNickname }: IChatMessageProps) {
+  const isOwn = msg.name === userNickname;
   const formattedDate = formatDate(msg.time);
-  console.log(formattedDate);
 
   return (
     <li className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}>

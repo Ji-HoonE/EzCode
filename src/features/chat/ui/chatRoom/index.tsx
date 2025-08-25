@@ -5,18 +5,22 @@ import useChatWebSocketStore from '@/features/chat/model/useChatWebSocketStore';
 import SystemMessage from '../chatMessage/SystemMessage';
 import ChatMessage from '../chatMessage/ChatMessage';
 import ChatRoomHeader from './ChatRoomHeader';
+import { useMyInfoQuery } from '@/entities/mypage/model/query';
 
 interface ChatProps {
-  roomId: string;
+  roomId: number;
   roomTitle: string;
 }
 
 export default function ChatRoom({ roomId, roomTitle }: ChatProps) {
-  useJoinChatRoom(Number(roomId));
+  useJoinChatRoom(roomId);
+  const { data } = useMyInfoQuery();
+  const nickname = data?.data.result.nickname;
   const { messages } = useChatWebSocketStore();
+
   return (
     <section className="w-full flex h-full flex-col justify-center flex-4/5">
-      {roomId !== '0' ? (
+      {roomId !== 0 ? (
         <>
           <ChatRoomHeader roomTitle={roomTitle} />
           {messages && (
@@ -25,11 +29,11 @@ export default function ChatRoom({ roomId, roomTitle }: ChatProps) {
                 if (msg.name === '시스템') {
                   return <SystemMessage msg={msg} key={i} />;
                 }
-                return <ChatMessage msg={msg} key={i} />;
+                return <ChatMessage msg={msg} key={i} userNickname={nickname} />;
               })}
             </ul>
           )}
-          <ChatInput chatRoomId={Number(roomId)} />
+          <ChatInput chatRoomId={roomId} />
         </>
       ) : (
         <div className="flex flex-col justify-center  items-center">
