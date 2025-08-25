@@ -9,7 +9,7 @@ import Image from 'next/image';
 import useChatDialogTrigger from '../../hooks/useChatDialogTrigger';
 
 interface IChatRoomListProps {
-  selectedRoomId: string;
+  selectedRoomId: number;
 }
 export default function ChatRoomList({ selectedRoomId }: IChatRoomListProps) {
   useSubChatRooms();
@@ -48,7 +48,7 @@ export default function ChatRoomList({ selectedRoomId }: IChatRoomListProps) {
                 <ChatRoomItem
                   key={room.roomId}
                   room={room}
-                  isSelected={Number(selectedRoomId) === room.roomId}
+                  isSelected={selectedRoomId === room.roomId}
                 />
               );
             })}
