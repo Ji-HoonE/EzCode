@@ -6,16 +6,22 @@ import { Solved } from './tab/Solved';
 import { Report } from './tab/Report';
 import { Inquiry } from './tab/Inquiry';
 import { ChangePassword } from './tab/ChangePassword';
+import { useMyInfoQuery } from '@/entities/mypage/model/query';
 
 const Mypage = () => {
   const [tab, setTab] = useState('mine');
-  const tabComponents = {
+  const { data } = useMyInfoQuery();
+  console.log('data', data);
+  const baseTabs = {
     mine: <Mine />,
     solved: <Solved />,
     report: <Report />,
     inquiry: <Inquiry />,
-    password: <ChangePassword />,
   } as const;
+
+  const tabComponents = data?.data.result.userAuthTypes.includes('EMAIL')
+    ? { ...baseTabs, password: <ChangePassword /> }
+    : baseTabs;
 
   return (
     <div className="w-full  flex h-full">

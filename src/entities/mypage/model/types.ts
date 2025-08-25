@@ -13,6 +13,7 @@ export interface IMyInfo {
   introduction: string | null;
   verified: boolean;
   totalSolvedCount: number;
+  userAuthTypes : string[]
 }
 
 export interface AiReview {
