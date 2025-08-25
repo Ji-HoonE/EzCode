@@ -37,6 +37,7 @@ export const Mine = () => {
     username: '',
     userRole: '',
     verified: false,
+    userAuthTypes: [],
   });
   const [info, setInfo] = useState<IMyInfo>(Object);
   const [heatmapData, setHeatmapData] = useState<IHeatmapItem[]>([]);

@@ -11,25 +11,21 @@ import { useMyInfoQuery } from '@/entities/mypage/model/query';
 const Mypage = () => {
   const [tab, setTab] = useState('mine');
   const { data } = useMyInfoQuery();
-  console.log('data', data);
+
   const baseTabs = {
     mine: <Mine />,
     solved: <Solved />,
     report: <Report />,
     inquiry: <Inquiry />,
   } as const;
-  console.log(['GOOGLE'].includes('EMAIL'));
-  const tabComponents = ['GOOGLE'].includes('EMAIL')
-    ? { ...baseTabs, password: <ChangePassword /> }
-    : baseTabs;
 
-  const tabComponents = data?.data.result.userAuthTypes.includes('EMAIL')
+  const tabComponents = ['GOOGLE'].includes('EMAIL')
     ? { ...baseTabs, password: <ChangePassword /> }
     : baseTabs;
 
   return (
     <div className="w-full  flex h-full">
-      <SideNavigation tab={tab} setTab={setTab} />
+      <SideNavigation tab={tab} setTab={setTab} authType={data?.data.result.userAuthTypes || []} />
       <div className="p-10 flex-1 h-full overflow-y-auto">{tabComponents[tab as 'mine']}</div>
     </div>
   );

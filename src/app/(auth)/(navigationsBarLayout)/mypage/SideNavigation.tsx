@@ -3,18 +3,14 @@
 import Password from './../../../../../public/icons/mypage/password.svg';
 import Image from 'next/image';
 import { User, MessageSquare, Flag, History } from 'lucide-react';
-import { useMyInfoQuery } from '@/entities/mypage/model/query';
-import { Mine } from './tab/Mine';
-import { Solved } from './tab/Solved';
-import { Report } from './tab/Report';
+
 interface IProps {
   tab: string;
   setTab: (tab: string) => void;
+  authType: string[];
 }
 type MenuItem = 'mine' | 'solved' | 'inquiry' | 'report' | 'password';
-export const SideNavigation = ({ tab, setTab }: IProps) => {
-  const { data } = useMyInfoQuery();
-
+export const SideNavigation = ({ tab, setTab, authType }: IProps) => {
   const menuItems = [
     { id: 'mine' as MenuItem, label: '내 정보 확인', icon: User },
     { id: 'report' as MenuItem, label: '신고', icon: Flag },
@@ -52,7 +48,7 @@ export const SideNavigation = ({ tab, setTab }: IProps) => {
             );
           })}
         </nav>
-        {data?.data.result.userAuthTypes.includes('EMAIL') && (
+        {authType.includes('EMAIL') && (
           <nav className="space-y-2 border-t border-gray-700/50">
             {/* 하단 메뉴 (비밀번호 변경) */}
             {bottomMenuItem.map((item) => {
