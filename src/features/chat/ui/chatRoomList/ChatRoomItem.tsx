@@ -15,8 +15,8 @@ export default function ChatRoomItem({ room, isSelected }: IChatRoomItemProps) {
   const { clearMessages } = useChatWebSocketActions();
 
   const handleClick = () => {
-    handleSwitchRoom(roomId, title);
     clearMessages();
+    handleSwitchRoom(roomId, title);
   };
 
   return (

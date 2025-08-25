@@ -16,18 +16,20 @@ export interface IChatMessage {
   time: string;
 }
 
-/** setMessage 상태 인터페이스 */
+/** store state 인터페이스 */
 export interface IInitialState {
   isConnected: boolean;
   rooms: IChatRoom[] | [];
-  messages: IChatMessage[] | [];
+  initMessages: IChatMessage[] | [];
+  realTimeMessages: IChatMessage[] | [];
 }
 
 /**store 초기 상태*/
 export const INITIAL_STATE: IInitialState = {
   isConnected: false,
   rooms: [],
-  messages: [],
+  initMessages: [],
+  realTimeMessages: [],
 };
 
 /** 스토어 액션 인터페이스 */
@@ -37,8 +39,7 @@ interface IChatWebSocketStoreActions {
     setInitRooms: (rooms: IChatRoom[] | []) => void;
     setRooms: (response: IChatRoom) => void;
     setInitMessages: (message: IChatMessage[]) => void;
-    setMessage: (message: IChatMessage) => void;
-    setEnterMessage: (message: string) => void;
+    setRealTimeMessage: (message: IChatMessage) => void;
     clearMessages: () => void;
     clearStore: () => void;
   };

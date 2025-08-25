@@ -7,14 +7,13 @@ import useChatWebSocketStore, { useChatWebSocketActions } from '../../model/useC
 
 export default function useJoinChatRoom(chatroomId: ChatRoomId) {
   const { chatStompRef } = useConnectWebSocket();
-  const { setMessage, setInitMessages } = useChatWebSocketActions();
+  const { setRealTimeMessage, setInitMessages } = useChatWebSocketActions();
   const { isConnected } = useChatWebSocketStore();
 
   useEffect(() => {
     if (chatroomId === 0) return;
 
     if (!chatStompRef?.current) return;
-    if (!isConnected) return;
     const joinChatRoomReceiptId = 'sub-chatRoom';
     const chatMessageReceiptId = `sub-message-${chatroomId}-${Date.now()}	`;
 
@@ -40,9 +39,9 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
         (msg: IMessage) => {
           try {
             const parsedBody = JSON.parse(msg.body);
-            setMessage({ ...parsedBody });
+            setRealTimeMessage({ ...parsedBody });
           } catch {
-            setMessage({
+            setRealTimeMessage({
               message: msg.body,
               tier: 'LV1',
               name: '시스템',

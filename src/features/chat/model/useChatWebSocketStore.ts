@@ -50,24 +50,23 @@ const useChatWebSocketStore = create<IChatWebSocketStore>()(
 
       setInitMessages: (messages) => {
         set({
-          messages: Array.isArray(messages) ? messages : [],
+          initMessages: Array.isArray(messages) ? messages : [],
         });
       },
 
-      setMessage: (message) => {
+      setRealTimeMessage: (message) => {
         set((state) => {
-          const newMessages = [...(state.messages ?? []), message] as Array<IChatMessage>;
-          newMessages.sort((a, b) => Number(a.time) - Number(b.time));
           return {
             ...state,
-            messages: newMessages as IChatMessage[],
+            realTimeMessages: [...state.realTimeMessages, message],
           };
         });
       },
 
       clearMessages: () => {
         set({
-          messages: [],
+          initMessages: [],
+          realTimeMessages: [],
         });
       },
 
@@ -89,7 +88,7 @@ export function useChatWebSocketActions() {
       setInitRooms: state.actions.setInitRooms,
       setRooms: state.actions.setRooms,
       setInitMessages: state.actions.setInitMessages,
-      setMessage: state.actions.setMessage,
+      setRealTimeMessage: state.actions.setRealTimeMessage,
 
       clearMessages: state.actions.clearMessages,
       clearStore: state.actions.clearStore,

@@ -16,23 +16,32 @@ export default function ChatRoom({ roomId, roomTitle }: ChatProps) {
   useJoinChatRoom(roomId);
   const { data } = useMyInfoQuery();
   const nickname = data?.data.result.nickname;
-  const { messages } = useChatWebSocketStore();
+  const { initMessages, realTimeMessages } = useChatWebSocketStore();
 
   return (
     <section className="w-full flex h-full flex-col justify-center flex-4/5">
       {roomId !== 0 ? (
         <>
           <ChatRoomHeader roomTitle={roomTitle} />
-          {messages && (
-            <ul className="flex-1 p-4 flex flex-col gap-4">
-              {messages.map((msg, i) => {
-                if (msg.name === '시스템') {
-                  return <SystemMessage msg={msg} key={i} />;
-                }
-                return <ChatMessage msg={msg} key={i} userNickname={nickname} />;
-              })}
-            </ul>
-          )}
+          <div className="flex-1 p-4 flex flex-col gap-4 overflow-y-scroll">
+            {initMessages && (
+              <ul className="flex flex-col gap-4 h-fit">
+                {initMessages.map((msg, i) => (
+                  <ChatMessage msg={msg} key={i} userNickname={nickname} />
+                ))}
+              </ul>
+            )}
+            {realTimeMessages && (
+              <ul className="flex flex-col gap-4 h-fit">
+                {realTimeMessages.map((msg, i) => {
+                  if (msg.name === '시스템') {
+                    return <SystemMessage msg={msg} key={i} />;
+                  }
+                  return <ChatMessage msg={msg} key={i} userNickname={nickname} />;
+                })}
+              </ul>
+            )}
+          </div>
           <ChatInput chatRoomId={roomId} />
         </>
       ) : (
