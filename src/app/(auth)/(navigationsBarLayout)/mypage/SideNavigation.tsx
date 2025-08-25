@@ -3,12 +3,18 @@
 import Password from './../../../../../public/icons/mypage/password.svg';
 import Image from 'next/image';
 import { User, MessageSquare, Flag, History } from 'lucide-react';
+import { useMyInfoQuery } from '@/entities/mypage/model/query';
+import { Mine } from './tab/Mine';
+import { Solved } from './tab/Solved';
+import { Report } from './tab/Report';
 interface IProps {
   tab: string;
   setTab: (tab: string) => void;
 }
 type MenuItem = 'mine' | 'solved' | 'inquiry' | 'report' | 'password';
 export const SideNavigation = ({ tab, setTab }: IProps) => {
+  const { data } = useMyInfoQuery();
+
   const menuItems = [
     { id: 'mine' as MenuItem, label: '내 정보 확인', icon: User },
     { id: 'report' as MenuItem, label: '신고', icon: Flag },
@@ -46,28 +52,30 @@ export const SideNavigation = ({ tab, setTab }: IProps) => {
             );
           })}
         </nav>
-        <nav className="space-y-2 border-t border-gray-700/50">
-          {/* 하단 메뉴 (비밀번호 변경) */}
-          {bottomMenuItem.map((item) => {
-            return (
-              <button
-                key={item.id}
-                onClick={() => setTab(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
-                  tab === item.id
-                    ? 'text-white shadow-lg'
-                    : 'text-gray-400 hover:text-white hover:bg-white/8'
-                }`}
-                style={{
-                  backgroundColor: tab === item.id ? '#214d35' : 'transparent',
-                }}
-              >
-                <Image src={item.icon} alt="menuIcon" width={20} height={20} />
-                <span className="font-medium">{item.label}</span>
-              </button>
-            );
-          })}
-        </nav>
+        {data?.data.result.userAuthTypes.includes('EMAIL') && (
+          <nav className="space-y-2 border-t border-gray-700/50">
+            {/* 하단 메뉴 (비밀번호 변경) */}
+            {bottomMenuItem.map((item) => {
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setTab(item.id)}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                    tab === item.id
+                      ? 'text-white shadow-lg'
+                      : 'text-gray-400 hover:text-white hover:bg-white/8'
+                  }`}
+                  style={{
+                    backgroundColor: tab === item.id ? '#214d35' : 'transparent',
+                  }}
+                >
+                  <Image src={item.icon} alt="menuIcon" width={20} height={20} />
+                  <span className="font-medium">{item.label}</span>
+                </button>
+              );
+            })}
+          </nav>
+        )}
       </div>
     </div>
   );

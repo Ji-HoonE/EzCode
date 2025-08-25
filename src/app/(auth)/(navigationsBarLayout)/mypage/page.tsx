@@ -18,6 +18,10 @@ const Mypage = () => {
     report: <Report />,
     inquiry: <Inquiry />,
   } as const;
+  console.log(['GOOGLE'].includes('EMAIL'));
+  const tabComponents = ['GOOGLE'].includes('EMAIL')
+    ? { ...baseTabs, password: <ChangePassword /> }
+    : baseTabs;
 
   const tabComponents = data?.data.result.userAuthTypes.includes('EMAIL')
     ? { ...baseTabs, password: <ChangePassword /> }
