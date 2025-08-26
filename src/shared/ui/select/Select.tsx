@@ -72,6 +72,10 @@ export const Select = ({
     lg: 'h-15 text-base w-100 px-4',
   };
   const sizeClass = sizeMap[size];
+  const selectedOption =
+    typeof value === 'string'
+      ? option.find((opt) => typeof opt.value === 'string' && opt.value === value)
+      : null;
 
   const handleSelectChange = (value: string | (() => void)) => {
     // type 분기
@@ -116,7 +120,9 @@ export const Select = ({
         )}
         aria-expanded={dropdown}
       >
-        <span className="truncate">{value || '전체'}</span>
+        <span className="truncate">
+          {typeof value === 'string' ? selectedOption?.label || '전체' : value}
+        </span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className={twMerge(

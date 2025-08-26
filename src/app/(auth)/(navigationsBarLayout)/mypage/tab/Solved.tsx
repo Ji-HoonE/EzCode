@@ -2,6 +2,8 @@ import { useSubmissionList } from '@/entities/mypage/model/query';
 import { History } from 'lucide-react';
 import { SubmissionsResonse } from '@/entities/mypage/model/types';
 import { Badge } from '@/shared/ui/badge/Badge';
+import { useEffect, useState } from 'react';
+import { SolvedModal } from '../ui/SolvedModal';
 
 const getResultBadge = (result: string) => {
   if (result === '정답') {
@@ -27,7 +29,13 @@ const getResultBadge = (result: string) => {
   }
 };
 
-const Card = ({ submissions }: { submissions: SubmissionsResonse }) => {
+const Card = ({
+  submissions,
+  onClick,
+}: {
+  submissions: SubmissionsResonse;
+  onClick: () => void;
+}) => {
   const result = submissions.submissions[0].isCorrect ? '정답' : '오답';
   const getDifficultyColor = (difficulty: string) => {
     if (difficulty.includes('LV1')) return '#cd7f32'; // Bronze
@@ -40,7 +48,12 @@ const Card = ({ submissions }: { submissions: SubmissionsResonse }) => {
     return '#888'; // Default color
   };
   return (
-    <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700/50 ">
+    <div
+      className="bg-gray-800/50 p-4 rounded-lg border border-gray-700/50 cursor-pointer"
+      onClick={() => {
+        onClick();
+      }}
+    >
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
           <span className="text-gray-400 text-sm">#{submissions.problemId}</span>
@@ -78,12 +91,15 @@ const Card = ({ submissions }: { submissions: SubmissionsResonse }) => {
 
 export const Solved = () => {
   const { data } = useSubmissionList();
-  // const [onModal, setOnModal] = useState(false);
-  // const [selected, setSelected] = useState(0);
-
+  console.log('dataaawefr', data);
+  const [onModal, setOnModal] = useState(false);
+  const [selected, setSelected] = useState(0);
+  useEffect(() => {
+    console.log('modaldata', data);
+  }, [data]);
   return (
     <div className="w-full flex flex-col gap-10 pb-10">
-      {/* {data && onModal && (
+      {data && onModal && (
         <SolvedModal
           open={onModal}
           data={data?.result[selected]}
@@ -91,7 +107,7 @@ export const Solved = () => {
             setOnModal(false);
           }}
         />
-      )} */}
+      )}
       <section className="rounded-lg flex flex-col gap-8 border bg-gray-900/50 border-gray-700/50 p-10">
         <div className="flex flex-row gap-4 items-center">
           <History size={24} style={{ color: '#00d084' }} />
@@ -100,8 +116,17 @@ export const Solved = () => {
       </section>
       <div className="flex flex-col gap-2">
         {data?.result?.length || 0 > 0 ? (
-          data?.result.map((item) => {
-            return <Card key={item.problemId} submissions={item} />;
+          data?.result.map((item, index) => {
+            return (
+              <Card
+                onClick={() => {
+                  setSelected(index);
+                  setOnModal(true);
+                }}
+                key={item.problemId}
+                submissions={item}
+              />
+            );
           })
         ) : (
           <span>푼 문제가 없습니다.</span>
