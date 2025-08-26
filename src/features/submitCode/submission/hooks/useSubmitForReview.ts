@@ -30,6 +30,7 @@ export default function useSubmitForReview(problemId: ProblemId) {
     if (codeReviewData) {
       setCodeReview(codeReviewData);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reviewTokenData, codeReviewData]);
 
   return {
