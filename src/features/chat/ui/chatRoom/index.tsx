@@ -28,7 +28,7 @@ export default function ChatRoom({ roomId, roomTitle }: ChatProps) {
 
   return (
     <section className="w-full flex h-full flex-col justify-center flex-4/5">
-      {roomId !== 0 ? (
+      {!!roomId ? (
         <>
           <ChatRoomHeader roomTitle={roomTitle} />
           <div className="flex-1 p-4 flex flex-col gap-4 overflow-y-scroll">

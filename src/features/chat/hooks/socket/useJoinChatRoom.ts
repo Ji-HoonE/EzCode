@@ -13,7 +13,7 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
   useLeaveChatRoom(chatStompRef, chatroomId);
 
   useEffect(() => {
-    if (chatroomId === 0) return;
+    if (!chatroomId) return;
 
     if (!chatStompRef?.current) return;
     const joinChatRoomReceiptId = 'sub-chatRoom';

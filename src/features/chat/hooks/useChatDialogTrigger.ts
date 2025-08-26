@@ -9,7 +9,7 @@ export default function useChatDialogTrigger() {
   const { setIsLeaved } = useChatWebSocketActions();
 
   const openChatDialog = () => {
-    params.set(PATHS.CHAT.SEARCHPARAMS_ID, '0');
+    params.set(PATHS.CHAT.SEARCHPARAMS_ID, 'NaN');
     params.set(PATHS.CHAT.SEARCHPARAMS_TITLE, 'null');
 
     router.push(`?${params.toString()}`);

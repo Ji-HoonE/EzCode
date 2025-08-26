@@ -11,7 +11,6 @@ export default function ChatDialog({ searchParams }: ChatDialogProps) {
   const roomId = use(searchParams)['room-id'];
   const title = use(searchParams)['title'];
 
-  console.log(roomId, title);
   return (
     <Dialog open={!!roomId}>
       <DialogContent

@@ -11,7 +11,6 @@ export default function useLeaveChatRoom(
   const { isLeaveRoom } = useChatWebSocketStore();
   const { clearMessages } = useChatWebSocketActions();
 
-  console.log(isLeaveRoom);
   useEffect(() => {
     if (chatroomId === 0 || !chatStompRef?.current || !isLeaveRoom) return;
     console.log('퇴장 훅 실행');
