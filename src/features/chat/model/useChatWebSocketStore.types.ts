@@ -19,6 +19,7 @@ export interface IChatMessage {
 /** store state 인터페이스 */
 export interface IInitialState {
   isConnected: boolean;
+  isLeaveRoom: boolean;
   rooms: IChatRoom[] | [];
   initMessages: IChatMessage[] | [];
   realTimeMessages: IChatMessage[] | [];
@@ -27,6 +28,7 @@ export interface IInitialState {
 /**store 초기 상태*/
 export const INITIAL_STATE: IInitialState = {
   isConnected: false,
+  isLeaveRoom: false,
   rooms: [],
   initMessages: [],
   realTimeMessages: [],
@@ -36,6 +38,7 @@ export const INITIAL_STATE: IInitialState = {
 interface IChatWebSocketStoreActions {
   actions: {
     setIsConnected: (status: boolean) => void;
+    setIsLeaved: (status: boolean) => void;
     setInitRooms: (rooms: IChatRoom[] | []) => void;
     setRooms: (response: IChatRoom) => void;
     setInitMessages: (message: IChatMessage[]) => void;

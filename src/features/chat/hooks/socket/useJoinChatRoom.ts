@@ -4,11 +4,13 @@ import { useEffect } from 'react';
 import { ChatRoomId } from '../../types';
 import { useConnectWebSocket } from '../..';
 import useChatWebSocketStore, { useChatWebSocketActions } from '../../model/useChatWebSocketStore';
+import useLeaveChatRoom from './useLeaveChatRoom';
 
 export default function useJoinChatRoom(chatroomId: ChatRoomId) {
   const { chatStompRef } = useConnectWebSocket();
-  const { setRealTimeMessage, setInitMessages } = useChatWebSocketActions();
+  const { setRealTimeMessage, setInitMessages, setIsLeaved } = useChatWebSocketActions();
   const { isConnected } = useChatWebSocketStore();
+  useLeaveChatRoom(chatStompRef, chatroomId);
 
   useEffect(() => {
     if (chatroomId === 0) return;
@@ -58,6 +60,10 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
         body: String(chatroomId),
       });
     }
+
+    return () => {
+      setIsLeaved(true);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, chatStompRef, chatroomId]);
 }

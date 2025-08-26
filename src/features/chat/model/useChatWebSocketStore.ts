@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { useShallow } from 'zustand/shallow';
-import { IChatMessage, IChatWebSocketStore, INITIAL_STATE } from './useChatWebSocketStore.types';
+import { IChatWebSocketStore, INITIAL_STATE } from './useChatWebSocketStore.types';
 
 /** 인증 스토어 */
 const useChatWebSocketStore = create<IChatWebSocketStore>()(
@@ -11,6 +11,11 @@ const useChatWebSocketStore = create<IChatWebSocketStore>()(
       setIsConnected: (status) => {
         set({
           isConnected: status,
+        });
+      },
+      setIsLeaved: (status) => {
+        set({
+          isLeaveRoom: status,
         });
       },
 
@@ -85,6 +90,8 @@ export function useChatWebSocketActions() {
   return useChatWebSocketStore(
     useShallow((state) => ({
       setIsConnected: state.actions.setIsConnected,
+      setIsLeaved: state.actions.setIsLeaved,
+
       setInitRooms: state.actions.setInitRooms,
       setRooms: state.actions.setRooms,
       setInitMessages: state.actions.setInitMessages,
