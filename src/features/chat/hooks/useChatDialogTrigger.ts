@@ -1,12 +1,11 @@
 import { PATHS } from '@/constants/paths';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useChatWebSocketActions } from '../model/useChatWebSocketStore';
 
 export default function useChatDialogTrigger() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const params = new URLSearchParams(searchParams.toString());
-  const { setIsLeaved } = useChatWebSocketActions();
+  // const { setIsLeaved } = useChatWebSocketActions();
 
   const openChatDialog = () => {
     params.set(PATHS.CHAT.SEARCHPARAMS_ID, 'NaN');
@@ -19,7 +18,7 @@ export default function useChatDialogTrigger() {
     const params = new URLSearchParams(searchParams.toString());
     const prevRoomId = params.get(PATHS.CHAT.SEARCHPARAMS_ID);
     if (prevRoomId && Number(prevRoomId) !== roomId) {
-      setIsLeaved(true);
+      // setIsLeaved(true);
       params.set(PATHS.CHAT.SEARCHPARAMS_ID, String(roomId));
       params.set(PATHS.CHAT.SEARCHPARAMS_TITLE, title);
 
@@ -28,7 +27,7 @@ export default function useChatDialogTrigger() {
   };
 
   const closeChatDialog = () => {
-    setIsLeaved(true);
+    // setIsLeaved(true);
     params.delete(PATHS.CHAT.SEARCHPARAMS_ID);
     params.delete(PATHS.CHAT.SEARCHPARAMS_TITLE);
 

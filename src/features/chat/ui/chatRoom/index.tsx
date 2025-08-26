@@ -1,14 +1,11 @@
 'use client';
 
 import { ChatInput, useJoinChatRoom } from '@/features/chat';
-import useChatWebSocketStore, {
-  useChatWebSocketActions,
-} from '@/features/chat/model/useChatWebSocketStore';
+import useChatWebSocketStore from '@/features/chat/model/useChatWebSocketStore';
 import SystemMessage from '../chatMessage/SystemMessage';
 import ChatMessage from '../chatMessage/ChatMessage';
 import ChatRoomHeader from './ChatRoomHeader';
 import { useMyInfoQuery } from '@/entities/mypage/model/query';
-import { useEffect } from 'react';
 
 interface ChatProps {
   roomId: number;
@@ -20,11 +17,11 @@ export default function ChatRoom({ roomId, roomTitle }: ChatProps) {
   const { data } = useMyInfoQuery();
   const nickname = data?.data.result.nickname;
   const { initMessages, realTimeMessages } = useChatWebSocketStore();
-  const { setIsLeaved } = useChatWebSocketActions();
+  // const { setIsLeaved } = useChatWebSocketActions();
 
-  useEffect(() => {
-    setIsLeaved(false);
-  }, [roomId]);
+  // useEffect(() => {
+  //   setIsLeaved(false);
+  // }, [roomId]);
 
   return (
     <section className="w-full flex h-full flex-col justify-center flex-4/5">
