@@ -1,5 +1,5 @@
 'use client';
-import { IMessage } from '@stomp/stompjs';
+import { IMessage, StompSubscription } from '@stomp/stompjs';
 import { useRef, useEffect } from 'react';
 import { ChatRoomId, useConnectWebSocket } from '../..';
 import useChatWebSocketStore, { useChatWebSocketActions } from '../../model/useChatWebSocketStore';
@@ -10,8 +10,8 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
   const { isConnected } = useChatWebSocketStore();
 
   // 구독 객체 저장용 ref
-  const userQueueSubRef = useRef<any>(null);
-  const topicSubRef = useRef<any>(null);
+  const userQueueSubRef = useRef<StompSubscription | null>(null);
+  const topicSubRef = useRef<StompSubscription | null>(null);
 
   useEffect(() => {
     if (!chatroomId || !chatStompRef?.current) return;
