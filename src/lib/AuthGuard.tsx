@@ -28,7 +28,7 @@ export default function AuthGuard() {
     } else {
       setShowLoginModal(false);
     }
-  }, [status, pathname, session, searchParams]);
+  }, [status, pathname, session, searchParams, hasAuthGuardTrigger]);
 
   const handleCloseLoginModal = () => {
     router.back();

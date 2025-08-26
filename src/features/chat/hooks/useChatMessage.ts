@@ -15,8 +15,8 @@ export default function useChatMessage(roomId: number) {
     setValue('');
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
       e.preventDefault();
       createMessage();
     }
@@ -27,6 +27,6 @@ export default function useChatMessage(roomId: number) {
     setValue,
     handleChangeMessage,
     createMessage,
-    handleKeyPress,
+    handleKeyDown,
   };
 }

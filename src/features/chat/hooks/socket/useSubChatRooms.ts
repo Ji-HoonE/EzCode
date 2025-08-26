@@ -12,7 +12,7 @@ export default function useSubChatRooms() {
 
   useEffect(() => {
     if (!chatStompRef.current) return;
-    if (!isConnected) return;
+    if (!chatStompRef.current.connected) return;
 
     const roomReceiptId = 'sub-chatrooms';
     const roomUpdateReceiptId = 'sub-roomUpdate';

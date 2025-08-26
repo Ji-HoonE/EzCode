@@ -1,13 +1,15 @@
+'use client';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { ChatRoom, ChatRoomList } from '@/features/chat';
 import { DialogTitle } from '@radix-ui/react-dialog';
+import { use } from 'react';
 
 interface ChatDialogProps {
   searchParams: Promise<{ 'room-id': string; title: string }>;
 }
-export default async function ChatDialog({ searchParams }: ChatDialogProps) {
-  const roomId = (await searchParams)['room-id'];
-  const title = (await searchParams)['title'];
+export default function ChatDialog({ searchParams }: ChatDialogProps) {
+  const roomId = use(searchParams)['room-id'];
+  const title = use(searchParams)['title'];
 
   return (
     <Dialog open={!!roomId}>
@@ -16,8 +18,8 @@ export default async function ChatDialog({ searchParams }: ChatDialogProps) {
         showCloseButton={false}
       >
         <DialogTitle className="hidden" />
-        <ChatRoomList selectedRoomId={roomId} />
-        <ChatRoom roomId={roomId} roomTitle={title} />
+        <ChatRoomList selectedRoomId={Number(roomId)} />
+        <ChatRoom roomId={Number(roomId)} roomTitle={title} />
       </DialogContent>
     </Dialog>
   );

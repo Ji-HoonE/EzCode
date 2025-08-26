@@ -45,10 +45,12 @@ export default function useSubscribeProblem() {
         clearStore();
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isConnected,
     setResults,
     clearStore,
+    problemStompRef,
     submitPrepareData.sessionKey,
     problemStompRef.current?.connected,
   ]);

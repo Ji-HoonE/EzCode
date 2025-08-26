@@ -2,6 +2,7 @@ import { IChatMessage } from '../../model/useChatWebSocketStore.types';
 
 export interface IChatMessageProps {
   msg: IChatMessage;
+  userNickname?: string;
 }
 export default function SystemMessage({ msg }: IChatMessageProps) {
   return (

@@ -1,13 +1,12 @@
 export const formatDate = (date: string): string => {
   const newDate = new Date(date);
+  newDate.setHours(newDate.getHours() + 9);
 
-  const options: Intl.DateTimeFormatOptions = {
+  const formatter = new Intl.DateTimeFormat('ko-KR', {
     hour: 'numeric',
     minute: 'numeric',
     hour12: true,
     timeZone: 'Asia/Seoul',
-  };
-
-  const formatter = new Intl.DateTimeFormat('ko-KR', options);
-  return formatter.format(newDate); // 예: "오후 4:58"
+  });
+  return formatter.format(newDate);
 };

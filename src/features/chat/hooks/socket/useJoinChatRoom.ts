@@ -1,56 +1,51 @@
 'use client';
-import { IMessage } from '@stomp/stompjs';
-import { useEffect } from 'react';
-import { ChatRoomId } from '../../types';
-import { useConnectWebSocket } from '../..';
+import { IMessage, StompSubscription } from '@stomp/stompjs';
+import { useRef, useEffect } from 'react';
+import { ChatRoomId, useConnectWebSocket } from '../..';
 import useChatWebSocketStore, { useChatWebSocketActions } from '../../model/useChatWebSocketStore';
 
 export default function useJoinChatRoom(chatroomId: ChatRoomId) {
   const { chatStompRef } = useConnectWebSocket();
-  const { setMessage, setInitMessages } = useChatWebSocketActions();
+  const { setRealTimeMessage, setInitMessages } = useChatWebSocketActions();
   const { isConnected } = useChatWebSocketStore();
 
-  useEffect(() => {
-    if (chatroomId === 0) return;
+  // 구독 객체 저장용 ref
+  const userQueueSubRef = useRef<StompSubscription | null>(null);
+  const topicSubRef = useRef<StompSubscription | null>(null);
 
-    if (!chatStompRef?.current) return;
-    if (!isConnected) return;
-    const joinChatRoomReceiptId = 'sub-chatRoom';
-    const chatMessageReceiptId = `sub-message-${chatroomId}-${Date.now()}	`;
+  useEffect(() => {
+    if (!chatroomId || !chatStompRef?.current) return;
 
     if (chatStompRef.current.connected) {
-      // 채팅방 메시지 초기 구독
-      chatStompRef.current.subscribe(
+      // 채팅방 메시지 초기 구독후 구독 객체 저장
+      userQueueSubRef.current = chatStompRef.current.subscribe(
         '/user/queue/chat',
         (msg: IMessage) => {
           try {
             const chats = JSON.parse(msg.body);
-
             setInitMessages(chats);
           } catch (e) {
             console.error('채팅 내역 파싱 오류', e);
           }
-        },
-        { receipt: joinChatRoomReceiptId }
+        }
       );
 
-      //실시간 메시지 수신 구독
-      chatStompRef.current.subscribe(
+      //실시간 메시지 수신 구독후 구독 객체 저장
+      topicSubRef.current = chatStompRef.current.subscribe(
         `/topic/chat/${chatroomId}`,
         (msg: IMessage) => {
           try {
             const parsedBody = JSON.parse(msg.body);
-            setMessage({ ...parsedBody });
+            setRealTimeMessage({ ...parsedBody });
           } catch {
-            setMessage({
+            setRealTimeMessage({
               message: msg.body,
               tier: 'LV1',
               name: '시스템',
               time: String(new Date()),
             });
           }
-        },
-        { receipt: chatMessageReceiptId }
+        }
       );
 
       // 입장 메시지 전송
@@ -59,6 +54,18 @@ export default function useJoinChatRoom(chatroomId: ChatRoomId) {
         body: String(chatroomId),
       });
     }
+
+    return () => {
+      // cleanup에서 구독 해지
+      if (userQueueSubRef.current) {
+        userQueueSubRef.current.unsubscribe();
+        userQueueSubRef.current = null;
+      }
+      if (topicSubRef.current) {
+        topicSubRef.current.unsubscribe();
+        topicSubRef.current = null;
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, chatStompRef, chatroomId]);
 }

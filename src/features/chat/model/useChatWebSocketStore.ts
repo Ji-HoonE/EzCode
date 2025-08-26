@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { useShallow } from 'zustand/shallow';
-import { IChatMessage, IChatWebSocketStore, INITIAL_STATE } from './useChatWebSocketStore.types';
+import { IChatWebSocketStore, INITIAL_STATE } from './useChatWebSocketStore.types';
 
 /** 인증 스토어 */
 const useChatWebSocketStore = create<IChatWebSocketStore>()(
@@ -11,6 +11,11 @@ const useChatWebSocketStore = create<IChatWebSocketStore>()(
       setIsConnected: (status) => {
         set({
           isConnected: status,
+        });
+      },
+      setIsLeaved: (status) => {
+        set({
+          isLeaveRoom: status,
         });
       },
 
@@ -50,24 +55,23 @@ const useChatWebSocketStore = create<IChatWebSocketStore>()(
 
       setInitMessages: (messages) => {
         set({
-          messages: Array.isArray(messages) ? messages : [],
+          initMessages: Array.isArray(messages) ? messages : [],
         });
       },
 
-      setMessage: (message) => {
+      setRealTimeMessage: (message) => {
         set((state) => {
-          const newMessages = [...(state.messages ?? []), message] as Array<IChatMessage>;
-          newMessages.sort((a, b) => Number(a.time) - Number(b.time));
           return {
             ...state,
-            messages: newMessages as IChatMessage[],
+            realTimeMessages: [...state.realTimeMessages, message],
           };
         });
       },
 
       clearMessages: () => {
         set({
-          messages: [],
+          initMessages: [],
+          realTimeMessages: [],
         });
       },
 
@@ -86,10 +90,12 @@ export function useChatWebSocketActions() {
   return useChatWebSocketStore(
     useShallow((state) => ({
       setIsConnected: state.actions.setIsConnected,
+      setIsLeaved: state.actions.setIsLeaved,
+
       setInitRooms: state.actions.setInitRooms,
       setRooms: state.actions.setRooms,
       setInitMessages: state.actions.setInitMessages,
-      setMessage: state.actions.setMessage,
+      setRealTimeMessage: state.actions.setRealTimeMessage,
 
       clearMessages: state.actions.clearMessages,
       clearStore: state.actions.clearStore,

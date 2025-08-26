@@ -5,9 +5,10 @@ export default function useChatDialogTrigger() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const params = new URLSearchParams(searchParams.toString());
+  // const { setIsLeaved } = useChatWebSocketActions();
 
   const openChatDialog = () => {
-    params.set(PATHS.CHAT.SEARCHPARAMS_ID, '0');
+    params.set(PATHS.CHAT.SEARCHPARAMS_ID, 'NaN');
     params.set(PATHS.CHAT.SEARCHPARAMS_TITLE, 'null');
 
     router.push(`?${params.toString()}`);
@@ -15,13 +16,18 @@ export default function useChatDialogTrigger() {
 
   const handleSwitchRoom = (roomId: number, title: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set(PATHS.CHAT.SEARCHPARAMS_ID, String(roomId));
-    params.set(PATHS.CHAT.SEARCHPARAMS_TITLE, title);
+    const prevRoomId = params.get(PATHS.CHAT.SEARCHPARAMS_ID);
+    if (prevRoomId && Number(prevRoomId) !== roomId) {
+      // setIsLeaved(true);
+      params.set(PATHS.CHAT.SEARCHPARAMS_ID, String(roomId));
+      params.set(PATHS.CHAT.SEARCHPARAMS_TITLE, title);
 
-    router.push(`?${params.toString()}`);
+      router.push(`?${params.toString()}`);
+    }
   };
 
   const closeChatDialog = () => {
+    // setIsLeaved(true);
     params.delete(PATHS.CHAT.SEARCHPARAMS_ID);
     params.delete(PATHS.CHAT.SEARCHPARAMS_TITLE);
 
