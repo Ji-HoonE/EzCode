@@ -79,7 +79,7 @@ export default function RankingPage() {
   return (
     <div className="min-h-screen bg-[#0c151c] text-white">
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 ">
         {/* Page Title */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center space-x-3 mb-4">
@@ -128,7 +128,9 @@ export default function RankingPage() {
             </div>
           </div>
         </div>
-
+        <div className="flex justify-end mb-2">
+          <span className="text-sm font-medium">랭킹 1시간마다 갱신 됩니다.</span>
+        </div>
         {/* Ranking Table */}
         <div className="bg-[#1a2332] rounded-2xl shadow-2xl overflow-hidden border border-gray-800">
           <div className="px-6 py-4 bg-[#214d35] border-b border-gray-700">
