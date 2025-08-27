@@ -2,15 +2,17 @@
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { ChatRoom, ChatRoomList } from '@/features/chat';
 import { DialogTitle } from '@radix-ui/react-dialog';
-import { use } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-interface ChatDialogProps {
-  searchParams: Promise<{ 'room-id': string; title: string }>;
-}
-export default function ChatDialog({ searchParams }: ChatDialogProps) {
-  const roomId = use(searchParams)['room-id'];
-  const title = use(searchParams)['title'];
+export default function ChatDialog({}) {
+  const sp = useSearchParams();
 
+  const roomId = sp.get('room-id');
+  const title = sp.get('title');
+
+  if (!roomId || !title) {
+    return null;
+  }
   return (
     <Dialog open={!!roomId}>
       <DialogContent
