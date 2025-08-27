@@ -2,6 +2,7 @@
 
 import FormatMarkdown from '@/shared/ui/FormatMarkdown';
 import { IDetailProblemResponse } from '../api/server/getDetailProblem.type';
+import Arrow from '@/shared/ui/icons/arrow-icon';
 
 interface IDetailProblemProps {
   detailProblem: IDetailProblemResponse;
@@ -9,6 +10,7 @@ interface IDetailProblemProps {
 
 export default function DetailProblem({ detailProblem }: IDetailProblemProps) {
   const { title, difficulty, categories, description } = detailProblem;
+  console.log('detailProblem', detailProblem);
 
   return (
     <article className="flex flex-col gap-[29px] max-w-6xl bg-secondary-background rounded-[10px] h-full p-6">
@@ -17,8 +19,14 @@ export default function DetailProblem({ detailProblem }: IDetailProblemProps) {
         난이도 <span className="text-[#FFCFA7]">{difficulty}</span>
         {categories && categories.length > 0 && (
           <div className="flex gap-4">
-            <p>{'>'}</p>
-            {categories[0]}
+            <Arrow direction="right" className="text-white" />
+            <ul className="flex gap-1">
+              {categories.map((category, idx) => (
+                <li key={category}>
+                  {category} {idx !== categories.length - 1 && ','}
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </div>
