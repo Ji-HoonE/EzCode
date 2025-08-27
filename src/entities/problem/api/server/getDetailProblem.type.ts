@@ -13,6 +13,7 @@ export interface IDetailProblemResponse {
   memoryLimit: number;
   timeLimit: number;
   reference: string;
+  imageUrl: string | null;
   createdAt: string;
   modifiedAt: string;
 }
