@@ -14,7 +14,6 @@ interface IDiscussionContentProps {
 }
 
 export default function Discussion({ discussion, id }: IDiscussionContentProps) {
-  console.log('id', id);
   const [isEdit, setIsEdit] = useState(false);
   const [isRepliesOpen, setIsRepliesOpen] = useState(false);
 
