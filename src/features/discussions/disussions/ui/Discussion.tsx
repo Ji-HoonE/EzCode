@@ -47,6 +47,7 @@ export default function Discussion({ discussion, id }: IDiscussionContentProps) 
               replyCount={replyCount}
               onDelete={() => deleteMutate()}
               onEdit={() => setIsEdit(true)}
+              replyId={discussionId}
             />
           </>
         ) : (

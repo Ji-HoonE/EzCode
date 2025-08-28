@@ -10,10 +10,9 @@ interface IDiscussionFooterProps {
   content: IDiscussionContentResponse | IReply;
   onDelete: () => void;
   onEdit: () => void;
-
   replyCount?: number;
   setChildRepliesOpen?: () => void;
-  replyId?: number;
+  replyId: number;
 }
 
 export default function DiscussionFooter({ ...props }: IDiscussionFooterProps) {
@@ -24,7 +23,12 @@ export default function DiscussionFooter({ ...props }: IDiscussionFooterProps) {
       {replyCount !== undefined && (
         <ShowChildReplies onClick={() => setChildRepliesOpen?.()} replyCount={replyCount} />
       )}
-      <DiscussionDropDown isAuthor={content.isAuthor} onDelete={onDelete} onEdit={onEdit} />
+      <DiscussionDropDown
+        isAuthor={content.isAuthor}
+        onDelete={onDelete}
+        onEdit={onEdit}
+        reportTargetId={replyId}
+      />
     </div>
   );
 }
