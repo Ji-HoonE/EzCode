@@ -17,18 +17,18 @@ export default function RenderImageContent({
 }: RenderImageContentProps) {
   return (
     <>
-      {previewImage ? (
+      {variant === 'profile-circle' ? (
         <Image
-          src={previewImage}
+          src={previewImage || '/icons/mypage/defaultImg.svg'}
           fill
           className={cn('object-cover absolute')}
           alt="preview-image"
         />
-      ) : variant === 'profile-circle' ? (
+      ) : previewImage ? (
         <Image
-          src="/icons/mypage/defaultImg.svg"
+          src={previewImage}
           fill
-          className={cn('object-cover absolute')}
+          className={cn('object-contain absolute')}
           alt="preview-image"
         />
       ) : (
@@ -37,7 +37,7 @@ export default function RenderImageContent({
             src="/icons/upload.svg"
             width={40}
             height={40}
-            className={cn('object-contain ')}
+            className={cn('object-none')}
             alt="preview-image"
           />
           {description && <p className="text-[#ccc]">{description}</p>}
