@@ -25,7 +25,7 @@ const Mypage = () => {
 
   return (
     <div className="w-full  flex h-full">
-      <SideNavigation tab={tab} setTab={setTab} authType={data?.data.result.userAuthTypes || []} />
+      <SideNavigation tab={tab} setTab={setTab} authType={data?.data.result?.userAuthTypes || []} />
       <div className="p-10 flex-1 h-full overflow-y-auto">{tabComponents[tab as 'mine']}</div>
     </div>
   );

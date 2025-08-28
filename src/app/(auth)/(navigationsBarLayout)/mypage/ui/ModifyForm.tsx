@@ -1,19 +1,28 @@
-import { useUploadImage } from '@/entities/mypage/model/query';
-import { IMyInfo } from '@/entities/mypage/model/types';
+import { ILanguages, IMyInfo } from '@/entities/mypage/model/types';
 import { Badge } from '@/shared/ui/badge/Badge';
+import { Select } from '@/shared/ui/select/Select';
 import Image from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+
+type LanguageList = {
+  label: string;
+  value: string;
+}[];
 
 export const ModifyForm = ({
   myInfo,
   editForm,
   setEditForm,
+  languageList,
+  languages,
 }: {
   myInfo: IMyInfo;
   editForm: IMyInfo;
   setEditForm: Dispatch<SetStateAction<IMyInfo>>;
+  languageList: LanguageList;
+  languages?: ILanguages[];
 }) => {
-  const { mutateAsync: uploadImg } = useUploadImage();
+  // const { mutateAsync: uploadImg } = useUploadImage();
   const fileInputRef = useRef<HTMLInputElement | null>(null); // 타입 지정
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -23,18 +32,12 @@ export const ModifyForm = ({
     if (!event.target.files?.length) return;
 
     const file = event.target.files[0];
-
+    console.log(file);
     try {
-      const result = await uploadImg(file); // 서버에 업로드
-
-      if (result.status === 200) {
-        setEditForm((prev) => ({
-          ...prev,
-          profileImageUrl: result.result.message,
-        }));
-      } else {
-        alert(result.message);
-      }
+      setEditForm((prev) => ({
+        ...prev,
+        profileImage: file,
+      }));
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
     }
@@ -43,6 +46,10 @@ export const ModifyForm = ({
     if (!myInfo) return;
     setEditForm(myInfo);
   }, [myInfo]);
+
+  useEffect(() => {
+    console.log(languages?.find((item) => item.id === editForm.language?.id)?.name);
+  }, [editForm.language]);
 
   return (
     <div className="flex gap-8">
@@ -54,7 +61,9 @@ export const ModifyForm = ({
               width={150}
               height={150}
               src={
-                editForm.profileImageUrl ? editForm.profileImageUrl : '/icons/mypage/defaultImg.svg'
+                editForm.profileImage
+                  ? URL.createObjectURL(editForm.profileImage)
+                  : editForm.profileImageUrl || '/icons/mypage/defaultImg.svg'
               }
               onClick={() => {
                 handleImageClick();
@@ -88,7 +97,7 @@ export const ModifyForm = ({
             <input
               id="nickname"
               type="text"
-              value={editForm.nickname}
+              value={editForm.nickname || ''}
               onChange={(e) =>
                 setEditForm((prev) => ({
                   ...prev,
@@ -137,6 +146,26 @@ export const ModifyForm = ({
               }
               className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-green-500 transition-colors"
               placeholder="블로그 url을 입력해주세요."
+            />
+          </div>
+          <div>
+            <label htmlFor="blogUrl" className="block text-sm font-medium text-gray-300 mb-2">
+              언어
+            </label>
+            <Select
+              className="h-[50px] w-full"
+              entireOption={false}
+              option={languageList}
+              title="언어선택"
+              // 선택된 value는 id로
+              value={editForm.language?.id ? String(editForm.language.id) : ''}
+              setValue={(value) => {
+                const selectedLanguage = languages?.find((lang) => String(lang.id) === value);
+                setEditForm((prev) => ({
+                  ...prev,
+                  language: selectedLanguage || null,
+                }));
+              }}
             />
           </div>
           {/* 자기소개 */}

@@ -15,6 +15,7 @@ export const SolvedModal = ({
   open: boolean;
 }) => {
   const router = useRouter();
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-[60%] max-h-[80%] overflow-y-auto" showCloseButton>
@@ -34,9 +35,11 @@ export const SolvedModal = ({
           <div className="flex flex-row gap-1">
             <span className="w-25">제목</span>
             <span>{data?.problemTitle}</span>
+            <span>{data?.problemTitle}</span>
           </div>
           <div className="flex flex-row gap-1">
             <span className="w-25 shrink-0">설명</span>
+            <span>{data?.problemDescription}</span>
             <span>{data?.problemDescription}</span>
           </div>
           <div className="flex flex-col gap-1 border-[#000] border-[1px]">

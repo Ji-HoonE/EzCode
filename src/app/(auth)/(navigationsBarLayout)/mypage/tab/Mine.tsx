@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 import { Heatmap } from '../ui/Heatmap';
 import {
   useEmailVerify,
+  useGetLanguageList,
   useModifyInfo,
   useMyAiReviewCheckQuery,
   useMyDailySolved,
   useMyInfoQuery,
   useMyRankingQuery,
 } from '@/entities/mypage/model/query';
-import { IHeatmapItem, IMyInfo } from '@/entities/mypage/model/types';
+import { IHeatmapItem, IModifyBody, IMyInfo } from '@/entities/mypage/model/types';
 import { Check, User } from 'lucide-react';
 
 import Bookopen from './../../../../../../public/icons/mypage/bookopen.svg';
@@ -38,15 +39,19 @@ export const Mine = () => {
     userRole: '',
     verified: false,
     userAuthTypes: [],
+    language: null,
   });
+
   const [info, setInfo] = useState<IMyInfo>(Object);
   const [heatmapData, setHeatmapData] = useState<IHeatmapItem[]>([]);
   const { data } = useMyInfoQuery();
+  const { data: languages } = useGetLanguageList();
   const { data: ranking } = useMyRankingQuery('all-time');
   const { data: aiReview } = useMyAiReviewCheckQuery();
   const { data: heatmap } = useMyDailySolved();
   const { mutateAsync: emailVerfiy } = useEmailVerify(BASE_URL || '');
   const { mutateAsync: modify } = useModifyInfo();
+  const [languageList, setLanguageList] = useState<{ label: string; value: string }[]>([]);
 
   const myInfo = data?.data.result;
   const myRanking = ranking?.data.result;
@@ -80,6 +85,13 @@ export const Mine = () => {
     setInfo(myInfo);
   }, [myInfo]);
 
+  useEffect(() => {
+    if (!languages) return;
+    languages.data.result.map((item) => {
+      setLanguageList((prev) => [...prev, { label: item.name, value: String(item.id) }]);
+    });
+  }, [languages]);
+
   return (
     <div className=" flex flex-col gap-10 h-full">
       <section className="rounded-lg flex flex-col gap-8 border bg-gray-900/50 border-gray-700/50 p-10">
@@ -97,12 +109,28 @@ export const Mine = () => {
                 } else {
                   if (editForm.nickname.length < 1) {
                     alert('닉네임을 확인해주세요.');
-                  } else {
-                    const response = await modify(editForm);
-                    alert(response.message);
-                    if (response.status === 200) {
-                      queryClient.invalidateQueries({ queryKey: ['my-info'] });
-                    }
+                    return;
+                  }
+
+                  // API 요청용 body 생성
+                  const body: IModifyBody = {
+                    age: editForm.age,
+                    blogUrl: editForm.blogUrl || null,
+                    githubUrl: editForm.githubUrl || null,
+                    introduction: editForm.introduction || null,
+                    languageId: editForm.language?.id || null, // 여기서 id만 보냄
+                    nickname: editForm.nickname,
+                  };
+
+                  const response = await modify({
+                    request: body,
+                    image: editForm.profileImage ?? undefined,
+                  });
+
+                  alert(response.message);
+                  if (response.status === 200) {
+                    queryClient.invalidateQueries({ queryKey: ['my-info'] });
+                    setTab('info');
                   }
                 }
               }}
@@ -181,7 +209,7 @@ export const Mine = () => {
 
               {/* 통계 정보 - 세로 중앙 배치로 변경 */}
               <div className="flex-1 flex flex-col justify-center space-y-6">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="bg-gray-800/50 p-4 rounded-lg">
                     <div className="text-sm text-gray-400">랭킹</div>
                     <div className="text-xl font-bold text-white">
@@ -197,6 +225,12 @@ export const Mine = () => {
                   <div className="bg-gray-800/50 p-4 rounded-lg">
                     <div className="text-sm text-gray-400">남은 리뷰</div>
                     <div className="text-xl font-bold text-white">{aiReviewCnt}</div>
+                  </div>
+                  <div className="bg-gray-800/50 p-4 rounded-lg">
+                    <div className="text-sm text-gray-400">언어</div>
+                    <div className="text-xl font-bold text-white">
+                      {myInfo?.language?.name || '-'}
+                    </div>
                   </div>
                 </div>
 
@@ -230,7 +264,13 @@ export const Mine = () => {
             </div>
           </>
         ) : (
-          <ModifyForm myInfo={info} editForm={editForm} setEditForm={setEditForm} />
+          <ModifyForm
+            languageList={languageList}
+            myInfo={info}
+            editForm={editForm}
+            setEditForm={setEditForm}
+            languages={languages?.data.result}
+          />
         )}
       </section>
       <section className="rounded-lg flex flex-col gap-8 border bg-gray-900/50 border-gray-700/50 p-10">

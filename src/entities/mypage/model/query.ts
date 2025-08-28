@@ -5,6 +5,8 @@ import {
   ChangePasswordBody,
   ChangePasswordRequest,
   DailySolved,
+  ILanguages,
+  IModifyBody,
   IMyInfo,
   Ranking,
   Report,
@@ -119,8 +121,29 @@ export const useReportList = () => {
 
 export const useModifyInfo = () => {
   return useMutation({
-    mutationFn: async (data: IMyInfo) => {
-      const response = await ApiHelper.put(API_URL.MYPAGE.MODIFY_INFO, data);
+    mutationFn: async ({
+      request,
+      image,
+    }: {
+      request: IModifyBody; // 닉네임, 블로그, 깃허브 등 정보
+      image?: File; // 프로필 이미지 (선택)
+    }) => {
+      console.log('image', image);
+      console.log('request', request);
+      const formData = new FormData();
+
+      // request(JSON) 추가
+      formData.append('request', new Blob([JSON.stringify(request)], { type: 'application/json' }));
+
+      // image(File) 추가
+      if (image) {
+        formData.append('image', image);
+      }
+
+      const response = await ApiHelper.put(API_URL.MYPAGE.MODIFY_INFO, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
       return response.data;
     },
   });
@@ -147,6 +170,16 @@ export const useUploadImage = () => {
       );
 
       return response.data;
+    },
+  });
+};
+
+export const useGetLanguageList = () => {
+  return useQuery({
+    queryKey: ['languages'],
+    queryFn: async () => {
+      const response = await ApiHelper.get<ILanguages[]>(API_URL.LANGUAGES);
+      return response;
     },
   });
 };

@@ -10,10 +10,17 @@ export interface IMyInfo {
   githubUrl: string | null;
   blogUrl: string | null;
   profileImageUrl: string | null;
+  profileImage?: File;
   introduction: string | null;
   verified: boolean;
+  language: {
+    id: number;
+    judge0Id: number;
+    name: string;
+    version: string;
+  } | null;
   totalSolvedCount: number;
-  userAuthTypes : string[]
+  userAuthTypes: string[];
 }
 
 export interface AiReview {
@@ -82,3 +89,18 @@ export interface Report {
   targetType: string;
 }
 
+export interface ILanguages {
+  id: number;
+  name: string;
+  version: string;
+  judge0Id: number;
+}
+
+export type IModifyBody = {
+  nickname: string | null;
+  githubUrl: string | null;
+  blogUrl: string | null;
+  introduction: string | null;
+  age: number;
+  languageId: number | null;
+};

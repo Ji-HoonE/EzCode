@@ -38,8 +38,8 @@ export const API_URL = {
     SUBMISSION: '/submissions',
     VERIFY_EMAIL: '/email/send',
     REPORT: '/reports/my',
-    MODIFY_INFO : '/users',
-    UPLOAD_IMG : '/users/profile'
+    MODIFY_INFO: '/users',
+    UPLOAD_IMG: '/users/profile',
   },
   USER: {
     TOKEN_COUNT: '/users/review-token',
@@ -54,6 +54,7 @@ export const API_URL = {
     AROUNDEME: '/rankings/me/around',
   },
   NOTIFICATIONS: '/notifications',
+  LANGUAGES: '/languages',
 };
 
 /** API 요청 주소 */
