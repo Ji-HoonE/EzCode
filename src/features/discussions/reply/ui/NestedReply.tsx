@@ -4,6 +4,7 @@ import ReplyForm from './ReplyForm';
 import { IReply, useDeleteReplyMutation } from '@/entities/discussions';
 import DiscussionFooter from '../../DiscussionFooter';
 import UserProfile from '@/shared/ui/userProfile';
+import DeleteConfirmModal from '@/shared/ui/modals/deleteConfirmModal/DeleteConfirmModal';
 
 interface INestedReplyProps {
   nestedReply: IReply;
@@ -11,6 +12,8 @@ interface INestedReplyProps {
 }
 export default function NestedReply({ nestedReply, problemId }: INestedReplyProps) {
   const [isEdit, setIsEdit] = useState(false);
+  const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
+
   const { discussionId, replyId, parentReplyId } = nestedReply;
 
   const { mutateAsync: remove } = useDeleteReplyMutation(problemId, discussionId, replyId, [
@@ -34,7 +37,7 @@ export default function NestedReply({ nestedReply, problemId }: INestedReplyProp
                 content={nestedReply}
                 problemId={problemId}
                 replyId={nestedReply.replyId}
-                onDelete={() => remove()}
+                onDelete={() => setIsOpenDeleteModal(true)}
                 onEdit={() => setIsEdit(true)}
               />
             </>
@@ -49,6 +52,12 @@ export default function NestedReply({ nestedReply, problemId }: INestedReplyProp
             />
           )}
         </div>
+        <DeleteConfirmModal
+          open={isOpenDeleteModal}
+          onClose={() => setIsOpenDeleteModal(false)}
+          onConfirm={remove}
+          title="댓글을 삭제 하시겠어요?"
+        />
       </div>
     </div>
   );
