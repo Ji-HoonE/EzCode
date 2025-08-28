@@ -5,6 +5,7 @@ import ReplyForm from './ReplyForm';
 import { IReply, useDeleteReplyMutation } from '@/entities/discussions';
 import DiscussionFooter from '../../DiscussionFooter';
 import UserProfile from '@/shared/ui/userProfile';
+import DeleteConfirmModal from '@/shared/ui/modals/deleteConfirmModal/DeleteConfirmModal';
 
 interface IReplyProps {
   reply: IReply;
@@ -13,6 +14,7 @@ interface IReplyProps {
 export default function Reply({ reply, problemId }: IReplyProps) {
   const [isEdit, setIsEdit] = useState(false);
   const [isNestedRepliesOpen, setIsNestedRepliesOpen] = useState(false);
+  const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
 
   const { content, discussionId, replyId, userInfo, childReplyCount } = reply;
 
@@ -38,7 +40,7 @@ export default function Reply({ reply, problemId }: IReplyProps) {
                   setIsNestedRepliesOpen((prev) => !prev);
                 }}
                 replyCount={childReplyCount}
-                onDelete={() => remove()}
+                onDelete={() => setIsOpenDeleteModal(true)}
                 onEdit={() => setIsEdit(true)}
               />
               <div className="pl-8">
@@ -61,6 +63,12 @@ export default function Reply({ reply, problemId }: IReplyProps) {
               onClick={() => setIsEdit(false)}
             />
           )}
+          <DeleteConfirmModal
+            open={isOpenDeleteModal}
+            onClose={() => setIsOpenDeleteModal(false)}
+            onConfirm={remove}
+            title="댓글을 삭제 하시겠어요?"
+          />
         </div>
       </div>
     </div>
