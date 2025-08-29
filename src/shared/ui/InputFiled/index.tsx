@@ -3,7 +3,7 @@ import { InputHTMLAttributes, ReactNode } from 'react';
 import * as S from './unifiedInput.default.style';
 import InputTypeFiled from './InputTypeFiled';
 import TextAreaTypeFiled from './TextAreaTypeFiled';
-import ImageTypeFiled from './ImageTypeFiled';
+import ImageTypeFiled, { TImageVariant } from './imageTypeFiled';
 import { TZodKey } from '@/shared/lib/zod/types';
 import { cn } from '@/lib/utils';
 
@@ -16,8 +16,10 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement | HTMLTextArea
   rightSlot?: ReactNode;
 
   imageProps?: {
-    previewImage: string;
+    previewImage: string | null;
     selectImage: (value: string) => void;
+    variant: TImageVariant;
+    description?: string;
   };
 }
 
@@ -31,8 +33,7 @@ export default function UnifiedInput({ inputType, label, ...props }: Props) {
       case 'textarea':
         return <TextAreaTypeFiled name={name} {...rest} />;
       case 'image':
-        return <ImageTypeFiled imageProps={imageProps} className={rest.className} />;
-
+        return <ImageTypeFiled name={name} imageProps={imageProps} className={rest.className} />;
       default:
         return null;
     }

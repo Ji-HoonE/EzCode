@@ -7,6 +7,7 @@ import { TDiscussionContentMutationResponse } from '@/entities/discussions/discu
 import { LANGUAGE } from '@/shared/types/problem.type';
 import DiscussionFooter from '../../DiscussionFooter';
 import UserProfile from '@/shared/ui/userProfile';
+import DeleteConfirmModal from '@/shared/ui/modals/deleteConfirmModal/DeleteConfirmModal';
 
 interface IDiscussionContentProps {
   discussion: TDiscussionContentMutationResponse;
@@ -14,9 +15,9 @@ interface IDiscussionContentProps {
 }
 
 export default function Discussion({ discussion, id }: IDiscussionContentProps) {
-  console.log('id', id);
   const [isEdit, setIsEdit] = useState(false);
   const [isRepliesOpen, setIsRepliesOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const { userInfo, replyCount, problemId, discussionId, content, languageId } = discussion;
 
@@ -45,7 +46,7 @@ export default function Discussion({ discussion, id }: IDiscussionContentProps) 
                 setIsRepliesOpen((prev) => !prev);
               }}
               replyCount={replyCount}
-              onDelete={() => deleteMutate()}
+              onDelete={() => setIsDeleteModalOpen(true)}
               onEdit={() => setIsEdit(true)}
               replyId={discussionId}
             />
@@ -59,7 +60,14 @@ export default function Discussion({ discussion, id }: IDiscussionContentProps) 
           />
         )}
       </div>
+
       {isRepliesOpen && <Replies problemId={String(problemId)} discussionId={discussionId} />}
+      <DeleteConfirmModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={deleteMutate}
+        title="이 토론을 삭제하시겠어요?"
+      />
     </div>
   );
 }

@@ -88,14 +88,24 @@ export default function ProblemTable({
   // };
 
   const handleNextPage = () => {
+    console.log(totalPages);
     if (currentPage + 1 < totalPages) {
-      setCurrentPage(currentPage + 1);
+      if (currentPage + PAGE_LIMIT > totalPages) {
+        setCurrentPage(totalPages - 1);
+      } else {
+        setCurrentPage(currentPage + PAGE_LIMIT);
+      }
     }
   };
-
   const handlePrevPage = () => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+      if (currentPage - PAGE_LIMIT < 1) {
+        // 맨 앞 범위보다 작아지면 1로
+        setCurrentPage(1);
+      } else {
+        // 이전 구간의 "끝"으로 이동
+        setCurrentPage(currentPage - (currentPage % PAGE_LIMIT || PAGE_LIMIT));
+      }
     }
   };
 
