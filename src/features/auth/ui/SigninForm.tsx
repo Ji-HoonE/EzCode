@@ -11,13 +11,13 @@ interface SignInFormProps {
 }
 const SignInForm = ({ onLoginSuccess }: SignInFormProps) => {
   const router = useRouter();
-  const { handleSignInClick, handlePasswordVisible, isPasswordVisible } = useLogin(onLoginSuccess);
+  const { handleSignInClick, handlePasswordVisible, isPasswordVisible, requestError } =
+    useLogin(onLoginSuccess);
 
   const methods = useZodForm(SIGNIN_ZOD_SCHEMA, ['email', 'password']);
 
   const handleSubmit = methods.handleSubmit((data) => {
     handleSignInClick(data);
-    console.log('🚀 성공!', data);
   });
 
   return (
@@ -59,6 +59,7 @@ const SignInForm = ({ onLoginSuccess }: SignInFormProps) => {
             비밀번호 찾기
           </button>
         </div>
+        {requestError && <p className="text-red-500 text-sm">{requestError}</p>}
         <button
           type="button"
           className="w-full bg-[#214d35] text-white py-3 rounded-[10px] font-medium hover:bg-[#276e48] active:bg-[#1e3e2c] active:scale-[0.98] transition-all duration-200 shadow-lg hover:shadow-xl"

@@ -1,5 +1,4 @@
 'use client';
-import { ChangeEvent } from 'react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
@@ -9,7 +8,8 @@ import { signIn } from 'next-auth/react';
  */
 const useLogin = (onLoginSuccess?: () => void) => {
   const router = useRouter();
-
+  /**로그인 검증은 통과했지만, 에러가 있을때*/
+  const [requestError, setRequestError] = useState<string | null>(null);
   /** 비밀번호 표시 정보 */
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   /** 비밀번호 표시 함수 */
@@ -25,7 +25,7 @@ const useLogin = (onLoginSuccess?: () => void) => {
         redirect: false,
       });
       if (result?.error) {
-        // handleSignInError(result.error);
+        setRequestError(result.error);
         return;
       }
       if (result?.ok) {
@@ -44,6 +44,7 @@ const useLogin = (onLoginSuccess?: () => void) => {
     handleSignInClick,
     handlePasswordVisible,
     isPasswordVisible,
+    requestError,
   };
 };
 
