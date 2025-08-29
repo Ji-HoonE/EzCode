@@ -31,7 +31,7 @@ export default function ProblemWorksSection({ problemId, githubUrl }: IProblemWo
           mode={mode}
           githubUrl={githubUrl}
         />
-        <TerminalOutput mode={mode} sourceCodeData={sourceCodeData} />
+        <TerminalOutput mode={mode} sourceCodeData={sourceCodeData} problemId={problemId} />
       </div>
     </section>
   );
