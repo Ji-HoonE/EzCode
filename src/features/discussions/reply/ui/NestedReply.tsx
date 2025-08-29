@@ -36,9 +36,10 @@ export default function NestedReply({ nestedReply, problemId }: INestedReplyProp
               <DiscussionFooter
                 content={nestedReply}
                 problemId={problemId}
-                replyId={nestedReply.replyId}
+                id={nestedReply.replyId}
                 onDelete={() => setIsOpenDeleteModal(true)}
                 onEdit={() => setIsEdit(true)}
+                variant="COMMENT"
               />
             </>
           ) : (

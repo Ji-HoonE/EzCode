@@ -8,11 +8,12 @@ interface IDiscussionDropDownProps {
   onEdit: (status: boolean) => void;
   onDelete: () => void;
   reportTargetId: number;
+  variant: 'POST' | 'COMMENT';
 }
 export default function DiscussionDropDown({ ...props }: IDiscussionDropDownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenReportModal, setIsOpenReportModal] = useState(false);
-  const { isAuthor, onEdit, onDelete, reportTargetId } = props;
+  const { isAuthor, onEdit, onDelete, reportTargetId, variant } = props;
 
   return (
     <div className="relative">
@@ -43,7 +44,7 @@ export default function DiscussionDropDown({ ...props }: IDiscussionDropDownProp
             open={isOpenReportModal}
             onClose={() => setIsOpenReportModal(false)}
             targetId={reportTargetId}
-            targetType="POST"
+            targetType={variant}
           />
         </ul>
       )}
