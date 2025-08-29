@@ -35,13 +35,14 @@ export default function Reply({ reply, problemId }: IReplyProps) {
               <DiscussionFooter
                 content={reply}
                 problemId={problemId}
-                replyId={replyId}
+                id={replyId}
                 setChildRepliesOpen={() => {
                   setIsNestedRepliesOpen((prev) => !prev);
                 }}
                 replyCount={childReplyCount}
                 onDelete={() => setIsOpenDeleteModal(true)}
                 onEdit={() => setIsEdit(true)}
+                variant="COMMENT"
               />
               <div className="pl-8">
                 {isNestedRepliesOpen && (

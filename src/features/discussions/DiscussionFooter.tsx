@@ -10,21 +10,28 @@ interface IDiscussionFooterProps {
   content: IDiscussionContentResponse | IReply;
   onDelete: () => void;
   onEdit: () => void;
-
   replyCount?: number;
   setChildRepliesOpen?: () => void;
-  replyId?: number;
+  id: number;
+  variant: 'POST' | 'COMMENT';
 }
 
 export default function DiscussionFooter({ ...props }: IDiscussionFooterProps) {
-  const { problemId, replyId, replyCount, content, onDelete, onEdit, setChildRepliesOpen } = props;
+  const { problemId, id, replyCount, content, onDelete, onEdit, setChildRepliesOpen } = props;
+
   return (
     <div className="flex items-center gap-2">
-      <Vote problemId={problemId} content={content} replyId={replyId} />
+      <Vote problemId={problemId} content={content} replyId={id} />
       {replyCount !== undefined && (
         <ShowChildReplies onClick={() => setChildRepliesOpen?.()} replyCount={replyCount} />
       )}
-      <DiscussionDropDown isAuthor={content.isAuthor} onDelete={onDelete} onEdit={onEdit} />
+      <DiscussionDropDown
+        isAuthor={content.isAuthor}
+        onDelete={onDelete}
+        onEdit={onEdit}
+        reportTargetId={id}
+        variant={props.variant}
+      />
     </div>
   );
 }

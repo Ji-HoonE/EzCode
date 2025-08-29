@@ -1,4 +1,5 @@
 'use client';
+import CreateReportModal from '@/shared/ui/modals/CreateReportModal/CreateReportModal';
 import KebabIcons from '@/shared/ui/icons/kebab-icons';
 import { useState } from 'react';
 
@@ -6,10 +7,13 @@ interface IDiscussionDropDownProps {
   isAuthor: boolean;
   onEdit: (status: boolean) => void;
   onDelete: () => void;
+  reportTargetId: number;
+  variant: 'POST' | 'COMMENT';
 }
 export default function DiscussionDropDown({ ...props }: IDiscussionDropDownProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const { isAuthor, onEdit, onDelete } = props;
+  const [isOpenReportModal, setIsOpenReportModal] = useState(false);
+  const { isAuthor, onEdit, onDelete, reportTargetId, variant } = props;
 
   return (
     <div className="relative">
@@ -29,8 +33,19 @@ export default function DiscussionDropDown({ ...props }: IDiscussionDropDownProp
               </li>
             </>
           ) : (
-            <li className="py-2 px-3 hover:bg-primary/70 rounded-xl">신고하기</li>
+            <li
+              className="py-2 px-3 hover:bg-primary/70 rounded-xl"
+              onClick={() => setIsOpenReportModal(true)}
+            >
+              신고하기
+            </li>
           )}
+          <CreateReportModal
+            open={isOpenReportModal}
+            onClose={() => setIsOpenReportModal(false)}
+            targetId={reportTargetId}
+            targetType={variant}
+          />
         </ul>
       )}
     </div>

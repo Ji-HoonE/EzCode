@@ -55,6 +55,7 @@ export const API_URL = {
   },
   NOTIFICATIONS: '/notifications',
   LANGUAGES: '/languages',
+  REPORT: '/reports',
 };
 
 /** API 요청 주소 */

@@ -48,6 +48,8 @@ export default function Discussion({ discussion, id }: IDiscussionContentProps) 
               replyCount={replyCount}
               onDelete={() => setIsDeleteModalOpen(true)}
               onEdit={() => setIsEdit(true)}
+              id={discussionId}
+              variant="POST"
             />
           </>
         ) : (
