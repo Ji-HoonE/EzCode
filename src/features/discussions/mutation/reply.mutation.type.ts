@@ -3,5 +3,5 @@ export interface IReportMutationRequest {
   targetType: string;
   reportType: string;
   message: string;
-  imageUrl: string;
+  imageUrl: string | null;
 }

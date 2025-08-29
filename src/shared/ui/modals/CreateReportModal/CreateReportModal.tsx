@@ -2,8 +2,9 @@ import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { useCreateReportMutation } from '@/features/discussions/mutation/reply.mutation';
 import { IReportMutationRequest } from '@/features/discussions/mutation/reply.mutation.type';
 import { useState } from 'react';
-import UnifiedInput from './InputFiled';
-import { Select } from './select/Select';
+import UnifiedInput from '../../InputFiled';
+import { Select } from '../../select/Select';
+import { TImageVariant } from '../../InputFiled/imageTypeFiled';
 
 const reportTypes = [
   { value: 'spam', label: '스팸/광고' },
@@ -25,7 +26,7 @@ export default function CreateReportModal({ open, onClose, targetId }: DeleteCon
     targetType: 'string',
     reportType: 'spam',
     message: 'string',
-    imageUrl: 'string',
+    imageUrl: null,
   });
 
   const { mutateAsync: createReport } = useCreateReportMutation();
@@ -33,6 +34,13 @@ export default function CreateReportModal({ open, onClose, targetId }: DeleteCon
   const onCreateReport = () => {
     createReport(reportForm);
     onClose();
+  };
+
+  const imageProps = {
+    previewImage: reportForm.imageUrl,
+    selectImage: (image: string) => setReportForm((state) => ({ ...state, imageUrl: image })),
+    variant: 'square' as TImageVariant,
+    description: '이미지를 업로드하세요',
   };
 
   return (
@@ -67,6 +75,8 @@ export default function CreateReportModal({ open, onClose, targetId }: DeleteCon
 
           <p className="text-right text-[#888] text-sm">{reportForm.message.length}/1000</p>
         </div>
+        <UnifiedInput inputType="image" name="image" imageProps={imageProps} />
+
         <div className="bg-[#0c151c] p-4 rounded-[10px] border border-[#2a3441] w-full">
           <p className="text-[#888] text-sm leading-relaxed">
             <strong className="text-secondary">안내:</strong> 허위 신고는 제재 대상이 될 수

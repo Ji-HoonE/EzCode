@@ -1,5 +1,5 @@
 'use client';
-import CreateReportModal from '@/shared/ui/CreateReportModal';
+import CreateReportModal from '@/shared/ui/modals/CreateReportModal/CreateReportModal';
 import KebabIcons from '@/shared/ui/icons/kebab-icons';
 import { useState } from 'react';
 
