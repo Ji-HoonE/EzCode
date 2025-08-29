@@ -41,8 +41,22 @@ export default function ImageTypeFiled({ name, imageProps, className }: Props) {
     setPreviewImage(fileURL);
   };
 
+  const handleImageRemove = () => {
+    setPreviewImage(null);
+    selectImage('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   return (
-    <WrapperImageInput variant={variant} className={className} isFocused={isFocused}>
+    <WrapperImageInput
+      variant={variant}
+      className={className}
+      isFocused={isFocused}
+      removeImage={handleImageRemove}
+    >
+      {/* Input */}
       <input
         ref={fileInputRef}
         id={name}
