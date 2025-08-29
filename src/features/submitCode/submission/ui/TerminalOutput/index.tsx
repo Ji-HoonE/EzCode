@@ -10,8 +10,9 @@ import { Mode } from '../ProblemWorksSection';
 interface ITerminalOutputProps {
   mode: Mode;
   sourceCodeData: ISourceCode;
+  problemId: string;
 }
-export default function TerminalOutput({ mode, sourceCodeData }: ITerminalOutputProps) {
+export default function TerminalOutput({ mode, sourceCodeData, problemId }: ITerminalOutputProps) {
   const { totalResult } = useProblemWebSocketStore();
 
   const { setIsCorrect } = useCodeReviewStoreActions();
@@ -27,7 +28,7 @@ export default function TerminalOutput({ mode, sourceCodeData }: ITerminalOutput
       {mode === 'result' ? (
         <CodeResultSummary />
       ) : mode === 'review' ? (
-        <CodeReviewSummary problemId="1" sourceCodeData={sourceCodeData} />
+        <CodeReviewSummary problemId={problemId} sourceCodeData={sourceCodeData} />
       ) : (
         <div className="text-[#ccc] text-sm">코드를 먼저 실행해주세요</div>
       )}
