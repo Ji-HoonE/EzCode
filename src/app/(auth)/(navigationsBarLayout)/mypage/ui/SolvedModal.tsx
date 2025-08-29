@@ -34,21 +34,24 @@ export const SolvedModal = ({
         <div className="flex flex-col gap-2">
           <div className="flex flex-row gap-1">
             <span className="w-25">제목</span>
-            <span>{data?.problemTitle}</span>
+
             <span>{data?.problemTitle}</span>
           </div>
           <div className="flex flex-row gap-1">
             <span className="w-25 shrink-0">설명</span>
-            <span>{data?.problemDescription}</span>
-            <span>{data?.problemDescription}</span>
+
+            <span className="whitespace-pre-line">{data?.problemDescription}</span>
           </div>
-          <div className="flex flex-col gap-1 border-[#000] border-[1px]">
+          <div className="flex flex-col gap-1 ">
             {data?.submissions.map((item, index) => {
               return (
-                <div className="flex flex-col gap-1" key={item.id}>
+                <div
+                  className="flex flex-col gap-2 p-4 rounded-xl border border-gray-300 shadow-sm "
+                  key={item.id}
+                >
                   <div className="flex flex-row gap-1">
                     <span className="w-25 shrink-0">제출 답안 {index + 1}</span>
-                    <span>{item.sourceCode}</span>
+                    <span className="whitespace-pre-line">{item.sourceCode}</span>
                   </div>
                   <div className="flex flex-row gap-1">
                     <span className="w-25">정답 여부</span>

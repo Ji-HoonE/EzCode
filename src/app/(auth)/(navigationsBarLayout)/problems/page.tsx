@@ -7,18 +7,73 @@ import { useProblemListQuery } from '@/entities/problems/model/query';
 import { Select } from '@/shared/ui/select/Select';
 import { Button } from '@/shared/ui/button/Button';
 
+const categoryCodeOptions = [
+  { label: '출력', value: 'OUTPUT' },
+  { label: '사칙연산', value: 'ARITHMETIC' },
+  { label: '배열', value: 'ARRAY' },
+  { label: '조건문', value: 'CONDITIONAL' },
+  { label: '정렬', value: 'SORTING' },
+  { label: '수학', value: 'MATH' },
+  { label: '시뮬레이션', value: 'SIMULATION' },
+  { label: '자료구조', value: 'DATA_STRUCTURE' },
+  { label: '입문자용', value: 'FOR_BEGINNER' },
+  { label: '구현', value: 'IMPLEMENTATION' },
+  { label: '그리디', value: 'GREEDY' },
+  { label: '문자열 처리', value: 'STRING_PROCESSING' },
+  { label: '해시맵', value: 'HASH_MAP' },
+  { label: '선형 탐색', value: 'LINEAR_SEARCH' },
+  { label: '동적 계획법', value: 'DP' },
+  { label: '순환 탐지', value: 'CYCLE_DETECTION' },
+  { label: '비트 연산', value: 'BIT_OPERATION' },
+  { label: '반복 제어', value: 'LOOP_CONTROL' },
+  { label: '카운팅', value: 'COUNTING' },
+  { label: '너비 우선 탐색', value: 'BFS' },
+  { label: '깊이 우선 탐색', value: 'DFS' },
+  { label: '비트마스킹', value: 'BITMASK' },
+  { label: '해시', value: 'HASH' },
+  { label: '맵', value: 'MAP' },
+  { label: '반복문', value: 'LOOPS' },
+  { label: '분할 정복', value: 'DIVIDE_AND_CONQUER' },
+  { label: '문자열', value: 'STRING' },
+  { label: '집합론', value: 'SET_THEORY' },
+  { label: '누적 합', value: 'PREFIX_SUM' },
+  { label: '기하학', value: 'GEOMETRY' },
+  { label: '이분 탐색', value: 'BINARY_SEARCH' },
+  { label: '투포인터', value: 'TWO_POINTERS' },
+  { label: '그래프 이론', value: 'GRAPH_THEORY' },
+  { label: '탐색', value: 'SEARCH' },
+  { label: '우선순위 큐', value: 'PRIORITY_QUEUE' },
+  { label: '백트래킹', value: 'BACKTRACKING' },
+  { label: '알고리즘', value: 'ALGORITHM' },
+  { label: '트리', value: 'TREE' },
+  { label: '상태 압축', value: 'STATE_COMPRESSION' },
+  { label: '재귀', value: 'RECURSION' },
+  { label: '큐', value: 'QUEUE' },
+  { label: '최대 유량', value: 'MAX_FLOW' },
+  { label: '최소 컷', value: 'MIN_CUT' },
+  { label: '최소 스패닝 트리', value: 'MINIMUM_SPANNING_TREE' },
+  { label: '완전 탐색', value: 'BRUTE_FORCE' },
+  { label: '조합론', value: 'COMBINATORICS' },
+  { label: '세그먼트 트리', value: 'SEGMENT_TREE' },
+  { label: 'Deque', value: 'DEQUE' },
+  { label: '해밍 거리', value: 'HAMMING_DISTANCE' },
+  { label: '2차원 배열', value: 'TWO_DIMENSIONAL_ARRAY' },
+  { label: '누적 선택 최적화', value: 'CUMULATIVE_SELECTION_OPTIMIZATION' },
+  { label: '좌표', value: 'COORDINATE' },
+  { label: '최대공약수(GCD)', value: 'GCD' },
+  { label: '수열', value: 'SEQUENCE' },
+  { label: '집합 처리', value: 'SET_PROCESSING' },
+  { label: '그래프 탐색', value: 'GRAPH_SEARCH' },
+  { label: '분리 집합', value: 'DISJOINT_SET' },
+  { label: '조합', value: 'COMBINATION' },
+];
+
 const FilterSelect = ({ children }: { children: ReactNode }) => {
   return <div className="flex flex-col gap-1 w-1/3">{children}</div>;
 };
 
 const ProblemsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const categoryCodeOptions = [
-    { label: 'BFS', value: 'BFS' },
-    { label: 'DFS', value: 'DFS' },
-    { label: '수학', value: '수학' },
-    { label: '조건문', value: '조건문' },
-  ];
 
   const difficultyOptions = [
     { label: 'LV1', value: 'LV1' },
@@ -131,7 +186,9 @@ const ProblemsList = () => {
             >
               {categoryCode !== '전체' && categoryCode && (
                 <div className="flex flex-row gap-1 items-center">
-                  <span>{categoryCode}</span>
+                  <span>
+                    {categoryCodeOptions.find((item) => item.value === categoryCode)?.label}
+                  </span>
                   <Image
                     src="/icons/close/closeWithBorder.svg"
                     className="cursor-pointer"
