@@ -1,31 +1,29 @@
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { useCreateReportMutation } from '@/features/discussions/mutation/reply.mutation';
-import { IReportMutationRequest } from '@/features/discussions/mutation/reply.mutation.type';
+import { useCreateReportMutation } from '@/features/discussions/mutation/report.mutation';
 import { useState } from 'react';
 import UnifiedInput from '../../InputFiled';
 import { Select } from '../../select/Select';
 import { TImageVariant } from '../../InputFiled/imageTypeFiled';
+import { IReportRequestData, reportTypesSelectOptions } from '@/features/report/report.types';
 
-const reportTypes = [
-  { value: 'spam', label: '스팸/광고' },
-  { value: 'harassment', label: '괴롭힘/욕설' },
-  { value: 'inappropriate', label: '부적절한 콘텐츠' },
-  { value: 'copyright', label: '저작권 침해' },
-  { value: 'fake', label: '허위 정보' },
-  { value: 'other', label: '기타' },
-];
 interface DeleteConfirmModalProps {
   open: boolean;
   onClose: () => void;
   targetId: number;
+  targetType: IReportRequestData['targetType'];
 }
 
-export default function CreateReportModal({ open, onClose, targetId }: DeleteConfirmModalProps) {
-  const [reportForm, setReportForm] = useState<IReportMutationRequest>({
+export default function CreateReportModal({
+  open,
+  onClose,
+  targetId,
+  targetType,
+}: DeleteConfirmModalProps) {
+  const [reportForm, setReportForm] = useState<IReportRequestData>({
     targetId: targetId,
-    targetType: 'string',
-    reportType: 'spam',
-    message: 'string',
+    targetType: targetType,
+    reportType: 'SPAM',
+    message: '',
     imageUrl: null,
   });
 
@@ -52,9 +50,14 @@ export default function CreateReportModal({ open, onClose, targetId }: DeleteCon
           <Select
             aria-label="report-type"
             title="신고 유형"
-            option={reportTypes}
+            option={reportTypesSelectOptions}
             value={reportForm.reportType}
-            setValue={(value) => setReportForm((prev) => ({ ...prev, reportType: value }))}
+            setValue={(value) =>
+              setReportForm((prev) => ({
+                ...prev,
+                reportType: value as IReportRequestData['reportType'],
+              }))
+            }
           />
         </div>
         <div className="w-full flex flex-col items-end gap-2">

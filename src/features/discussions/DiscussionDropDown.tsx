@@ -43,6 +43,7 @@ export default function DiscussionDropDown({ ...props }: IDiscussionDropDownProp
             open={isOpenReportModal}
             onClose={() => setIsOpenReportModal(false)}
             targetId={reportTargetId}
+            targetType="POST"
           />
         </ul>
       )}
