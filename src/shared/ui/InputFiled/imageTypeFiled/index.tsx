@@ -18,10 +18,21 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
 
 export default function ImageTypeFiled({ name, imageProps, className }: Props) {
   const [previewImage, setPreviewImage] = useState<string | null>(imageProps?.previewImage || null);
+  const [isFocused, setIsFocused] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   if (!imageProps) return null;
   const { selectImage, variant, description } = imageProps;
 
+  const onBlur = () => {
+    fileInputRef.current?.blur();
+    setIsFocused(false);
+  };
+
+  const onFocus = () => {
+    fileInputRef.current?.focus();
+    setIsFocused(true);
+  };
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return;
     const file = e.target.files[0];
@@ -31,7 +42,7 @@ export default function ImageTypeFiled({ name, imageProps, className }: Props) {
   };
 
   return (
-    <WrapperImageInput variant={variant} className={className}>
+    <WrapperImageInput variant={variant} className={className} isFocused={isFocused}>
       <input
         ref={fileInputRef}
         id={name}
@@ -39,7 +50,10 @@ export default function ImageTypeFiled({ name, imageProps, className }: Props) {
         type="file"
         accept="image/*"
         onChange={handleImageChange}
-        className="hidden"
+        className="sr-only"
+        tabIndex={0}
+        onFocus={onFocus}
+        onBlur={onBlur}
       />
       {/* Selected */}
       <label htmlFor={name} className="cursor-pointer">

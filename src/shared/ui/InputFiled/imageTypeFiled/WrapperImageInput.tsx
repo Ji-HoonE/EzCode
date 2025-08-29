@@ -4,9 +4,10 @@ import { TImageVariant } from '.';
 interface Props {
   variant: TImageVariant;
   children: React.ReactNode;
+  isFocused: boolean;
   className?: string;
 }
-export default function WrapperImageInput({ variant, children, className }: Props) {
+export default function WrapperImageInput({ variant, children, isFocused, className }: Props) {
   if (variant === 'profile-circle') {
     return (
       <div
@@ -23,7 +24,8 @@ export default function WrapperImageInput({ variant, children, className }: Prop
     return (
       <div
         className={cn(
-          'relative border-2 border-gray700 min-h-50 h-full max-h-50 rounded-[10px] text-center transition-colors',
+          'relative border-2 min-h-50 h-full max-h-50 rounded-[10px] text-center transition-colors',
+          isFocused ? 'border-secondary' : 'border-gray-700',
           className
         )}
       >
