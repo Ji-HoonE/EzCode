@@ -32,7 +32,7 @@ export default function InputTypeFiled({ leftSlot, rightSlot, ...props }: IInput
         className={cn(
           S.defaultInputArea,
           (isFocused || showSuccess) && 'border-secondary',
-          isBlur && 'border-gray-700',
+          isBlur && 'border-gray700',
           showError && 'border-danger',
           className
         )}

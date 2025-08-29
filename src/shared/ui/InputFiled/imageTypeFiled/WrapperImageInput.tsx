@@ -11,7 +11,7 @@ export default function WrapperImageInput({ variant, children, className }: Prop
     return (
       <div
         className={cn(
-          'relative rounded-full w-[150px] h-[150px] overflow-hidden flex items-center justify-center',
+          'relative rounded-full w-37 h-37 overflow-hidden flex items-center justify-center',
           className
         )}
       >
@@ -23,7 +23,7 @@ export default function WrapperImageInput({ variant, children, className }: Prop
     return (
       <div
         className={cn(
-          'relative border-2 border-[#2a3441] min-h-50 h-full max-h-50 rounded-[10px] text-center hover:border-secondary transition-colors',
+          'relative border-2 border-gray700 min-h-50 h-full max-h-50 rounded-[10px] text-center transition-colors',
           className
         )}
       >
