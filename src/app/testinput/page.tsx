@@ -1,10 +1,16 @@
 'use client';
 import { FormProvider } from 'react-hook-form';
 import { useZodForm } from '@/shared/lib/zod/useZodForm';
-import { TEST_SCHEMA } from '@/entities/auth/model/authZodSchemas';
 import UnifiedInput from '@/shared/ui/InputFiled';
 import { useState } from 'react';
 import { TImageVariant } from '@/shared/ui/InputFiled/imageTypeFiled';
+import z from 'zod';
+import { EMAIL, PASSWORD } from '@/shared/lib/zod/primitives';
+
+export const TEST_SCHEMA = z.object({
+  email: EMAIL,
+  password: PASSWORD,
+});
 
 export default function Test() {
   const [image, setImage] = useState<string | null>(null);
