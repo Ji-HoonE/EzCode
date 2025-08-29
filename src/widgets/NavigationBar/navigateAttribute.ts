@@ -3,7 +3,7 @@ import { PATHS } from '@/constants/paths';
 export const NAVIGATE_ATTRIBUTE = {
   root: {
     href: '/',
-    content: 'CodeTest',
+    content: 'EZ-CODE',
     className: 'flex items-center space-x-2 text-xl font-bold text-secondary',
     image: { src: '/icons/code.svg', alt: '헤더의 사이트로고', w: 32, h: 32 },
   },

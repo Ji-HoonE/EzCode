@@ -84,7 +84,7 @@ export default function RankingPage() {
         <div className="text-center mb-12">
           <div className="flex items-center justify-center space-x-3 mb-4">
             <Trophy className="w-10 h-10 text-[#00d084]" />
-            <h1 className="text-4xl font-bold text-white">코딩테스트 랭킹</h1>
+            <h1 className="text-4xl font-bold text-white">EZ-CODE 랭킹</h1>
           </div>
           <p className="text-[#ccc] text-lg">최고의 코더들과 경쟁하고 실력을 향상시키세요</p>
         </div>

@@ -5,6 +5,15 @@ import { Toaster } from 'sonner';
 import AuthProvider from '@/lib/AuthProvider';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'EZ-CODE - 코딩 테스트',
+  description: 'EZ-CODE 코딩 테스트 플랫폼',
+  icons: {
+    icon: '/favicon.svg',
+  },
+};
 
 export default async function RootLayout({
   children,
