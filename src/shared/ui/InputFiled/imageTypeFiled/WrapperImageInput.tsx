@@ -1,13 +1,31 @@
 import { cn } from '@/lib/utils';
 import { TImageVariant } from '.';
+import Image from 'next/image';
 
 interface Props {
   variant: TImageVariant;
   children: React.ReactNode;
   isFocused: boolean;
+  removeImage: () => void;
   className?: string;
 }
-export default function WrapperImageInput({ variant, children, isFocused, className }: Props) {
+export default function WrapperImageInput({ ...props }: Props) {
+  const { variant, children, isFocused, className, removeImage } = props;
+
+  const removeButton = (variant: TImageVariant) => {
+    return (
+      <button
+        onClick={removeImage}
+        className={cn(
+          'absolute  z-10',
+          variant === 'profile-circle' ? 'top-5 right-5 bg-primary rounded-md' : ' top-2 right-2'
+        )}
+      >
+        <Image src="/icons/close/closeWithBorder.svg" alt="closeButton" width={20} height={20} />
+      </button>
+    );
+  };
+
   if (variant === 'profile-circle') {
     return (
       <div
@@ -16,6 +34,7 @@ export default function WrapperImageInput({ variant, children, isFocused, classN
           className
         )}
       >
+        {removeButton(variant)}
         {children}
       </div>
     );
@@ -29,12 +48,18 @@ export default function WrapperImageInput({ variant, children, isFocused, classN
           className
         )}
       >
+        {removeButton(variant)}
         {children}
       </div>
     );
   }
   if (variant === 'custom') {
-    return <div className={cn('relative', className)}>{children}</div>;
+    return (
+      <div className={cn('relative', className)}>
+        {removeButton(variant)}
+        {children}
+      </div>
+    );
   }
   return null;
 }
