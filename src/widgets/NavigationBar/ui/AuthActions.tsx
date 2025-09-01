@@ -3,33 +3,20 @@
 import LinkedButton from '@/shared/ui/linkedButton';
 import { AUTH_ACTIONS_OPTIONS, NAVIGATE_ATTRIBUTE } from '../navigateAttribute';
 import { Select } from '@/shared/ui/select/Select';
-import { useEffect, useState } from 'react';
-import { useMyInfoQuery } from '@/entities/mypage/model/query';
 import UserProfile from '@/shared/ui/userProfile';
 import { useRouter } from 'next/navigation';
 import { PATHS } from '@/constants/paths';
 import { useLogoutMutation } from '@/entities/auth/model/mutation/auth.mutation';
 import { useSession } from 'next-auth/react';
 import Notifications from './Notifications';
-
-interface IUserInfo {
-  profileImage: string;
-  nickname: string;
-}
+import { useUserStore } from '@/entities/user/model/store';
 
 export default function AuthActions() {
-  const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
   const { data: session } = useSession();
-  const { data } = useMyInfoQuery();
+
   const router = useRouter();
   const { mutateAsync } = useLogoutMutation();
-
-  useEffect(() => {
-    setUserInfo({
-      profileImage: data?.data.result.profileImageUrl || '',
-      nickname: data?.data.result.nickname || '',
-    });
-  }, [data?.data.result]);
+  const { user } = useUserStore((state) => state);
 
   const accessToken = session?.accessToken?.split(' ')[1] as string;
 
@@ -50,7 +37,7 @@ export default function AuthActions() {
               selectOption(value);
             }}
             value={
-              <UserProfile profileImageUrl={userInfo?.profileImage} nickname={userInfo?.nickname} />
+              <UserProfile profileImageUrl={user?.profileImageUrl} nickname={user?.nickname} />
             }
             className="text-white transition-all duration-200"
           />

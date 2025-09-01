@@ -38,7 +38,7 @@ export const API_URL = {
     SUBMISSION: '/submissions',
     VERIFY_EMAIL: '/email/send',
     REPORT: '/reports/my',
-    MODIFY_INFO: '/users',
+    USER_INFO: '/users',
     UPLOAD_IMG: '/users/profile',
   },
   USER: {

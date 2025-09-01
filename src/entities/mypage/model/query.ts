@@ -140,7 +140,7 @@ export const useModifyInfo = () => {
         formData.append('image', image);
       }
 
-      const response = await ApiHelper.put(API_URL.MYPAGE.MODIFY_INFO, formData, {
+      const response = await ApiHelper.put(API_URL.MYPAGE.USER_INFO, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 

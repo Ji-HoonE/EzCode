@@ -3,11 +3,16 @@ import { ChangeEvent } from 'react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import ApiHelper from '@/api/client/api';
+import { API_URL } from '@/api/constants/api.constants';
+import { useUserStore } from '@/entities/user/model/store';
+import { IMyInfo } from '@/entities/mypage/model/types';
 /**
  * @description 로그인 상태 관리 hook
  * @returns
  */
 const useLogin = (onLoginSuccess?: () => void) => {
+  const { setUser } = useUserStore((state) => state);
   const router = useRouter();
   /** 로그인 정보 */
   const [loginInfo, setLoginInfo] = useState({
@@ -46,15 +51,23 @@ const useLogin = (onLoginSuccess?: () => void) => {
         password: loginInfo.password,
         redirect: false,
       });
+      console.log('result', result);
+
       if (result?.error) {
         handleSignInError(result.error);
         return;
       }
       if (result?.ok) {
+        const response = await ApiHelper.get<IMyInfo>(API_URL.MYPAGE.USER_INFO);
+        if (response.data.status === 200) {
+          console.log('???');
+          console.log(response.data.result);
+          setUser(response.data.result);
+        }
         if (onLoginSuccess) {
           onLoginSuccess();
         } else {
-          router.replace('/');
+          router.push('/');
         }
       }
     } catch (err) {

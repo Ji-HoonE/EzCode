@@ -1,7 +1,7 @@
 'use client';
 
 import CodeMirror from '@uiw/react-codemirror';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   CODEMIRROR_EXTENSIONS,
   CodeMirrorBasicSetup,
@@ -12,6 +12,7 @@ import {
 import { OptionType, Select } from '@/shared/ui/select/Select';
 import { LANGUAGE_ID } from '@/shared/types/problem.type';
 import { LANGUAGE_SELECTOR_OPTIONS } from '@/shared/lib/codemirror';
+import { useUserStore } from '@/entities/user/model/store';
 
 interface ICodeEditorProps {
   onChangeSourceCodeData: (key: string, value: string | number) => void;
@@ -28,7 +29,10 @@ export default function CodeEditor({ onChangeSourceCodeData }: ICodeEditorProps)
     onChangeSourceCodeData('languageId', LANGUAGE_ID[typedValue]);
     onChangeSourceCodeData('sourceCode', INITIAL_VALUE[typedValue]);
   };
-
+  const { user } = useUserStore((state) => state);
+  useEffect(() => {
+    setCurrentLanguage(user?.language?.name as 'Python');
+  }, [user?.language]);
   return (
     <section className="flex-1 flex flex-col h-full gap-4">
       <Select
