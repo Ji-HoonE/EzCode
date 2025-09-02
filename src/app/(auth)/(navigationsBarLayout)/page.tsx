@@ -1,9 +1,8 @@
 import { PATHS } from '@/constants/paths';
 import { getAllTimeTop3Rankings, HomePageRanking } from '@/entities/rank';
-import { useUserStore } from '@/entities/user/model/store';
+
 import LinkedButton from '@/shared/ui/linkedButton';
 import Image from 'next/image';
-import { useEffect } from 'react';
 
 const PAGE_LINK_ATTRIBUTE = {
   start: {
