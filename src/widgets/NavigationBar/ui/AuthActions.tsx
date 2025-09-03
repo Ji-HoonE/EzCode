@@ -10,6 +10,7 @@ import { useLogoutMutation } from '@/entities/auth/model/mutation/auth.mutation'
 import { useSession } from 'next-auth/react';
 import Notifications from './Notifications';
 import { useUserStore } from '@/entities/user/model/store';
+import { useEffect } from 'react';
 
 export default function AuthActions() {
   const { data: session } = useSession();
@@ -24,7 +25,9 @@ export default function AuthActions() {
     if (value === 'mypage') return router.push(PATHS.MYPAGE);
     if (value === 'logout') return mutateAsync();
   };
-
+  useEffect(() => {
+    console.log('user', user);
+  }, [user]);
   return (
     <div className="flex items-center space-x-4">
       {accessToken ? (
