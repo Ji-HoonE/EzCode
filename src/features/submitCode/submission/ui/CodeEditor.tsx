@@ -31,8 +31,10 @@ export default function CodeEditor({ onChangeSourceCodeData }: ICodeEditorProps)
   };
   const { user } = useUserStore((state) => state);
   useEffect(() => {
+    if (!user) return;
     setCurrentLanguage(user?.language?.name as 'Python');
   }, [user?.language]);
+
   return (
     <section className="flex-1 flex flex-col h-full gap-4">
       <Select
