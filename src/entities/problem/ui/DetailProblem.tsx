@@ -21,6 +21,7 @@ export default function DetailProblem({ detailProblem }: IDetailProblemProps) {
     timeLimit,
     memoryLimit,
     imageUrl,
+    testcases,
   } = detailProblem;
 
   return (
@@ -46,22 +47,50 @@ export default function DetailProblem({ detailProblem }: IDetailProblemProps) {
           </div>
         </div>
       </div>
-      <div className="w-full h-[1px] bg-background" />
+      <hr className="w-full h-[1px] bg-background" />
       <div>
         <FormatMarkdown markdown={description} />
+      </div>
+      <div>
+        <h4 className="text-secondary mt-1">
+          <strong>입출력 예시</strong>
+        </h4>
+        {testcases && testcases.length > 0 && (
+          <>
+            {testcases.map((testCase, idx) => (
+              <div key={testCase.id} className="gap-2 p-4 bg-[#1a2332] rounded-lg w-full">
+                <p>예시 ({idx + 1})</p>
+                <div className="flex gap-4">
+                  <div className="flex flex-1 flex-col gap-2">
+                    <span>입력</span>
+                    <div className="bg-background p-2 rounded-md flex-1 whitespace-pre-wrap break-all">
+                      {testCase.input}
+                    </div>
+                  </div>
+                  <div className="flex flex-1 flex-col gap-2">
+                    <span>출력</span>
+                    <div className="bg-background p-2 rounded-md flex-1 whitespace-pre-wrap break-all">
+                      {testCase.output}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </>
+        )}
       </div>
       {imageUrl && (
         <div className="w-full h-60 relative">
           <Image src={imageUrl} alt="문제예시이미지" fill className="object-contain" />
         </div>
       )}
-      <div className="w-full h-[1px] bg-background" />
+      <hr className="w-full h-[1px] bg-background" />
       <div className="flex flex-col gap-4 ">
         <h2 className="text-lg font-semibold mt-3 text-secondary">제한 조건</h2>
         <span>제한시간 : {timeLimit}ms</span>
         <span>메모리 : {memoryLimit}KB</span>
       </div>
-      <div className="w-full h-[1px] bg-background" />
+      <hr className="w-full h-[1px] bg-background" />
 
       <div className="flex flex-col gap-4  text-xs text-gray-400">
         <span>출제 : {creator}</span>
