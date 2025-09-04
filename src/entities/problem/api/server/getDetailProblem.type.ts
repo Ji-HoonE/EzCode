@@ -16,4 +16,12 @@ export interface IDetailProblemResponse {
   imageUrl: string | null;
   createdAt: string;
   modifiedAt: string;
+  testcases: ITestCase[];
+}
+
+interface ITestCase {
+  id: number;
+  problemId: number;
+  input: string;
+  output: string;
 }
