@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import ProblemTable from './ui/Table';
 import { useProblemListQuery } from '@/entities/problems/model/query';
@@ -67,10 +67,6 @@ const categoryCodeOptions = [
   { label: '분리 집합', value: 'DISJOINT_SET' },
   { label: '조합', value: 'COMBINATION' },
 ];
-
-const FilterSelect = ({ children }: { children: ReactNode }) => {
-  return <div className="flex flex-col gap-1 w-1/3">{children}</div>;
-};
 
 const ProblemsList = () => {
   const [currentPage, setCurrentPage] = useState(0);
