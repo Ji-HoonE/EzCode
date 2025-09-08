@@ -1,9 +1,9 @@
 'use client';
 
-import FormatMarkdown from '@/shared/ui/FormatMarkdown';
 import { IDetailProblemResponse } from '../api/server/getDetailProblem.type';
 import Arrow from '@/shared/ui/icons/arrow-icon';
 import Image from 'next/image';
+import MarkdownRenderer from '@/shared/mdx/MdxRenderer';
 
 interface IDetailProblemProps {
   detailProblem: IDetailProblemResponse;
@@ -48,37 +48,34 @@ export default function DetailProblem({ detailProblem }: IDetailProblemProps) {
         </div>
       </div>
       <hr className="w-full h-[1px] bg-background" />
-      <div>
-        <FormatMarkdown markdown={description} />
-      </div>
-      <div>
-        <h4 className="text-secondary mt-1">
-          <strong>입출력 예시</strong>
-        </h4>
-        {testcases && testcases.length > 0 && (
-          <>
-            {testcases.map((testCase, idx) => (
-              <div key={testCase.id} className="gap-2 p-4 bg-[#1a2332] rounded-lg w-full">
-                <p>예시 ({idx + 1})</p>
-                <div className="flex gap-4">
-                  <div className="flex flex-1 flex-col gap-2">
-                    <span>입력</span>
-                    <div className="bg-background p-2 rounded-md flex-1 whitespace-pre-wrap break-all">
-                      {testCase.input}
-                    </div>
+      <MarkdownRenderer source={description} />
+      {testcases && testcases.length > 0 && (
+        <>
+          <h4 className="text-secondary mt-1">
+            <strong>입출력 예시</strong>
+          </h4>
+
+          {testcases.map((testCase, idx) => (
+            <div key={testCase.id} className="gap-2 p-4 bg-[#1a2332] rounded-lg w-full">
+              <p>예시 ({idx + 1})</p>
+              <div className="flex gap-4">
+                <div className="flex flex-1 flex-col gap-2">
+                  <span>입력</span>
+                  <div className="bg-background p-2 rounded-md flex-1 whitespace-pre-wrap break-all">
+                    {testCase.input}
                   </div>
-                  <div className="flex flex-1 flex-col gap-2">
-                    <span>출력</span>
-                    <div className="bg-background p-2 rounded-md flex-1 whitespace-pre-wrap break-all">
-                      {testCase.output}
-                    </div>
+                </div>
+                <div className="flex flex-1 flex-col gap-2">
+                  <span>출력</span>
+                  <div className="bg-background p-2 rounded-md flex-1 whitespace-pre-wrap break-all">
+                    {testCase.output}
                   </div>
                 </div>
               </div>
-            ))}
-          </>
-        )}
-      </div>
+            </div>
+          ))}
+        </>
+      )}
       {imageUrl && (
         <div className="w-full h-60 relative">
           <Image src={imageUrl} alt="문제예시이미지" fill className="object-contain" />
