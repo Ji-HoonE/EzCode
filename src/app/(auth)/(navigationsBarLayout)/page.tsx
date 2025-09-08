@@ -1,5 +1,6 @@
 import { PATHS } from '@/constants/paths';
 import { getAllTimeTop3Rankings, HomePageRanking } from '@/entities/rank';
+
 import LinkedButton from '@/shared/ui/linkedButton';
 import Image from 'next/image';
 

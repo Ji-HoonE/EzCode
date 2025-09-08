@@ -1,48 +1,40 @@
 'use client';
 
 import CodeMirror from '@uiw/react-codemirror';
-import { useState } from 'react';
 import {
   CODEMIRROR_EXTENSIONS,
   CodeMirrorBasicSetup,
-  INITIAL_LANG,
-  INITIAL_VALUE,
-  ProblemLanguageType,
+  LANGUAGE_SELECTOR_OPTIONS,
+  SOURCECODE,
 } from '@/shared';
-import { OptionType, Select } from '@/shared/ui/select/Select';
-import { LANGUAGE_ID } from '@/shared/types/problem.type';
-import { LANGUAGE_SELECTOR_OPTIONS } from '@/shared/lib/codemirror';
+import { Select } from '@/shared/ui/select/Select';
 
 interface ICodeEditorProps {
-  onChangeSourceCodeData: (key: string, value: string | number) => void;
+  onChangeSourceCodeData: (key: 'sourceCode' | 'languageId', value: number | string) => void;
+  languageId: number;
 }
+export default function CodeEditor({ onChangeSourceCodeData, languageId }: ICodeEditorProps) {
+  const handleChangeLanguage = (value: string) => {
+    const languageId = Number(value); //select option required only string type value ㅠ
 
-export default function CodeEditor({ onChangeSourceCodeData }: ICodeEditorProps) {
-  const [currentLanguage, setCurrentLanguage] = useState<ProblemLanguageType>(INITIAL_LANG);
-
-  const typedOptions = LANGUAGE_SELECTOR_OPTIONS as OptionType[];
-  const changeSourceCodeData = (value: string) => {
-    const typedValue = value as ProblemLanguageType;
-
-    setCurrentLanguage(typedValue);
-    onChangeSourceCodeData('languageId', LANGUAGE_ID[typedValue]);
-    onChangeSourceCodeData('sourceCode', INITIAL_VALUE[typedValue]);
+    onChangeSourceCodeData('languageId', languageId);
+    onChangeSourceCodeData('sourceCode', SOURCECODE[languageId]);
   };
 
   return (
     <section className="flex-1 flex flex-col h-full gap-4">
       <Select
         title="언어 선택"
-        value={currentLanguage}
-        option={typedOptions}
-        setValue={(value) => changeSourceCodeData(value)}
+        value={String(languageId)}
+        option={LANGUAGE_SELECTOR_OPTIONS}
+        setValue={(value) => handleChangeLanguage(value)}
       />
       <CodeMirror
         basicSetup={CodeMirrorBasicSetup}
-        value={INITIAL_VALUE[currentLanguage as keyof typeof INITIAL_VALUE]}
+        value={SOURCECODE[languageId]}
         theme={'dark'}
         onChange={(value) => onChangeSourceCodeData('sourceCode', value)}
-        extensions={[CODEMIRROR_EXTENSIONS[currentLanguage]]}
+        extensions={[CODEMIRROR_EXTENSIONS[languageId]]}
         aria-autocomplete="none"
         autoCapitalize="off"
         height="100%"

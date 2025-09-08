@@ -1,5 +1,5 @@
 'use client';
-import useProblemWebSocketStore from '@/features/submitCode/submission/model/useProblemWebSocketStore';
+import useProblemWebSocketStore from '../../model/useProblemWebSocketStore';
 import { useEffect } from 'react';
 import CodeResultSummary from './CodeResultSummary';
 import CodeReviewSummary from './CodeReviewSummary';

@@ -1,3 +1,7 @@
+import ApiHelper from '@/api/client/api';
+import { API_URL } from '@/api/constants/api.constants';
+import { IMyInfo } from '@/entities/mypage/model/types';
+import { useUserStore } from '@/entities/user/model/store';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
@@ -9,7 +13,7 @@ import { useEffect } from 'react';
 const useSocialLogin = (onLoginSuccess?: () => void) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-
+  const { setUser } = useUserStore((state) => state);
   useEffect(() => {
     const accessToken = searchParams.get('accessToken');
     const refreshToken = searchParams.get('refreshToken');
@@ -20,6 +24,7 @@ const useSocialLogin = (onLoginSuccess?: () => void) => {
         redirect: false,
       }).then((response) => {
         if (response?.ok) {
+          setUserFunc();
           if (onLoginSuccess) {
             onLoginSuccess();
           } else {
@@ -30,6 +35,15 @@ const useSocialLogin = (onLoginSuccess?: () => void) => {
       return;
     }
   }, [searchParams, router, onLoginSuccess]);
+
+  const setUserFunc = async () => {
+    const response = await ApiHelper.get<IMyInfo>(API_URL.MYPAGE.USER_INFO);
+    if (response.data.status === 200) {
+      console.log('???');
+      console.log(response.data.result);
+      setUser(response.data.result);
+    }
+  };
 
   const handleSocialLogin = async (provider: 'github' | 'google') => {
     try {

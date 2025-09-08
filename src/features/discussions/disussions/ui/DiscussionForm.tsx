@@ -7,13 +7,11 @@ import {
   useEditDiscussionContent,
 } from '@/entities/discussions';
 import { TDiscussionContentMutationResponse } from '@/entities/discussions/discussions/model/mutation/discussions.types';
-
-import { INITIAL_LANG, ProblemId, ProblemLanguageType } from '@/shared';
-import { LANGUAGE_SELECTOR_OPTIONS } from '@/shared/lib/codemirror';
-import { LANGUAGE, LANGUAGE_ID } from '@/shared/types/problem.type';
-import { OptionType, Select } from '@/shared/ui/select/Select';
+import { LANGUAGE_SELECTOR_OPTIONS, ProblemId } from '@/shared';
+import { Select } from '@/shared/ui/select/Select';
 import UnifiedInput from '@/shared/ui/InputFiled';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { useUserStore } from '@/entities/user/model/store';
 
 interface ICreateDiscussionInputProps {
   problemId: ProblemId;
@@ -27,23 +25,19 @@ export default function DiscussionForm({
   discussion,
   changeEditMode,
 }: ICreateDiscussionInputProps) {
-  const [currentLanguage, setCurrentLanguage] = useState<ProblemLanguageType>(
-    discussion ? LANGUAGE[discussion.languageId] : INITIAL_LANG
-  );
-
   const [contentForm, setContentForm] = useState<IDiscussionContentMutationRequest>(
     discussion
       ? { content: discussion.content, languageId: discussion.languageId }
       : DISCUSSION_CREATE_VALUE
   );
-
   const { mutateAsync: createDiscussion } = useCreateDiscussionContent(problemId);
   const { mutateAsync: editMutate } = useEditDiscussionContent(
     String(problemId),
     discussion?.discussionId || 0
   );
+  const { user } = useUserStore();
+
   const buttonText = mode === 'create' ? '토론 생성' : '토론 수정';
-  const typedOptions = LANGUAGE_SELECTOR_OPTIONS as OptionType[];
 
   const submitDiscussionForm = () => {
     if (mode === 'create') {
@@ -57,17 +51,22 @@ export default function DiscussionForm({
   };
 
   const selectLanguage = (value: string) => {
-    const typedValue = value as ProblemLanguageType;
-    setCurrentLanguage(typedValue);
-    setContentForm((prev) => ({ ...prev, languageId: LANGUAGE_ID[typedValue] }));
+    const languageId = Number(value); //select 컴포넌트에서 value를 string으로 받기 때문에 number로 변환
+    setContentForm((prev) => ({ ...prev, languageId: languageId }));
   };
+
+  useEffect(() => {
+    if (discussion || !user) return;
+
+    setContentForm((prev) => ({ ...prev, languageId: user?.language?.id as number }));
+  }, [user?.language]);
 
   return (
     <div className="relative flex flex-col gap-3">
       <Select
         title="언어 선택"
-        value={currentLanguage}
-        option={typedOptions}
+        value={contentForm.languageId.toString()}
+        option={LANGUAGE_SELECTOR_OPTIONS}
         setValue={(value) => selectLanguage(value)}
       />
       <UnifiedInput

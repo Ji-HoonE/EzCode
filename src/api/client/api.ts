@@ -81,7 +81,8 @@ const request = async <T>(
     if (response.status === 401) {
       const session =
         config.reqType === 'server' ? await getServerSession(authOptions) : await getSession();
-
+      console.log('response  status', response.status);
+      console.log('session', session);
       if (!session?.refreshToken) {
         redirect('/signin');
       }

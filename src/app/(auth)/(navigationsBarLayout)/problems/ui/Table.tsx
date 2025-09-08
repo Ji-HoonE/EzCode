@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import React, { useState, useEffect, useMemo } from 'react';
-
 import { useRouter } from 'next/navigation';
 import { SkeletonBox } from '@/shared/ui/loading-indicators';
 import { ProblemsContent } from '@/entities/problems/model/types';
@@ -40,9 +39,9 @@ const getLevelBg = (difficulty: string) => {
 export default function ProblemTable({
   data,
   isLoading,
-  currentPage,
+  currentPage, // 0-based
   setCurrentPage,
-  totalPages,
+  totalPages, // API에서 오는 "페이지 수" (count)
 }: {
   data: ProblemsContent[];
   isLoading: boolean;
@@ -51,67 +50,56 @@ export default function ProblemTable({
   totalPages: number;
 }) {
   const router = useRouter();
-  const [pageGroupStart, setPageGroupStart] = useState(1);
+  const [pageGroupStart, setPageGroupStart] = useState<number>(0); // 0-based group start
   const [myProblemsList, setMyProblemsList] = useState<number[]>([]);
   const { data: myProblems } = useSubmissionList();
   const { data: session } = useSession();
+
   useEffect(() => {
     setMyProblemsList([]);
     if (!session) return;
     if (!myProblems) return;
+    myProblems.result.forEach((item) => setMyProblemsList((prev) => [...prev, item.problemId]));
+  }, [myProblems, session]);
 
-    myProblems.result.map((item) => setMyProblemsList((prev) => [...prev, item.problemId]));
-  }, [myProblems]);
-
+  // currentPage가 page group 범위를 벗어나면 group start 재조정
   useEffect(() => {
     if (currentPage < pageGroupStart || currentPage >= pageGroupStart + PAGE_LIMIT) {
-      setPageGroupStart(Math.floor((currentPage - 1) / PAGE_LIMIT) * PAGE_LIMIT + 1);
+      setPageGroupStart(Math.floor(currentPage / PAGE_LIMIT) * PAGE_LIMIT);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  }, [currentPage, pageGroupStart]);
+
+  // totalPages는 "페이지 수" (count)라고 가정 -> lastIndex = totalPages - 1
+  const lastIndex = Math.max(totalPages - 1, 0);
 
   const pageNumbers = useMemo(() => {
-    const end = Math.min(pageGroupStart + PAGE_LIMIT - 1, totalPages - 1); //-1한 이유는 현재 백에서 주는 totalPages가 +1되서 들어옴 예를들어 23페이지까지 데이터가 있으면 totalPages는 24로 들어옴
+    if (totalPages <= 0) return [];
+    const end = Math.min(pageGroupStart + PAGE_LIMIT - 1, lastIndex);
     return Array.from({ length: end - pageGroupStart + 1 }, (_, i) => pageGroupStart + i);
-  }, [pageGroupStart, totalPages]);
+  }, [pageGroupStart, totalPages, lastIndex]);
 
-  // const handlePrevGroup = () => {
-  //   if (isLoading || pageGroupStart <= 1) return;
-  //   setPageGroupStart((prev) => prev - PAGE_LIMIT);
-  //   setCurrentPage(pageGroupStart - 1);
-  // };
-
-  // const handleNextGroup = () => {
-  //   if (isLoading || pageGroupStart + PAGE_LIMIT > totalPages) return;
-  //   setPageGroupStart((prev) => prev + PAGE_LIMIT);
-  //   setCurrentPage(pageGroupStart + PAGE_LIMIT);
-  // };
-
+  // 오른쪽 화살표: 한 그룹 앞으로 (혹은 마지막 인덱스)
   const handleNextPage = () => {
-    console.log(totalPages);
-    if (currentPage + 1 < totalPages) {
-      if (currentPage + PAGE_LIMIT > totalPages) {
-        setCurrentPage(totalPages - 1);
-      } else {
-        setCurrentPage(currentPage + PAGE_LIMIT);
-      }
+    if (pageGroupStart + PAGE_LIMIT <= lastIndex) {
+      setCurrentPage(pageGroupStart + PAGE_LIMIT); // 다음 그룹 시작점
+    } else {
+      setCurrentPage(lastIndex); // 마지막 그룹에서 넘어가면 마지막 페이지로
     }
   };
+
+  // 왼쪽 화살표: 한 그룹 뒤로 (혹은 0)
   const handlePrevPage = () => {
-    if (currentPage > 1) {
-      if (currentPage - PAGE_LIMIT < 1) {
-        // 맨 앞 범위보다 작아지면 1로
-        setCurrentPage(1);
-      } else {
-        // 이전 구간의 "끝"으로 이동
-        setCurrentPage(currentPage - (currentPage % PAGE_LIMIT || PAGE_LIMIT));
-      }
+    const prevGroupEnd = pageGroupStart - 1;
+    if (prevGroupEnd >= 0) {
+      setCurrentPage(prevGroupEnd); // 이전 그룹의 마지막 페이지
+    } else {
+      setCurrentPage(0); // 이미 첫 그룹이면 첫 페이지
     }
   };
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-col w-full text-white font-sans bg-gray-900/50 rounded-md  border border-gray-800">
+      <div className="flex flex-col w-full text-white font-sans bg-gray-900/50 rounded-md border border-gray-800">
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-800 bg-gray-800/50">
@@ -171,7 +159,9 @@ export default function ProblemTable({
                       </td>
                       <td className={`px-6 py-4 text-center text-sm font-medium`}>
                         <span
-                          className={`inline-block px-2 py-1 min-w-[50px] text-xs rounded-md border text-center ${getLevelBg(item.difficulty)} ${getLevelColorClass(item.difficulty)}`}
+                          className={`inline-block px-2 py-1 min-w-[50px] text-xs rounded-md border text-center ${getLevelBg(
+                            item.difficulty
+                          )} ${getLevelColorClass(item.difficulty)}`}
                         >
                           {item.difficulty}
                         </span>
@@ -182,11 +172,6 @@ export default function ProblemTable({
                       <td className="px-6 py-4 text-center text-sm text-gray-300 ">
                         {item.totalSubmissions || 0}건
                       </td>
-                      {/* <td className="px-6 py-4 text-center">
-                      {item.totalSubmissions === 0 || !item.totalSubmissions
-                        ? '0%'
-                        : `${Math.round((item.correctSubmissions / item.totalSubmissions) * 100 * 10) / 10}%`}
-                    </td> */}
                       <td
                         className={`text-center text-sm font-medium ${successRate >= 70 ? 'text-green-400' : successRate >= 40 ? 'text-yellow-400' : 'text-red-400'}`}
                       >
@@ -198,6 +183,7 @@ export default function ProblemTable({
           </tbody>
         </table>
       </div>
+
       {/* 페이지네이션 */}
       <div className="flex justify-center items-center gap-2 mt-4 text-gray-400">
         <Button
@@ -216,25 +202,13 @@ export default function ProblemTable({
         />
 
         {pageNumbers.map((num) => (
-          // <button
-          //   type="button"
-          //   key={num}
-          //   className={`w-10 h-10 rounded-md flex items-center justify-center text-sm transition bg-[#6B6B6B] ${
-          //     currentPage === num
-          //       ? 'bg-[#214d35] hover:bg-[#276e48] text-white border-[#214d35]'
-          //       : 'bg-gray-800 border-gray-700 text-white hover:bg-gray-700'
-          //   }`}
-          //   onClick={() => !isLoading && setCurrentPage(num)}
-          // >
-          //   {num}
-          // </button>
           <Button
+            key={num}
             onClick={() => {
               if (!isLoading) setCurrentPage(num);
             }}
-            key={num}
-            label={num}
-            className={`w-10 h-10 rounded-md flex items-center justify-center text-sm transition bg-[#6B6B6B] ${
+            label={num + 1} // UI는 1-based로 보여줌
+            className={`w-10 h-10 rounded-md flex items-center justify-center text-sm transition ${
               currentPage === num
                 ? 'bg-[#214d35] hover:bg-[#276e48] text-white border-[#214d35]'
                 : 'bg-gray-800 border-gray-700 text-white hover:bg-gray-700'

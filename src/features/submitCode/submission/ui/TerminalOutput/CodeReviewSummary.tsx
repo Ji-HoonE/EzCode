@@ -3,7 +3,7 @@ import { ISourceCode } from '@/entities/submitCode/submission/model/mutation/sub
 import useSubmitForReview from '../../hooks/useSubmitForReview';
 import { BouncingDots } from '@/shared/ui/loading-indicators';
 import useProblemWebSocketStore from '../../model/useProblemWebSocketStore';
-import FormatMarkdown from '@/shared/ui/FormatMarkdown';
+import MarkdownRenderer from '@/shared/mdx/MdxRenderer';
 
 interface ICodeReviewSummaryProps {
   problemId: ProblemId;
@@ -22,9 +22,7 @@ export default function CodeReviewSummary({ problemId, sourceCodeData }: ICodeRe
       {isSubmittedReview ? (
         <div className="flex flex-col gap-2">
           {codeReview ? (
-            <div>
-              <FormatMarkdown markdown={codeReview} />
-            </div>
+            <MarkdownRenderer source={codeReview} />
           ) : (
             <div className="w-full rounded-xl bg-background items-center flex flex-col p-3">
               <div className="flex gap-3 items-center">

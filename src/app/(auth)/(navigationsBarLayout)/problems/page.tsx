@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import ProblemTable from './ui/Table';
 import { useProblemListQuery } from '@/entities/problems/model/query';
@@ -68,12 +68,8 @@ const categoryCodeOptions = [
   { label: '조합', value: 'COMBINATION' },
 ];
 
-const FilterSelect = ({ children }: { children: ReactNode }) => {
-  return <div className="flex flex-col gap-1 w-1/3">{children}</div>;
-};
-
 const ProblemsList = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const difficultyOptions = [
     { label: 'LV1', value: 'LV1' },
@@ -107,25 +103,27 @@ const ProblemsList = () => {
           <h1 className="text-3xl font-bold mb-2">문제 리스트</h1>
           <p className="text-gray-400">코딩테스트 문제를 난이도별로 확인하고 도전해보세요</p>
         </section>
+
         <section className="flex flex-col gap-10">
           <section className="mb-6 p-6 bg-gray-900/50 rounded-[10px] border border-gray-800">
             <div className="flex flex-row gap-4 items-center w-full">
-              <FilterSelect>
+              <div className="flex flex-col gap-1 w-1/3">
                 <label htmlFor="category" className="text-base">
-                  카테고리{' '}
+                  카테고리
                 </label>
                 <Select
+                  id="category"
                   className="w-full"
                   title="카테고리"
                   option={categoryCodeOptions}
                   setValue={(value) => setCategoryCode(value)}
                   value={categoryCode}
-                  id="category"
                 />
-              </FilterSelect>
-              <FilterSelect>
+              </div>
+
+              <div className="flex flex-col gap-1 w-1/3">
                 <label htmlFor="difficulty" className="text-base">
-                  난이도{' '}
+                  난이도
                 </label>
                 <Select
                   id="difficulty"
@@ -135,19 +133,19 @@ const ProblemsList = () => {
                   setValue={(value) => setDifficulty(value)}
                   value={difficulty}
                 />
-              </FilterSelect>
+              </div>
 
-              <FilterSelect>
+              <div className="flex flex-col gap-1 w-1/3">
                 <label className="text-base">검색</label>
-                <div className="flex flex-row  w-full gap-5">
+                <div className="flex flex-row w-full gap-5">
                   <input
                     placeholder="문제 제목 또는 번호 검색"
-                    className="text-base border px-2 border-gray-700 rounded h-12  w-full  bg-gray-800"
+                    className="text-base border px-2 border-gray-700 rounded h-12 w-full bg-gray-800"
                     onChange={(e) => setKeyword(e.target.value)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         setSearch(keyword);
-                        setCurrentPage(1);
+                        setCurrentPage(0); // 검색하면 0페이지(첫페이지)로
                       }
                     }}
                   />
@@ -156,7 +154,7 @@ const ProblemsList = () => {
                     aria-label="검색"
                     onClick={() => {
                       setSearch(keyword);
-                      setCurrentPage(1);
+                      setCurrentPage(0); // 검색하면 0페이지로
                     }}
                     label={
                       <svg
@@ -175,9 +173,10 @@ const ProblemsList = () => {
                     }
                   />
                 </div>
-              </FilterSelect>
+              </div>
             </div>
           </section>
+
           {(categoryCode !== '전체' || difficulty !== '전체') && (
             <div
               data-testid="selected-filters"
@@ -220,7 +219,7 @@ const ProblemsList = () => {
           data={data?.content || []}
           isLoading={isLoading}
           currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
+          setCurrentPage={(p) => setCurrentPage(p)}
           totalPages={totalPages}
         />
       </div>
