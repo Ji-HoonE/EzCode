@@ -9,14 +9,6 @@ export type ProblemId = string;
 /* 문제 언어 타입 */
 export type ProblemLanguageType = 'Python' | 'Java' | 'C' | 'Cpp';
 
-//언어별 id
-export const LANGUAGE_ID: Record<ProblemLanguageType, number> = {
-  Java: 1,
-  C: 2,
-  Cpp: 3,
-  Python: 4,
-};
-
 //id별 언어
 export const LANGUAGE: Record<number, ProblemLanguageType> = {
   1: 'Java',
@@ -24,9 +16,3 @@ export const LANGUAGE: Record<number, ProblemLanguageType> = {
   3: 'Cpp',
   4: 'Python',
 };
-
-//언어 선택하는 셀렉트 옵션 타입
-export interface ILanguageSelectOption {
-  label: ProblemLanguageType;
-  value: number;
-}

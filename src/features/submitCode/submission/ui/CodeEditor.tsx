@@ -1,9 +1,13 @@
 'use client';
 
 import CodeMirror from '@uiw/react-codemirror';
-import { CODEMIRROR_EXTENSIONS, CodeMirrorBasicSetup } from '@/shared';
+import {
+  CODEMIRROR_EXTENSIONS,
+  CodeMirrorBasicSetup,
+  LANGUAGE_SELECTOR_OPTIONS,
+  SOURCECODE,
+} from '@/shared';
 import { Select } from '@/shared/ui/select/Select';
-import { LANGUAGE_SELECTOR_OPTIONS, SOURCECODE } from '@/shared/lib/codemirror/codeMirror.Docs';
 
 interface ICodeEditorProps {
   onChangeSourceCodeData: (key: 'sourceCode' | 'languageId', value: number | string) => void;

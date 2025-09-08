@@ -3,10 +3,9 @@ import { useEffect, useState } from 'react';
 import CodeEditor from './CodeEditor';
 import TerminalOutput from './TerminalOutput';
 import TerminalPanel from './TerminalPanel';
-import { INITIAL_SOURCE_CODE_DATA } from '@/shared';
 import { ISourceCode } from '@/entities/submitCode';
-import { fetchSourceCodeData } from '@/shared/lib/codemirror/codeMirror.Docs';
 import { useUserStore } from '@/entities/user/model/store';
+import { fetchSourceCodeData, INITIAL_SOURCE_CODE_DATA } from '@/shared';
 
 interface IProblemWorksSectionProps {
   problemId: string;
@@ -30,7 +29,6 @@ export default function ProblemWorksSection({ problemId, githubUrl }: IProblemWo
     setSourceCodeData(fetchedSourceCodeData);
   }, [user?.language]);
 
-  console.log(sourceCodeData);
   return (
     <section className="flex flex-col gap-5 h-full">
       <CodeEditor

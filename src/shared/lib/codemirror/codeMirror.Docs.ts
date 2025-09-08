@@ -1,7 +1,13 @@
 import { ISourceCode } from '@/entities/submitCode/submission/model/mutation/submitCode.mutation.type';
 import { OptionType } from '@/shared/ui/select/Select';
 
-//언어 선택시 초기 값
+import { LanguageSupport } from '@codemirror/language';
+import { python } from '@codemirror/lang-python';
+import { java } from '@codemirror/lang-java';
+import { cpp } from '@codemirror/lang-cpp';
+import { BasicSetupOptions } from '@uiw/react-codemirror';
+
+//언어별 기본 소스코드
 export const SOURCECODE: Record<number, string> = {
   1: `// Java code goes here\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}\n`,
   2: `// C code goes here`,
@@ -32,4 +38,15 @@ export const fetchSourceCodeData = (languageId: number): ISourceCode => {
     languageId: languageId,
     sourceCode: SOURCECODE[languageId] || '',
   };
+};
+
+export const CodeMirrorBasicSetup: BasicSetupOptions = {
+  autocompletion: false,
+};
+
+export const CODEMIRROR_EXTENSIONS: Record<number, LanguageSupport> = {
+  1: java(),
+  2: cpp(),
+  3: cpp(),
+  4: python(),
 };
