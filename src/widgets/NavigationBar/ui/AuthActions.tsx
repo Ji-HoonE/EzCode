@@ -11,18 +11,11 @@ import { useLogoutMutation } from '@/entities/auth/model/mutation/auth.mutation'
 import Notifications from './Notifications';
 import { useUserStore } from '@/entities/user/model/store';
 
-import Cookies from 'js-cookie';
-import { useEffect, useState } from 'react';
 export default function AuthActions() {
   const router = useRouter();
   const { mutateAsync } = useLogoutMutation();
   const { user } = useUserStore((state) => state);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
 
-  useEffect(() => {
-    const token = Cookies.get('accessToken') || null;
-    setAccessToken(token);
-  }, []);
   const selectOption = (value: string) => {
     if (value === 'mypage') return router.push(PATHS.MYPAGE);
     if (value === 'logout') return mutateAsync();
@@ -30,7 +23,7 @@ export default function AuthActions() {
 
   return (
     <div className="flex items-center space-x-4">
-      {accessToken ? (
+      {user ? (
         <div className="flex flex-row gap-4 items-center">
           <Notifications />
           <Select

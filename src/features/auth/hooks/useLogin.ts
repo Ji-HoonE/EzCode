@@ -65,6 +65,11 @@ const useLogin = (onLoginSuccess?: () => void) => {
           password: loginInfo.password,
         }
       );
+      if (result.data.status !== 200) {
+        // API가 실패 응답을 준 경우
+        alert(result.data.message || '로그인에 실패했습니다.');
+        return;
+      }
       if (result.data.status === 200) {
         Cookies.set('accessToken', result.data.result.accessToken.split(' ')[1], {
           path: '/', // 전체 경로에서 사용
@@ -87,8 +92,12 @@ const useLogin = (onLoginSuccess?: () => void) => {
           router.push('/');
         }
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      if (err && typeof err === 'object' && 'message' in err) {
+        alert((err as { message: string }).message);
+      } else {
+        alert('알 수 없는 오류가 발생했습니다.');
+      }
     }
   };
 

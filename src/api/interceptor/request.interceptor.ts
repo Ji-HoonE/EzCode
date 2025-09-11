@@ -10,7 +10,7 @@ import Cookies from 'js-cookie';
 export const requestClientInterceptor = async (config: IRequestConfig): Promise<IRequestConfig> => {
   const token = Cookies.get('accessToken');
   const headers = new Headers(config.headers);
-  console.log('client token', token);
+
   if (!(config.body instanceof FormData)) headers.set('Content-Type', 'application/json');
   if (token) headers.set('Authorization', `Bearer ${token}`);
 
@@ -21,7 +21,7 @@ export const requestServerInterceptor = async (config: IRequestConfig): Promise<
   // 서버에서도 js-cookie 사용
   const token = Cookies.get('accessToken');
   const headers = new Headers(config.headers);
-  console.log('server token', token);
+
   headers.set('Content-Type', 'application/json');
   if (token) headers.set('Authorization', `Bearer ${token}`);
 
