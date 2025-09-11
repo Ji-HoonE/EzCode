@@ -61,12 +61,13 @@ const useSocialLogin = (onLoginSuccess?: () => void) => {
           setUser(response.data.result);
         }
 
-        // 성공 시 콜백 or 메인 페이지로 이동
-        if (onLoginSuccess) {
-          onLoginSuccess();
-        } else {
-          router.replace('/');
-        }
+        router.replace('/');
+
+        // if (onLoginSuccess) {
+        //   onLoginSuccess();
+        // } else {
+        //   router.replace('/');
+        // }
       } catch (err: unknown) {
         console.error('Social login user info fetch failed', err);
         // 실패 시 알림이나 리다이렉트 처리 가능
