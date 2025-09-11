@@ -43,7 +43,7 @@ const useSocialLogin = (onLoginSuccess?: () => void) => {
 
     const login = async () => {
       // 쿠키 저장
-      Cookies.set('accessToken', accessToken, {
+      Cookies.set('accessToken', accessToken.split(' ')[1], {
         path: '/',
         secure: true,
         sameSite: 'lax',
