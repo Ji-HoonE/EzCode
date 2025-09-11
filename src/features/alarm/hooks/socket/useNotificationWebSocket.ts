@@ -2,7 +2,7 @@
 
 import { BASE_URL } from '@/constants/env';
 import { Client } from '@stomp/stompjs';
-import { getSession } from 'next-auth/react';
+
 import { useState, useEffect } from 'react';
 import SockJS from 'sockjs-client';
 import { sharedAlarmStompRef } from '../../store/sharedAlarmStompRef';
@@ -15,8 +15,9 @@ export default function useConnectAlarmWebSocket() {
   const [accessToken, setAccessToken] = useState('');
   useEffect(() => {
     const fetchSession = async () => {
-      const data = await getSession();
-      const rawToken = data?.accessToken || '';
+      // const data = await getSession();
+      // const rawToken = data?.accessToken || '';
+      const rawToken = localStorage.getItem('accessToken') || '';
       // "Bearer " 접두어 제거 (있을 때만)
       const cleanedToken = rawToken.startsWith('Bearer ') ? rawToken.slice(7) : rawToken;
       setAccessToken(cleanedToken);

@@ -1,15 +1,15 @@
 'use client';
-import { useSession } from 'next-auth/react';
+
 import ChatDialogOpenButton from './ChatDialogOpenButton';
 import GameModalButton from '@/features/game/ui/GameButton';
 import { useCheckCharacterQuery } from '@/entities/game/model/query/game.query';
 import { usePathname } from 'next/navigation';
-
+import Cookies from 'js-cookie';
 export function GlobalFloatingWidget() {
   const problemId = usePathname().split('/')[2];
 
-  const { data: session } = useSession();
-  const isLogged = session?.accessToken;
+  // const { data: session } = useSession();
+  const isLogged = Cookies.get('accessToken');
 
   const { data: characterData } = useCheckCharacterQuery(!!isLogged);
 

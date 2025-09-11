@@ -13,7 +13,7 @@ const SignInForm = ({ onLoginSuccess }: SignInFormProps) => {
     handleSignInClick,
     handlePasswordVisible,
     isPasswordVisible,
-    errorMessage,
+    // errorMessage,
   } = useLogin(onLoginSuccess);
 
   return (
@@ -77,7 +77,7 @@ const SignInForm = ({ onLoginSuccess }: SignInFormProps) => {
           비밀번호 찾기
         </button>
       </div>
-      {errorMessage && <div className="text-red-500 text-sm">{errorMessage}</div>}
+      {/* {errorMessage && <div className="text-red-500 text-sm">{errorMessage}</div>} */}
       <button
         type="submit"
         className="w-full bg-[#214d35] text-white py-3 rounded-[10px] font-medium hover:bg-[#276e48] active:bg-[#1e3e2c] active:scale-[0.98] transition-all duration-200 shadow-lg hover:shadow-xl"

@@ -13,7 +13,8 @@ import {
   IVerifyResetPasswordResponse,
 } from '@/entities/auth/model/auth.interface';
 import { BASE_URL } from '@/constants/env';
-import { signOut } from 'next-auth/react';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 /** 회원가입 뮤테이션 */
 export const useSignUpMutation = () => {
@@ -28,6 +29,7 @@ export const useSignUpMutation = () => {
 /** 로그아웃 뮤테이션 */
 export const useLogoutMutation = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   return useMutation({
     mutationFn: async () => {
       const response = await ApiHelper.post<string>(API_URL.AUTH.LOGOUT, { reqType: 'client' });
@@ -35,11 +37,15 @@ export const useLogoutMutation = () => {
     },
     onSuccess: async () => {
       console.log('로그아웃');
-      await signOut({ redirect: false, callbackUrl: '/' });
+      // await signOut({ redirect: false, callbackUrl: '/' });
+      Cookies.remove('refreshToken');
+      Cookies.remove('accessToken');
+
       // 로그아웃 시 내정보조회하는 api 캐시 무효화
       queryClient.invalidateQueries({ queryKey: ['my-info'] });
       queryClient.invalidateQueries({ queryKey: ['my-ranking'] });
       queryClient.invalidateQueries({ queryKey: ['my-review'] });
+      router.push('/');
     },
   });
 };
