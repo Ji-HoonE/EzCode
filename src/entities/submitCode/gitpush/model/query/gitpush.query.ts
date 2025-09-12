@@ -3,6 +3,7 @@ import { API_URL } from '@/api/constants/api.constants';
 import { useQuery } from '@tanstack/react-query';
 import { IGitPushAutoToggleResponse, TGetReposResponse } from './gitpush.query.types';
 import Cookies from 'js-cookie';
+
 /**git push */
 export const useGetGitHubRepo = (githubUrl: string | null) => {
   const accessToken = Cookies.get('accessToken');

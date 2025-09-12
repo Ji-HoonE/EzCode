@@ -16,7 +16,6 @@ interface TerminalPanelProps {
   problemId: ProblemId;
   setMode: (mode: Mode) => void;
   mode: Mode;
-  githubUrl: string | null;
   sourceCodeData: ISourceCode;
 }
 
@@ -24,7 +23,6 @@ export default function TerminalPanel({
   problemId,
   setMode,
   mode,
-  githubUrl,
   sourceCodeData,
 }: TerminalPanelProps) {
   const router = useRouter();
@@ -77,7 +75,7 @@ export default function TerminalPanel({
           <Icon.TerminalReviewIcon />
         </PanelButton>
       </div>
-      <GitPushDialog githubUrl={githubUrl} />
+      <GitPushDialog />
     </div>
   );
 }
