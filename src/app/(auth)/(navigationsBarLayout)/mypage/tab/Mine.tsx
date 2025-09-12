@@ -56,7 +56,7 @@ export const Mine = () => {
   const myInfo = data?.data.result;
   const myRanking = ranking?.data.result;
 
-  const aiReviewCnt = aiReview?.data.result.reviewToken;
+  const aiReviewCnt = aiReview?.data.result?.reviewToken;
   const levelCalculator = (count: number) => {
     if (count === 0) {
       return 0;

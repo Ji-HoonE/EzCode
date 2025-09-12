@@ -14,11 +14,10 @@ import {
 } from './types';
 import { TPeriod } from '@/shared/types/mypage.type';
 import { API_URL } from '@/api/constants/api.constants';
-import { useSession } from 'next-auth/react';
+import Cookies from 'js-cookie';
 
 export const useMyInfoQuery = () => {
-  const { data: session } = useSession();
-  const accessToken = session?.accessToken?.split(' ')[1] as string;
+  const accessToken = Cookies.get('accessToken');
   return useQuery({
     queryKey: ['my-info'],
     queryFn: async () => {

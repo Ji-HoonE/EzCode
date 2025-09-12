@@ -91,12 +91,10 @@ const Card = ({
 
 export const Solved = () => {
   const { data } = useSubmissionList();
-  console.log('dataaawefr', data);
+
   const [onModal, setOnModal] = useState(false);
   const [selected, setSelected] = useState(0);
-  useEffect(() => {
-    console.log('modaldata', data);
-  }, [data]);
+
   return (
     <div className="w-full flex flex-col gap-10 pb-10">
       {data && onModal && (

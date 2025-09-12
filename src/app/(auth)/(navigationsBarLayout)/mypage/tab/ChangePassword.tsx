@@ -6,6 +6,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/shared/ui/button/Button';
 
 export const ChangePassword = () => {
+  console.log('hi');
   const [passwordForm, setPasswordForm] = useState<{
     currentPassword: string;
     newPassword: string;
