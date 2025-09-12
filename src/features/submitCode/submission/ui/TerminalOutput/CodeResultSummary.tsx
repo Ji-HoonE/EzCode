@@ -8,6 +8,7 @@ import PendingResultItem from './PendingResultItem';
 export default function CodeResultSummary() {
   const { results, totalResult, isSubmitted, submitPrepareData } = useProblemWebSocketStore();
 
+  console.log('results', totalResult);
   return (
     <div className="flex flex-col gap-4">
       {isSubmitted ? (

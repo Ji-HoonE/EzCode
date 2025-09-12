@@ -5,13 +5,12 @@ import { ProblemId } from '@/shared';
 import { useQuery } from '@tanstack/react-query';
 import { ISubmitPrepareData } from './submitCode.query.type';
 import { useProblemWebSocketStoreActions } from '@/features/submitCode/submission/model/useProblemWebSocketStore';
-import { useSession } from 'next-auth/react';
+import Cookies from 'js-cookie';
 
 /**코드 제출시 필요한 세션키, initcaseIds 를 리스폰스로 받음 */
 
 export const useGetSubmitPrepareData = (problemId: ProblemId) => {
-  const { data: session } = useSession();
-  const accessToken = session?.accessToken?.split(' ')[1] as string;
+  const accessToken = Cookies.get('accessToken');
   const { setPrepareData } = useProblemWebSocketStoreActions();
 
   const path = getProblemIdPath(problemId, 'submit-prepare');

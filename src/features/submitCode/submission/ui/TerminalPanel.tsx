@@ -11,8 +11,7 @@ import PanelButton from './PanelButton';
 import { useGetSubmitPrepareData } from '@/entities/submitCode/submission/model/query/submitCode.query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import useSubscribeProblem from '../hooks/useSubscribeProblem';
-import { useSession } from 'next-auth/react';
-
+import Cookies from 'js-cookie';
 interface TerminalPanelProps {
   problemId: ProblemId;
   setMode: (mode: Mode) => void;
@@ -30,9 +29,8 @@ export default function TerminalPanel({
 }: TerminalPanelProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const accessToken = Cookies.get('accessToken');
 
-  const { data: session } = useSession();
-  const token = session?.accessToken?.split(' ')[1] as string;
   useGetSubmitPrepareData(problemId);
   const { submitPrepareData } = useProblemWebSocketStore();
 
@@ -46,7 +44,7 @@ export default function TerminalPanel({
   const { clearResults } = useProblemWebSocketStoreActions();
 
   const submitForResult = () => {
-    if (!token) return authGuardTrigger();
+    if (!accessToken) return authGuardTrigger();
     clearResults();
     mutateAsync({ ...sourceCodeData, sessionKey: submitPrepareData.sessionKey || '' });
     setMode('result');
