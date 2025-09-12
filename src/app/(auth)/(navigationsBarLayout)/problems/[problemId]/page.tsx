@@ -1,15 +1,13 @@
-import { getGitHubUrl } from '@/entities/submitCode/gitpush/actions/getGitHub';
+import { getGitHubUrl } from '@/entities/submitCode';
 import ProblemWorksSection from '@/features/submitCode/submission/ui/ProblemWorksSection';
-import { authOptions } from '@/lib/authOptions';
-import { getServerSession } from 'next-auth';
+import Cookies from 'js-cookie';
 
 interface IProblemPageProps {
   params: Promise<{ problemId: string }>;
 }
 export default async function ProblemPage({ params }: IProblemPageProps) {
   const problemId = (await params).problemId;
-  const session = await getServerSession(authOptions);
-  const accessToken = session?.accessToken;
+  const accessToken = Cookies.get('accessToken');
 
   let githubUrl: string | null = null;
 
