@@ -1,7 +1,7 @@
 import AuthGuard from '@/lib/AuthGuard';
 import { GlobalFloatingWidget } from '@/widgets/globalFloatingWidget/ui';
 
-export default async function RootLayout({
+export default async function NavigationBarLayout({
   children,
   chatDialog,
 }: Readonly<{

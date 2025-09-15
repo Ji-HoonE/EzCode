@@ -2,12 +2,11 @@ import ApiHelper from '@/api/client/api';
 import { API_URL } from '@/api/constants/api.constants';
 import { useQuery } from '@tanstack/react-query';
 import { IGitPushAutoToggleResponse, TGetReposResponse } from './gitpush.query.types';
-import { useSession } from 'next-auth/react';
+import Cookies from 'js-cookie';
 
 /**git push */
 export const useGetGitHubRepo = (githubUrl: string | null) => {
-  const { data: session } = useSession();
-  const accessToken = session?.accessToken?.split(' ')[1] as string;
+  const accessToken = Cookies.get('accessToken');
   return useQuery({
     queryKey: ['get-git-repos'],
     queryFn: async () => {
@@ -20,8 +19,7 @@ export const useGetGitHubRepo = (githubUrl: string | null) => {
 
 /**유저의 gitPush auto 유무를 파악합니다. */
 export const useAutoGitPushStatus = (githubUrl: string | null) => {
-  const { data: session } = useSession();
-  const accessToken = session?.accessToken?.split(' ')[1] as string;
+  const accessToken = Cookies.get('accessToken');
 
   return useQuery({
     queryKey: ['auto-git-push-status'],

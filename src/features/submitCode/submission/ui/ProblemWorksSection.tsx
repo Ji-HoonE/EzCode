@@ -9,11 +9,10 @@ import { fetchSourceCodeData, INITIAL_SOURCE_CODE_DATA } from '@/shared';
 
 interface IProblemWorksSectionProps {
   problemId: string;
-  githubUrl: string | null;
 }
 export type Mode = 'init' | 'result' | 'review';
 
-export default function ProblemWorksSection({ problemId, githubUrl }: IProblemWorksSectionProps) {
+export default function ProblemWorksSection({ problemId }: IProblemWorksSectionProps) {
   const [sourceCodeData, setSourceCodeData] = useState<ISourceCode>(INITIAL_SOURCE_CODE_DATA);
   const [mode, setMode] = useState<Mode>('init');
   const { user } = useUserStore((state) => state);
@@ -41,7 +40,6 @@ export default function ProblemWorksSection({ problemId, githubUrl }: IProblemWo
           sourceCodeData={sourceCodeData}
           setMode={(mode) => setMode(mode)}
           mode={mode}
-          githubUrl={githubUrl}
         />
         <TerminalOutput mode={mode} sourceCodeData={sourceCodeData} problemId={problemId} />
       </div>
