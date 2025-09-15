@@ -41,7 +41,8 @@ export const fetchSourceCodeData = (languageId: number): ISourceCode => {
 };
 
 export const CodeMirrorBasicSetup: BasicSetupOptions = {
-  autocompletion: false,
+  autocompletion: true,
+  tabSize: 4,
 };
 
 export const CODEMIRROR_EXTENSIONS: Record<number, LanguageSupport> = {

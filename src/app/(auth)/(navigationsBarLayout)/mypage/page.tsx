@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { SideNavigation } from './SideNavigation';
 import { Mine } from './tab/Mine';
 import { Solved } from './tab/Solved';

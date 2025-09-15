@@ -24,23 +24,20 @@
 }
 
 @layer {
+  * {
+    font-family: 'NanumSquare';
+  }
   html {
     height: 100%;
   }
 
   body {
     height: 100%;
-    font-family: 'NanumSquare';
     color: var(--color-white);
     background-color: var(--color-background);
   }
-  table,
-  th,
-  td {
-    font-family: 'NanumSquare';
-  }
+
   button {
-    font-family: 'NanumSquare';
     cursor: pointer;
   }
 
