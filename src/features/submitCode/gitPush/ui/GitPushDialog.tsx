@@ -14,9 +14,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useEffect, useState } from 'react';
 import { Select } from '@/shared/ui/select/Select';
 
-interface GitPushDialogProps {}
-
-export default function GitPushDialog({}: GitPushDialogProps) {
+export default function GitPushDialog({}) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [gitPushStatus, setGitPushStatus] = useState<string | null>(null);
   const [isToolTipOpen, setIsToolTipOpen] = useState<true | undefined>(undefined);

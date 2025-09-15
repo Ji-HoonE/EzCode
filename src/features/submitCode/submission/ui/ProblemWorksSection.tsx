@@ -26,7 +26,7 @@ export default function ProblemWorksSection({ problemId }: IProblemWorksSectionP
 
     const fetchedSourceCodeData = fetchSourceCodeData(user?.language?.id as number);
     setSourceCodeData(fetchedSourceCodeData);
-  }, [user?.language]);
+  }, [user?.language, user]);
 
   return (
     <section className="flex flex-col gap-5 h-full">

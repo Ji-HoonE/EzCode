@@ -2,7 +2,7 @@ import { useSubmissionList } from '@/entities/mypage/model/query';
 import { History } from 'lucide-react';
 import { SubmissionsResonse } from '@/entities/mypage/model/types';
 import { Badge } from '@/shared/ui/badge/Badge';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { SolvedModal } from '../ui/SolvedModal';
 
 const getResultBadge = (result: string) => {
