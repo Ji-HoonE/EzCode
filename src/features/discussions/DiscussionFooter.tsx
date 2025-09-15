@@ -13,15 +13,16 @@ interface IDiscussionFooterProps {
   replyCount?: number;
   setChildRepliesOpen?: () => void;
   id: number;
+  type: 'discussion' | 'reply';
   variant: 'POST' | 'COMMENT';
 }
 
 export default function DiscussionFooter({ ...props }: IDiscussionFooterProps) {
-  const { problemId, id, replyCount, content, onDelete, onEdit, setChildRepliesOpen } = props;
+  const { problemId, replyCount, id, content, type, onDelete, onEdit, setChildRepliesOpen } = props;
 
   return (
     <div className="flex items-center gap-2">
-      <Vote problemId={problemId} content={content} replyId={id} />
+      <Vote problemId={problemId} content={content} id={id} type={type} />
       {replyCount !== undefined && (
         <ShowChildReplies onClick={() => setChildRepliesOpen?.()} replyCount={replyCount} />
       )}

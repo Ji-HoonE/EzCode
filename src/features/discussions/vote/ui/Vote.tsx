@@ -11,18 +11,19 @@ import { useEffect, useState } from 'react';
 interface IVoteProps {
   content: IDiscussionContentResponse | IReply;
   problemId?: ProblemId;
-  replyId?: number;
+  id: number;
+  type: 'discussion' | 'reply';
 }
 
-export default function Vote({ content, problemId, replyId }: IVoteProps) {
+export default function Vote({ content, problemId, id, type }: IVoteProps) {
   const [voteStatus, setVoteStatus] = useState<TVoteStatus>(content.voteStatus);
   const [voteCount, setVoteCount] = useState({
     upvoteCount: content.upvoteCount,
     downvoteCount: content.downvoteCount,
   });
+  const discussionId = type === 'discussion' ? id : content.discussionId;
 
-  const { discussionId } = content;
-  const { mutateAsync, data } = useVoteStatusMutation(String(problemId), discussionId, replyId);
+  const { mutateAsync, data } = useVoteStatusMutation(String(problemId), discussionId, id, type);
 
   const changeVoteStatus = (iconType: TVoteStatus) => {
     if (iconType === voteStatus) {
