@@ -43,6 +43,7 @@ export default function Reply({ reply, problemId }: IReplyProps) {
                 onDelete={() => setIsOpenDeleteModal(true)}
                 onEdit={() => setIsEdit(true)}
                 variant="COMMENT"
+                type="reply"
               />
               <div className="pl-8">
                 {isNestedRepliesOpen && (

@@ -58,6 +58,10 @@
     caret-color: var(--color-gray100) !important;
   }
 
+  textarea:focus,
+  textarea:focus-visible {
+    outline: none;
+  }
   /* 스크롤바 전체 스타일 */
   ::-webkit-scrollbar {
     width: 5px; /* 스크롤바 너비 */
