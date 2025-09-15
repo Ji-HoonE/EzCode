@@ -40,6 +40,7 @@ export default function NestedReply({ nestedReply, problemId }: INestedReplyProp
                 onDelete={() => setIsOpenDeleteModal(true)}
                 onEdit={() => setIsEdit(true)}
                 variant="COMMENT"
+                type="reply"
               />
             </>
           ) : (
