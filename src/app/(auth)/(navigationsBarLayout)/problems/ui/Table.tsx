@@ -5,35 +5,42 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { SkeletonBox } from '@/shared/ui/loading-indicators';
 import { ProblemsContent } from '@/entities/problems/model/types';
-import { Button } from '@/shared/ui/button/Button';
 import { useSubmissionList } from '@/entities/mypage/model/query';
-// import { useSession } from 'next-auth/react';
-import { CheckCircle } from 'lucide-react';
-import Cookies from 'js-cookie'
+import { useSession } from 'next-auth/react';
+import { CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
 const PAGE_LIMIT = 15;
 
 const getLevelColorClass = (levelStr: string): string => {
   if (!levelStr) return '';
   const level = parseInt(levelStr.replace(/[^0-9]/g, ''), 10);
-  if (level <= 2) return 'text-orange-300 font-semibold';
-  if (level <= 4) return 'text-yellow-500 font-semibold';
-  if (level <= 6) return 'text-red-500 font-semibold';
-  return 'text-red-700 font-semibold';
+  if (level <= 2) return 'text-blue-400 font-medium';
+  if (level <= 4) return 'text-yellow-400 font-medium';
+  if (level <= 6) return 'text-orange-400 font-medium';
+  return 'text-red-400 font-medium';
 };
 
 const getLevelBg = (difficulty: string) => {
-  switch (difficulty) {
-    case '3':
-      return 'bg-yellow-400/10 border-yellow-400/20';
-    case '4':
-      return 'bg-orange-400/10 border-orange-400/20';
-    case '5':
-      return 'bg-red-400/10 border-red-400/20';
-    case '6':
-      return 'bg-red-500/10 border-red-500/20';
-    default:
-      return 'bg-gray-400/10 border-gray-400/20';
-  }
+  const level = parseInt(difficulty.replace(/[^0-9]/g, ''), 10);
+  if (level <= 2) return 'bg-blue-500/20 border-blue-500/30';
+  if (level <= 4) return 'bg-yellow-500/20 border-yellow-500/30';
+  if (level <= 6) return 'bg-orange-500/20 border-orange-500/30';
+  return 'bg-red-500/20 border-red-500/30';
+};
+
+const getLevelText = (difficulty: string) => {
+  const level = parseInt(difficulty.replace(/[^0-9]/g, ''), 10);
+  const labels = {
+    1: '입문',
+    2: '초급',
+    3: '중급',
+    4: '중상급',
+    5: '고급',
+    6: '전문가',
+    7: '마스터',
+  };
+  return `${labels[level as keyof typeof labels] || '알 수 없음'} (${level}단계)`;
 };
 
 export default function ProblemTable({
@@ -165,11 +172,11 @@ export default function ProblemTable({
                       </td>
                       <td className={`px-6 py-4 text-center text-sm font-medium`}>
                         <span
-                          className={`inline-block px-2 py-1 min-w-[50px] text-xs rounded-md border text-center ${getLevelBg(
+                          className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full border transition-all duration-200 hover:scale-105 ${getLevelBg(
                             item.difficulty
                           )} ${getLevelColorClass(item.difficulty)}`}
                         >
-                          {item.difficulty}
+                          {getLevelText(item.difficulty)}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-center text-sm text-gray-300 ">
@@ -193,49 +200,32 @@ export default function ProblemTable({
       {/* 페이지네이션 */}
       <div className="flex justify-center items-center gap-2 mt-4 text-gray-400">
         <Button
-          className="w-10 h-10"
           onClick={handlePrevPage}
-          variant="outline"
-          label={
-            <Image
-              className="cursor-pointer"
-              src="/icons/arrow/arrowLeft.svg"
-              width={10}
-              height={10}
-              alt="page-arrow"
-            />
-          }
-        />
-
+          className="p-1 bg-[#214d35] hover:bg-[#276e48] disabled:opacity-50 disabled:cursor-not-allowed rounded-[10px] w-10 h-10"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </Button>
         {pageNumbers.map((num) => (
           <Button
             key={num}
             onClick={() => {
               if (!isLoading) setCurrentPage(num);
             }}
-            label={num + 1} // UI는 1-based로 보여줌
             className={`w-10 h-10 rounded-md flex items-center justify-center text-sm transition ${
               currentPage === num
                 ? 'bg-[#214d35] hover:bg-[#276e48] text-white border-[#214d35]'
                 : 'bg-gray-800 border-gray-700 text-white hover:bg-gray-700'
             }`}
-          />
+          >
+            {num + 1}
+          </Button>
         ))}
-
         <Button
-          className="w-10 h-10"
-          variant="outline"
           onClick={handleNextPage}
-          label={
-            <Image
-              className="cursor-pointer"
-              src="/icons/arrow/arrowRight.svg"
-              width={10}
-              height={10}
-              alt="page-arrow"
-            />
-          }
-        />
+          className="p-1 bg-[#214d35] hover:bg-[#276e48] disabled:opacity-50 disabled:cursor-not-allowed rounded-[10px] w-10 h-10"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </Button>
       </div>
     </div>
   );

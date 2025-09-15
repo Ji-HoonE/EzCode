@@ -32,6 +32,7 @@ export default function AuthActions() {
             setValue={(value) => {
               selectOption(value);
             }}
+            isHeader
             value={
               <UserProfile profileImageUrl={user?.profileImageUrl} nickname={user?.nickname} />
             }
