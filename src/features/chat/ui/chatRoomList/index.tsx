@@ -5,8 +5,6 @@ import ChatRoomItem from './ChatRoomItem';
 import useSubChatRooms from '../../hooks/socket/useSubChatRooms';
 import ChatSearchBar from './ChatSearchBar';
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import useChatDialogTrigger from '../../hooks/useChatDialogTrigger';
 
 interface IChatRoomListProps {
   selectedRoomId: number;
@@ -16,7 +14,6 @@ export default function ChatRoomList({ selectedRoomId }: IChatRoomListProps) {
   const { rooms } = useChatWebSocketStore();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredRoom, setFilteredRoom] = useState(rooms);
-  const { closeChatDialog } = useChatDialogTrigger();
 
   const handleSearchRoom = (value: string) => {
     setSearchQuery(value);

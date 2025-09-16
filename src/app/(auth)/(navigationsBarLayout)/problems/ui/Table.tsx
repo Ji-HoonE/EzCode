@@ -1,14 +1,12 @@
 'use client';
-
-import Image from 'next/image';
 import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { SkeletonBox } from '@/shared/ui/loading-indicators';
 import { ProblemsContent } from '@/entities/problems/model/types';
 import { useSubmissionList } from '@/entities/mypage/model/query';
-import { useSession } from 'next-auth/react';
 import { CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Cookies from 'js-cookie';
 
 const PAGE_LIMIT = 15;
 
@@ -61,16 +59,13 @@ export default function ProblemTable({
   const [myProblemsList, setMyProblemsList] = useState<number[]>([]);
   const { data: myProblems } = useSubmissionList();
   // const { data: session } = useSession();
-  const token = Cookies.get('accessToken')
-
-
+  const token = Cookies.get('accessToken');
 
   useEffect(() => {
-    
     setMyProblemsList([]);
     // if (!session) return;
-    if(!token) return ;
-    console.log('123')
+    if (!token) return;
+    console.log('123');
     if (!myProblems) return;
     myProblems.result.forEach((item) => setMyProblemsList((prev) => [...prev, item.problemId]));
   }, [myProblems, token]);
