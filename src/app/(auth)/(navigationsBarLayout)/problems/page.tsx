@@ -72,13 +72,13 @@ const ProblemsList = () => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const difficultyOptions = [
-    { label: 'LV1', value: 'LV1' },
-    { label: 'LV2', value: 'LV2' },
-    { label: 'LV3', value: 'LV3' },
-    { label: 'LV4', value: 'LV4' },
-    { label: 'LV5', value: 'LV5' },
-    { label: 'LV6', value: 'LV6' },
-    { label: 'LV7', value: 'LV7' },
+    { label: '입문 (1단계)', value: 'LV1' },
+    { label: '초급 (2단계)', value: 'LV2' },
+    { label: '중급 (3단계)', value: 'LV3' },
+    { label: '중상급 (4단계)', value: 'LV4' },
+    { label: '고급 (5단계)', value: 'LV5' },
+    { label: '전문가 (6단계)', value: 'LV6' },
+    { label: '마스터 (7단계)', value: 'LV7' },
   ];
   const [categoryCode, setCategoryCode] = useState('');
   const [difficulty, setDifficulty] = useState('');
@@ -100,15 +100,15 @@ const ProblemsList = () => {
     <div className="flex flex-col px-10 py-18 w-full gap-4 justify-center items-center">
       <div className="flex flex-col max-w-[1600px] w-full gap-6">
         <section>
-          <h1 className="text-3xl font-bold mb-2">문제 리스트</h1>
+          <h1 className="text-3xl font-bold mb-2 text-secondary">문제 리스트</h1>
           <p className="text-gray-400">코딩테스트 문제를 난이도별로 확인하고 도전해보세요</p>
         </section>
 
         <section className="flex flex-col gap-10">
           <section className="mb-6 p-6 bg-gray-900/50 rounded-[10px] border border-gray-800">
             <div className="flex flex-row gap-4 items-center w-full">
-              <div className="flex flex-col gap-1 w-1/3">
-                <label htmlFor="category" className="text-base">
+              <div className="flex flex-col gap-1 w-1/3 max-w-[240px]">
+                <label htmlFor="category" className="text-base text-secondary">
                   카테고리
                 </label>
                 <Select
@@ -121,13 +121,13 @@ const ProblemsList = () => {
                 />
               </div>
 
-              <div className="flex flex-col gap-1 w-1/3">
-                <label htmlFor="difficulty" className="text-base">
+              <div className="flex flex-col gap-1 w-1/3 max-w-[200px]">
+                <label htmlFor="difficulty" className="text-base text-secondary">
                   난이도
                 </label>
                 <Select
                   id="difficulty"
-                  className="w-full"
+                  className="w-full "
                   title="난이도"
                   option={difficultyOptions}
                   setValue={(value) => setDifficulty(value)}
@@ -136,7 +136,7 @@ const ProblemsList = () => {
               </div>
 
               <div className="flex flex-col gap-1 w-1/3">
-                <label className="text-base">검색</label>
+                <label className="text-base text-secondary">검색</label>
                 <div className="flex flex-row w-full gap-5">
                   <input
                     placeholder="문제 제목 또는 번호 검색"
@@ -181,32 +181,34 @@ const ProblemsList = () => {
             <div
               data-testid="selected-filters"
               aria-label="선택된 필터"
-              className="flex flex-row gap-8"
+              className="flex flex-row gap-4"
             >
               {categoryCode !== '전체' && categoryCode && (
-                <div className="flex flex-row gap-1 items-center">
+                <div className="flex flex-row gap-2 items-center bg-[#00d084]/20 border border-[#00d084]/30 text-[#00d084] px-3 py-1.5 rounded-full text-sm font-medium">
                   <span>
                     {categoryCodeOptions.find((item) => item.value === categoryCode)?.label}
                   </span>
                   <Image
                     src="/icons/close/closeWithBorder.svg"
-                    className="cursor-pointer"
+                    className="cursor-pointer hover:opacity-70 transition-opacity"
                     alt="close"
-                    width={16}
-                    height={16}
+                    width={14}
+                    height={14}
                     onClick={() => setCategoryCode('')}
                   />
                 </div>
               )}
               {difficulty !== '전체' && difficulty && (
-                <div className="flex flex-row gap-1 items-center">
-                  <span>{difficulty}</span>
+                <div
+                  className={`flex flex-row gap-2 items-center px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200`}
+                >
+                  <span>{difficultyOptions.find((item) => item.value === difficulty)?.label}</span>
                   <Image
                     src="/icons/close/closeWithBorder.svg"
-                    className="cursor-pointer"
+                    className="cursor-pointer hover:opacity-70 transition-opacity"
                     alt="close"
-                    width={16}
-                    height={16}
+                    width={14}
+                    height={14}
                     onClick={() => setDifficulty('')}
                   />
                 </div>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/shared/ui/button/Button';
+import { toast } from 'sonner';
 
 export const ChangePassword = () => {
   console.log('hi');
@@ -22,7 +23,13 @@ export const ChangePassword = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const handlePasswordChange = async () => {
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      alert('새 비밀번호가 일치하지 않습니다.');
+      toast.error('새 비밀번호가 일치하지 않습니다.', {
+        richColors: true,
+        style: {
+          fontWeight: 'bold',
+          fontSize: '16px',
+        },
+      });
       return;
     }
 
@@ -30,9 +37,16 @@ export const ChangePassword = () => {
       newPassword: passwordForm.newPassword,
       oldPassword: passwordForm.currentPassword,
     });
-
-    alert(result);
-
+    toast.success(result, {
+      richColors: false,
+      style: {
+        background: '#00d084',
+        color: '#ffffff',
+        fontWeight: 'bold',
+        fontSize: '16px',
+        border: 'none',
+      },
+    });
     setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
   };
   return (

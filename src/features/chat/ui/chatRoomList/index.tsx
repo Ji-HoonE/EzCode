@@ -5,8 +5,6 @@ import ChatRoomItem from './ChatRoomItem';
 import useSubChatRooms from '../../hooks/socket/useSubChatRooms';
 import ChatSearchBar from './ChatSearchBar';
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import useChatDialogTrigger from '../../hooks/useChatDialogTrigger';
 
 interface IChatRoomListProps {
   selectedRoomId: number;
@@ -16,7 +14,6 @@ export default function ChatRoomList({ selectedRoomId }: IChatRoomListProps) {
   const { rooms } = useChatWebSocketStore();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredRoom, setFilteredRoom] = useState(rooms);
-  const { closeChatDialog } = useChatDialogTrigger();
 
   const handleSearchRoom = (value: string) => {
     setSearchQuery(value);
@@ -29,15 +26,9 @@ export default function ChatRoomList({ selectedRoomId }: IChatRoomListProps) {
   }, [rooms]);
 
   return (
-    <section className="h-full w-full flex-1/5 border-r border-border_primary/20">
-      <div className="flex items-center justify-between p-4 border-b border-border_primary/20">
+    <section className="h-full w-full flex-1/5 border-r border-[#214d35] bg-[#0c151c] relative rounded-l-[10px]">
+      <div className="flex items-center justify-between p-4 border-b border-[#214d35] ">
         <h2 className="text-xl font-semibold text-white">채팅</h2>
-        <button
-          onClick={closeChatDialog}
-          className="hover:bg-white/10 rounded-[10px] transition-colors"
-        >
-          <Image src="/icons/close/closeWithBorder.svg" height={20} width={20} alt="closeBtn" />
-        </button>
       </div>
       <div className="flex flex-col gap-2 p-2">
         <ChatSearchBar searchQuery={searchQuery} onSearch={handleSearchRoom} />
@@ -54,7 +45,9 @@ export default function ChatRoomList({ selectedRoomId }: IChatRoomListProps) {
             })}
           </ul>
         ) : (
-          <div>생성된 채팅방이 없습니다.</div>
+          <div className="h-full absolute top-0 left-0 w-full h-full flex items-center justify-center">
+            생성된 채팅방이 없습니다.
+          </div>
         )}
       </div>
       {/* <CreateChatRoomDialog /> */}

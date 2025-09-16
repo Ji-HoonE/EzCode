@@ -8,6 +8,7 @@ import { API_URL } from '@/api/constants/api.constants';
 import { useUserStore } from '@/entities/user/model/store';
 import { IMyInfo } from '@/entities/mypage/model/types';
 import Cookies from 'js-cookie';
+import { toast } from 'sonner';
 /**
  * @description 로그인 상태 관리 hook
  * @returns
@@ -67,7 +68,13 @@ const useLogin = (onLoginSuccess?: () => void) => {
       );
       if (result.data.status !== 200) {
         // API가 실패 응답을 준 경우
-        alert(result.data.message || '로그인에 실패했습니다.');
+        toast.error(result.data.message || '로그인에 실패했습니다.', {
+          richColors: false,
+          style: {
+            fontWeight: 'bold',
+            fontSize: '16px',
+          },
+        });
         return;
       }
       if (result.data.status === 200) {
@@ -94,9 +101,21 @@ const useLogin = (onLoginSuccess?: () => void) => {
       }
     } catch (err: unknown) {
       if (err && typeof err === 'object' && 'message' in err) {
-        alert((err as { message: string }).message);
+        toast.error((err as { message: string }).message || '로그인에 실패했습니다.', {
+          richColors: false,
+          style: {
+            fontWeight: 'bold',
+            fontSize: '16px',
+          },
+        });
       } else {
-        alert('알 수 없는 오류가 발생했습니다.');
+        toast.error('알 수 없는 오류가 발생했습니다.', {
+          richColors: false,
+          style: {
+            fontWeight: 'bold',
+            fontSize: '16px',
+          },
+        });
       }
     }
   };

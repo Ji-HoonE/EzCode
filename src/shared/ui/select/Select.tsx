@@ -50,6 +50,7 @@ interface PropsType extends HTMLAttributes<HTMLDivElement> {
   size?: 'sm' | 'md' | 'lg';
   type?: 'setValue' | 'router' | 'api';
   entireOption?: boolean;
+  isHeader?: boolean;
 }
 
 export const Select = ({
@@ -61,6 +62,7 @@ export const Select = ({
   type = 'setValue',
   entireOption = false,
   id,
+  isHeader = false,
   ...rest
 }: PropsType & { id?: string }) => {
   const router = useRouter();
@@ -161,15 +163,32 @@ export const Select = ({
         {option.map((item, index) => (
           <div
             key={typeof item.value === 'string' ? item.value : `option-${index}`}
-            className="flex flex-row gap-2 items-center px-1 hover:bg-white hover:text-black cursor-pointer py-1 rounded "
+            className="flex flex-row gap-2 items-center justify-start py-2 hover:bg-white/8 text-[#ccc] cursor-pointer transition-all duration-200 hover:text-[#00d084]"
             onClick={() => {
               handleSelectChange(item.value);
             }}
           >
-            <span className="ml-5 w-3">
-              {typeof item.value === 'string' && item.value === value && '✔'}
+            {!isHeader && (
+              <span
+                className={twMerge('ml-3 w-4 text-left')}
+                style={{
+                  color:
+                    typeof item.value === 'string' && item.value === value ? '#00d084' : undefined,
+                }}
+              >
+                {typeof item.value === 'string' && item.value === value && '✔'}
+              </span>
+            )}
+
+            <span
+              className={twMerge(isHeader ? 'flex-1 text-center' : 'text-left')}
+              style={{
+                color:
+                  typeof item.value === 'string' && item.value === value ? '#00d084' : undefined,
+              }}
+            >
+              {item.label}
             </span>
-            <span>{item.label}</span>
           </div>
         ))}
       </div>
