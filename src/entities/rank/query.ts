@@ -2,7 +2,9 @@ import ApiHelper from '@/api/client/api';
 import { API_URL } from '@/api/constants/api.constants';
 import { useQuery } from '@tanstack/react-query';
 import { TAroundRanking, TRankings } from './types';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
+import Cookies from "js-cookie"
+
 
 export const useGetRankAlltime = () => {
   return useQuery({
@@ -38,8 +40,10 @@ export const useGetRankLastWeek = () => {
 };
 
 export const useGetRankAroundMe = (period: 'all-time' | 'weekly' | 'last-week') => {
-  const { data: session } = useSession();
-  const accessToken = session?.accessToken?.split(' ')[1] as string;
+  // const { data: session } = useSession();
+  // const accessToken = session?.accessToken?.split(' ')[1] as string;
+  const accessToken = Cookies.get('accessToken')
+  
   return useQuery({
     queryKey: ['rank-me-around', period],
     queryFn: async () => {

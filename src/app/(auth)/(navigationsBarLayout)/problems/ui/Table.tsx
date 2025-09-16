@@ -7,9 +7,9 @@ import { SkeletonBox } from '@/shared/ui/loading-indicators';
 import { ProblemsContent } from '@/entities/problems/model/types';
 import { Button } from '@/shared/ui/button/Button';
 import { useSubmissionList } from '@/entities/mypage/model/query';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
 import { CheckCircle } from 'lucide-react';
-
+import Cookies from 'js-cookie'
 const PAGE_LIMIT = 15;
 
 const getLevelColorClass = (levelStr: string): string => {
@@ -53,14 +53,20 @@ export default function ProblemTable({
   const [pageGroupStart, setPageGroupStart] = useState<number>(0); // 0-based group start
   const [myProblemsList, setMyProblemsList] = useState<number[]>([]);
   const { data: myProblems } = useSubmissionList();
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
+  const token = Cookies.get('accessToken')
+
+
 
   useEffect(() => {
+    
     setMyProblemsList([]);
-    if (!session) return;
+    // if (!session) return;
+    if(!token) return ;
+    console.log('123')
     if (!myProblems) return;
     myProblems.result.forEach((item) => setMyProblemsList((prev) => [...prev, item.problemId]));
-  }, [myProblems, session]);
+  }, [myProblems, token]);
 
   // currentPage가 page group 범위를 벗어나면 group start 재조정
   useEffect(() => {
