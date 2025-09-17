@@ -22,6 +22,7 @@ import { ModifyForm } from '../ui/ModifyForm';
 import { useQueryClient } from '@tanstack/react-query';
 import { Badge } from '@/shared/ui/badge/Badge';
 import { toast } from 'sonner';
+import { useUserStore } from '@/entities/user/model/store';
 
 export const Mine = () => {
   const queryClient = useQueryClient();
@@ -53,7 +54,7 @@ export const Mine = () => {
   const { mutateAsync: emailVerfiy } = useEmailVerify(BASE_URL || '');
   const { mutateAsync: modify } = useModifyInfo();
   const [languageList, setLanguageList] = useState<{ label: string; value: string }[]>([]);
-
+  const { setUser } = useUserStore();
   const myInfo = data?.data.result;
   const myRanking = ranking?.data.result;
 
@@ -133,7 +134,9 @@ export const Mine = () => {
                     request: body,
                     image: editForm.profileImage ?? undefined,
                   });
-
+                  // setUser()
+                  console.log(response);
+                  setUser(response.result);
                   toast.success(response.message, {
                     richColors: false,
                     style: {

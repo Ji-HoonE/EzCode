@@ -8,6 +8,7 @@ import {
   ILanguages,
   IModifyBody,
   IMyInfo,
+  IUserInfoModifyResponse,
   Ranking,
   Report,
   SubmissionsResonse,
@@ -127,8 +128,7 @@ export const useModifyInfo = () => {
       request: IModifyBody; // 닉네임, 블로그, 깃허브 등 정보
       image?: File; // 프로필 이미지 (선택)
     }) => {
-      console.log('image', image);
-      console.log('request', request);
+
       const formData = new FormData();
 
       // request(JSON) 추가
@@ -139,7 +139,7 @@ export const useModifyInfo = () => {
         formData.append('image', image);
       }
 
-      const response = await ApiHelper.put(API_URL.MYPAGE.USER_INFO, formData, {
+      const response = await ApiHelper.put<IUserInfoModifyResponse>(API_URL.MYPAGE.USER_INFO, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
