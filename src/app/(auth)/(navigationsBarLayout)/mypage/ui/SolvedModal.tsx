@@ -19,7 +19,10 @@ export const SolvedModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-[60%] max-h-[80%] overflow-y-auto" showCloseButton>
+      <DialogContent
+        className="p-4 max-w-[60vw] w-full h-[800px]  bg-[#0c151c] border border-[#214d35]  overflow-y-auto"
+        showCloseButton
+      >
         <AlertDialogHeader className="flex flex-row justify-between w-full">
           <DialogTitle>내가 푼 문제 상세 페이지</DialogTitle>
         </AlertDialogHeader>
@@ -32,21 +35,17 @@ export const SolvedModal = ({
             router.push(`/problems/${data.problemId}`);
           }}
         />
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-8">
           <div className="flex flex-row gap-1">
-            <span className="w-25">제목</span>
-
             <span>{data?.problemTitle}</span>
           </div>
           <div className="flex flex-row gap-1">
-            <span className="w-25 shrink-0">설명</span>
-
             {/* <span className="whitespace-pre-line">{}</span> */}
             <div className="flex flex-col">
               <MarkdownRenderer source={data?.problemDescription} />
             </div>
           </div>
-          <div className="flex flex-col gap-1 ">
+          <div className="flex flex-col gap-4">
             {data?.submissions.map((item, index) => {
               return (
                 <div
