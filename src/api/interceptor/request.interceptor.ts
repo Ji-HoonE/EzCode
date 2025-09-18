@@ -1,43 +1,29 @@
-import { getServerSession } from 'next-auth';
 import { IRequestConfig } from './interceptor.interface';
-import { getSession } from 'next-auth/react';
-import { authOptions } from '@/lib/authOptions';
+
+import Cookies from 'js-cookie';
 
 /**
  * 요청 인터셉터
  * 모든 API 요청 전에 실행되는 함수
  */
-export const requestClientInterceptor = async (config: IRequestConfig): Promise<IRequestConfig> => {
-  const session = await getSession();
-  const token = session?.accessToken;
 
+export const requestClientInterceptor = async (config: IRequestConfig): Promise<IRequestConfig> => {
+  const token = Cookies.get('accessToken');
   const headers = new Headers(config.headers);
 
-  // FormData인 경우 Content-Type을 건드리지 않음
-  if (!(config.body instanceof FormData)) {
-    headers.set('Content-Type', 'application/json');
-  }
+  if (!(config.body instanceof FormData)) headers.set('Content-Type', 'application/json');
+  if (token) headers.set('Authorization', `Bearer ${token}`);
 
-  if (token) {
-    headers.set('Authorization', `${token}`);
-  }
-
-  return {
-    ...config,
-    headers,
-  };
+  return { ...config, headers };
 };
 
 export const requestServerInterceptor = async (config: IRequestConfig): Promise<IRequestConfig> => {
-  const session = await getServerSession(authOptions);
-  const token = session?.accessToken;
+  // 서버에서도 js-cookie 사용
+  const token = Cookies.get('accessToken');
   const headers = new Headers(config.headers);
+
   headers.set('Content-Type', 'application/json');
-  if (token) {
-    headers.set('Authorization', `${token}`);
-  }
-  return {
-    ...config,
-    headers,
-  };
+  if (token) headers.set('Authorization', `Bearer ${token}`);
+
+  return { ...config, headers };
 };

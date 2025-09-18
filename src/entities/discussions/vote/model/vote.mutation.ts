@@ -8,10 +8,11 @@ import { IVoteMutationRequest, IVoteMutationResponse } from './vote.mutation.typ
 export const useVoteStatusMutation = (
   problemId: ProblemId,
   discussionId: number,
-  replyId?: number
+  id: number,
+  type: 'discussion' | 'reply'
 ) => {
   const defaultPath = getProblemIdPath(problemId, 'discussions') + `/${discussionId}`;
-  const path = replyId ? defaultPath + `/replies/${replyId}` : defaultPath;
+  const path = type === 'discussion' ? defaultPath : defaultPath + `/replies/${id}`;
 
   return useMutation({
     mutationFn: async (params: IVoteMutationRequest) => {

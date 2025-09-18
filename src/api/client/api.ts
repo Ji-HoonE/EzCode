@@ -1,16 +1,15 @@
 import { BASE_URL } from '@/constants/env';
 import { IApiResponseFormat } from '../interceptor/interceptor.interface';
-import { getSession } from 'next-auth/react';
+
 import { responseInterceptor } from '../interceptor/response.interceptor';
 import { API_URL } from '../constants/api.constants';
 import {
   requestClientInterceptor,
   requestServerInterceptor,
 } from '../interceptor/request.interceptor';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/authOptions';
-import { redirect } from 'next/navigation';
 
+import { redirect } from 'next/navigation';
+import Cookies from 'js-cookie';
 export type ReqType = 'client' | 'server';
 interface RequestConfig extends RequestInit {
   params?: Record<string, string>;
@@ -79,16 +78,15 @@ const request = async <T>(
     const response = await fetch(url, interceptedConfig);
 
     if (response.status === 401) {
-      const session =
-        config.reqType === 'server' ? await getServerSession(authOptions) : await getSession();
-      console.log('response  status', response.status);
-      console.log('session', session);
-      if (!session?.refreshToken) {
+      // const session =
+      //   config.reqType === 'server' ? await getServerSession(authOptions) : await getSession();
+
+      if (Cookies.get('refreshToken')) {
         redirect('/signin');
       }
 
       try {
-        const newAccessToken = await refreshToken(session?.refreshToken as string);
+        const newAccessToken = await refreshToken(Cookies.get('refreshToken') || '');
         const retryConfig = await (config.reqType === 'server'
           ? requestServerInterceptor({
               ...config,

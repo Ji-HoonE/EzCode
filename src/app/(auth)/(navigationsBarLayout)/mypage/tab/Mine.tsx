@@ -21,6 +21,8 @@ import { ModifyForm } from '../ui/ModifyForm';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { Badge } from '@/shared/ui/badge/Badge';
+import { toast } from 'sonner';
+import { useUserStore } from '@/entities/user/model/store';
 
 export const Mine = () => {
   const queryClient = useQueryClient();
@@ -52,11 +54,11 @@ export const Mine = () => {
   const { mutateAsync: emailVerfiy } = useEmailVerify(BASE_URL || '');
   const { mutateAsync: modify } = useModifyInfo();
   const [languageList, setLanguageList] = useState<{ label: string; value: string }[]>([]);
-
+  const { setUser } = useUserStore();
   const myInfo = data?.data.result;
   const myRanking = ranking?.data.result;
 
-  const aiReviewCnt = aiReview?.data.result.reviewToken;
+  const aiReviewCnt = aiReview?.data.result?.reviewToken;
   const levelCalculator = (count: number) => {
     if (count === 0) {
       return 0;
@@ -108,7 +110,13 @@ export const Mine = () => {
                   setTab('modify');
                 } else {
                   if (editForm.nickname.length < 1) {
-                    alert('닉네임을 확인해주세요.');
+                    toast.error('닉네임을 확인해주세요.', {
+                      richColors: true,
+                      style: {
+                        fontWeight: 'bold',
+                        fontSize: '16px',
+                      },
+                    });
                     return;
                   }
 
@@ -126,8 +134,19 @@ export const Mine = () => {
                     request: body,
                     image: editForm.profileImage ?? undefined,
                   });
-
-                  alert(response.message);
+                  // setUser()
+                  console.log(response);
+                  setUser(response.result);
+                  toast.success(response.message, {
+                    richColors: false,
+                    style: {
+                      background: '#00d084',
+                      color: '#ffffff',
+                      fontWeight: 'bold',
+                      fontSize: '16px',
+                      border: 'none',
+                    },
+                  });
                   if (response.status === 200) {
                     queryClient.invalidateQueries({ queryKey: ['my-info'] });
                     setTab('info');
@@ -255,7 +274,16 @@ export const Mine = () => {
                       label="이메일 인증"
                       onClick={async () => {
                         const response = await emailVerfiy();
-                        alert(response);
+                        toast.success(response, {
+                          richColors: false,
+                          style: {
+                            background: '#00d084',
+                            color: '#ffffff',
+                            fontWeight: 'bold',
+                            fontSize: '16px',
+                            border: 'none',
+                          },
+                        });
                       }}
                     />
                   )}

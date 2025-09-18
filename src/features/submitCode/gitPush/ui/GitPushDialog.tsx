@@ -14,13 +14,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useEffect, useState } from 'react';
 import { Select } from '@/shared/ui/select/Select';
 
-interface GitPushDialogProps {
-  githubUrl: string | null;
-}
-export default function GitPushDialog({ githubUrl }: GitPushDialogProps) {
+export default function GitPushDialog({}) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [gitPushStatus, setGitPushStatus] = useState<string | null>(null);
   const [isToolTipOpen, setIsToolTipOpen] = useState<true | undefined>(undefined);
+  const storageData = localStorage.getItem('user-storage');
+  const githubUrl = storageData ? JSON.parse(storageData).state.user.githubUrl : null;
 
   const {
     pushAutoToggle,

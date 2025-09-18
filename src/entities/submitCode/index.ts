@@ -9,7 +9,6 @@ export type { ISubmissionReviewRequest } from './submission/model/mutation/submi
 export type { ISubmissionReviewResponse } from './submission/model/mutation/submitCode.mutation.type';
 
 /**git push */
-export { getGitHubUrl } from './gitpush/actions/getGitHub';
 export { useGitPushAutoToggleMutation } from './gitpush/model/mutation/gitpush.mutation';
 export { useGitRepoChoice } from './gitpush/model/mutation/gitpush.mutation';
 export { useGetGitHubRepo } from './gitpush/model/query/gitpush.query';

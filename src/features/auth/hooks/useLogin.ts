@@ -1,11 +1,13 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+
 import ApiHelper from '@/api/client/api';
 import { API_URL } from '@/api/constants/api.constants';
 import { useUserStore } from '@/entities/user/model/store';
 import { IMyInfo } from '@/entities/mypage/model/types';
+import Cookies from 'js-cookie';
+import { toast } from 'sonner';
 /**
  * @description 로그인 상태 관리 hook
  * @returns
@@ -13,8 +15,6 @@ import { IMyInfo } from '@/entities/mypage/model/types';
 const useLogin = (onLoginSuccess?: () => void) => {
   const { setUser } = useUserStore((state) => state);
   const router = useRouter();
-  /**로그인 검증은 통과했지만, 에러가 있을때*/
-  const [requestError, setRequestError] = useState<string | null>(null);
   /** 비밀번호 표시 정보 */
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   /** 비밀번호 표시 함수 */
@@ -25,21 +25,49 @@ const useLogin = (onLoginSuccess?: () => void) => {
   /** 로그인 클릭 함수 */
   const handleSignInClick = async (data: Record<string, unknown>) => {
     try {
-      const result = await signIn('credentials', {
-        ...data,
-        redirect: false,
-      });
-      console.log('result', result);
+      // setErrorMessage('');
+      // const result = await signIn('credentials', {
+      //   email: loginInfo.email,
+      //   password: loginInfo.password,
+      //   redirect: false,
+      // });
+      // console.log('result', result);
 
-      if (result?.error) {
-        setRequestError(result.error);
+      // if (result?.error) {
+      //   handleSignInError(result.error);
+      //   return;
+      // }
+      const result = await ApiHelper.post<{ accessToken: string; refreshToken: string }>(
+        API_URL.AUTH.SIGN_IN,
+        {
+          email: data.email,
+          password: data.password,
+        }
+      );
+      if (result.data.status !== 200) {
+        // API가 실패 응답을 준 경우
+        toast.error(result.data.message || '로그인에 실패했습니다.', {
+          richColors: false,
+          style: {
+            fontWeight: 'bold',
+            fontSize: '16px',
+          },
+        });
         return;
       }
-      if (result?.ok) {
+      if (result.data.status === 200) {
+        Cookies.set('accessToken', result.data.result.accessToken.split(' ')[1], {
+          path: '/', // 전체 경로에서 사용
+          secure: true, // HTTPS에서만
+          sameSite: 'lax', // 기본 보안
+        });
+        Cookies.set('refreshToken', result.data.result.refreshToken, {
+          path: '/', // 전체 경로에서 사용
+          secure: true, // HTTPS에서만
+          sameSite: 'lax', // 기본 보안
+        });
         const response = await ApiHelper.get<IMyInfo>(API_URL.MYPAGE.USER_INFO);
         if (response.data.status === 200) {
-          console.log('???');
-          console.log(response.data.result);
           setUser(response.data.result);
         }
         if (onLoginSuccess) {
@@ -48,8 +76,24 @@ const useLogin = (onLoginSuccess?: () => void) => {
           router.push('/');
         }
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      if (err && typeof err === 'object' && 'message' in err) {
+        toast.error((err as { message: string }).message || '로그인에 실패했습니다.', {
+          richColors: false,
+          style: {
+            fontWeight: 'bold',
+            fontSize: '16px',
+          },
+        });
+      } else {
+        toast.error('알 수 없는 오류가 발생했습니다.', {
+          richColors: false,
+          style: {
+            fontWeight: 'bold',
+            fontSize: '16px',
+          },
+        });
+      }
     }
   };
 
@@ -57,7 +101,7 @@ const useLogin = (onLoginSuccess?: () => void) => {
     handleSignInClick,
     handlePasswordVisible,
     isPasswordVisible,
-    requestError,
+    // errorMessage,
   };
 };
 

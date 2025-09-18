@@ -6,14 +6,12 @@ import { BASE_URL } from '@/constants/env';
 import { sharedStompRef } from '@/shared/lib/stomp/sharedStompRef';
 import { useEffect } from 'react';
 import { useProblemWebSocketStoreActions } from '../model/useProblemWebSocketStore';
-import { useSession } from 'next-auth/react';
-
+import Cookies from 'js-cookie';
 export default function useConnectProblemWebSocket() {
   const problemStompRef = sharedStompRef;
 
   const { clearStore, setIsConnected } = useProblemWebSocketStoreActions();
-  const { data: session } = useSession();
-  const accessToken = session?.accessToken?.split(' ')[1] as string;
+  const accessToken = Cookies.get('accessToken');
 
   useEffect(() => {
     if (!accessToken) {

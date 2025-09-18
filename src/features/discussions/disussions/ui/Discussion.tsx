@@ -49,6 +49,7 @@ export default function Discussion({ discussion, id }: IDiscussionContentProps) 
               onDelete={() => setIsDeleteModalOpen(true)}
               onEdit={() => setIsEdit(true)}
               id={discussionId}
+              type="discussion"
               variant="POST"
             />
           </>

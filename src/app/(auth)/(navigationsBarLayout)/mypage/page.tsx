@@ -19,10 +19,11 @@ const Mypage = () => {
     inquiry: <Inquiry />,
   } as const;
 
-  const tabComponents = ['GOOGLE'].includes('EMAIL')
+  // 소셜로그인은 비밀번호 변경 탭 안보이게
+  const tabComponents = data?.data.result.userAuthTypes.includes('EMAIL')
     ? { ...baseTabs, password: <ChangePassword /> }
     : baseTabs;
-
+  console.log(data);
   return (
     <div className="w-full  flex h-full">
       <SideNavigation tab={tab} setTab={setTab} authType={data?.data.result?.userAuthTypes || []} />

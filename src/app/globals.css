@@ -13,6 +13,7 @@
   --color-border_primary: #a4a1aa;
 
   --color-gray700: #364153;
+  --color-gray500: #888;
   --color-active: #1e3e2c;
 }
 
@@ -24,23 +25,20 @@
 }
 
 @layer {
+  * {
+    font-family: 'NanumSquare';
+  }
   html {
     height: 100%;
   }
 
   body {
     height: 100%;
-    font-family: 'NanumSquare';
     color: var(--color-white);
     background-color: var(--color-background);
   }
-  table,
-  th,
-  td {
-    font-family: 'NanumSquare';
-  }
+
   button {
-    font-family: 'NanumSquare';
     cursor: pointer;
   }
 
@@ -61,6 +59,10 @@
     caret-color: var(--color-gray100) !important;
   }
 
+  textarea:focus,
+  textarea:focus-visible {
+    outline: none;
+  }
   /* 스크롤바 전체 스타일 */
   ::-webkit-scrollbar {
     width: 5px; /* 스크롤바 너비 */

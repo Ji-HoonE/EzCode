@@ -104,3 +104,29 @@ export type IModifyBody = {
   age: number;
   languageId: number | null;
 };
+
+
+
+export interface IUserInfoModifyResponse {
+  age: number;
+  blogUrl: string;
+  email: string;
+  githubUrl: string;
+  introduction: string;
+  language: Language;
+  nickname: string;
+  profileImageUrl: string;
+  tier: string;
+  totalSolvedCount: number;
+  userAuthTypes: string[]
+  userRole: string;
+  username: string;
+  verified: boolean;
+}
+
+export interface Language {
+  id: number;
+  judge0Id: number;
+  name: string;
+  version: string;
+}

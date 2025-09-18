@@ -7,30 +7,23 @@ import UserProfile from '@/shared/ui/userProfile';
 import { useRouter } from 'next/navigation';
 import { PATHS } from '@/constants/paths';
 import { useLogoutMutation } from '@/entities/auth/model/mutation/auth.mutation';
-import { useSession } from 'next-auth/react';
+
 import Notifications from './Notifications';
 import { useUserStore } from '@/entities/user/model/store';
-import { useEffect } from 'react';
 
 export default function AuthActions() {
-  const { data: session } = useSession();
-
   const router = useRouter();
   const { mutateAsync } = useLogoutMutation();
   const { user } = useUserStore((state) => state);
-
-  const accessToken = session?.accessToken?.split(' ')[1] as string;
 
   const selectOption = (value: string) => {
     if (value === 'mypage') return router.push(PATHS.MYPAGE);
     if (value === 'logout') return mutateAsync();
   };
-  useEffect(() => {
-    console.log('user', user);
-  }, [user]);
+
   return (
     <div className="flex items-center space-x-4">
-      {accessToken ? (
+      {user ? (
         <div className="flex flex-row gap-4 items-center">
           <Notifications />
           <Select
@@ -39,6 +32,7 @@ export default function AuthActions() {
             setValue={(value) => {
               selectOption(value);
             }}
+            isHeader
             value={
               <UserProfile profileImageUrl={user?.profileImageUrl} nickname={user?.nickname} />
             }
