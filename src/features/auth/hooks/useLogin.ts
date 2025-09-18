@@ -1,5 +1,4 @@
 'use client';
-import { ChangeEvent } from 'react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -16,36 +15,15 @@ import { toast } from 'sonner';
 const useLogin = (onLoginSuccess?: () => void) => {
   const { setUser } = useUserStore((state) => state);
   const router = useRouter();
-  /** 로그인 정보 */
-  const [loginInfo, setLoginInfo] = useState({
-    email: '',
-    password: '',
-  });
-
   /** 비밀번호 표시 정보 */
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
-  /** 로그인 에러 정보*/
-  // const [errorMessage, setErrorMessage] = useState('');
-
-  /** 로그인 정보 변경 함수 */
-  const handleChangeLoginInfo = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setLoginInfo((prev) => ({ ...prev, [name]: value }));
-  };
-
   /** 비밀번호 표시 함수 */
   const handlePasswordVisible = () => {
     setIsPasswordVisible((prev) => !prev);
   };
 
-  /** 로그인 에러 함수 */
-  // const handleSignInError = (pError: string) => {
-  //   setErrorMessage(pError);
-  // };
-
   /** 로그인 클릭 함수 */
-  const handleSignInClick = async () => {
+  const handleSignInClick = async (data: Record<string, unknown>) => {
     try {
       // setErrorMessage('');
       // const result = await signIn('credentials', {
@@ -62,8 +40,8 @@ const useLogin = (onLoginSuccess?: () => void) => {
       const result = await ApiHelper.post<{ accessToken: string; refreshToken: string }>(
         API_URL.AUTH.SIGN_IN,
         {
-          email: loginInfo.email,
-          password: loginInfo.password,
+          email: data.email,
+          password: data.password,
         }
       );
       if (result.data.status !== 200) {
@@ -89,7 +67,6 @@ const useLogin = (onLoginSuccess?: () => void) => {
           sameSite: 'lax', // 기본 보안
         });
         const response = await ApiHelper.get<IMyInfo>(API_URL.MYPAGE.USER_INFO);
-        console.log('weafwefwaef', response);
         if (response.data.status === 200) {
           setUser(response.data.result);
         }
@@ -121,8 +98,6 @@ const useLogin = (onLoginSuccess?: () => void) => {
   };
 
   return {
-    loginInfo,
-    handleChangeLoginInfo,
     handleSignInClick,
     handlePasswordVisible,
     isPasswordVisible,
