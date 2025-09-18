@@ -11,8 +11,7 @@ interface SignInFormProps {
 }
 const SignInForm = ({ onLoginSuccess }: SignInFormProps) => {
   const router = useRouter();
-  const { handleSignInClick, handlePasswordVisible, isPasswordVisible, requestError } =
-    useLogin(onLoginSuccess);
+  const { handleSignInClick, handlePasswordVisible, isPasswordVisible } = useLogin(onLoginSuccess);
 
   const methods = useZodForm(SIGNIN_ZOD_SCHEMA, ['email', 'password']);
 
@@ -53,16 +52,16 @@ const SignInForm = ({ onLoginSuccess }: SignInFormProps) => {
         </label> */}
           <button
             type="button"
-            className="text-[#00d084] hover:underline"
+            className="text-secondary hover:underline"
             onClick={() => router.push('/find/password')}
           >
             비밀번호 찾기
           </button>
         </div>
-        {requestError && <p className="text-red-500 text-sm">{requestError}</p>}
+        {/* {requestError && <p className="text-red-500 text-sm">{requestError}</p>} */}
         <button
           type="button"
-          className="w-full bg-[#214d35] text-white py-3 rounded-[10px] font-medium hover:bg-[#276e48] active:bg-[#1e3e2c] active:scale-[0.98] transition-all duration-200 shadow-lg hover:shadow-xl"
+          className="w-full bg-primary text-white py-3 rounded-[10px] font-medium hover:bg-hover-primary active:bg-active active:scale-[0.98] transition-all duration-200 shadow-lg hover:shadow-xl"
           onClick={handleSubmit}
         >
           로그인
