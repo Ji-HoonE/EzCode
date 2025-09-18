@@ -1,5 +1,5 @@
 import { M } from '@/shared/lib/zod/messages';
-import { EMAIL, Name, PASSWORD, PASSWORD_CHECK } from '@/shared/lib/zod/primitives';
+import { EMAIL, NAME, PASSWORD, PASSWORD_CHECK } from '@/shared/lib/zod/primitives';
 import { z } from 'zod';
 
 /**로그인 스키마 */
@@ -19,7 +19,7 @@ export type TSignupSchemaRegister = z.infer<typeof SIGNUP_ZOD_SCHEMA>;
 
 export const SIGNUP_ZOD_SCHEMA = z
   .object({
-    name: Name,
+    name: NAME,
     email: EMAIL,
     password: PASSWORD,
     passwordCheck: PASSWORD_CHECK,

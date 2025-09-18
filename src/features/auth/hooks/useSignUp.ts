@@ -1,7 +1,7 @@
 'use client';
 import { API_CONSTANTS } from '@/api/constants/api.constants';
 import { useSignUpMutation } from '@/entities/auth/model/mutation/auth.mutation';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { useAuthStore } from '../store/authSlice';
 import { useShallow } from 'zustand/shallow';
 import { toast } from 'sonner';
@@ -20,17 +20,17 @@ const useSignUp = () => {
   const { mutateAsync } = useSignUpMutation();
 
   /** 회원가입 정보 */
-  const [signUpInfo, setSignUpInfo] = useState({
-    email: '',
-    password: '',
-    passwordConfirm: '',
-    username: '',
-    nickname: '',
-    age: 0,
-  });
+  // const [signUpInfo, setSignUpInfo] = useState({
+  //   email: '',
+  //   password: '',
+  //   passwordConfirm: '',
+  //   username: '',
+  //   nickname: '',
+  //   age: 0,
+  // });
 
   /** 회원가입 에러 메시지 */
-  const [errorMessage, setErrorMessage] = useState('');
+  // const [errorMessage, setErrorMessage] = useState('');
 
   /** 비밀번호 보여주기 상태 */
   const [showPassword, setShowPassword] = useState(false);
@@ -39,34 +39,29 @@ const useSignUp = () => {
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   /** 회원가입 정보 변경 함수 */
-  const handleChangeSignUpInfo = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setSignUpInfo((prev) => ({ ...prev, [name]: value }));
-  };
+  // const handleChangeSignUpInfo = (e: ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target;
+  //   setSignUpInfo((prev) => ({ ...prev, [name]: value }));
+  // };
 
   /** 회원가입 에러 함수 */
-  const handleSignUpError = (pError: string) => {
-    setErrorMessage(pError);
-  };
+  // const handleSignUpError = (pError: string) => {
+  //   setErrorMessage(pError);
+  // };
 
   /** 회원가입 클릭 함수 */
-  const handleSignUpClick = async () => {
+  const handleSignUpClick = async (data: Record<string, unknown>) => {
     try {
-      setErrorMessage('');
-      const response = await mutateAsync(signUpInfo);
-      if (response.data.status !== API_CONSTANTS.CODE.CREATED) {
-        handleSignUpError(response.data.message);
-        return;
-      }
+      // setErrorMessage('');
+      const response = await mutateAsync({
+        email: data.email as string,
+        password: data.password as string,
+        passwordConfirm: data.passwordCheck as string,
+        username: data.name as string,
+        nickname: '',
+        age: 0,
+      });
       if (response.data.status === API_CONSTANTS.CODE.CREATED) {
-        setSignUpInfo({
-          email: '',
-          password: '',
-          passwordConfirm: '',
-          username: '',
-          nickname: '',
-          age: 0,
-        });
         toast.success('회원가입에 완료', {
           richColors: false,
           style: {
@@ -78,12 +73,26 @@ const useSignUp = () => {
           },
         });
         setActiveTab('login');
+      } else {
+        toast.error(response.data.message || '로그인에 실패했습니다.', {
+          richColors: false,
+          style: {
+            fontWeight: 'bold',
+            fontSize: '16px',
+          },
+        });
+        return;
       }
     } catch (err) {
-      console.error(err);
+      toast.error('알 수 없는 오류가 발생했습니다.', {
+        richColors: false,
+        style: {
+          fontWeight: 'bold',
+          fontSize: '16px',
+        },
+      });
     }
   };
-
   /** 비밀번호 보이기/숨기기 토글 함수 */
   const handlePasswordVisible = () => {
     setShowPassword(!showPassword);
@@ -92,16 +101,15 @@ const useSignUp = () => {
   const handlePasswordConfirmVisible = () => {
     setShowPasswordConfirm(!showPasswordConfirm);
   };
-
   return {
-    signUpInfo,
-    handleChangeSignUpInfo,
+    // signUpInfo,
+    // handleChangeSignUpInfo,
     handleSignUpClick,
     handlePasswordVisible,
     handlePasswordConfirmVisible,
     showPassword,
     showPasswordConfirm,
-    errorMessage,
+    // errorMessage,
   };
 };
 
