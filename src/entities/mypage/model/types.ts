@@ -31,8 +31,8 @@ export interface DailySolved {
   dailySolvedCounts: {
     date: string;
     count: number;
+     problemIds : number[]
   }[];
-  userId: number;
 }
 
 export interface IHeatmapItem {

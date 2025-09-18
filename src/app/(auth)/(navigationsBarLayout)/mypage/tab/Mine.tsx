@@ -134,8 +134,7 @@ export const Mine = () => {
                     request: body,
                     image: editForm.profileImage ?? undefined,
                   });
-                  // setUser()
-                  console.log(response);
+
                   setUser(response.result);
                   toast.success(response.message, {
                     richColors: false,

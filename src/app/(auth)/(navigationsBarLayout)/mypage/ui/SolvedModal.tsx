@@ -2,6 +2,7 @@ import { AlertDialogHeader } from '@/components/ui/alert-dialog';
 
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { SubmissionsResonse } from '@/entities/mypage/model/types';
+import MarkdownRenderer from '@/shared/mdx/MdxRenderer';
 import { Button } from '@/shared/ui/button/Button';
 import { useRouter } from 'next/navigation';
 
@@ -40,7 +41,10 @@ export const SolvedModal = ({
           <div className="flex flex-row gap-1">
             <span className="w-25 shrink-0">설명</span>
 
-            <span className="whitespace-pre-line">{data?.problemDescription}</span>
+            {/* <span className="whitespace-pre-line">{}</span> */}
+            <div className="flex flex-col">
+              <MarkdownRenderer source={data?.problemDescription} />
+            </div>
           </div>
           <div className="flex flex-col gap-1 ">
             {data?.submissions.map((item, index) => {

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { SkeletonBox } from '@/shared/ui/loading-indicators';
 import { ProblemsContent } from '@/entities/problems/model/types';
-import { useSubmissionList } from '@/entities/mypage/model/query';
+import { useMyDailySolved, useSubmissionList } from '@/entities/mypage/model/query';
 import { CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Cookies from 'js-cookie';
@@ -57,7 +57,7 @@ export default function ProblemTable({
   const router = useRouter();
   const [pageGroupStart, setPageGroupStart] = useState<number>(0); // 0-based group start
   const [myProblemsList, setMyProblemsList] = useState<number[]>([]);
-  const { data: myProblems } = useSubmissionList();
+  const { data: myProblems } = useMyDailySolved();
   // const { data: session } = useSession();
   const token = Cookies.get('accessToken');
 
@@ -65,10 +65,22 @@ export default function ProblemTable({
     setMyProblemsList([]);
     // if (!session) return;
     if (!token) return;
-    console.log('123');
+
     if (!myProblems) return;
-    myProblems.result.forEach((item) => setMyProblemsList((prev) => [...prev, item.problemId]));
+    // myProblems.forEach((item) => setMyProblemsList((prev) => [...prev, item.problemId]));
+    // myProblems.data.result.dailySolvedCounts.map((item) =>
+    //   item.problems.map((item2) => console.log(item2))
+    // );
+    const solved = Array.from(
+      new Set(myProblems.data.result.dailySolvedCounts.flatMap((item) => item.problemIds))
+    );
+    console.log(myProblems.data.result.dailySolvedCounts);
+    setMyProblemsList(solved); // 하나의 배열에 담김
   }, [myProblems, token]);
+
+  useEffect(() => {
+    console.log(myProblemsList);
+  }, [myProblemsList]);
 
   // currentPage가 page group 범위를 벗어나면 group start 재조정
   useEffect(() => {
