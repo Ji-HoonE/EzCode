@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { SkeletonBox } from '@/shared/ui/loading-indicators';
 import { ProblemsContent } from '@/entities/problems/model/types';
-import { useMyDailySolved, useSubmissionList } from '@/entities/mypage/model/query';
+import { useMyDailySolved } from '@/entities/mypage/model/query';
 import { CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Cookies from 'js-cookie';
