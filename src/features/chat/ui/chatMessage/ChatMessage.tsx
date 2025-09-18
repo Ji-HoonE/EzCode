@@ -9,7 +9,7 @@ export default function ChatMessage({ msg, userNickname }: IChatMessageProps) {
   return (
     <li className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}>
       <div className={`max-w-[70%] ${isOwn ? 'order-2' : 'order-1'}`}>
-        <p className={`text-sm ${isOwn ? 'text-right' : 'text-left'}`}>{userNickname}</p>
+        <p className={`text-sm ${isOwn ? 'text-right' : 'text-left'}`}>{msg.name}</p>
 
         <div
           className={`px-4 py-2 rounded-[14px] ${isOwn ? 'bg-primary ' : 'bg-secondary-background '}`}
