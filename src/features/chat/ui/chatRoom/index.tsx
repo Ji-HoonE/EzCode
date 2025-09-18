@@ -25,8 +25,6 @@ export default function ChatRoom({ roomId, roomTitle }: ChatProps) {
   //   setIsLeaved(false);
   // }, [roomId]);
 
-  // 방이 바뀔 때(입장) 즉시 하단으로 이동
-
   useEffect(() => {
     if (endRef.current) {
       endRef.current.scrollIntoView({ behavior: 'instant' });
