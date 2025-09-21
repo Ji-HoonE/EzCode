@@ -30,8 +30,7 @@ export default function Discussions({ problemId }: IDiscussionProps) {
     { label: '인기순', value: '인기순' },
     { label: '최신순', value: '최신순' },
     { label: '추천순', value: '추천순' },
-  ];
-
+  ] as const;
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && hasNextPage) {
@@ -87,7 +86,7 @@ export default function Discussions({ problemId }: IDiscussionProps) {
           <p>토론 목록을 불러오는데 실패했습니다.</p>
         ) : (
           <div className="flex flex-col w-full">
-            <Select
+            {/* <Select
               option={sortOptions}
               title="정렬"
               value={params.sort}
@@ -95,7 +94,21 @@ export default function Discussions({ problemId }: IDiscussionProps) {
                 const typedValue = value as sortType;
                 setParams((prev) => ({ ...prev, sort: typedValue, sortBy: typedValue }));
               }}
-            />
+            /> */}
+            <div className="flex flex-row gap-1">
+              {sortOptions.map((item) => {
+                return (
+                  <span
+                    className={`${item.value === params.sort ? `text-secondary` : ``}`}
+                    onClick={() => {
+                      setParams((prev) => ({ ...prev, sort: item.label, sortBy: item.label }));
+                    }}
+                  >
+                    {item.label}
+                  </span>
+                );
+              })}
+            </div>
             {discussions.length < 1 ? (
               <div className="flex justify-center text-[#ccc] mt-3">
                 아직 해당문제의 토론글이 없습니다.
