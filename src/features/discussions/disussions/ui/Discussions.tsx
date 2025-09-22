@@ -3,10 +3,8 @@ import { ProblemId } from '@/shared';
 import Discussion from './Discussion';
 import { BouncingDots, Spinner } from '@/shared/ui/loading-indicators';
 import DiscussionForm from './DiscussionForm';
-import { Select } from '@/shared/ui/select/Select';
 import { useEffect, useRef, useState } from 'react';
 import { useInfiniteDiscussionsQuery } from '@/entities/discussions';
-import { sortType } from '@/shared/model/query/paramsQueryKey';
 import { useDiscussionParams } from '../model/Discussion.sort.context';
 import { useSearchParams } from 'next/navigation';
 
@@ -54,7 +52,7 @@ export default function Discussions({ problemId }: IDiscussionProps) {
     if (discussionId) {
       setTargetId(discussionId);
     }
-  }, [searchParams]);
+  }, [searchParams, discussionId]);
 
   useEffect(() => {
     if (!targetId) return;
@@ -99,6 +97,7 @@ export default function Discussions({ problemId }: IDiscussionProps) {
               {sortOptions.map((item) => {
                 return (
                   <span
+                    key={item.value}
                     className={`${item.value === params.sort ? `text-secondary` : ``}`}
                     onClick={() => {
                       setParams((prev) => ({ ...prev, sort: item.label, sortBy: item.label }));

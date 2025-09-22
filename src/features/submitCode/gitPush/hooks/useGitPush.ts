@@ -38,7 +38,6 @@ export default function useGitPush(githubUrl: string | null) {
       }));
       setReposOptions(options);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userRepos, currentGitPushData]);
 
   useEffect(() => {
