@@ -1,24 +1,22 @@
 'use client';
-import { RefObject, useEffect } from 'react';
-import { ChatRoomId } from '../../types';
+import { useEffect } from 'react';
 import useChatWebSocketStore, { useChatWebSocketActions } from '../../model/useChatWebSocketStore';
-import { Client } from '@stomp/stompjs';
+import { useConnectWebSocket } from '../..';
 
-export default function useLeaveChatRoom(
-  chatStompRef: RefObject<Client | null>,
-  chatroomId: ChatRoomId
-) {
-  const { isLeaveRoom } = useChatWebSocketStore();
+export default function useLeaveChatRoom() {
+  // chatStompRef: RefObject<Client | null>,
+  const { chatStompRef } = useConnectWebSocket();
+
+  const { leavedRoom } = useChatWebSocketStore();
   const { clearMessages } = useChatWebSocketActions();
 
   useEffect(() => {
-    if (chatroomId === 0 || !chatStompRef?.current || !isLeaveRoom) return;
-    console.log('퇴장 훅 실행');
+    if (leavedRoom === 0 || !chatStompRef?.current) return;
     if (chatStompRef.current?.connected) {
       try {
         chatStompRef.current.publish({
-          destination: `/chat/rooms/${chatroomId}/leave`,
-          body: String(chatroomId),
+          destination: `/chat/rooms/${leavedRoom}/left`,
+          body: String(leavedRoom),
         });
       } catch (err) {
         console.error('퇴장 메시지 전송 오류', err);
@@ -28,5 +26,5 @@ export default function useLeaveChatRoom(
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatStompRef, chatroomId, isLeaveRoom]);
+  }, [chatStompRef, leavedRoom]);
 }

@@ -13,9 +13,9 @@ const useChatWebSocketStore = create<IChatWebSocketStore>()(
           isConnected: status,
         });
       },
-      setIsLeaved: (status) => {
+      setLeavedRoom: (status) => {
         set({
-          isLeaveRoom: status,
+          leavedRoom: status,
         });
       },
 
@@ -90,7 +90,7 @@ export function useChatWebSocketActions() {
   return useChatWebSocketStore(
     useShallow((state) => ({
       setIsConnected: state.actions.setIsConnected,
-      setIsLeaved: state.actions.setIsLeaved,
+      setLeavedRoom: state.actions.setLeavedRoom,
 
       setInitRooms: state.actions.setInitRooms,
       setRooms: state.actions.setRooms,

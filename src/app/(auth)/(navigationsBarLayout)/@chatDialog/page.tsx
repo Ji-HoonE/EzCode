@@ -19,7 +19,7 @@ export default function ChatDialog({}) {
       open={!!roomId}
       onOpenChange={(open) => {
         if (!open) {
-          closeChatDialog();
+          closeChatDialog(Number(roomId));
         }
       }}
     >

@@ -17,4 +17,3 @@ export type { ProblemId } from './types/problem.type.ts';
 //lib
 
 //hooks
-export { default as useAccessToken } from './hooks/useAuthToken';
