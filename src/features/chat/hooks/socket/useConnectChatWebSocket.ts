@@ -3,12 +3,13 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { BASE_URL } from '@/constants/env';
 import { useEffect } from 'react';
-import useAccessToken from '@/shared/hooks/useAuthToken';
+// import useAccessToken from '@/shared/hooks/useAuthToken';
 import { sharedStompRef } from '@/shared/lib/stomp/sharedStompRef';
 import { useChatWebSocketActions } from '../../model/useChatWebSocketStore';
+import cookies from 'js-cookie';
 
 export default function useConnectChatWebSocket() {
-  const accessToken = useAccessToken();
+  const accessToken = cookies.get('accessToken');
   const chatStompRef = sharedStompRef;
   const { setIsConnected } = useChatWebSocketActions();
 

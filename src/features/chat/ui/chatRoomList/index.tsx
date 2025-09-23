@@ -45,7 +45,7 @@ export default function ChatRoomList({ selectedRoomId }: IChatRoomListProps) {
             })}
           </ul>
         ) : (
-          <div className="h-full absolute top-0 left-0 w-full h-full flex items-center justify-center">
+          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
             생성된 채팅방이 없습니다.
           </div>
         )}
