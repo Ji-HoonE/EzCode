@@ -7,6 +7,7 @@ import ChatMessage from '../chatMessage/ChatMessage';
 import ChatRoomHeader from './ChatRoomHeader';
 import { useMyInfoQuery } from '@/entities/mypage/model/query';
 import { useEffect, useRef } from 'react';
+import useLeaveChatRoom from '../../hooks/socket/useLeaveChatRoom';
 
 interface ChatProps {
   roomId: number;
@@ -15,15 +16,11 @@ interface ChatProps {
 
 export default function ChatRoom({ roomId, roomTitle }: ChatProps) {
   useJoinChatRoom(roomId);
+  useLeaveChatRoom();
   const { data } = useMyInfoQuery();
   const endRef = useRef<HTMLDivElement>(null);
   const nickname = data?.data.result.nickname;
   const { initMessages, realTimeMessages } = useChatWebSocketStore();
-  // const { setIsLeaved } = useChatWebSocketActions();
-
-  // useEffect(() => {
-  //   setIsLeaved(false);
-  // }, [roomId]);
 
   useEffect(() => {
     if (endRef.current) {
