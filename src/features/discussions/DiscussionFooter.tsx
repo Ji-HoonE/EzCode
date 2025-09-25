@@ -21,7 +21,7 @@ export default function DiscussionFooter({ ...props }: IDiscussionFooterProps) {
   const { problemId, replyCount, id, content, type, onDelete, onEdit, setChildRepliesOpen } = props;
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-3">
       <Vote problemId={problemId} content={content} id={id} type={type} />
       {replyCount !== undefined && (
         <ShowChildReplies onClick={() => setChildRepliesOpen?.()} replyCount={replyCount} />

@@ -31,7 +31,9 @@ export default function UnifiedInput({ inputType, label, ...props }: Props) {
       case 'input':
         return <InputTypeFiled name={name} {...rest} />;
       case 'textarea':
-        return <TextAreaTypeFiled name={name} {...rest} />;
+        return (
+          <TextAreaTypeFiled className="border-gray-800 border shadow-lg" name={name} {...rest} />
+        );
       case 'image':
         return <ImageTypeFiled name={name} imageProps={imageProps} className={rest.className} />;
       default:

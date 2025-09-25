@@ -7,39 +7,9 @@ import { useMyDailySolved } from '@/entities/mypage/model/query';
 import { CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Cookies from 'js-cookie';
+import { LevelUtil } from '@/shared/util/levelUtil';
 
 const PAGE_LIMIT = 15;
-
-const getLevelColorClass = (levelStr: string): string => {
-  if (!levelStr) return '';
-  const level = parseInt(levelStr.replace(/[^0-9]/g, ''), 10);
-  if (level <= 2) return 'text-blue-400 font-medium';
-  if (level <= 4) return 'text-yellow-400 font-medium';
-  if (level <= 6) return 'text-orange-400 font-medium';
-  return 'text-red-400 font-medium';
-};
-
-const getLevelBg = (difficulty: string) => {
-  const level = parseInt(difficulty.replace(/[^0-9]/g, ''), 10);
-  if (level <= 2) return 'bg-blue-500/20 border-blue-500/30';
-  if (level <= 4) return 'bg-yellow-500/20 border-yellow-500/30';
-  if (level <= 6) return 'bg-orange-500/20 border-orange-500/30';
-  return 'bg-red-500/20 border-red-500/30';
-};
-
-const getLevelText = (difficulty: string) => {
-  const level = parseInt(difficulty.replace(/[^0-9]/g, ''), 10);
-  const labels = {
-    1: '입문',
-    2: '초급',
-    3: '중급',
-    4: '중상급',
-    5: '고급',
-    6: '전문가',
-    7: '마스터',
-  };
-  return `${labels[level as keyof typeof labels] || '알 수 없음'} (${level}단계)`;
-};
 
 export default function ProblemTable({
   data,
@@ -179,11 +149,11 @@ export default function ProblemTable({
                       </td>
                       <td className={`px-6 py-4 text-center text-sm font-medium`}>
                         <span
-                          className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full border transition-all duration-200 hover:scale-105 ${getLevelBg(
+                          className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full border transition-all duration-200 hover:scale-105 ${LevelUtil.getLevelBg(
                             item.difficulty
-                          )} ${getLevelColorClass(item.difficulty)}`}
+                          )} ${LevelUtil.getLevelColorClass(item.difficulty)}`}
                         >
-                          {getLevelText(item.difficulty)}
+                          {LevelUtil.getLevelText(item.difficulty)}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-center text-sm text-gray-300 ">

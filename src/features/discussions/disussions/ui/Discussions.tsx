@@ -94,19 +94,29 @@ export default function Discussions({ problemId }: IDiscussionProps) {
               }}
             /> */}
             <div className="flex flex-row gap-1">
-              {sortOptions.map((item) => {
-                return (
-                  <span
-                    key={item.value}
-                    className={`${item.value === params.sort ? `text-secondary` : ``}`}
-                    onClick={() => {
-                      setParams((prev) => ({ ...prev, sort: item.label, sortBy: item.label }));
-                    }}
-                  >
-                    {item.label}
-                  </span>
-                );
-              })}
+              <div className="flex flex-row gap-1 mb-4 bg-secondary-background rounded-[10px] p-1">
+                {sortOptions.map((item) => {
+                  const isActive = item.value === params.sort;
+                  return (
+                    <button
+                      key={item.value}
+                      className={`
+                      flex-1 py-3 px-6 rounded-[10px] font-medium transition-all duration-200
+                      ${
+                        isActive
+                          ? 'bg-[#214d35] text-white shadow-lg'
+                          : 'text-white hover:bg-[rgba(255,255,255,0.08)] hover:text-secondary'
+                      }
+                    `}
+                      onClick={() => {
+                        setParams((prev) => ({ ...prev, sort: item.label, sortBy: item.label }));
+                      }}
+                    >
+                      {item.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
             {discussions.length < 1 ? (
               <div className="flex justify-center text-[#ccc] mt-3">

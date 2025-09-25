@@ -4,6 +4,7 @@ import { IDetailProblemResponse } from '../api/server/getDetailProblem.type';
 import Arrow from '@/shared/ui/icons/arrow-icon';
 import Image from 'next/image';
 import MarkdownRenderer from '@/shared/mdx/MdxRenderer';
+import { LevelUtil } from '@/shared/util/levelUtil';
 
 interface IDetailProblemProps {
   detailProblem: IDetailProblemResponse;
@@ -31,7 +32,13 @@ export default function DetailProblem({ detailProblem }: IDetailProblemProps) {
         <div className="flex gap-4 items-center">
           <span className="text-gray-400">배점 : {score}점</span>
           <div className="flex gap-2 items-center">
-            <span className="text-[#FFCFA7]">{difficulty}</span>
+            <span
+              className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full border transition-all duration-200 ${LevelUtil.getLevelBg(
+                difficulty
+              )} ${LevelUtil.getLevelColorClass(difficulty)}`}
+            >
+              {LevelUtil.getLevelText(difficulty)}
+            </span>
             {categories && categories.length > 0 && (
               <>
                 <Arrow direction="right" className="text-white" />

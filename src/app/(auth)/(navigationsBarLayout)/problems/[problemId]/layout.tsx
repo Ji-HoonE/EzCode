@@ -17,7 +17,7 @@ export default async function ProblemPageLayout({
         <TabsToggle problemId={problemId} />
         {tabs}
       </menu>
-      <div className="w-[1px] h-full bg-border_primary" />
+      <div className="w-[1px] h-full border border-gray-800" />
       <div className="flex-1 w-full h-full">{children}</div>
     </main>
   );

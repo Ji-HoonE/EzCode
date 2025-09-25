@@ -6,6 +6,7 @@ import ProblemTable from './ui/Table';
 import { useProblemListQuery } from '@/entities/problems/model/query';
 import { Select } from '@/shared/ui/select/Select';
 import { Button } from '@/shared/ui/button/Button';
+import { LevelUtil } from '@/shared/util/levelUtil';
 
 const categoryCodeOptions = [
   { label: '출력', value: 'OUTPUT' },
@@ -200,7 +201,7 @@ const ProblemsList = () => {
               )}
               {difficulty !== '전체' && difficulty && (
                 <div
-                  className={`flex flex-row gap-2 items-center px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200`}
+                  className={`flex flex-row gap-2 items-center px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 border ${LevelUtil.getLevelBg(difficulty)} ${LevelUtil.getLevelColorClass(difficulty)}`}
                 >
                   <span>{difficultyOptions.find((item) => item.value === difficulty)?.label}</span>
                   <Image

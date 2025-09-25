@@ -54,7 +54,7 @@ export default function Vote({ content, problemId, id, type }: IVoteProps) {
             changeVoteStatus('UP');
           }}
         />
-        {voteCount.upvoteCount}
+        <p className="pt-[4px]">{voteCount.upvoteCount}</p>
       </div>
       <div className="flex items-center gap-1">
         <DownVoteIcon
@@ -63,7 +63,7 @@ export default function Vote({ content, problemId, id, type }: IVoteProps) {
             changeVoteStatus('DOWN');
           }}
         />
-        {voteCount.downvoteCount}
+        <p className="pt-[4px]">{voteCount.downvoteCount}</p>
       </div>
     </>
   );
