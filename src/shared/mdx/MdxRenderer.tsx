@@ -17,7 +17,9 @@ export default function MarkdownRenderer({ source }: Props) {
           <h3 className="text-md font-semibold text-secondary mt-3" {...props} />
         ),
         strong: ({ ...props }) => <strong className="font-bold text-md" {...props} />,
-        li: ({ ...props }) => <li className="ml-3" style={{ listStyleType: 'disc' }} {...props} />,
+        li: ({ ...props }) => (
+          <li style={{ listStyleType: 'disc', listStylePosition: 'inside' }} {...props} />
+        ),
       }}
     >
       {source}

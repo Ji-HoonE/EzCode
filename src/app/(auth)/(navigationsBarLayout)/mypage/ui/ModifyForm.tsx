@@ -65,6 +65,7 @@ export const ModifyForm = ({
                   ? URL.createObjectURL(editForm.profileImage)
                   : editForm.profileImageUrl || '/icons/mypage/defaultImg.svg'
               }
+              unoptimized
               onClick={() => {
                 handleImageClick();
               }}

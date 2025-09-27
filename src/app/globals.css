@@ -160,3 +160,15 @@
   --sidebar-border: #214d35;
   --sidebar-ring: #00d084;
 }
+
+.cm-editor {
+  border-radius: 10px;
+}
+
+.cm-gutters {
+  border-radius: 10px 0 0 10px !important;
+}
+
+.cm-gutter.cm-lineNumbers {
+  border-radius: 10px 0 0 10px !important;
+}

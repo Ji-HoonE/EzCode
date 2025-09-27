@@ -129,7 +129,7 @@ export default function RankingPage() {
           </div>
         </div>
         <div className="flex justify-end mb-2">
-          <span className="text-sm font-medium">랭킹 1시간마다 갱신 됩니다.</span>
+          <span className="text-sm font-medium">랭킹은 1시간마다 갱신 됩니다.</span>
         </div>
         {/* Ranking Table */}
         <div className="bg-[#1a2332] rounded-2xl shadow-2xl overflow-hidden border border-gray-800">

@@ -23,6 +23,7 @@ export default function RenderImageContent({
           fill
           className={cn('object-cover absolute')}
           alt="preview-image"
+          unoptimized
         />
       ) : previewImage ? (
         <Image
@@ -30,6 +31,7 @@ export default function RenderImageContent({
           fill
           className={cn('object-contain absolute')}
           alt="preview-image"
+          unoptimized
         />
       ) : (
         <div className="absolute flex flex-col gap-2 items-center justify-center w-full h-full">

@@ -61,9 +61,8 @@ export default function DetailProblem({ detailProblem }: IDetailProblemProps) {
           <h4 className="text-secondary mt-1">
             <strong>입출력 예시</strong>
           </h4>
-          {testcases.map((testCase, idx) => (
+          {testcases.map((testCase) => (
             <div key={testCase.id} className="gap-2 p-1 bg-[#1a2332] rounded-lg w-full">
-              <p>예시 ({idx + 1})</p>
               <div className="flex gap-4">
                 <div className="flex flex-1 flex-col gap-2">
                   <span>입력</span>
@@ -84,7 +83,7 @@ export default function DetailProblem({ detailProblem }: IDetailProblemProps) {
       )}
       {imageUrl && (
         <div className="w-full h-60 relative">
-          <Image src={imageUrl} alt="문제예시이미지" fill className="object-contain" />
+          <Image src={imageUrl} alt="문제예시이미지" fill className="object-contain" unoptimized />
         </div>
       )}
       <hr className="w-full h-[1px] bg-background" />

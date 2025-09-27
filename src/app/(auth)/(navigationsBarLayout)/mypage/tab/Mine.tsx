@@ -172,7 +172,13 @@ export const Mine = () => {
                 {/* 프로필 사진 */}
 
                 {myInfo?.profileImageUrl ? (
-                  <Image alt="my" width={150} height={150} src={myInfo.profileImageUrl} />
+                  <Image
+                    alt="my"
+                    width={150}
+                    height={150}
+                    src={myInfo.profileImageUrl}
+                    unoptimized
+                  />
                 ) : (
                   <Image width={150} height={150} src="/icons/mypage/defaultImg.svg" alt="my" />
                 )}
