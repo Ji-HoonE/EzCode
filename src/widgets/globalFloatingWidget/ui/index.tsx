@@ -6,6 +6,7 @@ import { useCheckCharacterQuery } from '@/entities/game/model/query/game.query';
 import { usePathname } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
+import { GoogleFormBtn } from '@/features/google-form/ui/GoogleFormButton';
 export function GlobalFloatingWidget() {
   const problemId = usePathname().split('/')[2];
   const [isLogged, setIsLogged] = useState(false);
@@ -27,6 +28,7 @@ export function GlobalFloatingWidget() {
       {isLogged && (
         <GameModalButton hasCharacter={characterData?.data?.result?.isCharacterExist || false} />
       )}
+      <GoogleFormBtn />
     </div>
   );
 }
