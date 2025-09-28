@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Gamepad2 } from 'lucide-react';
+
 import GoogleForm from './../../../../public/icons/google-form.png';
 import Image from 'next/image';
 export const GoogleFormBtn = () => {
