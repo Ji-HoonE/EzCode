@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import { GoogleFormBtn } from '@/features/google-form/ui/GoogleFormButton';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 export function GlobalFloatingWidget() {
   const problemId = usePathname().split('/')[2];
   const [isLogged, setIsLogged] = useState(false);
@@ -22,13 +23,22 @@ export function GlobalFloatingWidget() {
 
   if (problemId) return null;
 
+  const tooltipContent = '오류 사항, 제안 사항을 구글폼에 남겨주세요!';
   return (
-    <div className="fixed top-[calc(100vh-15%)] left-[calc(100vw-5%)] flex flex-col gap-2">
+    <div className="fixed bottom-[calc(100vh-95%)] left-[calc(100vw-5%)] flex flex-col gap-2">
       {isLogged && <ChatDialogOpenButton />}
       {isLogged && (
         <GameModalButton hasCharacter={characterData?.data?.result?.isCharacterExist || false} />
       )}
-      <GoogleFormBtn />
+
+      <Tooltip>
+        <TooltipTrigger>
+          <GoogleFormBtn />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{tooltipContent}</p>
+        </TooltipContent>
+      </Tooltip>
     </div>
   );
 }
