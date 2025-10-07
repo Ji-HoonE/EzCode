@@ -10,11 +10,12 @@ import { useLogoutMutation } from '@/entities/auth/model/mutation/auth.mutation'
 
 import Notifications from './Notifications';
 import { useUserStore } from '@/entities/user/model/store';
-
+import cookies from 'js-cookie';
 export default function AuthActions() {
   const router = useRouter();
   const { mutateAsync } = useLogoutMutation();
   const { user } = useUserStore((state) => state);
+  const accessToken = cookies.get('accessToken');
 
   const selectOption = (value: string) => {
     if (value === 'mypage') return router.push(PATHS.MYPAGE);
@@ -23,7 +24,7 @@ export default function AuthActions() {
 
   return (
     <div className="flex items-center space-x-4">
-      {user ? (
+      {accessToken && user ? (
         <div className="flex flex-row gap-4 items-center">
           <Notifications />
           <Select
@@ -40,10 +41,7 @@ export default function AuthActions() {
           />
         </div>
       ) : (
-        <>
-          {/* <LinkedButton props={NAVIGATE_ATTRIBUTE.signup} /> */}
-          <LinkedButton props={NAVIGATE_ATTRIBUTE.signin} />
-        </>
+        <LinkedButton props={NAVIGATE_ATTRIBUTE.signin} />
       )}
     </div>
   );
