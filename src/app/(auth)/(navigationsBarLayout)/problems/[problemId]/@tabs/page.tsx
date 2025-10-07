@@ -2,6 +2,7 @@ import Discussions from '@/features/discussions/disussions/ui/Discussions';
 import { DetailProblem, getDetailProblem } from '@/entities/problem';
 import CollapsibleProblem from '@/entities/problem/ui/CollapsibleProblem';
 import { DiscussionsParamsProvider } from '@/features/discussions/disussions/model/Discussion.sort.context';
+import { notFound } from 'next/navigation';
 
 interface IProblemPageProps {
   params: Promise<{ problemId: string }>;
@@ -14,8 +15,7 @@ export default async function ProblemPage({ params, searchParams }: IProblemPage
   const detailProblem = await getDetailProblem(problemId);
 
   if (!detailProblem) {
-    console.error('문제를 불러오는 데 실패했습니다.');
-    return <div>문제를 불러오는 데 실패했습니다.</div>;
+    return notFound();
   }
 
   return (
