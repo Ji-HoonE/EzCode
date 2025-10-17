@@ -5,7 +5,7 @@ import TerminalOutput from './TerminalOutput';
 import TerminalPanel from './TerminalPanel';
 import { ISourceCode } from '@/entities/submitCode';
 import { useUserStore } from '@/entities/user/model/store';
-import { fetchSourceCodeData, INITIAL_SOURCE_CODE_DATA } from '@/shared';
+import { fetchSourceCodeData, INITIAL_SOURCE_CODE_DATA, SOURCECODE } from '@/shared';
 
 interface IProblemWorksSectionProps {
   problemId: string;
@@ -23,20 +23,27 @@ export default function ProblemWorksSection({ problemId }: IProblemWorksSectionP
 
   useEffect(() => {
     if (!user) return;
+    const storedData = localStorage.getItem(`sourceCodeData-${problemId}`);
 
     const fetchedSourceCodeData = fetchSourceCodeData(user?.language?.id as number);
+    if (
+      storedData &&
+      JSON.parse(storedData).sourceCode !== SOURCECODE[JSON.parse(storedData).languageId]
+    )
+      return;
     setSourceCodeData(fetchedSourceCodeData);
   }, [user?.language, user]);
 
   useEffect(() => {
     const storedData = localStorage.getItem(`sourceCodeData-${problemId}`);
+
     setSourceCodeData(
       storedData ? (JSON.parse(storedData) as ISourceCode) : INITIAL_SOURCE_CODE_DATA
     );
     if (!storedData) {
       localStorage.setItem(`sourceCodeData-${problemId}`, JSON.stringify(sourceCodeData));
     }
-  }, []);
+  }, [problemId]);
 
   return (
     <section className="flex flex-col gap-5 h-full">

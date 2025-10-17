@@ -5,12 +5,10 @@ import { ProblemId } from '@/shared';
 import { useQuery } from '@tanstack/react-query';
 import { ISubmitPrepareData } from './submitCode.query.type';
 import { useProblemWebSocketStoreActions } from '@/features/submitCode/submission/model/useProblemWebSocketStore';
-import Cookies from 'js-cookie';
 
 /**코드 제출시 필요한 세션키, initcaseIds 를 리스폰스로 받음 */
 
-export const useGetSubmitPrepareData = (problemId: ProblemId) => {
-  const accessToken = Cookies.get('accessToken');
+export const useGetSubmitPrepareData = (problemId: ProblemId, hasAccessToken: boolean) => {
   const { setPrepareData } = useProblemWebSocketStoreActions();
 
   const path = getProblemIdPath(problemId, 'submit-prepare');
@@ -31,6 +29,6 @@ export const useGetSubmitPrepareData = (problemId: ProblemId) => {
         return { sessionKey: null, testcaseIds: null };
       }
     },
-    enabled: !!accessToken,
+    enabled: hasAccessToken,
   });
 };
