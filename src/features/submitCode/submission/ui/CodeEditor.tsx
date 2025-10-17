@@ -8,18 +8,46 @@ import {
   SOURCECODE,
 } from '@/shared';
 import { Select } from '@/shared/ui/select/Select';
+import { useEffect } from 'react';
+import { useAutoSave } from '@/shared/util/saveLocalStorage';
+import { ISourceCode } from '@/entities/submitCode';
 
 interface ICodeEditorProps {
   onChangeSourceCodeData: (key: 'sourceCode' | 'languageId', value: number | string) => void;
-  languageId: number;
+  sourceCodeData: ISourceCode;
+  problemId: string;
 }
-export default function CodeEditor({ onChangeSourceCodeData, languageId }: ICodeEditorProps) {
-  const handleChangeLanguage = (value: string) => {
-    const languageId = Number(value); //select option required only string type value ㅠ
+export default function CodeEditor({
+  onChangeSourceCodeData,
+  sourceCodeData,
+  problemId,
+}: ICodeEditorProps) {
+  const { languageId } = sourceCodeData;
 
+  const debouncedSave = useAutoSave(2000);
+
+  const handleChangeLanguage = (value: string) => {
+    const languageId = Number(value);
+    debouncedSave(`sourceCodeData-${problemId}`, {
+      sourceCode: SOURCECODE[languageId],
+      languageId: languageId,
+    });
     onChangeSourceCodeData('languageId', languageId);
     onChangeSourceCodeData('sourceCode', SOURCECODE[languageId]);
   };
+
+  const handleChangeCode = (value: string) => {
+    onChangeSourceCodeData('sourceCode', value);
+  };
+
+  useEffect(() => {
+    if (sourceCodeData.sourceCode !== SOURCECODE[languageId]) {
+      debouncedSave(`sourceCodeData-${problemId}`, {
+        sourceCode: sourceCodeData.sourceCode,
+        languageId: languageId,
+      });
+    }
+  }, [sourceCodeData.sourceCode]);
 
   return (
     <section className="flex-1 flex flex-col h-full gap-4">
@@ -29,11 +57,12 @@ export default function CodeEditor({ onChangeSourceCodeData, languageId }: ICode
         option={LANGUAGE_SELECTOR_OPTIONS}
         setValue={(value) => handleChangeLanguage(value)}
       />
+
       <CodeMirror
         basicSetup={CodeMirrorBasicSetup}
-        value={SOURCECODE[languageId]}
+        value={sourceCodeData.sourceCode}
         theme={'dark'}
-        onChange={(value) => onChangeSourceCodeData('sourceCode', value)}
+        onChange={(value) => handleChangeCode(value)}
         extensions={[CODEMIRROR_EXTENSIONS[languageId]]}
         aria-autocomplete="none"
         autoCapitalize="off"

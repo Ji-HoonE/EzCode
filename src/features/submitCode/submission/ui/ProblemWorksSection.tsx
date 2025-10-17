@@ -28,11 +28,22 @@ export default function ProblemWorksSection({ problemId }: IProblemWorksSectionP
     setSourceCodeData(fetchedSourceCodeData);
   }, [user?.language, user]);
 
+  useEffect(() => {
+    const storedData = localStorage.getItem(`sourceCodeData-${problemId}`);
+    setSourceCodeData(
+      storedData ? (JSON.parse(storedData) as ISourceCode) : INITIAL_SOURCE_CODE_DATA
+    );
+    if (!storedData) {
+      localStorage.setItem(`sourceCodeData-${problemId}`, JSON.stringify(sourceCodeData));
+    }
+  }, []);
+
   return (
     <section className="flex flex-col gap-5 h-full">
       <CodeEditor
+        problemId={problemId}
+        sourceCodeData={sourceCodeData}
         onChangeSourceCodeData={handleChangeSourceCodeData}
-        languageId={sourceCodeData.languageId}
       />
       <div className="flex flex-1 flex-col bg-secondary-background rounded-[10px] shadow-lg ">
         <TerminalPanel
