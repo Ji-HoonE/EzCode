@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import ProblemTable from './ui/Table';
 import { useProblemListQuery } from '@/entities/problems/model/query';
@@ -97,6 +97,9 @@ const ProblemsList = () => {
 
   const totalPages = data?.totalPages ?? 0;
 
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [categoryCode, difficulty]);
   return (
     <div className="flex flex-col px-10 py-18 w-full gap-4 justify-center items-center">
       <div className="flex flex-col max-w-[1600px] w-full gap-6">
