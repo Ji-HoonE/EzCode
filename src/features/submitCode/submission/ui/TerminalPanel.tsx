@@ -29,7 +29,7 @@ export default function TerminalPanel({
   const searchParams = useSearchParams();
   const accessToken = Cookies.get('accessToken');
 
-  useGetSubmitPrepareData(problemId);
+  useGetSubmitPrepareData(problemId, !!accessToken);
   const { submitPrepareData } = useProblemWebSocketStore();
 
   const authGuardTrigger = () => {
