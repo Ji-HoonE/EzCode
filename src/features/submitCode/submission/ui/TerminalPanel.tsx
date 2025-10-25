@@ -12,6 +12,10 @@ import { useGetSubmitPrepareData } from '@/entities/submitCode/submission/model/
 import { useRouter, useSearchParams } from 'next/navigation';
 import useSubscribeProblem from '../hooks/useSubscribeProblem';
 import Cookies from 'js-cookie';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useUserStore } from '@/entities/user/model/store';
+import { useState } from 'react';
+import { is } from 'zod/v4/locales';
 interface TerminalPanelProps {
   problemId: ProblemId;
   setMode: (mode: Mode) => void;
@@ -25,10 +29,13 @@ export default function TerminalPanel({
   mode,
   sourceCodeData,
 }: TerminalPanelProps) {
+  const [isPanelButtonHovered, setIsPanelButtonHovered] = useState({
+    review: false,
+  });
   const router = useRouter();
   const searchParams = useSearchParams();
   const accessToken = Cookies.get('accessToken');
-
+  const { user } = useUserStore();
   useGetSubmitPrepareData(problemId, !!accessToken);
   const { submitPrepareData } = useProblemWebSocketStore();
 
@@ -48,6 +55,7 @@ export default function TerminalPanel({
     setMode('result');
   };
 
+  console.log(isPanelButtonHovered.review);
   return (
     <div className="flex items-center justify-between p-2 border-b border-[#333]">
       <div className="flex items-center space-x-2">
@@ -66,14 +74,26 @@ export default function TerminalPanel({
             className={clsx(mode === 'result' ? 'text-white' : 'text-[#ccc] hover:text-secondary')}
           />
         </PanelButton>
-        <PanelButton
-          onClick={() => setMode('review')}
-          currentMode={mode}
-          targetMode="review"
-          text="CODE REVIEW"
-        >
-          <Icon.TerminalReviewIcon />
-        </PanelButton>
+
+        <Tooltip open={!user?.verified && isPanelButtonHovered.review}>
+          <TooltipTrigger asChild>
+            <div
+              onMouseEnter={() => setIsPanelButtonHovered((prev) => ({ ...prev, review: true }))}
+              onMouseLeave={() => setIsPanelButtonHovered((prev) => ({ ...prev, review: false }))}
+            >
+              <PanelButton
+                onClick={() => setMode('review')}
+                currentMode={mode}
+                targetMode="review"
+                text="CODE REVIEW"
+                disabled={!user?.verified}
+              >
+                <Icon.TerminalReviewIcon />
+              </PanelButton>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>이메일 인증 완료 후 이용 가능합니다</TooltipContent>
+        </Tooltip>
       </div>
       <GitPushDialog />
     </div>
