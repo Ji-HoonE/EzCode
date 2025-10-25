@@ -15,7 +15,7 @@ export function useAutoSave(delay = 2000) {
           const serializedValue = JSON.stringify(value);
           localStorage.setItem(key, serializedValue);
           setStatus?.('saved');
-        } catch (err) {
+        } catch {
           setStatus?.('error');
         }
       }, delay),

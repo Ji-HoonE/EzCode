@@ -15,7 +15,6 @@ import Cookies from 'js-cookie';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useUserStore } from '@/entities/user/model/store';
 import { useState } from 'react';
-import { is } from 'zod/v4/locales';
 interface TerminalPanelProps {
   problemId: ProblemId;
   setMode: (mode: Mode) => void;
