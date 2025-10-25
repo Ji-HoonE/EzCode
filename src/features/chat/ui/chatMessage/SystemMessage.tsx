@@ -7,8 +7,8 @@ export interface IChatMessageProps {
 export default function SystemMessage({ msg }: IChatMessageProps) {
   return (
     <li className="text-center w-full flex justify-center">
-      <div className="px-2 bg-gray-700 w-fit rounded-2xl">
-        <strong>{msg.message}</strong>
+      <div className="px-2 bg-gray-800 w-fit rounded-2xl">
+        <strong className="text-[12px] text-gray-400">{msg.message}</strong>
       </div>
     </li>
   );
