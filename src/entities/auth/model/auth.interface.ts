@@ -21,6 +21,8 @@ export interface ISignUpRequest {
 /** 회원가입 응답 인터페이스 */
 export interface ISignUpResponse {
   message: string;
+  accessToken: string;
+  refreshToken : string
 }
 
 /** 비밀번호 찾기 요청 인터페이스 */

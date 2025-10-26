@@ -28,12 +28,26 @@ const SignInForm = ({ onLoginSuccess }: SignInFormProps) => {
           name="email"
           type="email"
           leftSlot={<Mail className="text-gray-500" size={18} />}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              console.log('wef123');
+              e.preventDefault();
+              handleSubmit();
+            }
+          }}
         />
         <UnifiedInput
           label="비밀번호"
           inputType="input"
           name="password"
           type={isPasswordVisible ? 'text' : 'password'}
+          onKeyDown={(e) => {
+            console.log('wef123');
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleSubmit(); // react-hook-form의 handleSubmit 실행
+            }
+          }}
           leftSlot={<Lock className="text-gray-500" size={18} />}
           rightSlot={
             <button
