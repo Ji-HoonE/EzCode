@@ -6,6 +6,9 @@ import AuthProvider from '@/lib/AuthProvider';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
 import { Metadata } from 'next';
+import { headers } from 'next/headers';
+import { detectDeviceType } from '@/shared/util/detectDeviceType';
+import MobileBlockUI from '@/shared/ui/moblieBlockUI/MoblieBlockUI';
 
 export const metadata: Metadata = {
   title: 'EZ-CODE - 코딩 테스트',
@@ -20,6 +23,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const ua = (await headers()).get('user-agent') ?? '';
+  const device = detectDeviceType(ua);
+  if (device === 'mobile')
+    return (
+      <html>
+        <body>
+          <MobileBlockUI />
+        </body>
+      </html>
+    );
   const session = await getServerSession(authOptions);
   return (
     <html lang="ko">
