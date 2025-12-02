@@ -9,6 +9,7 @@ interface ResultItemProps {
 export default function ResultItem({ res, index }: ResultItemProps) {
   const { isPassed, executionTime, memoryUsage, message } = res;
 
+  const resultMessage = message !== 'Accepted' ? message : isPassed ? 'Success' : 'Fail';
   return (
     <div
       className={clsx(
@@ -17,7 +18,7 @@ export default function ResultItem({ res, index }: ResultItemProps) {
       )}
     >
       <p>
-        [ {index + 1} ] {message} ({executionTime}ms, {memoryUsage}KB)
+        [ {index + 1} ] {resultMessage} ({executionTime}ms, {memoryUsage}KB)
       </p>
     </div>
   );
