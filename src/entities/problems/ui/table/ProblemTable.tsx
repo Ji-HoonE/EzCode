@@ -1,7 +1,6 @@
 'use client';
 import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { SkeletonBox } from '@/shared/ui/loading-indicators';
 import { ProblemsContent } from '@/entities/problems/model/types';
 import { useMyDailySolved } from '@/entities/mypage/model/query';
 import { CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -9,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import Cookies from 'js-cookie';
 import { LevelUtil } from '@/shared/util/levelUtil';
 import TableHead from '@/entities/problems/ui/table/TableHead';
+import TableSkeleton from './TableSkeleton';
 
 const PAGE_LIMIT = 15;
 
@@ -87,73 +87,68 @@ export default function ProblemTable({
         <table className="w-full">
           <TableHead />
           <tbody>
-            {isLoading || !data
-              ? Array.from({ length: 10 }).map((_, idx) => (
-                  <tr key={idx} className="border-b border-gray-800">
-                    {Array.from({ length: 7 }).map((__, colIdx) => (
-                      <td key={colIdx} className="text-center py-3 px-2">
-                        <SkeletonBox width={60} height={16} />
-                      </td>
-                    ))}
-                  </tr>
-                ))
-              : data.map((item) => {
-                  const successRate =
-                    item.totalSubmissions === 0 || item.correctSubmissions === 0
-                      ? 0
-                      : Math.round((item.correctSubmissions / item.totalSubmissions) * 100 * 10) /
-                        10;
-                  const isSolved = myProblemsList.includes(item.id);
-                  return (
-                    <tr
-                      key={item.id}
-                      className={`border-b border-gray-800/50 hover:bg-white/[0.08] transition-colors duration-200 cursor-pointer ${
-                        isSolved ? 'bg-[#214d35]/10 border-l-4 border-l-[#00d084]' : ''
-                      }`}
-                      onClick={() => router.push(`/problems/${item.id}`)}
-                    >
-                      <td className="px-6 py-4 text-sm text-center text-gray-300">{item.id}</td>
-                      <td className="px-6 py-4">
-                        <div className="flex flex-row gap-4 justify-center items-center">
-                          {isSolved && (
-                            <CheckCircle className="w-4 h-4 text-[#00d084] flex-shrink-0" />
-                          )}
-                          <div>
-                            <div className="text-center text-sm font-medium text-white hover:text-[#00d084] transition-colors">
-                              {item.title}
-                            </div>
-                            <div className="text-center text-xs text-gray-400 mt-1">
-                              {item.categories?.length > 1 ? item.categories.join(', ') : ''}
-                            </div>
+            {isLoading || !data ? (
+              <TableSkeleton />
+            ) : (
+              data.map((item) => {
+                const successRate =
+                  item.totalSubmissions === 0 || item.correctSubmissions === 0
+                    ? 0
+                    : Math.round((item.correctSubmissions / item.totalSubmissions) * 100 * 10) / 10;
+                const isSolved = myProblemsList.includes(item.id);
+                const categories =
+                  item.categories?.length > 1
+                    ? item.categories.join(', ')
+                    : item.categories[0] || '';
+                return (
+                  <tr
+                    key={item.id}
+                    className={`border-b border-gray-800/50 hover:bg-white/[0.08] transition-colors duration-200 cursor-pointer ${
+                      isSolved ? 'bg-[#214d35]/10 border-l-4 border-l-[#00d084]' : ''
+                    }`}
+                    onClick={() => router.push(`/problems/${item.id}`)}
+                  >
+                    <td className="px-6 py-4 text-sm text-center text-gray-300">{item.id}</td>
+                    <td className="px-6 py-4">
+                      <div className="flex flex-row gap-4 justify-center items-center">
+                        {isSolved && (
+                          <CheckCircle className="w-4 h-4 text-[#00d084] flex-shrink-0" />
+                        )}
+                        <div>
+                          <div className="text-center text-sm font-medium text-white hover:text-[#00d084] transition-colors">
+                            {item.title}
                           </div>
+                          <div className="text-center text-xs text-gray-400 mt-1">{categories}</div>
                         </div>
-                      </td>
-                      <td className="px-6 py-4 text-center text-sm text-[#00d084] font-medium">
-                        {item.score}
-                      </td>
-                      <td className={`px-6 py-4 text-center text-sm font-medium`}>
-                        <span
-                          className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full border transition-all duration-200 hover:scale-105 ${LevelUtil.getLevelBg(
-                            item.difficulty
-                          )} ${LevelUtil.getLevelColorClass(item.difficulty)}`}
-                        >
-                          {LevelUtil.getLevelText(item.difficulty)}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-center text-sm text-gray-300 ">
-                        {item.correctSubmissions || 0}건
-                      </td>
-                      <td className="px-6 py-4 text-center text-sm text-gray-300 ">
-                        {item.totalSubmissions || 0}건
-                      </td>
-                      <td
-                        className={`text-center text-sm font-medium ${successRate >= 70 ? 'text-green-400' : successRate >= 40 ? 'text-yellow-400' : 'text-red-400'}`}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-center text-sm text-[#00d084] font-medium">
+                      {item.score}
+                    </td>
+                    <td className={`px-6 py-4 text-center text-sm font-medium`}>
+                      <span
+                        className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full border transition-all duration-200 hover:scale-105 ${LevelUtil.getLevelBg(
+                          item.difficulty
+                        )} ${LevelUtil.getLevelColorClass(item.difficulty)}`}
                       >
-                        {successRate}%
-                      </td>
-                    </tr>
-                  );
-                })}
+                        {LevelUtil.getLevelText(item.difficulty)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-center text-sm text-gray-300 ">
+                      {item.correctSubmissions || 0}건
+                    </td>
+                    <td className="px-6 py-4 text-center text-sm text-gray-300 ">
+                      {item.totalSubmissions || 0}건
+                    </td>
+                    <td
+                      className={`text-center text-sm font-medium ${successRate >= 70 ? 'text-green-400' : successRate >= 40 ? 'text-yellow-400' : 'text-red-400'}`}
+                    >
+                      {successRate}%
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>
