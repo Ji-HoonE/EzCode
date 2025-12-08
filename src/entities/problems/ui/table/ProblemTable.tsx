@@ -8,6 +8,7 @@ import { CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Cookies from 'js-cookie';
 import { LevelUtil } from '@/shared/util/levelUtil';
+import TableHead from '@/entities/problems/ui/table/TableHead';
 
 const PAGE_LIMIT = 15;
 
@@ -28,23 +29,16 @@ export default function ProblemTable({
   const [pageGroupStart, setPageGroupStart] = useState<number>(0); // 0-based group start
   const [myProblemsList, setMyProblemsList] = useState<number[]>([]);
   const { data: myProblems } = useMyDailySolved();
-  // const { data: session } = useSession();
   const token = Cookies.get('accessToken');
 
   useEffect(() => {
     setMyProblemsList([]);
-    // if (!session) return;
     if (!token) return;
-
     if (!myProblems) return;
-    // myProblems.forEach((item) => setMyProblemsList((prev) => [...prev, item.problemId]));
-    // myProblems.data.result.dailySolvedCounts.map((item) =>
-    //   item.problems.map((item2) => console.log(item2))
-    // );
+
     const solved = Array.from(
       new Set(myProblems.data.result.dailySolvedCounts.flatMap((item) => item.problemIds))
     );
-    console.log(myProblems.data.result.dailySolvedCounts);
     setMyProblemsList(solved); // 하나의 배열에 담김
   }, [myProblems, token]);
 
@@ -91,17 +85,7 @@ export default function ProblemTable({
     <div className="flex flex-col">
       <div className="flex flex-col w-full text-white font-sans bg-gray-900/50 rounded-md border border-gray-800">
         <table className="w-full">
-          <thead>
-            <tr className="border-b border-gray-800 bg-gray-800/50">
-              <th className="px-6 py-4 text-center text-sm font-medium text-gray-300">번호</th>
-              <th className="px-6 py-4 text-center text-sm font-medium text-gray-300">제목</th>
-              <th className="px-6 py-4 text-center text-sm font-medium text-gray-300">점수</th>
-              <th className="px-6 py-4 text-center text-sm font-medium text-gray-300">난이도</th>
-              <th className="px-6 py-4 text-center text-sm font-medium text-gray-300">정답</th>
-              <th className="px-6 py-4 text-center text-sm font-medium text-gray-300">제출</th>
-              <th className="px-6 py-4 text-center text-sm font-medium text-gray-300">정답률</th>
-            </tr>
-          </thead>
+          <TableHead />
           <tbody>
             {isLoading || !data
               ? Array.from({ length: 10 }).map((_, idx) => (
@@ -139,7 +123,7 @@ export default function ProblemTable({
                               {item.title}
                             </div>
                             <div className="text-center text-xs text-gray-400 mt-1">
-                              {item.categories.join(', ')}
+                              {item.categories?.length > 1 ? item.categories.join(', ') : ''}
                             </div>
                           </div>
                         </div>

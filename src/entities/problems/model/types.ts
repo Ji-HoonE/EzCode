@@ -38,8 +38,3 @@ export interface ProblemsContent {
   totalSubmissions: number;
   correctSubmissions: number;
 }
-
-export interface ProblemListWithSearch {
-  content: ProblemsContent[];
-  totalPages: number;
-}

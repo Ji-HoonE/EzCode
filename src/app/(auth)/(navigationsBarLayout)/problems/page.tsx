@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import ProblemTable from './ui/Table';
 import { useProblemListQuery } from '@/entities/problems/model/query';
 import { Select } from '@/shared/ui/select/Select';
 import { Button } from '@/shared/ui/button/Button';
 import { LevelUtil } from '@/shared/util/levelUtil';
+import ProblemTable from '@/entities/problems/ui/table/ProblemTable';
 
 const categoryCodeOptions = [
   { label: '출력', value: 'OUTPUT' },
@@ -108,6 +108,7 @@ const ProblemsList = () => {
           <p className="text-gray-400">코딩테스트 문제를 난이도별로 확인하고 도전해보세요</p>
         </section>
 
+        {/* 필터영역 */}
         <section className="flex flex-col gap-10">
           <section className="mb-6 p-6 bg-gray-900/50 rounded-[10px] border border-gray-800">
             <div className="flex flex-row gap-4 items-center w-full">
@@ -143,7 +144,7 @@ const ProblemsList = () => {
                 <label className="text-base text-secondary">검색</label>
                 <div className="flex flex-row w-full gap-5">
                   <input
-                    placeholder="문제 제목 또는 번호 검색"
+                    placeholder="2~25글자 사이로 검색해주세요"
                     className="text-base border px-2 border-gray-700 rounded h-12 w-full bg-gray-800"
                     onChange={(e) => setKeyword(e.target.value)}
                     onKeyDown={(e) => {
@@ -153,7 +154,6 @@ const ProblemsList = () => {
                       }
                     }}
                   />
-
                   <Button
                     aria-label="검색"
                     onClick={() => {
