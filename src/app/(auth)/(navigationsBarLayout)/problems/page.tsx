@@ -2,85 +2,16 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { useProblemListQuery } from '@/entities/problems/model/query';
+import { useAutoCompleteKeywordQuery, useProblemListQuery } from '@/entities/problems/model/query';
 import { Select } from '@/shared/ui/select/Select';
 import { Button } from '@/shared/ui/button/Button';
 import { LevelUtil } from '@/shared/util/levelUtil';
 import ProblemTable from '@/entities/problems/ui/table/ProblemTable';
-
-const categoryCodeOptions = [
-  { label: '출력', value: 'OUTPUT' },
-  { label: '사칙연산', value: 'ARITHMETIC' },
-  { label: '배열', value: 'ARRAY' },
-  { label: '조건문', value: 'CONDITIONAL' },
-  { label: '정렬', value: 'SORTING' },
-  { label: '수학', value: 'MATH' },
-  { label: '시뮬레이션', value: 'SIMULATION' },
-  { label: '자료구조', value: 'DATA_STRUCTURE' },
-  { label: '입문자용', value: 'FOR_BEGINNER' },
-  { label: '구현', value: 'IMPLEMENTATION' },
-  { label: '그리디', value: 'GREEDY' },
-  { label: '문자열 처리', value: 'STRING_PROCESSING' },
-  { label: '해시맵', value: 'HASH_MAP' },
-  { label: '선형 탐색', value: 'LINEAR_SEARCH' },
-  { label: '동적 계획법', value: 'DP' },
-  { label: '순환 탐지', value: 'CYCLE_DETECTION' },
-  { label: '비트 연산', value: 'BIT_OPERATION' },
-  { label: '반복 제어', value: 'LOOP_CONTROL' },
-  { label: '카운팅', value: 'COUNTING' },
-  { label: '너비 우선 탐색', value: 'BFS' },
-  { label: '깊이 우선 탐색', value: 'DFS' },
-  { label: '비트마스킹', value: 'BITMASK' },
-  { label: '해시', value: 'HASH' },
-  { label: '맵', value: 'MAP' },
-  { label: '반복문', value: 'LOOPS' },
-  { label: '분할 정복', value: 'DIVIDE_AND_CONQUER' },
-  { label: '문자열', value: 'STRING' },
-  { label: '집합론', value: 'SET_THEORY' },
-  { label: '누적 합', value: 'PREFIX_SUM' },
-  { label: '기하학', value: 'GEOMETRY' },
-  { label: '이분 탐색', value: 'BINARY_SEARCH' },
-  { label: '투포인터', value: 'TWO_POINTERS' },
-  { label: '그래프 이론', value: 'GRAPH_THEORY' },
-  { label: '탐색', value: 'SEARCH' },
-  { label: '우선순위 큐', value: 'PRIORITY_QUEUE' },
-  { label: '백트래킹', value: 'BACKTRACKING' },
-  { label: '알고리즘', value: 'ALGORITHM' },
-  { label: '트리', value: 'TREE' },
-  { label: '상태 압축', value: 'STATE_COMPRESSION' },
-  { label: '재귀', value: 'RECURSION' },
-  { label: '큐', value: 'QUEUE' },
-  { label: '최대 유량', value: 'MAX_FLOW' },
-  { label: '최소 컷', value: 'MIN_CUT' },
-  { label: '최소 스패닝 트리', value: 'MINIMUM_SPANNING_TREE' },
-  { label: '완전 탐색', value: 'BRUTE_FORCE' },
-  { label: '조합론', value: 'COMBINATORICS' },
-  { label: '세그먼트 트리', value: 'SEGMENT_TREE' },
-  { label: 'Deque', value: 'DEQUE' },
-  { label: '해밍 거리', value: 'HAMMING_DISTANCE' },
-  { label: '2차원 배열', value: 'TWO_DIMENSIONAL_ARRAY' },
-  { label: '누적 선택 최적화', value: 'CUMULATIVE_SELECTION_OPTIMIZATION' },
-  { label: '좌표', value: 'COORDINATE' },
-  { label: '최대공약수(GCD)', value: 'GCD' },
-  { label: '수열', value: 'SEQUENCE' },
-  { label: '집합 처리', value: 'SET_PROCESSING' },
-  { label: '그래프 탐색', value: 'GRAPH_SEARCH' },
-  { label: '분리 집합', value: 'DISJOINT_SET' },
-  { label: '조합', value: 'COMBINATION' },
-];
+import { CATEGORY_OPTIONS, DIFFICULTY_OPTIONS } from '@/entities/problems/model/filter-options';
 
 const ProblemsList = () => {
   const [currentPage, setCurrentPage] = useState(0);
 
-  const difficultyOptions = [
-    { label: '입문 (1단계)', value: 'LV1' },
-    { label: '초급 (2단계)', value: 'LV2' },
-    { label: '중급 (3단계)', value: 'LV3' },
-    { label: '중상급 (4단계)', value: 'LV4' },
-    { label: '고급 (5단계)', value: 'LV5' },
-    { label: '전문가 (6단계)', value: 'LV6' },
-    { label: '마스터 (7단계)', value: 'LV7' },
-  ];
   const [categoryCode, setCategoryCode] = useState('');
   const [difficulty, setDifficulty] = useState('');
   const [keyword, setKeyword] = useState('');
@@ -120,7 +51,7 @@ const ProblemsList = () => {
                   id="category"
                   className="w-full"
                   title="카테고리"
-                  option={categoryCodeOptions}
+                  option={CATEGORY_OPTIONS}
                   setValue={(value) => setCategoryCode(value)}
                   value={categoryCode}
                 />
@@ -134,7 +65,7 @@ const ProblemsList = () => {
                   id="difficulty"
                   className="w-full "
                   title="난이도"
-                  option={difficultyOptions}
+                  option={DIFFICULTY_OPTIONS}
                   setValue={(value) => setDifficulty(value)}
                   value={difficulty}
                 />
@@ -189,9 +120,7 @@ const ProblemsList = () => {
             >
               {categoryCode !== '전체' && categoryCode && (
                 <div className="flex flex-row gap-2 items-center bg-[#00d084]/20 border border-[#00d084]/30 text-[#00d084] px-3 py-1.5 rounded-full text-sm font-medium">
-                  <span>
-                    {categoryCodeOptions.find((item) => item.value === categoryCode)?.label}
-                  </span>
+                  <span>{CATEGORY_OPTIONS.find((item) => item.value === categoryCode)?.label}</span>
                   <Image
                     src="/icons/close/closeWithBorder.svg"
                     className="cursor-pointer hover:opacity-70 transition-opacity"
@@ -206,7 +135,7 @@ const ProblemsList = () => {
                 <div
                   className={`flex flex-row gap-2 items-center px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 border ${LevelUtil.getLevelBg(difficulty)} ${LevelUtil.getLevelColorClass(difficulty)}`}
                 >
-                  <span>{difficultyOptions.find((item) => item.value === difficulty)?.label}</span>
+                  <span>{DIFFICULTY_OPTIONS.find((item) => item.value === difficulty)?.label}</span>
                   <Image
                     src="/icons/close/closeWithBorder.svg"
                     className="cursor-pointer hover:opacity-70 transition-opacity"
