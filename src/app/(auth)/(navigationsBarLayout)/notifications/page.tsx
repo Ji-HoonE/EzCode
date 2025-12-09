@@ -24,6 +24,12 @@ export default function Notifications() {
     ApiHelper.get(API_URL.NOTIFICATIONS);
   };
 
+  const handleMarkAllAsRead = async () => {
+    const unreadNotifications = notifications.content.filter((n) => !n.isRead);
+    await Promise.all(unreadNotifications.map((n) => readNotification(n.id)));
+    ApiHelper.get(API_URL.NOTIFICATIONS);
+  };
+
   return (
     <div className="flex flex-col px-10 py-18 w-full gap-4 justify-center items-center">
       <div className="flex flex-col max-w-[1600px] w-full gap-6">
@@ -104,12 +110,13 @@ export default function Notifications() {
             )}
           </div>
           {notifications.content.length > 0 && (
-            <div className="bg-gray-800/30 border-t border-gray-800 p-4">
-              <div className="flex justify-center">
-                <button className="text-secondary text-sm font-medium transition-colors">
-                  모든 알림 읽음으로 표시
-                </button>
-              </div>
+            <div className="bg-gray-800/30 border-t border-gray-800 p-4 flex justify-center">
+              <button
+                className="text-secondary text-sm font-medium transition-colors"
+                onClick={handleMarkAllAsRead}
+              >
+                모든 알림 읽음으로 표시
+              </button>
             </div>
           )}
         </section>
