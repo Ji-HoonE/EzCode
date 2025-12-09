@@ -1,11 +1,9 @@
 'use client';
 
-import { NotificationTypeEnum } from '@/entities/notifications/enum';
 import { useReadNotification } from '@/entities/notifications/query';
+import { moveToNotificationPath } from '@/features/alarm/hooks/moveToNotificationPath';
 import useConnectAlarmWebSocket from '@/features/alarm/hooks/useNotificationWebSocket';
 import { useNotificationsStore } from '@/features/alarm/model/store';
-import { NotificationPayload } from '@/features/alarm/model/store.types';
-
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -20,7 +18,6 @@ export default function Notifications() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const unreadCount = notifications.content.filter((n) => !n.isRead).length;
 
-  console.log('알림 렌더링:', notifications);
   const handleViewAll = () => {
     router.push('/notifications');
     setOpen(false);
@@ -38,33 +35,6 @@ export default function Notifications() {
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
-
-  const pathName = (type: NotificationTypeEnum, payload: NotificationPayload) => {
-    switch (type) {
-      case NotificationTypeEnum.COMMUNITY_CHILD_REPLY:
-        return router.push(
-          `/problems/${payload.problemId}?discussion=true&discussionId=${payload.discussionId}`
-        );
-      case NotificationTypeEnum.COMMUNITY_DISCUSSION_REPLY:
-        return router.push(
-          `/problems/${payload.problemId}?discussion=true&discussionId=${payload.discussionId}`
-        );
-      case NotificationTypeEnum.COMMUNITY_DISCUSSION_VOTED_UP:
-        return router.push(
-          `/problems/${payload.problemId}?discussion=true&discussionId=${payload.discussionId}`
-        );
-      case NotificationTypeEnum.COMMUNITY_MENTIONED:
-        return router.push(
-          `/problems/${payload.problemId}?discussion=true&discussionId=${payload.discussionId}`
-        );
-      case NotificationTypeEnum.COMMUNITY_REPLY_VOTED_UP:
-        return router.push(
-          `/problems/${payload.problemId}?discussion=true&discussionId=${payload.discussionId}`
-        );
-      default:
-        return;
-    }
-  };
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -124,7 +94,12 @@ export default function Notifications() {
                   <div
                     onClick={() => {
                       readNotification(notification.id);
-                      pathName(notification.notificationType, notification.payload);
+                      moveToNotificationPath(
+                        notification.notificationType,
+                        notification.payload.problemId,
+                        notification.payload.discussionId,
+                        router
+                      );
                       setOpen(false);
                     }}
                     key={notification.id}

@@ -4,12 +4,22 @@ import { Bell } from 'lucide-react';
 
 import { useNotificationsStore } from '@/features/alarm/model/store';
 import { useReadNotification } from '@/entities/notifications/query';
+import { moveToNotificationPath } from '@/features/alarm/hooks/moveToNotificationPath';
+import { Notification } from '@/features/alarm/model/store.types';
+import { useRouter } from 'next/navigation';
 
 export default function Notifications() {
   const { notifications } = useNotificationsStore();
   const { mutateAsync: readNotification } = useReadNotification();
-  // const queryClient = useQueryClient();
-  // const router = useRouter();
+  const router = useRouter();
+
+  const handleClickNotification = async (notification: Notification) => {
+    const { notificationType, id, payload, isRead } = notification;
+    moveToNotificationPath(notificationType, payload.problemId, payload.discussionId, router);
+    if (isRead) return;
+    await readNotification(id);
+  };
+
   return (
     <div className="flex flex-col px-10 py-18 w-full gap-4 justify-center items-center">
       <div className="flex flex-col max-w-[1600px] w-full gap-6">
@@ -52,11 +62,7 @@ export default function Notifications() {
                     className={`p-6 hover:bg-white/8 transition-colors duration-200 cursor-pointer ${
                       !notification.isRead ? 'bg-secondary/5 border-l-4 border-l-secondary' : ''
                     }`}
-                    onClick={async () => {
-                      const result = await readNotification(notification.id);
-                      console.log(result);
-                      // router.push(notification.redirectUrl);
-                    }}
+                    onClick={() => handleClickNotification(notification)}
                   >
                     <div className="flex items-start gap-4">
                       {/* 읽음/안읽음 인디케이터 */}
