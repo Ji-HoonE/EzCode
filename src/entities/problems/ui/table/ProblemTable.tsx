@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProblemsContent } from '@/entities/problems/model/types';
 import { useMyDailySolved } from '@/entities/mypage/model/query';

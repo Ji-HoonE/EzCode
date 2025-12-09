@@ -1,7 +1,5 @@
 'use client';
 
-import type React from 'react';
-
 import { Bell } from 'lucide-react';
 
 import { useNotificationsStore } from '@/features/alarm/model/store';
