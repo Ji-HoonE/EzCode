@@ -2,7 +2,7 @@
 
 import { NotificationTypeEnum } from '@/entities/notifications/enum';
 import { useReadNotification } from '@/entities/notifications/query';
-import useConnectAlarmWebSocket from '@/features/alarm/hooks/socket/useNotificationWebSocket';
+import useConnectAlarmWebSocket from '@/features/alarm/hooks/useNotificationWebSocket';
 import { useNotificationsStore } from '@/features/alarm/model/store';
 import { NotificationPayload } from '@/features/alarm/model/store.types';
 
@@ -20,6 +20,7 @@ export default function Notifications() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const unreadCount = notifications.content.filter((n) => !n.isRead).length;
 
+  console.log('알림 렌더링:', notifications);
   const handleViewAll = () => {
     router.push('/notifications');
     setOpen(false);

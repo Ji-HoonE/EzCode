@@ -1,6 +1,7 @@
 import ApiHelper from '@/api/client/api';
 import { useQuery } from '@tanstack/react-query';
-import { ProblemList, ProblemsContent } from './types';
+import { ProblemList } from './types';
+import { PATHS } from '@/constants/paths';
 
 export const useProblemListQuery = (
   page: number,
@@ -10,43 +11,37 @@ export const useProblemListQuery = (
   difficulty?: string,
   keyword?: string
 ) => {
-  const isSearching = Boolean(keyword && keyword.trim() !== '');
   const queryParams: Record<string, string> = {};
   if (difficulty && difficulty !== '전체') queryParams.difficulty = difficulty;
   if (categoryCode && categoryCode !== '전체') queryParams.categoryCode = categoryCode;
-  if (isSearching && keyword) queryParams.keyword = keyword;
-
-  const endpoint = isSearching ? '/problems/search' : '/problems';
-
+  if (keyword) queryParams.keyword = keyword;
   return useQuery({
-    queryKey: ['problemList', endpoint, page, size, sort, categoryCode, difficulty, keyword],
+    queryKey: ['problemList', page, size, sort, categoryCode, difficulty, keyword],
     queryFn: async () => {
-      if (isSearching) {
-        const response = await ApiHelper.get<ProblemsContent[]>(
-          `${endpoint}`, //
-          { params: queryParams }
-        );
-        const result = response.data.result;
-
-        const startIdx = (page - 1) * size;
-        const sliced = result.slice(startIdx, startIdx + size);
-
-        return {
-          content: sliced,
-          totalPages: Math.ceil(result.length / size),
-        };
-      } else {
-        const response = await ApiHelper.get<ProblemList>(
-          `${endpoint}?page=${page}&size=${size}&sort=${sort}`,
-          { params: queryParams }
-        );
-        return {
-          content: response.data.result.content,
-          totalPages: response.data.result.totalPages,
-        };
-      }
+      const response = await ApiHelper.get<ProblemList>(
+        `${PATHS.PROBLEMS}?page=${page}&size=${size}&sort=${sort}`,
+        { params: queryParams }
+      );
+      return {
+        content: response.data.result.content,
+        totalPages: response.data.result.totalPages,
+      };
     },
-    enabled: isSearching ? !!keyword?.trim() : true,
     staleTime: 1000 * 60 * 5,
+  });
+};
+export const useAutoCompleteKeywordQuery = (keyword: string) => {
+  return useQuery({
+    queryKey: ['autoCompleteKeyword', keyword],
+    queryFn: async () => {
+      const response = await ApiHelper.get<string[]>(`${PATHS.AUTO_COMPLETE}`, {
+        params: { keyword: keyword },
+      });
+      if (!response.data.result) {
+        return [];
+      }
+      return response.data.result;
+    },
+    staleTime: 1000 * 60 * 30,
   });
 };

@@ -3,29 +3,18 @@
 import { BASE_URL } from '@/constants/env';
 import { Client } from '@stomp/stompjs';
 
-import { useState, useEffect } from 'react';
+import { createRef, useEffect } from 'react';
 import SockJS from 'sockjs-client';
-import { sharedAlarmStompRef } from '../../store/sharedAlarmStompRef';
-import { useNotificationsStore } from '../../model/store';
+import { useNotificationsStore } from '../model/store';
 import ApiHelper from '@/api/client/api';
 import { API_URL } from '@/api/constants/api.constants';
+import Cookies from 'js-cookie';
 
 export default function useConnectAlarmWebSocket() {
+  const alarmStompRef = createRef<Client | null>();
+  const accessToken = Cookies.get('accessToken');
+
   const { setNotification } = useNotificationsStore();
-  const [accessToken, setAccessToken] = useState('');
-  useEffect(() => {
-    const fetchSession = async () => {
-      // const data = await getSession();
-      // const rawToken = data?.accessToken || '';
-      const rawToken = localStorage.getItem('accessToken') || '';
-      // "Bearer " 접두어 제거 (있을 때만)
-      const cleanedToken = rawToken.startsWith('Bearer ') ? rawToken.slice(7) : rawToken;
-      setAccessToken(cleanedToken);
-    };
-    fetchSession();
-  }, []);
-  // console.log(session.then((data)=>console.log(encodeURI(data?.accessToken || ""))))
-  const alarmStompRef = sharedAlarmStompRef;
 
   useEffect(() => {
     if (!accessToken) {
@@ -37,7 +26,6 @@ export default function useConnectAlarmWebSocket() {
       console.log('🟡 Alarm STOMP already connected');
       return;
     }
-    console.log(accessToken);
     // 소켓 연결
     const socket = new SockJS(`${BASE_URL}/ws?token=${accessToken}`);
 
@@ -52,7 +40,7 @@ export default function useConnectAlarmWebSocket() {
         client.subscribe('/user/queue/notifications', (message) => {
           try {
             const body = JSON.parse(message.body);
-            console.log('📥 알림 수신:', body);
+            console.log('🔔 New notification received via WebSocket:', body);
             setNotification(body);
           } catch (e) {
             console.error('❌ 알림 파싱 실패', e);
@@ -77,6 +65,4 @@ export default function useConnectAlarmWebSocket() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken]);
-
-  return { alarmStompRef };
 }
