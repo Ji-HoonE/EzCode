@@ -1,23 +1,27 @@
 'use client';
 
 import { Bell } from 'lucide-react';
-
 import { useNotificationsStore } from '@/features/alarm/model/store';
 import { useReadNotification } from '@/entities/notifications/query';
 import { moveToNotificationPath } from '@/features/alarm/hooks/moveToNotificationPath';
 import { Notification } from '@/features/alarm/model/store.types';
 import { useRouter } from 'next/navigation';
+import ApiHelper from '@/api/client/api';
+import { API_URL } from '@/api/constants/api.constants';
 
 export default function Notifications() {
-  const { notifications } = useNotificationsStore();
   const { mutateAsync: readNotification } = useReadNotification();
+  const { notifications } = useNotificationsStore();
   const router = useRouter();
+
+  const totalNotifications = notifications?.content.filter((n) => !n.isRead).length || 0;
 
   const handleClickNotification = async (notification: Notification) => {
     const { notificationType, id, payload, isRead } = notification;
     moveToNotificationPath(notificationType, payload.problemId, payload.discussionId, router);
     if (isRead) return;
     await readNotification(id);
+    ApiHelper.get(API_URL.NOTIFICATIONS);
   };
 
   return (
@@ -36,11 +40,9 @@ export default function Notifications() {
             <div className="flex items-center gap-3">
               <Bell className="text-secondary" size={24} />
               <h2 className="text-lg font-semibold text-white">전체 알림</h2>
-              {notifications.content.filter((n) => !n.isRead).length > 0 && (
-                <span className="bg-secondary text-white px-2 py-1 rounded-full text-xs font-medium">
-                  {notifications.content.filter((n) => !n.isRead).length}개의 새 알림
-                </span>
-              )}
+              <span className="bg-secondary text-white px-2 py-1 rounded-full text-xs font-medium">
+                {totalNotifications}개의 새 알림
+              </span>
             </div>
           </div>
 
