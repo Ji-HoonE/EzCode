@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { CompositionEvent, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useAutoCompleteKeywordQuery, useProblemListQuery } from '@/entities/problems/model/query';
 import { Select } from '@/shared/ui/select/Select';
@@ -11,11 +11,11 @@ import { CATEGORY_OPTIONS, DIFFICULTY_OPTIONS } from '@/entities/problems/model/
 
 const ProblemsList = () => {
   const [currentPage, setCurrentPage] = useState(0);
-
   const [categoryCode, setCategoryCode] = useState('');
   const [difficulty, setDifficulty] = useState('');
   const [keyword, setKeyword] = useState('');
   const [search, setSearch] = useState('');
+  const [autoCompleteKeyword, setAutoCompleteKeyword] = useState('');
 
   const { data, isLoading } = useProblemListQuery(
     currentPage,
@@ -26,11 +26,27 @@ const ProblemsList = () => {
     search
   );
 
+  const { data: autoComplete } = useAutoCompleteKeywordQuery(autoCompleteKeyword);
   const totalPages = data?.totalPages ?? 0;
 
   useEffect(() => {
     setCurrentPage(0);
   }, [categoryCode, difficulty]);
+
+  const handleCompositionEnd = (e: CompositionEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+    if (value.length >= 2 && value.length <= 25) {
+      setAutoCompleteKeyword(value);
+    }
+  };
+
+  const handleChangeKeyword = (value: string) => {
+    if (!value) {
+      setAutoCompleteKeyword('');
+    }
+    setKeyword(value);
+  };
+
   return (
     <div className="flex flex-col px-10 py-18 w-full gap-4 justify-center items-center">
       <div className="flex flex-col max-w-[1600px] w-full gap-6">
@@ -74,17 +90,39 @@ const ProblemsList = () => {
               <div className="flex flex-col gap-1 w-1/3">
                 <label className="text-base text-secondary">검색</label>
                 <div className="flex flex-row w-full gap-5">
-                  <input
-                    placeholder="2~25글자 사이로 검색해주세요"
-                    className="text-base border px-2 border-gray-700 rounded h-12 w-full bg-gray-800"
-                    onChange={(e) => setKeyword(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        setSearch(keyword);
-                        setCurrentPage(0); // 검색하면 0페이지(첫페이지)로
-                      }
-                    }}
-                  />
+                  <div className="relative flex-grow">
+                    <input
+                      value={keyword}
+                      placeholder="2~25글자 사이로 검색해주세요"
+                      className="text-base border px-2 border-gray-700 rounded h-12 w-full bg-gray-800"
+                      onChange={(e) => handleChangeKeyword(e.target.value)}
+                      onCompositionEnd={handleCompositionEnd}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          setSearch(keyword);
+                          setCurrentPage(0); // 검색하면 0페이지(첫페이지)로
+                        }
+                      }}
+                    />
+                    {autoComplete && autoComplete.length > 0 && (
+                      <div className="absolute top-14 border px-2 border-gray-700 rounded bg-gray-800 w-full">
+                        {autoComplete.map((item) => (
+                          <p
+                            key={item}
+                            className="py-1 hover:bg-gray-700 cursor-pointer"
+                            onClick={() => {
+                              setKeyword(item);
+                              setSearch(item);
+                              setAutoCompleteKeyword('');
+                              setCurrentPage(0); // 검색하면 0페이지로
+                            }}
+                          >
+                            {item}
+                          </p>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                   <Button
                     aria-label="검색"
                     onClick={() => {

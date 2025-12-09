@@ -9,4 +9,5 @@ export const PATHS = {
     SEARCHPARAMS_ID: 'room-id',
     SEARCHPARAMS_TITLE: 'title',
   },
+  AUTO_COMPLETE: '/problems/suggestions',
 };

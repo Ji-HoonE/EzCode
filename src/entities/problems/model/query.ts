@@ -30,3 +30,18 @@ export const useProblemListQuery = (
     staleTime: 1000 * 60 * 5,
   });
 };
+export const useAutoCompleteKeywordQuery = (keyword: string) => {
+  return useQuery({
+    queryKey: ['autoCompleteKeyword', keyword],
+    queryFn: async () => {
+      const response = await ApiHelper.get<string[]>(`${PATHS.AUTO_COMPLETE}`, {
+        params: { keyword: keyword },
+      });
+      if (!response.data.result) {
+        return [];
+      }
+      return response.data.result;
+    },
+    staleTime: 1000 * 60 * 30,
+  });
+};
