@@ -3,7 +3,7 @@
 import { BASE_URL } from '@/constants/env';
 import { Client } from '@stomp/stompjs';
 
-import { createRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import ApiHelper from '@/api/client/api';
 import { API_URL } from '@/api/constants/api.constants';
@@ -11,7 +11,7 @@ import Cookies from 'js-cookie';
 import { useNotificationsActions } from '../model/store';
 
 export default function useConnectAlarmWebSocket() {
-  const alarmStompRef = createRef<Client | null>();
+  const alarmStompRef = useRef<Client | null>(null);
   const accessToken = Cookies.get('accessToken');
 
   const { setNotification, setRealTimeNotification } = useNotificationsActions();
