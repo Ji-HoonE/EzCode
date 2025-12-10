@@ -3,12 +3,11 @@
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { BASE_URL } from '@/constants/env';
-import { sharedStompRef } from '@/shared/lib/stomp/sharedStompRef';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useProblemWebSocketStoreActions } from '../model/useProblemWebSocketStore';
 import Cookies from 'js-cookie';
 export default function useConnectProblemWebSocket() {
-  const problemStompRef = sharedStompRef;
+  const problemStompRef = useRef<Client | null>(null);
 
   const { clearStore, setIsConnected } = useProblemWebSocketStoreActions();
   const accessToken = Cookies.get('accessToken');

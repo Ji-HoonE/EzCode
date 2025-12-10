@@ -1,25 +1,41 @@
+import { INITIAL_STATE, INotificationsStore, INotificationStoreState } from './store.types';
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
+import { useShallow } from 'zustand/shallow';
 
-import { create } from "zustand"
-import { Notification } from "./store.types"
+/** 인증 스토어 */
+const useNotificationsStore = create<INotificationsStore>()(
+  devtools((set) => ({
+    ...INITIAL_STATE,
+    actions: {
+      setNotification: (notifications) => {
+        set({
+          notifications: notifications,
+        });
+      },
+      setRealTimeNotification: (newNotification) => {
+        set((state: INotificationStoreState) => {
+          return {
+            ...state,
+            notifications: {
+              ...state.notifications,
+              content: [newNotification, ...state.notifications.content],
+              totalElement: state.notifications.totalElement + 1,
+            },
+          };
+        });
+      },
+    },
+  }))
+);
 
-
-
-interface NotificationStore {
-  notifications: {
-    content :  Notification[],
-    page : number,
-    size : number,
-    totalElement : number
-  }
-  setNotification: (notifications: {
-    content :  Notification[],
-    page : number,
-    size : number,
-    totalElement : number
-  }) => void
+/** 인증 액션 훅 */
+export function useNotificationsActions() {
+  return useNotificationsStore(
+    useShallow((state) => ({
+      setNotification: state.actions.setNotification,
+      setRealTimeNotification: state.actions.setRealTimeNotification,
+    }))
+  );
 }
-
-export const useNotificationsStore = create<NotificationStore>((set) => ({
-  notifications: {content : [], page :0, size :0,  totalElement: 0},
-  setNotification: (notifications) => set({ notifications }),
-}))
+export default useNotificationsStore;

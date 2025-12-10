@@ -5,11 +5,11 @@ import { API_URL } from '@/api/constants/api.constants';
 import { useReadNotification } from '@/entities/notifications/query';
 import { moveToNotificationPath } from '@/features/alarm/hooks/moveToNotificationPath';
 import useConnectAlarmWebSocket from '@/features/alarm/hooks/useNotificationWebSocket';
-import { useNotificationsStore } from '@/features/alarm/model/store';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { Notification } from '@/features/alarm/model/store.types';
+import useNotificationsStore from '@/features/alarm/model/store';
 
 export default function Notifications() {
   useConnectAlarmWebSocket();

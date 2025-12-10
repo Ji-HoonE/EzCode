@@ -1,6 +1,6 @@
 'use client';
 
-import { CompositionEvent, useEffect, useState } from 'react';
+import { ChangeEvent, CompositionEvent, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useAutoCompleteKeywordQuery, useProblemListQuery } from '@/entities/problems/model/query';
 import { Select } from '@/shared/ui/select/Select';
@@ -40,9 +40,15 @@ const ProblemsList = () => {
     }
   };
 
-  const handleChangeKeyword = (value: string) => {
+  const handleChangeKeyword = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
     if (!value) {
       setAutoCompleteKeyword('');
+    }
+    if (value.length >= 2 && value.length <= 25) {
+      if ((e.nativeEvent as InputEvent).isComposing) {
+        setAutoCompleteKeyword(value);
+      }
     }
     setKeyword(value);
   };
@@ -59,7 +65,7 @@ const ProblemsList = () => {
         <section className="flex flex-col gap-10">
           <section className="mb-6 p-6 bg-gray-900/50 rounded-[10px] border border-gray-800">
             <div className="flex flex-row gap-4 items-center w-full">
-              <div className="flex flex-col gap-1 w-1/3 max-w-[240px]">
+              <div className="flex flex-col gap-1 w-1/3 max-w-60">
                 <label htmlFor="category" className="text-base text-secondary">
                   카테고리
                 </label>
@@ -90,12 +96,12 @@ const ProblemsList = () => {
               <div className="flex flex-col gap-1 w-1/3">
                 <label className="text-base text-secondary">검색</label>
                 <div className="flex flex-row w-full gap-5">
-                  <div className="relative flex-grow">
+                  <div className="relative grow">
                     <input
                       value={keyword}
                       placeholder="2~25글자 사이로 검색해주세요"
                       className="text-base border px-2 border-gray-700 rounded h-12 w-full bg-gray-800"
-                      onChange={(e) => handleChangeKeyword(e.target.value)}
+                      onChange={(e) => handleChangeKeyword(e)}
                       onCompositionEnd={handleCompositionEnd}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
@@ -157,7 +163,7 @@ const ProblemsList = () => {
               className="flex flex-row gap-4"
             >
               {categoryCode !== '전체' && categoryCode && (
-                <div className="flex flex-row gap-2 items-center bg-[#00d084]/20 border border-[#00d084]/30 text-[#00d084] px-3 py-1.5 rounded-full text-sm font-medium">
+                <div className="flex flex-row gap-2 items-center bg-secondary/20 border border-secondary/30 text-secondary px-3 py-1.5 rounded-full text-sm font-medium">
                   <span>{CATEGORY_OPTIONS.find((item) => item.value === categoryCode)?.label}</span>
                   <Image
                     src="/icons/close/closeWithBorder.svg"
