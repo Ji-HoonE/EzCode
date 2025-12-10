@@ -1,13 +1,13 @@
 'use client';
 
 import { Bell } from 'lucide-react';
-import { useNotificationsStore } from '@/features/alarm/model/store';
 import { useReadNotification } from '@/entities/notifications/query';
 import { moveToNotificationPath } from '@/features/alarm/hooks/moveToNotificationPath';
 import { Notification } from '@/features/alarm/model/store.types';
 import { useRouter } from 'next/navigation';
 import ApiHelper from '@/api/client/api';
 import { API_URL } from '@/api/constants/api.constants';
+import useNotificationsStore from '@/features/alarm/model/store';
 
 export default function Notifications() {
   const { mutateAsync: readNotification } = useReadNotification();

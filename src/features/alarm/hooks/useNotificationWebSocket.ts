@@ -5,16 +5,16 @@ import { Client } from '@stomp/stompjs';
 
 import { createRef, useEffect } from 'react';
 import SockJS from 'sockjs-client';
-import { useNotificationsStore } from '../model/store';
 import ApiHelper from '@/api/client/api';
 import { API_URL } from '@/api/constants/api.constants';
 import Cookies from 'js-cookie';
+import { useNotificationsActions } from '../model/store';
 
 export default function useConnectAlarmWebSocket() {
   const alarmStompRef = createRef<Client | null>();
   const accessToken = Cookies.get('accessToken');
 
-  const { setNotification } = useNotificationsStore();
+  const { setNotification, setRealTimeNotification } = useNotificationsActions();
 
   useEffect(() => {
     if (!accessToken) {
@@ -37,15 +37,24 @@ export default function useConnectAlarmWebSocket() {
       onConnect: () => {
         console.log('✅ Alarm WebSocket connected');
 
+        client.subscribe('/user/queue/notification', (message) => {
+          try {
+            const body = JSON.parse(message.body);
+            setRealTimeNotification(body);
+          } catch (e) {
+            console.error('신규 알림 파싱 실패', e);
+          }
+        });
+
         client.subscribe('/user/queue/notifications', (message) => {
           try {
             const body = JSON.parse(message.body);
-            console.log('🔔 New notification received via WebSocket:', body);
             setNotification(body);
           } catch (e) {
-            console.error('❌ 알림 파싱 실패', e);
+            console.error('❌ 알림리스트 파싱 실패', e);
           }
         });
+
         ApiHelper.get(API_URL.NOTIFICATIONS);
       },
       onStompError: (frame) => {
