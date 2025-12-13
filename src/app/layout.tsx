@@ -34,15 +34,23 @@ export default async function RootLayout({
       </html>
     );
   const session = await getServerSession(authOptions);
+  const headersList = await headers();
+  const pathname = headersList.get('x-pathname') || '';
+  const isAdminRoute = pathname.startsWith('/admin');
+
   return (
     <html lang="ko">
       <body className="flex justify-center w-full h-full">
         <QueryProvider>
           <AuthProvider session={session}>
-            <div className="w-full h-full">
-              <NavigationBar />
-              <div className="w-full h-[calc(100vh-72px)] px-15">{children}</div>
-            </div>
+            {isAdminRoute ? (
+              children
+            ) : (
+              <div className="w-full h-full">
+                <NavigationBar />
+                <div className="w-full h-[calc(100vh-72px)] px-15">{children}</div>
+              </div>
+            )}
             <Toaster />
           </AuthProvider>
         </QueryProvider>

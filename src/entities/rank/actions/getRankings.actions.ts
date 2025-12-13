@@ -11,5 +11,5 @@ export const getAllTimeTop3Rankings = async () => {
     cache: 'force-cache',
   });
 
-  return res.data.result.slice(0, 3);
+  return res?.data?.result?.slice(0, 3);
 };

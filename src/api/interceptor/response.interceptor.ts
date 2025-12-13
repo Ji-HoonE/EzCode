@@ -6,6 +6,17 @@ import { IApiResponse } from './interceptor.interface';
 
 const ERROR_THROW_PATHS = ['/auth/signin'];
 export const responseInterceptor = async <T>(response: Response): Promise<IApiResponse<T>> => {
+  /** 204 No Content 응답 처리 */
+  if (response.status === 204) {
+    return {
+      data: {
+        success: true,
+        status: 204,
+        message: 'No Content',
+        result: null as T,
+      },
+    };
+  }
   /** 응답 데이터 JSON 파싱 */
   let data = null;
 
