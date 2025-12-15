@@ -99,6 +99,8 @@ export const Heatmap = ({ data }: { data: IHeatmapItem[] }) => {
         title=""
         value={tab}
         setValue={(value) => setTab(value)}
+        size="sm"
+        className="absolute -top-15 right-15"
       />
     </div>
   );
