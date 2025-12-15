@@ -7,7 +7,6 @@ import { Button } from '@/shared/ui/button/Button';
 import { toast } from 'sonner';
 
 export const ChangePassword = () => {
-  console.log('hi');
   const [passwordForm, setPasswordForm] = useState<{
     currentPassword: string;
     newPassword: string;
@@ -54,7 +53,7 @@ export const ChangePassword = () => {
       <section className="rounded-lg flex flex-col gap-8 border bg-gray-900/50 border-gray-700/50 p-10">
         <div className="flex flex-row gap-4 items-center">
           <Image src={Password} alt="password" width={30} height={30} />
-          <h1 className="text-2xl leading-0 font-bold">문제 풀이 기록</h1>
+          <h1 className="text-2xl leading-0 font-bold">비밀번호 변경</h1>
         </div>
         <div className="max-w-md space-y-4">
           {/* 현재 비밀번호 */}
