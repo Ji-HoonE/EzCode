@@ -1,8 +1,6 @@
 'use client';
 
-import ApiHelper from '@/api/client/api';
-import { API_URL } from '@/api/constants/api.constants';
-import { useReadNotification } from '@/entities/notifications/query';
+import { useGetNotifications, useReadNotification } from '@/entities/notifications/query';
 import { moveToNotificationPath } from '@/features/alarm/hooks/moveToNotificationPath';
 import useConnectAlarmWebSocket from '@/features/alarm/hooks/useNotificationWebSocket';
 import Image from 'next/image';
@@ -10,16 +8,19 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { Notification } from '@/features/alarm/model/store.types';
 import useNotificationsStore from '@/features/alarm/model/store';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function Notifications() {
   useConnectAlarmWebSocket();
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const { notifications } = useNotificationsStore();
+  const { notifications, isConnected } = useNotificationsStore();
   const { mutateAsync: readNotification } = useReadNotification();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const unreadCount = notifications.content.filter((n) => !n.isRead).length;
+  useGetNotifications(0, isConnected);
+  const notificationQuery = useQueryClient();
 
   const handleViewAll = () => {
     router.push('/notifications');
@@ -43,7 +44,7 @@ export default function Notifications() {
     const { notificationType, id, payload, isRead } = notification;
     if (!isRead) {
       await readNotification(id);
-      ApiHelper.get(API_URL.NOTIFICATIONS);
+      notificationQuery.invalidateQueries({ queryKey: ['notifications', 0] });
     }
     moveToNotificationPath(notificationType, payload.problemId, payload.discussionId, router);
     setOpen(false);

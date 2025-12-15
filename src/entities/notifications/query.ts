@@ -1,6 +1,6 @@
 import ApiHelper from '@/api/client/api';
 import { API_URL } from '@/api/constants/api.constants';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 export const useReadNotification = () => {
   return useMutation({
@@ -9,5 +9,19 @@ export const useReadNotification = () => {
 
       return result;
     },
+  });
+};
+export const useGetNotifications = (page: number, isWebSocketConnected: boolean) => {
+  return useQuery({
+    queryKey: ['notifications', page],
+    queryFn: async () => {
+      const result = await ApiHelper.get(
+        `${API_URL.NOTIFICATIONS}?pageable=page&page=${page}&size=5`
+      );
+
+      return result;
+    },
+    enabled: isWebSocketConnected,
+    staleTime: 0,
   });
 };
