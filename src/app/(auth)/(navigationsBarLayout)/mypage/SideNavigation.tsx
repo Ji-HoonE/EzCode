@@ -2,20 +2,19 @@
 
 import Password from './../../../../../public/icons/mypage/password.svg';
 import Image from 'next/image';
-import { User, MessageSquare, Flag, History } from 'lucide-react';
+import { User, Flag, History } from 'lucide-react';
 
 interface IProps {
   tab: string;
   setTab: (tab: string) => void;
   authType: string[];
 }
-type MenuItem = 'mine' | 'solved' | 'inquiry' | 'report' | 'password';
+type MenuItem = 'mine' | 'solved' | 'report' | 'password';
 export const SideNavigation = ({ tab, setTab, authType }: IProps) => {
   const menuItems = [
     { id: 'mine' as MenuItem, label: '내 정보 확인', icon: User },
     { id: 'report' as MenuItem, label: '신고', icon: Flag },
     { id: 'solved' as MenuItem, label: '문제 푼 기록', icon: History },
-    { id: 'inquiry' as MenuItem, label: '문의하기', icon: MessageSquare },
   ];
   const bottomMenuItem = [{ id: 'password' as MenuItem, label: '비밀번호 변경', icon: Password }];
   return (
