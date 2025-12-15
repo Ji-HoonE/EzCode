@@ -1,19 +1,27 @@
 'use client';
 
 import { Bell } from 'lucide-react';
-import { useReadNotification } from '@/entities/notifications/query';
+import { useGetNotifications, useReadNotification } from '@/entities/notifications/query';
 import { moveToNotificationPath } from '@/features/alarm/hooks/moveToNotificationPath';
 import { Notification } from '@/features/alarm/model/store.types';
 import { useRouter } from 'next/navigation';
-import ApiHelper from '@/api/client/api';
-import { API_URL } from '@/api/constants/api.constants';
 import useNotificationsStore from '@/features/alarm/model/store';
+import Pagination from '@/widgets/pagination';
+import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function Notifications() {
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const { mutateAsync: readNotification } = useReadNotification();
-  const { notifications } = useNotificationsStore();
+  const { notifications, isConnected } = useNotificationsStore();
   const router = useRouter();
 
+  const notificationQuery = useQueryClient();
+  const { isLoading } = useGetNotifications(currentPage, isConnected);
+
+  const totalPages = notifications
+    ? Math.ceil(notifications.totalElements / notifications.size)
+    : 0;
   const totalNotifications = notifications?.content.filter((n) => !n.isRead).length || 0;
 
   const handleClickNotification = async (notification: Notification) => {
@@ -21,13 +29,13 @@ export default function Notifications() {
     moveToNotificationPath(notificationType, payload.problemId, payload.discussionId, router);
     if (isRead) return;
     await readNotification(id);
-    ApiHelper.get(API_URL.NOTIFICATIONS);
+    notificationQuery.invalidateQueries({ queryKey: ['notifications', currentPage] });
   };
 
   const handleMarkAllAsRead = async () => {
     const unreadNotifications = notifications.content.filter((n) => !n.isRead);
     await Promise.all(unreadNotifications.map((n) => readNotification(n.id)));
-    ApiHelper.get(API_URL.NOTIFICATIONS);
+    notificationQuery.invalidateQueries({ queryKey: ['notifications', currentPage] });
   };
 
   return (
@@ -119,6 +127,12 @@ export default function Notifications() {
               </button>
             </div>
           )}
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={totalPages}
+            isLoading={isLoading}
+          />
         </section>
       </div>
     </div>

@@ -25,11 +25,12 @@ export interface INotifications {
   content: Notification[];
   page: number;
   size: number;
-  totalElement: number;
+  totalElements: number;
 }
 /** 스토어 상태 인터페이스 */
 export interface INotificationStoreState {
   notifications: INotifications;
+  isConnected: boolean;
 }
 
 export const INITIAL_STATE = {
@@ -37,8 +38,9 @@ export const INITIAL_STATE = {
     content: [],
     page: 0,
     size: 10,
-    totalElement: 0,
+    totalElements: 0,
   },
+  isConnected: false,
 };
 
 /** 스토어 액션 인터페이스 */
@@ -46,6 +48,7 @@ interface INotificationStoreAction {
   actions: {
     setNotification: (notifications: INotifications) => void;
     setRealTimeNotification: (newNotification: Notification) => void;
+    setIsConnected: (isConnected: boolean) => void;
   };
 }
 

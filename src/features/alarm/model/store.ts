@@ -20,9 +20,14 @@ const useNotificationsStore = create<INotificationsStore>()(
             notifications: {
               ...state.notifications,
               content: [newNotification, ...state.notifications.content],
-              totalElement: state.notifications.totalElement + 1,
+              totalElements: state.notifications.totalElements + 1,
             },
           };
+        });
+      },
+      setIsConnected: (isConnected: boolean) => {
+        set({
+          isConnected,
         });
       },
     },
@@ -35,6 +40,7 @@ export function useNotificationsActions() {
     useShallow((state) => ({
       setNotification: state.actions.setNotification,
       setRealTimeNotification: state.actions.setRealTimeNotification,
+      setIsConnected: state.actions.setIsConnected,
     }))
   );
 }

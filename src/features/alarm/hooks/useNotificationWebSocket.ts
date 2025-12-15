@@ -5,8 +5,6 @@ import { Client } from '@stomp/stompjs';
 
 import { useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
-import ApiHelper from '@/api/client/api';
-import { API_URL } from '@/api/constants/api.constants';
 import Cookies from 'js-cookie';
 import { useNotificationsActions } from '../model/store';
 
@@ -14,7 +12,7 @@ export default function useConnectAlarmWebSocket() {
   const alarmStompRef = useRef<Client | null>(null);
   const accessToken = Cookies.get('accessToken');
 
-  const { setNotification, setRealTimeNotification } = useNotificationsActions();
+  const { setNotification, setRealTimeNotification, setIsConnected } = useNotificationsActions();
 
   useEffect(() => {
     if (!accessToken) {
@@ -36,7 +34,7 @@ export default function useConnectAlarmWebSocket() {
       heartbeatOutgoing: 10000, // 10초마다 클라이언트 -> 서버 ping 전송
       onConnect: () => {
         console.log('✅ Alarm WebSocket connected');
-
+        setIsConnected(true);
         client.subscribe('/user/queue/notification', (message) => {
           try {
             const body = JSON.parse(message.body);
@@ -55,7 +53,7 @@ export default function useConnectAlarmWebSocket() {
           }
         });
 
-        ApiHelper.get(API_URL.NOTIFICATIONS);
+        // ApiHelper.get(API_URL.NOTIFICATIONS);
       },
       onStompError: (frame) => {
         console.error('❌ STOMP Error', frame);
@@ -69,6 +67,7 @@ export default function useConnectAlarmWebSocket() {
     // 언마운트 시 정리
     return () => {
       console.log('🔌 Cleaning up Alarm STOMP client');
+      setIsConnected(false);
       client.deactivate();
       alarmStompRef.current = null;
     };
