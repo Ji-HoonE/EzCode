@@ -1,22 +1,44 @@
 'use client';
 
 import Password from './../../../../../public/icons/mypage/password.svg';
+import UserSvg from './../../../../../public/icons/user.svg';
+
 import Image from 'next/image';
 import { User, Flag, History } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import useWithDraw from '@/features/auth/hooks/useWithDraw';
 
 interface IProps {
   tab: string;
   setTab: (tab: string) => void;
   authType: string[];
 }
-type MenuItem = 'mine' | 'solved' | 'report' | 'password';
+type MenuItem = 'mine' | 'solved' | 'report' | 'password' | 'with-draw';
 export const SideNavigation = ({ tab, setTab, authType }: IProps) => {
+  const { handleWithDrawClick } = useWithDraw();
   const menuItems = [
     { id: 'mine' as MenuItem, label: '내 정보 확인', icon: User },
     { id: 'report' as MenuItem, label: '신고', icon: Flag },
     { id: 'solved' as MenuItem, label: '문제 푼 기록', icon: History },
   ];
-  const bottomMenuItem = [{ id: 'password' as MenuItem, label: '비밀번호 변경', icon: Password }];
+  const bottomMenuItem = [
+    {
+      id: 'password' as MenuItem,
+      label: '비밀번호 변경',
+      icon: Password,
+      checkEmailForHidden: true,
+      onClick: () => {
+        setTab('password');
+      },
+    },
+    {
+      id: 'with-draw' as MenuItem,
+      label: '회원 탈퇴',
+      icon: UserSvg,
+      checkEmailForHidden: false,
+      onClick: handleWithDrawClick,
+    },
+  ];
   return (
     <div className="w-64 border-r border-gray-700/50 p-6 flex h-full flex-col">
       <div className="mb-8">
@@ -47,30 +69,31 @@ export const SideNavigation = ({ tab, setTab, authType }: IProps) => {
             );
           })}
         </nav>
-        {authType.includes('EMAIL') && (
-          <nav className="space-y-2 border-t border-gray-700/50">
-            {/* 하단 메뉴 (비밀번호 변경) */}
+        <nav className="space-y-2 border-t border-gray-700/50 pt-4 text-left">
+          <div>
+            {/* 하단 메뉴 (비밀번호 변경, 회원탈퇴) */}
             {bottomMenuItem.map((item) => {
+              if (item.checkEmailForHidden && !authType.includes('EMAIL')) {
+                return null;
+              }
               return (
                 <button
                   key={item.id}
-                  onClick={() => setTab(item.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                  onClick={item.onClick}
+                  className={cn(
+                    `w-full flex items-center gap-2 p-2 rounded-lg transition-all duration-200`,
                     tab === item.id
-                      ? 'text-white shadow-lg'
-                      : 'text-gray-400 hover:text-white hover:bg-white/8'
-                  }`}
-                  style={{
-                    backgroundColor: tab === item.id ? '#214d35' : 'transparent',
-                  }}
+                      ? 'text-white shadow-lg bg-primary'
+                      : 'text-gray-400 hover:text-white hover:bg-white/8 bg-transparent'
+                  )}
                 >
                   <Image src={item.icon} alt="menuIcon" width={20} height={20} />
                   <span className="font-medium">{item.label}</span>
                 </button>
               );
             })}
-          </nav>
-        )}
+          </div>
+        </nav>
       </div>
     </div>
   );
