@@ -11,6 +11,7 @@ export const API_URL = {
     FIND_PASSWORD: '/auth/find-password',
     RESET_PASSWORD: '/auth/reset-password',
     FIND_PASSWORD_VERIFY: '/auth/find-password-verify',
+    WITHDRAW: '/users/withdraw',
   },
   PROBLEM: {
     GET_PROBLEMS: '/problems',
