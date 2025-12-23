@@ -17,6 +17,7 @@ import { ModifyForm } from '../ui/ModifyForm';
 import { Badge } from '@/shared/ui/badge/Badge';
 import useUserInfoEdit from '@/features/user/hooks/useUserInfoEdit';
 import { Spinner } from '@/shared/ui/loading-indicators';
+import { useUserStore } from '@/entities/user/model/store';
 
 export const Mine = () => {
   const [heatmapData, setHeatmapData] = useState<IHeatmapItem[]>([]);
@@ -27,8 +28,18 @@ export const Mine = () => {
   const { data: heatmap } = useMyDailySolved();
   const [languageList, setLanguageList] = useState<{ label: string; value: string }[]>([]);
   const myRanking = ranking?.data.result;
-  const { handleClickEdit, tab, setTab, editForm, setEditForm, handleClickEmailVerifySend } =
-    useUserInfoEdit();
+  const { setUser } = useUserStore();
+  const {
+    handleClickEdit,
+    tab,
+    setTab,
+    editForm,
+    setEditForm,
+    handleClickEmailVerifySend,
+    showEmailVerifyForm,
+    handleClickEmailVerifyConfirm,
+  } = useUserInfoEdit();
+
   const aiReviewCnt = aiReview?.data.result?.reviewToken;
   const myInfo = data?.data.result;
   const levelCalculator = (count: number) => {
@@ -60,6 +71,11 @@ export const Mine = () => {
       setLanguageList((prev) => [...prev, { label: item.name, value: String(item.id) }]);
     });
   }, [languages]);
+
+  useEffect(() => {
+    if (!data) return;
+    setUser(data?.data.result);
+  }, [data]);
 
   if (!myInfo) return <Spinner />;
 
@@ -210,6 +226,17 @@ export const Mine = () => {
                     />
                   )}
                 </div>
+                {showEmailVerifyForm && (
+                  <div className="text-sm mt-2 flex gap-2 items-center">
+                    인증 메일이 발송되었습니다. 이메일을 확인해주세요.
+                    <Button
+                      variant="primary"
+                      label="확인"
+                      size="sm"
+                      onClick={handleClickEmailVerifyConfirm}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </>

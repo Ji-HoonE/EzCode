@@ -82,6 +82,11 @@ export default function useUserInfoEdit() {
     }
   };
 
+  const handleClickEmailVerifyConfirm = () => {
+    setShowEmailVerifyForm(false);
+    queryClient.invalidateQueries({ queryKey: ['my-info'] });
+  };
+
   return {
     handleClickEdit,
     tab,
@@ -90,5 +95,6 @@ export default function useUserInfoEdit() {
     setEditForm,
     handleClickEmailVerifySend,
     showEmailVerifyForm,
+    handleClickEmailVerifyConfirm,
   };
 }
