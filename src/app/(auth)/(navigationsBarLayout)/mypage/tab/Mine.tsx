@@ -1,17 +1,15 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-
 import { Heatmap } from '../ui/Heatmap';
 import {
   useEmailVerify,
   useGetLanguageList,
-  useModifyInfo,
   useMyAiReviewCheckQuery,
   useMyDailySolved,
   useMyInfoQuery,
   useMyRankingQuery,
 } from '@/entities/mypage/model/query';
-import { IHeatmapItem, IModifyBody, IMyInfo } from '@/entities/mypage/model/types';
+import { IHeatmapItem, IMyInfo } from '@/entities/mypage/model/types';
 import { Check, User } from 'lucide-react';
 
 import Bookopen from './../../../../../../public/icons/mypage/bookopen.svg';
@@ -19,31 +17,11 @@ import { Button } from '@/shared/ui/button/Button';
 import { BASE_URL } from '@/constants/env';
 import { ModifyForm } from '../ui/ModifyForm';
 
-import { useQueryClient } from '@tanstack/react-query';
 import { Badge } from '@/shared/ui/badge/Badge';
 import { toast } from 'sonner';
-import { useUserStore } from '@/entities/user/model/store';
+import useUserInfoEdit from '@/features/user/hooks/useUserInfoEdit';
 
 export const Mine = () => {
-  const queryClient = useQueryClient();
-  const [tab, setTab] = useState<'info' | 'modify'>('info');
-  const [editForm, setEditForm] = useState<IMyInfo>({
-    nickname: '',
-    githubUrl: '',
-    blogUrl: '',
-    profileImageUrl: '',
-    tier: '',
-    introduction: '',
-    age: 0,
-    email: '',
-    totalSolvedCount: 0,
-    username: '',
-    userRole: '',
-    verified: false,
-    userAuthTypes: [],
-    language: null,
-  });
-
   const [info, setInfo] = useState<IMyInfo>(Object);
   const [heatmapData, setHeatmapData] = useState<IHeatmapItem[]>([]);
   const { data } = useMyInfoQuery();
@@ -52,12 +30,10 @@ export const Mine = () => {
   const { data: aiReview } = useMyAiReviewCheckQuery();
   const { data: heatmap } = useMyDailySolved();
   const { mutateAsync: emailVerfiy } = useEmailVerify(BASE_URL || '');
-  const { mutateAsync: modify } = useModifyInfo();
   const [languageList, setLanguageList] = useState<{ label: string; value: string }[]>([]);
-  const { setUser } = useUserStore();
   const myInfo = data?.data.result;
   const myRanking = ranking?.data.result;
-
+  const { handleClickEdit, tab, setTab, editForm, setEditForm } = useUserInfoEdit();
   const aiReviewCnt = aiReview?.data.result?.reviewToken;
   const levelCalculator = (count: number) => {
     if (count === 0) {
@@ -109,47 +85,7 @@ export const Mine = () => {
                 if (tab === 'info') {
                   setTab('modify');
                 } else {
-                  if (editForm.nickname.length < 1) {
-                    toast.error('닉네임을 확인해주세요.', {
-                      richColors: true,
-                      style: {
-                        fontWeight: 'bold',
-                        fontSize: '16px',
-                      },
-                    });
-                    return;
-                  }
-
-                  // API 요청용 body 생성
-                  const body: IModifyBody = {
-                    age: editForm.age,
-                    blogUrl: editForm.blogUrl || null,
-                    githubUrl: editForm.githubUrl || null,
-                    introduction: editForm.introduction || null,
-                    languageId: editForm.language?.id || null, // 여기서 id만 보냄
-                    nickname: editForm.nickname,
-                  };
-
-                  const response = await modify({
-                    request: body,
-                    image: editForm.profileImage ?? undefined,
-                  });
-
-                  setUser(response.result);
-                  toast.success(response.message, {
-                    richColors: false,
-                    style: {
-                      background: '#00d084',
-                      color: '#ffffff',
-                      fontWeight: 'bold',
-                      fontSize: '16px',
-                      border: 'none',
-                    },
-                  });
-                  if (response.status === 200) {
-                    queryClient.invalidateQueries({ queryKey: ['my-info'] });
-                    setTab('info');
-                  }
+                  handleClickEdit();
                 }
               }}
             />
