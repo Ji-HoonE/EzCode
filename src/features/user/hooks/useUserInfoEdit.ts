@@ -1,4 +1,5 @@
-import { useModifyInfo } from '@/entities/mypage/model/query';
+import { BASE_URL } from '@/constants/env';
+import { useEmailVerify, useModifyInfo } from '@/entities/mypage/model/query';
 import { IModifyBody, IMyInfo } from '@/entities/mypage/model/types';
 import { useUserStore } from '@/entities/user/model/store';
 import { useQueryClient } from '@tanstack/react-query';
@@ -6,8 +7,10 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 export default function useUserInfoEdit() {
+  const { mutateAsync: emailVerfiy } = useEmailVerify(BASE_URL || '');
   const { mutateAsync: modify } = useModifyInfo();
   const [tab, setTab] = useState<'info' | 'modify'>('info');
+  const [showEmailVerifyForm, setShowEmailVerifyForm] = useState(false);
   const [editForm, setEditForm] = useState<IMyInfo>({
     nickname: '',
     githubUrl: '',
@@ -70,5 +73,22 @@ export default function useUserInfoEdit() {
       setTab('info');
     }
   };
-  return { handleClickEdit, tab, setTab, editForm, setEditForm };
+  const handleClickEmailVerifySend = async () => {
+    try {
+      await emailVerfiy();
+      setShowEmailVerifyForm(true);
+    } catch {
+      setShowEmailVerifyForm(false);
+    }
+  };
+
+  return {
+    handleClickEdit,
+    tab,
+    setTab,
+    editForm,
+    setEditForm,
+    handleClickEmailVerifySend,
+    showEmailVerifyForm,
+  };
 }

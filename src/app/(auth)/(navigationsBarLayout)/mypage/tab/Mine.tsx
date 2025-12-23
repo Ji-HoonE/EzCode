@@ -2,7 +2,6 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Heatmap } from '../ui/Heatmap';
 import {
-  useEmailVerify,
   useGetLanguageList,
   useMyAiReviewCheckQuery,
   useMyDailySolved,
@@ -14,11 +13,8 @@ import { Check, User } from 'lucide-react';
 
 import Bookopen from './../../../../../../public/icons/mypage/bookopen.svg';
 import { Button } from '@/shared/ui/button/Button';
-import { BASE_URL } from '@/constants/env';
 import { ModifyForm } from '../ui/ModifyForm';
-
 import { Badge } from '@/shared/ui/badge/Badge';
-import { toast } from 'sonner';
 import useUserInfoEdit from '@/features/user/hooks/useUserInfoEdit';
 import { Spinner } from '@/shared/ui/loading-indicators';
 
@@ -29,10 +25,10 @@ export const Mine = () => {
   const { data: ranking } = useMyRankingQuery('all-time');
   const { data: aiReview } = useMyAiReviewCheckQuery();
   const { data: heatmap } = useMyDailySolved();
-  const { mutateAsync: emailVerfiy } = useEmailVerify(BASE_URL || '');
   const [languageList, setLanguageList] = useState<{ label: string; value: string }[]>([]);
   const myRanking = ranking?.data.result;
-  const { handleClickEdit, tab, setTab, editForm, setEditForm } = useUserInfoEdit();
+  const { handleClickEdit, tab, setTab, editForm, setEditForm, handleClickEmailVerifySend } =
+    useUserInfoEdit();
   const aiReviewCnt = aiReview?.data.result?.reviewToken;
   const myInfo = data?.data.result;
   const levelCalculator = (count: number) => {
@@ -210,19 +206,7 @@ export const Mine = () => {
                     <Button
                       variant="primary"
                       label="이메일 인증"
-                      onClick={async () => {
-                        const response = await emailVerfiy();
-                        toast.success(response, {
-                          richColors: false,
-                          style: {
-                            background: '#00d084',
-                            color: '#ffffff',
-                            fontWeight: 'bold',
-                            fontSize: '16px',
-                            border: 'none',
-                          },
-                        });
-                      }}
+                      onClick={handleClickEmailVerifySend}
                     />
                   )}
                 </div>
