@@ -1,64 +1,47 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-
 import { Heatmap } from '../ui/Heatmap';
 import {
-  useEmailVerify,
   useGetLanguageList,
-  useModifyInfo,
   useMyAiReviewCheckQuery,
   useMyDailySolved,
   useMyInfoQuery,
   useMyRankingQuery,
 } from '@/entities/mypage/model/query';
-import { IHeatmapItem, IModifyBody, IMyInfo } from '@/entities/mypage/model/types';
+import { IHeatmapItem } from '@/entities/mypage/model/types';
 import { Check, User } from 'lucide-react';
 
 import Bookopen from './../../../../../../public/icons/mypage/bookopen.svg';
 import { Button } from '@/shared/ui/button/Button';
-import { BASE_URL } from '@/constants/env';
 import { ModifyForm } from '../ui/ModifyForm';
-
-import { useQueryClient } from '@tanstack/react-query';
 import { Badge } from '@/shared/ui/badge/Badge';
-import { toast } from 'sonner';
+import useUserInfoEdit from '@/features/user/hooks/useUserInfoEdit';
+import { Spinner } from '@/shared/ui/loading-indicators';
 import { useUserStore } from '@/entities/user/model/store';
 
 export const Mine = () => {
-  const queryClient = useQueryClient();
-  const [tab, setTab] = useState<'info' | 'modify'>('info');
-  const [editForm, setEditForm] = useState<IMyInfo>({
-    nickname: '',
-    githubUrl: '',
-    blogUrl: '',
-    profileImageUrl: '',
-    tier: '',
-    introduction: '',
-    age: 0,
-    email: '',
-    totalSolvedCount: 0,
-    username: '',
-    userRole: '',
-    verified: false,
-    userAuthTypes: [],
-    language: null,
-  });
-
-  const [info, setInfo] = useState<IMyInfo>(Object);
   const [heatmapData, setHeatmapData] = useState<IHeatmapItem[]>([]);
   const { data } = useMyInfoQuery();
   const { data: languages } = useGetLanguageList();
   const { data: ranking } = useMyRankingQuery('all-time');
   const { data: aiReview } = useMyAiReviewCheckQuery();
   const { data: heatmap } = useMyDailySolved();
-  const { mutateAsync: emailVerfiy } = useEmailVerify(BASE_URL || '');
-  const { mutateAsync: modify } = useModifyInfo();
   const [languageList, setLanguageList] = useState<{ label: string; value: string }[]>([]);
-  const { setUser } = useUserStore();
-  const myInfo = data?.data.result;
   const myRanking = ranking?.data.result;
+  const { setUser } = useUserStore();
+  const {
+    handleClickEdit,
+    tab,
+    setTab,
+    editForm,
+    setEditForm,
+    handleClickEmailVerifySend,
+    showEmailVerifyForm,
+    handleClickEmailVerifyConfirm,
+  } = useUserInfoEdit();
 
   const aiReviewCnt = aiReview?.data.result?.reviewToken;
+  const myInfo = data?.data.result;
   const levelCalculator = (count: number) => {
     if (count === 0) {
       return 0;
@@ -83,16 +66,18 @@ export const Mine = () => {
   }, [heatmap]);
 
   useEffect(() => {
-    if (!myInfo) return;
-    setInfo(myInfo);
-  }, [myInfo]);
-
-  useEffect(() => {
     if (!languages) return;
     languages.data.result.map((item) => {
       setLanguageList((prev) => [...prev, { label: item.name, value: String(item.id) }]);
     });
   }, [languages]);
+
+  useEffect(() => {
+    if (!data) return;
+    setUser(data?.data.result);
+  }, [data]);
+
+  if (!myInfo) return <Spinner />;
 
   return (
     <div className=" flex flex-col gap-10 h-full">
@@ -109,47 +94,7 @@ export const Mine = () => {
                 if (tab === 'info') {
                   setTab('modify');
                 } else {
-                  if (editForm.nickname.length < 1) {
-                    toast.error('닉네임을 확인해주세요.', {
-                      richColors: true,
-                      style: {
-                        fontWeight: 'bold',
-                        fontSize: '16px',
-                      },
-                    });
-                    return;
-                  }
-
-                  // API 요청용 body 생성
-                  const body: IModifyBody = {
-                    age: editForm.age,
-                    blogUrl: editForm.blogUrl || null,
-                    githubUrl: editForm.githubUrl || null,
-                    introduction: editForm.introduction || null,
-                    languageId: editForm.language?.id || null, // 여기서 id만 보냄
-                    nickname: editForm.nickname,
-                  };
-
-                  const response = await modify({
-                    request: body,
-                    image: editForm.profileImage ?? undefined,
-                  });
-
-                  setUser(response.result);
-                  toast.success(response.message, {
-                    richColors: false,
-                    style: {
-                      background: '#00d084',
-                      color: '#ffffff',
-                      fontWeight: 'bold',
-                      fontSize: '16px',
-                      border: 'none',
-                    },
-                  });
-                  if (response.status === 200) {
-                    queryClient.invalidateQueries({ queryKey: ['my-info'] });
-                    setTab('info');
-                  }
+                  handleClickEdit();
                 }
               }}
             />
@@ -158,7 +103,7 @@ export const Mine = () => {
                 label="취소"
                 onClick={() => {
                   setTab('info');
-                  setEditForm(info);
+                  setEditForm(myInfo);
                 }}
               />
             )}
@@ -277,29 +222,28 @@ export const Mine = () => {
                     <Button
                       variant="primary"
                       label="이메일 인증"
-                      onClick={async () => {
-                        const response = await emailVerfiy();
-                        toast.success(response, {
-                          richColors: false,
-                          style: {
-                            background: '#00d084',
-                            color: '#ffffff',
-                            fontWeight: 'bold',
-                            fontSize: '16px',
-                            border: 'none',
-                          },
-                        });
-                      }}
+                      onClick={handleClickEmailVerifySend}
                     />
                   )}
                 </div>
+                {showEmailVerifyForm && (
+                  <div className="text-sm mt-2 flex gap-2 items-center">
+                    인증 메일이 발송되었습니다. 이메일을 확인해주세요.
+                    <Button
+                      variant="primary"
+                      label="확인"
+                      size="sm"
+                      onClick={handleClickEmailVerifyConfirm}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </>
         ) : (
           <ModifyForm
             languageList={languageList}
-            myInfo={info}
+            myInfo={myInfo}
             editForm={editForm}
             setEditForm={setEditForm}
             languages={languages?.data.result}

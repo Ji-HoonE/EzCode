@@ -16,6 +16,7 @@ import {
 import { TPeriod } from '@/shared/types/mypage.type';
 import { API_URL } from '@/api/constants/api.constants';
 import Cookies from 'js-cookie';
+import { toast } from 'sonner';
 
 export const useMyInfoQuery = () => {
   const accessToken = Cookies.get('accessToken');
@@ -99,9 +100,12 @@ export const useEmailVerify = (redirectUrl: string) => {
       const response = await ApiHelper.post<ChangePasswordRequest>(API_URL.MYPAGE.VERIFY_EMAIL, {
         redirectUrl: redirectUrl,
       });
-      if (response.data.status === 200) {
+      if (response.data.success) {
+        toast.success('이메일 인증 요청 성공');
         return response.data.result.message;
       } else {
+        toast.error(response.data.message);
+
         return response.data.message;
       }
     },
@@ -128,7 +132,6 @@ export const useModifyInfo = () => {
       request: IModifyBody; // 닉네임, 블로그, 깃허브 등 정보
       image?: File; // 프로필 이미지 (선택)
     }) => {
-
       const formData = new FormData();
 
       // request(JSON) 추가
@@ -139,9 +142,13 @@ export const useModifyInfo = () => {
         formData.append('image', image);
       }
 
-      const response = await ApiHelper.put<IUserInfoModifyResponse>(API_URL.MYPAGE.USER_INFO, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const response = await ApiHelper.put<IUserInfoModifyResponse>(
+        API_URL.MYPAGE.USER_INFO,
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
 
       return response.data;
     },
