@@ -9,7 +9,7 @@ import {
   useMyInfoQuery,
   useMyRankingQuery,
 } from '@/entities/mypage/model/query';
-import { IHeatmapItem, IMyInfo } from '@/entities/mypage/model/types';
+import { IHeatmapItem } from '@/entities/mypage/model/types';
 import { Check, User } from 'lucide-react';
 
 import Bookopen from './../../../../../../public/icons/mypage/bookopen.svg';
@@ -20,9 +20,9 @@ import { ModifyForm } from '../ui/ModifyForm';
 import { Badge } from '@/shared/ui/badge/Badge';
 import { toast } from 'sonner';
 import useUserInfoEdit from '@/features/user/hooks/useUserInfoEdit';
+import { Spinner } from '@/shared/ui/loading-indicators';
 
 export const Mine = () => {
-  const [info, setInfo] = useState<IMyInfo>(Object);
   const [heatmapData, setHeatmapData] = useState<IHeatmapItem[]>([]);
   const { data } = useMyInfoQuery();
   const { data: languages } = useGetLanguageList();
@@ -31,10 +31,10 @@ export const Mine = () => {
   const { data: heatmap } = useMyDailySolved();
   const { mutateAsync: emailVerfiy } = useEmailVerify(BASE_URL || '');
   const [languageList, setLanguageList] = useState<{ label: string; value: string }[]>([]);
-  const myInfo = data?.data.result;
   const myRanking = ranking?.data.result;
   const { handleClickEdit, tab, setTab, editForm, setEditForm } = useUserInfoEdit();
   const aiReviewCnt = aiReview?.data.result?.reviewToken;
+  const myInfo = data?.data.result;
   const levelCalculator = (count: number) => {
     if (count === 0) {
       return 0;
@@ -59,16 +59,13 @@ export const Mine = () => {
   }, [heatmap]);
 
   useEffect(() => {
-    if (!myInfo) return;
-    setInfo(myInfo);
-  }, [myInfo]);
-
-  useEffect(() => {
     if (!languages) return;
     languages.data.result.map((item) => {
       setLanguageList((prev) => [...prev, { label: item.name, value: String(item.id) }]);
     });
   }, [languages]);
+
+  if (!myInfo) return <Spinner />;
 
   return (
     <div className=" flex flex-col gap-10 h-full">
@@ -94,7 +91,7 @@ export const Mine = () => {
                 label="취소"
                 onClick={() => {
                   setTab('info');
-                  setEditForm(info);
+                  setEditForm(myInfo);
                 }}
               />
             )}
@@ -235,7 +232,7 @@ export const Mine = () => {
         ) : (
           <ModifyForm
             languageList={languageList}
-            myInfo={info}
+            myInfo={myInfo}
             editForm={editForm}
             setEditForm={setEditForm}
             languages={languages?.data.result}
