@@ -14,3 +14,11 @@ export interface ISubmissionReviewRequest extends ISourceCode {
 export interface ISubmissionReviewResponse {
   reviewContent: string;
 }
+
+export interface ISaveDraftResponse {
+  problemId: number;
+  languageId: number;
+  code: string;
+  version: number;
+}
+export type ISaveDraftRequest = ISaveDraftResponse;

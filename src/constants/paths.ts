@@ -10,4 +10,5 @@ export const PATHS = {
     SEARCHPARAMS_TITLE: 'title',
   },
   AUTO_COMPLETE: '/problems/suggestions',
+  DRAFT: '/drafts',
 };

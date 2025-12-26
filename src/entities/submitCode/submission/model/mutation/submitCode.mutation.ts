@@ -3,11 +3,14 @@ import { useMutation } from '@tanstack/react-query';
 import { API_CONSTANTS, getProblemIdPath } from '@/api/constants/api.constants';
 import ApiHelper from '@/api/client/api';
 import {
+  ISaveDraftRequest,
+  ISaveDraftResponse,
   ISubmissionReviewRequest,
   ISubmissionReviewResponse,
   ISubmitCodeRequest,
 } from './submitCode.mutation.type';
 import { useProblemWebSocketStoreActions } from '@/features/submitCode/submission/model/useProblemWebSocketStore';
+import { PATHS } from '@/constants/paths';
 
 //문제 제출하기
 export const useSubmissionForResultMutation = (problemId: ProblemId) => {
@@ -31,6 +34,24 @@ export const useISubmissionForReviewMutation = (problemId: ProblemId) => {
 
       const response = await ApiHelper.post<ISubmissionReviewResponse>(path, params);
       return response.data.result.reviewContent;
+    },
+  });
+};
+
+//작성중인 코드 저장
+export const useSaveDraftData = (hasAccessToken: boolean) => {
+  return useMutation({
+    mutationFn: async (saveDraftData: ISaveDraftRequest) => {
+      if (!hasAccessToken) return null;
+      try {
+        const res = await ApiHelper.post<ISaveDraftResponse>(`${PATHS.DRAFT}`, saveDraftData);
+        if (res.data.success) {
+          const newVersion = res.data.result.version;
+          return newVersion;
+        }
+      } catch {
+        return null;
+      }
     },
   });
 };

@@ -15,11 +15,14 @@ import Cookies from 'js-cookie';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useUserStore } from '@/entities/user/model/store';
 import { useState } from 'react';
+import { useSaveDraftData } from '@/entities/submitCode/submission/model/mutation/submitCode.mutation';
 interface TerminalPanelProps {
   problemId: ProblemId;
   setMode: (mode: Mode) => void;
   mode: Mode;
   sourceCodeData: ISourceCode;
+  draftVersion: number;
+  setDraftVersion: (version: number) => void;
 }
 
 export default function TerminalPanel({
@@ -27,6 +30,8 @@ export default function TerminalPanel({
   setMode,
   mode,
   sourceCodeData,
+  draftVersion,
+  setDraftVersion,
 }: TerminalPanelProps) {
   const [isPanelButtonHovered, setIsPanelButtonHovered] = useState({
     review: false,
@@ -37,6 +42,7 @@ export default function TerminalPanel({
   const { user } = useUserStore();
   useGetSubmitPrepareData(problemId, !!accessToken);
   const { submitPrepareData } = useProblemWebSocketStore();
+  const { mutateAsync: saveDraft } = useSaveDraftData(!!accessToken);
 
   const authGuardTrigger = () => {
     const params = new URLSearchParams(searchParams.toString());
@@ -49,6 +55,15 @@ export default function TerminalPanel({
 
   const submitForResult = () => {
     if (!accessToken) return authGuardTrigger();
+    const newVersion = saveDraft({
+      problemId: Number(problemId),
+      languageId: sourceCodeData.languageId,
+      code: sourceCodeData.sourceCode,
+      version: draftVersion,
+    });
+    if (typeof newVersion === 'number') {
+      setDraftVersion(newVersion);
+    }
     clearResults();
     mutateAsync({ ...sourceCodeData, sessionKey: submitPrepareData.sessionKey || '' });
     setMode('result');
