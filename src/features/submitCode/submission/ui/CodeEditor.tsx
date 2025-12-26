@@ -8,8 +8,6 @@ import {
   SOURCECODE,
 } from '@/shared';
 import { Select } from '@/shared/ui/select/Select';
-import { useEffect } from 'react';
-import { useAutoSave } from '@/shared/util/saveLocalStorage';
 import { ISourceCode } from '@/entities/submitCode';
 
 interface ICodeEditorProps {
@@ -17,21 +15,11 @@ interface ICodeEditorProps {
   sourceCodeData: ISourceCode;
   problemId: string;
 }
-export default function CodeEditor({
-  onChangeSourceCodeData,
-  sourceCodeData,
-  problemId,
-}: ICodeEditorProps) {
+export default function CodeEditor({ onChangeSourceCodeData, sourceCodeData }: ICodeEditorProps) {
   const { languageId } = sourceCodeData;
-
-  const debouncedSave = useAutoSave(2000);
 
   const handleChangeLanguage = (value: string) => {
     const languageId = Number(value);
-    debouncedSave(`sourceCodeData-${problemId}`, {
-      sourceCode: SOURCECODE[languageId],
-      languageId: languageId,
-    });
     onChangeSourceCodeData('languageId', languageId);
     onChangeSourceCodeData('sourceCode', SOURCECODE[languageId]);
   };
@@ -39,15 +27,6 @@ export default function CodeEditor({
   const handleChangeCode = (value: string) => {
     onChangeSourceCodeData('sourceCode', value);
   };
-
-  useEffect(() => {
-    if (sourceCodeData.sourceCode !== SOURCECODE[languageId]) {
-      debouncedSave(`sourceCodeData-${problemId}`, {
-        sourceCode: sourceCodeData.sourceCode,
-        languageId: languageId,
-      });
-    }
-  }, [sourceCodeData.sourceCode]);
 
   return (
     <section className="flex-1 flex flex-col h-full gap-4">
