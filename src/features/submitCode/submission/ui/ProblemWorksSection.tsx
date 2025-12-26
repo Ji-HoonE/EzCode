@@ -29,22 +29,30 @@ export default function ProblemWorksSection({ problemId }: IProblemWorksSectionP
   useEffect(() => {
     if (!user) return;
 
-    if (draftData) {
+    const targetLanguageId = isInitialLoad
+      ? (user?.language?.id as number) // 초기 로드: 사용자 선호도 언어
+      : sourceCodeData.languageId; // 언어 변경: 선택된 언어
+
+    // 해당 언어의 draft 데이터 확인
+    if (draftData && draftData.languageId === targetLanguageId) {
+      // Draft 데이터가 있고, 언어가 일치하면 사용
       setSourceCodeData({
         languageId: draftData.languageId,
         sourceCode: draftData.code,
       });
       setDraftVersion(draftData.version);
-    } else if (!draftData && isInitialLoad) {
-      setIsInitialLoad(false);
-      const defaultSourceCodeData = fetchSourceCodeData(user?.language?.id as number);
-      setSourceCodeData(defaultSourceCodeData);
+    } else {
+      // Draft가 없으면 해당 언어의 템플릿 코드 사용
+      const templateData = fetchSourceCodeData(targetLanguageId);
+      setSourceCodeData(templateData);
+      setDraftVersion(0);
     }
-  }, [draftData, user?.language?.id]);
 
-  useEffect(() => {
-    setIsInitialLoad(true);
-  }, [sourceCodeData.languageId]);
+    // 초기 로드 완료 처리
+    if (isInitialLoad) {
+      setIsInitialLoad(false);
+    }
+  }, [draftData, user?.language?.id, sourceCodeData.languageId, isInitialLoad]);
 
   const handleChangeDraftVersion = (version: number) => {
     setDraftVersion(version);
