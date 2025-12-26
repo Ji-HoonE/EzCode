@@ -45,6 +45,11 @@ export default function ProblemWorksSection({ problemId }: IProblemWorksSectionP
   useEffect(() => {
     setIsInitialLoad(true);
   }, [sourceCodeData.languageId]);
+
+  const handleChangeDraftVersion = (version: number) => {
+    setDraftVersion(version);
+  };
+
   return (
     <section className="flex flex-col gap-5 h-full">
       <CodeEditor
@@ -59,6 +64,7 @@ export default function ProblemWorksSection({ problemId }: IProblemWorksSectionP
           setMode={(mode) => setMode(mode)}
           mode={mode}
           draftVersion={draftVersion}
+          setDraftVersion={handleChangeDraftVersion}
         />
         <TerminalOutput mode={mode} sourceCodeData={sourceCodeData} problemId={problemId} />
       </div>

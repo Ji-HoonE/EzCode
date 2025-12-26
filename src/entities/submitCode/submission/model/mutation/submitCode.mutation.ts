@@ -45,8 +45,8 @@ export const useSaveDraftData = () => {
       try {
         const res = await ApiHelper.post<ISaveDraftResponse>(`${PATHS.DRAFT}`, saveDraftData);
         if (res.data.success) {
-          const data = res.data.result;
-          return data;
+          const newVersion = res.data.result.version;
+          return newVersion;
         }
       } catch {
         return null;
