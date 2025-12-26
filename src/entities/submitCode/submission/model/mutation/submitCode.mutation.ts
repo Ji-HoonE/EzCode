@@ -39,9 +39,10 @@ export const useISubmissionForReviewMutation = (problemId: ProblemId) => {
 };
 
 //작성중인 코드 저장
-export const useSaveDraftData = () => {
+export const useSaveDraftData = (hasAccessToken: boolean) => {
   return useMutation({
     mutationFn: async (saveDraftData: ISaveDraftRequest) => {
+      if (!hasAccessToken) return null;
       try {
         const res = await ApiHelper.post<ISaveDraftResponse>(`${PATHS.DRAFT}`, saveDraftData);
         if (res.data.success) {

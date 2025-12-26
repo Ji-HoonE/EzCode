@@ -42,7 +42,7 @@ export default function TerminalPanel({
   const { user } = useUserStore();
   useGetSubmitPrepareData(problemId, !!accessToken);
   const { submitPrepareData } = useProblemWebSocketStore();
-  const { mutateAsync: saveDraft } = useSaveDraftData();
+  const { mutateAsync: saveDraft } = useSaveDraftData(!!accessToken);
 
   const authGuardTrigger = () => {
     const params = new URLSearchParams(searchParams.toString());

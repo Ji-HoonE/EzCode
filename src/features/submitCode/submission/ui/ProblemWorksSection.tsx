@@ -64,6 +64,8 @@ export default function ProblemWorksSection({ problemId }: IProblemWorksSectionP
         problemId={problemId}
         sourceCodeData={sourceCodeData}
         onChangeSourceCodeData={handleChangeSourceCodeData}
+        draftVersion={draftVersion}
+        setDraftVersion={handleChangeDraftVersion}
       />
       <div className="flex flex-1 flex-col bg-secondary-background rounded-[10px] shadow-lg ">
         <TerminalPanel
