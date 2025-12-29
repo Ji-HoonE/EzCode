@@ -24,7 +24,7 @@
   }
 }
 
-@layer {
+@layer base {
   * {
     font-family: 'NanumSquare';
   }
@@ -54,8 +54,8 @@
     list-style: none;
   }
   input:-webkit-autofill {
-    box-shadow: 0 0 0px 1000px var(--color-bg200) inset !important;
-    -webkit-text-fill-color: var(--color-gray100) !important;
+    box-shadow: 0 0 0px 1000px var(--color-secondary-background) inset !important;
+    -webkit-text-fill-color: var(--color-white) !important;
     caret-color: var(--color-gray100) !important;
   }
 
