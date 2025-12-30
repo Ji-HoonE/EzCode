@@ -53,6 +53,7 @@ export const useGetDraftData = (problemId: ProblemId, laguageId: number) => {
         return null;
       }
     },
+    staleTime: 0,
     enabled: !!problemId && !!laguageId,
   });
 };

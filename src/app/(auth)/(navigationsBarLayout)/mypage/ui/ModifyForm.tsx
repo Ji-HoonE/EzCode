@@ -3,6 +3,7 @@ import { Badge } from '@/shared/ui/badge/Badge';
 import { Select } from '@/shared/ui/select/Select';
 import Image from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import { toast } from 'sonner';
 
 type LanguageList = {
   label: string;
@@ -32,7 +33,10 @@ export const ModifyForm = ({
     if (!event.target.files?.length) return;
 
     const file = event.target.files[0];
-    console.log(file);
+    if (file.size > 1024 * 1024 * 5) {
+      toast.info('프로필 이미지는 5MB 이하로 업로드 가능합니다.');
+      return;
+    }
     try {
       setEditForm((prev) => ({
         ...prev,

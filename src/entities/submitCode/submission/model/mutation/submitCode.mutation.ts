@@ -11,6 +11,7 @@ import {
 } from './submitCode.mutation.type';
 import { useProblemWebSocketStoreActions } from '@/features/submitCode/submission/model/useProblemWebSocketStore';
 import { PATHS } from '@/constants/paths';
+import { toast } from 'sonner';
 
 //문제 제출하기
 export const useSubmissionForResultMutation = (problemId: ProblemId) => {
@@ -48,6 +49,10 @@ export const useSaveDraftData = (hasAccessToken: boolean) => {
         if (res.data.success) {
           const newVersion = res.data.result.version;
           return newVersion;
+        } else {
+          if (res.data.message) {
+            toast.error(res.data.message);
+          }
         }
       } catch {
         return null;
