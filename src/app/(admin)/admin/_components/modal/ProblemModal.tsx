@@ -85,6 +85,11 @@ const ProblemModal = (props: ProblemModalProps) => {
       }
     };
 
+  const resetForm = () => {
+    setImageFile(null);
+    setFormValues(DEFAULT_VALUES);
+  };
+
   const handleSelectChange = (field: keyof ProblemFormValues) => (value: string) => {
     setFormValues((prev) => ({
       ...prev,
@@ -107,14 +112,8 @@ const ProblemModal = (props: ProblemModalProps) => {
     }
   };
 
-  const resetForm = () => {
-    setImageFile(null);
-    setFormValues(DEFAULT_VALUES);
-  };
-
   const handleOpenChange = (open: boolean) => {
     if (!open) {
-      resetForm();
       onClose();
     }
   };
@@ -166,7 +165,6 @@ const ProblemModal = (props: ProblemModalProps) => {
         return;
       }
       queryClient.invalidateQueries({ queryKey: ['adminProblemsList'] });
-      resetForm();
       onClose();
     } catch (error) {
       console.error(error);
@@ -187,7 +185,6 @@ const ProblemModal = (props: ProblemModalProps) => {
       });
 
       if (Object.keys(formattedCategories).length === 0) return;
-
       const res = await updateProblem({
         problemId: Number(problemId),
         request: {
@@ -201,8 +198,9 @@ const ProblemModal = (props: ProblemModalProps) => {
       if (!res.data.success) {
         return;
       }
-      queryClient.invalidateQueries({ queryKey: ['adminProblemsList'] });
-      resetForm();
+      queryClient.invalidateQueries({
+        queryKey: ['adminGetProblemDetail', Number(problemId)],
+      });
       onClose();
     } catch (error) {
       console.error(error);
@@ -212,7 +210,6 @@ const ProblemModal = (props: ProblemModalProps) => {
   useEffect(() => {
     if (problemDetail?.data && mode === 'update' && isOpen) {
       const data = problemDetail.data;
-
       const categoryValues = Array.isArray(data.result.categories)
         ? data.result.categories
             .map((label: string) => {
@@ -223,7 +220,6 @@ const ProblemModal = (props: ProblemModalProps) => {
             })
             .filter((value): value is string => value !== null)
         : [];
-
       setFormValues({
         categories: categoryValues,
         title: data.result.title || '',
@@ -246,6 +242,13 @@ const ProblemModal = (props: ProblemModalProps) => {
         onPointerDownOutside={(e) => e.preventDefault()}
         onInteractOutside={(e) => e.preventDefault()}
         showCloseButton={false}
+        onAnimationEnd={(e) => {
+          if (e.animationName === 'exit') {
+            if (!isOpen) {
+              resetForm();
+            }
+          }
+        }}
       >
         <DialogHeader className="px-6 pt-6 pb-4 relative shrink-0">
           <DialogTitle className="flex items-center gap-2">

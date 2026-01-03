@@ -31,6 +31,8 @@ export const useAdminGetProblemDetailQuery = (problemId: number) => {
       const response = await adminProblemApi.getProblemDetail(problemId);
       return response;
     },
+    staleTime: 1000 * 60,
+    gcTime: 1000 * 60 * 10,
   });
 };
 

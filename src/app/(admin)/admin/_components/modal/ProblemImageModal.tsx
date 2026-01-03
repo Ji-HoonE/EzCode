@@ -60,15 +60,10 @@ const ProblemImageModal = (props: IProblemImageModal) => {
         image: imageFile,
       });
       if (!response.data.success) return;
-      toast.success('이미지가 수정되었습니다.', {
-        richColors: false,
-        style: {
-          background: '#00d084',
-          color: '#ffffff',
-          fontWeight: 'bold',
-          fontSize: '16px',
-        },
+      queryClient.invalidateQueries({
+        queryKey: ['adminGetProblemDetail', Number(problemId)],
       });
+      onClose();
     } catch (error) {
       console.error(error);
     }

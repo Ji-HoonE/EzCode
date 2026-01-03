@@ -48,13 +48,13 @@ export default function ProblemsPage() {
     setSelectedProblemId(value);
   };
 
-  /** 문제 등록 모달 오픈 */
+  /** 문제 등록, 수정 모달 오픈 */
   const handleOpenProblemModal = (mode: ModalMode) => {
     setMode(mode);
     setIsProblemModalOpen(true);
   };
 
-  /** 문제 등록 모달 닫기 */
+  /** 문제 등록, 수정 모달 닫기 */
   const handleCloseProblemModal = () => {
     setIsProblemModalOpen(false);
   };

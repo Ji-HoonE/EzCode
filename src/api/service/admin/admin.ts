@@ -105,7 +105,6 @@ export const adminProblemApi = {
   updateProblem: async (params: IUpdateProblemRequest) => {
     const { problemId, image, request } = params;
     const multipartFormData = new FormData();
-    console.log(request);
     multipartFormData.append(
       'request',
       new Blob([JSON.stringify(request)], { type: 'application/json' })
@@ -127,19 +126,11 @@ export const adminProblemApi = {
     if (!image) {
       throw new Error('이미지 파일이 필요합니다.');
     }
-    const base64Image = await new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const result = reader.result as string;
-        const base64 = result.split(',')[1];
-        resolve(base64);
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(image);
-    });
+    const multipartFormData = new FormData();
+    multipartFormData.append('image', image);
     const response = await ApiHelper.put(
       API_URL.ADMIN.PROBLEM.IMAGE.replace('{problemId}', String(problemId)),
-      { image: base64Image },
+      multipartFormData,
       {
         reqType: 'client',
       }
