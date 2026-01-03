@@ -4,10 +4,8 @@ import QueryProvider from '@/lib/QueryProvider';
 
 export default async function AdminLayout({
   children,
-  modal,
 }: Readonly<{
   children: React.ReactNode;
-  modal: React.ReactNode;
 }>) {
   return (
     <QueryProvider>
@@ -19,7 +17,6 @@ export default async function AdminLayout({
               <div className="p-6">{children}</div>
             </main>
           </div>
-          {modal}
         </body>
       </html>
     </QueryProvider>

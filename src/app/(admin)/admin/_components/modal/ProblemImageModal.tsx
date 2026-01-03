@@ -13,7 +13,6 @@ import { cn } from '@/lib/utils';
 import { FileText, XIcon, Upload, Image as ImageIcon } from 'lucide-react';
 import { useAdminUpdateProblemImageMutation } from '@/entities/admin/mutation/admin.mutation';
 import { useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
 
 interface IProblemImageModal {
   isOpen: boolean;
