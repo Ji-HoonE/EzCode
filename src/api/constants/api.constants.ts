@@ -57,6 +57,18 @@ export const API_URL = {
   NOTIFICATIONS: '/notifications',
   LANGUAGES: '/languages',
   REPORT: '/reports',
+  ADMIN: {
+    PROBLEM: {
+      BASE: '/admin/problems',
+      LIST: '/admin/problems/list',
+      CATEGORY: '/admin/problems/categories',
+      IMAGE: '/admin/problems/image/{problemId}',
+    },
+    TEST_CASES: {
+      BASE: '/admin/problems/{problemId}/testcases',
+      ID: '/admin/problems/{problemId}/testcases/{testcaseId}',
+    },
+  },
 };
 
 /** API 요청 주소 */

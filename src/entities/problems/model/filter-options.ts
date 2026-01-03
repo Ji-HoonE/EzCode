@@ -67,3 +67,14 @@ export const CATEGORY_OPTIONS = [
   { label: '분리 집합', value: 'DISJOINT_SET' },
   { label: '조합', value: 'COMBINATION' },
 ];
+
+export const REFERENCE_OPTIONS = [
+  { label: 'ORIGINAL', value: 'ORIGINAL' },
+  { label: 'DOVELET', value: 'DOVELET' },
+  { label: 'LEETCODE', value: 'LEETCODE' },
+  { label: 'CODEWARS', value: 'CODEWARS' },
+  { label: 'BAEKJOON', value: 'BAEKJOON' },
+  { label: 'PROGRAMMERS', value: 'PROGRAMMERS' },
+  { label: 'CODEFORCES', value: 'CODEFORCES' },
+  { label: 'AI', value: 'AI' },
+];

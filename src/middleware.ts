@@ -15,11 +15,13 @@ export async function middleware(request: NextRequest) {
   });
 
   if (!token || token.error) {
-    // return NextResponse.redirect(new URL('/signin', request.url));
     return NextResponse.next();
   }
 
-  return NextResponse.next();
+  /** pathname 경로 저장 */
+  const response = NextResponse.next();
+  response.headers.set('x-pathname', request.nextUrl.pathname);
+  return response;
 }
 
 export const config = {

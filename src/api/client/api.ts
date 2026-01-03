@@ -142,15 +142,25 @@ const ApiHelper = {
    * @returns {Promise<ApiResponse<T>>} API 응답
    */
   post: <T>(endpoint: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>> => {
-    return request<T>(endpoint, {
-      method: 'POST',
-      body: JSON.stringify(data),
+    const isFormData = data instanceof FormData;
+    const mergedConfig = {
       ...defaultConfig,
       ...config,
+    };
+
+    const headers = new Headers(mergedConfig.headers as HeadersInit);
+
+    if (isFormData) {
+      headers.delete('Content-Type');
+    }
+    return request<T>(endpoint, {
+      ...mergedConfig,
+      method: 'POST',
+      body: isFormData ? (data as FormData) : JSON.stringify(data),
+      headers,
       reqType: config?.reqType || 'client',
     });
   },
-
   /**
    * PUT 요청
    * @template T 응답 데이터의 타입

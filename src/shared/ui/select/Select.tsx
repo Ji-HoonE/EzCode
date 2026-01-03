@@ -51,6 +51,7 @@ interface PropsType extends HTMLAttributes<HTMLDivElement> {
   type?: 'setValue' | 'router' | 'api';
   entireOption?: boolean;
   isHeader?: boolean;
+  initialValue?: string;
 }
 
 export const Select = ({
@@ -63,6 +64,7 @@ export const Select = ({
   entireOption = false,
   id,
   isHeader = false,
+  initialValue = '',
   ...rest
 }: PropsType & { id?: string }) => {
   const router = useRouter();
@@ -123,7 +125,7 @@ export const Select = ({
         aria-expanded={dropdown}
       >
         <span className="truncate">
-          {typeof value === 'string' ? selectedOption?.label || '전체' : value}
+          {typeof value === 'string' ? selectedOption?.label || initialValue || '전체' : value}
         </span>
         <svg
           xmlns="http://www.w3.org/2000/svg"

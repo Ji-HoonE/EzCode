@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
-import ProblemsList from '@/app/(auth)/(navigationsBarLayout)/problems/page';
+import ProblemsList from '@/app/(user)/(auth)/(navigationsBarLayout)/problems/page';
 
 jest.mock('@/entities/problems/model/query', () => ({
   useProblemListQuery: jest.fn(),
