@@ -5,6 +5,10 @@ import type { NextRequest } from 'next/server';
 const publicPaths = ['/signin', '/find/password', '/find/api/auth/find-password-verify'];
 
 export async function middleware(request: NextRequest) {
+  /** pathname 경로 저장 */
+  const response = NextResponse.next();
+  response.headers.set('x-pathname', request.nextUrl.pathname);
+
   if (publicPaths.some((publicPath) => request.nextUrl.pathname.includes(publicPath))) {
     return NextResponse.next();
   }
@@ -18,9 +22,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  /** pathname 경로 저장 */
-  const response = NextResponse.next();
-  response.headers.set('x-pathname', request.nextUrl.pathname);
   return response;
 }
 

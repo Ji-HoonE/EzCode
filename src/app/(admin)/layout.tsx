@@ -1,24 +1,39 @@
+'use client';
+
 import { AdminSidebar } from './admin/_ui/AdminSideBar';
 import './admin.css';
-import QueryProvider from '@/lib/QueryProvider';
+import { useEffect } from 'react';
+import { useMyInfoQuery } from '@/entities/mypage/model/query';
+import { useRouter } from 'next/navigation';
 
-export default async function AdminLayout({
+export default function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const router = useRouter();
+  const { data: userInfo, isError, error, isLoading } = useMyInfoQuery();
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (isError || error || !userInfo) {
+      router.back();
+      return;
+    }
+    if (userInfo?.data?.result?.userRole !== 'ADMIN') {
+      router.back();
+    }
+  }, [userInfo, isError, error, isLoading, router]);
+
+  if (isLoading || isError || error || !userInfo || userInfo?.data?.result?.userRole !== 'ADMIN') {
+    return null;
+  }
   return (
-    <QueryProvider>
-      <html lang="ko">
-        <body className="flex justify-center w-full h-full">
-          <div className="flex h-screen bg-background w-full">
-            <AdminSidebar />
-            <main className="flex-1 overflow-auto">
-              <div className="p-6">{children}</div>
-            </main>
-          </div>
-        </body>
-      </html>
-    </QueryProvider>
+    <div className="flex h-screen bg-background w-full">
+      <AdminSidebar />
+      <main className="flex-1 overflow-auto">
+        <div className="p-6">{children}</div>
+      </main>
+    </div>
   );
 }
