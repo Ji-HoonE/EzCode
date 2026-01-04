@@ -5,9 +5,14 @@ import type { NextRequest } from 'next/server';
 const publicPaths = ['/signin', '/find/password', '/find/api/auth/find-password-verify'];
 
 export async function middleware(request: NextRequest) {
-  /** pathname 경로 저장 */
   const response = NextResponse.next();
-  response.headers.set('x-pathname', request.nextUrl.pathname);
+  /** pathname 경로 저장 */
+  response.cookies.set('x-pathname', request.nextUrl.pathname, {
+    httpOnly: false,
+    path: '/',
+    maxAge: 60,
+    sameSite: 'lax',
+  });
 
   if (publicPaths.some((publicPath) => request.nextUrl.pathname.includes(publicPath))) {
     return NextResponse.next();

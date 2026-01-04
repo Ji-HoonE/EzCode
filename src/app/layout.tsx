@@ -6,7 +6,7 @@ import AuthProvider from '@/lib/AuthProvider';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
 import { Metadata } from 'next';
-import { headers } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { detectDeviceType } from '@/shared/util/detectDeviceType';
 import MobileBlockUI from '@/shared/ui/moblieBlockUI/MoblieBlockUI';
 
@@ -34,8 +34,8 @@ export default async function RootLayout({
       </html>
     );
   const session = await getServerSession(authOptions);
-  const headersList = await headers();
-  const pathname = headersList.get('x-pathname') || '';
+  const cookieStore = await cookies();
+  const pathname = cookieStore.get('x-pathname')?.value || '';
   const isAdminRoute = pathname.startsWith('/admin');
 
   return (
