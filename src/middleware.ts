@@ -14,6 +14,8 @@ export async function middleware(request: NextRequest) {
     sameSite: 'lax',
   });
 
+  response.headers.set('x-pathname', request.nextUrl.pathname);
+
   if (publicPaths.some((publicPath) => request.nextUrl.pathname.includes(publicPath))) {
     return NextResponse.next();
   }

@@ -23,7 +23,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const ua = (await headers()).get('user-agent') ?? '';
+  const headersList = await headers();
+  const ua = headersList.get('user-agent') ?? '';
   const device = detectDeviceType(ua);
   if (device === 'mobile')
     return (
@@ -35,7 +36,7 @@ export default async function RootLayout({
     );
   const session = await getServerSession(authOptions);
   const cookieStore = await cookies();
-  const pathname = cookieStore.get('x-pathname')?.value || '';
+  const pathname = headersList.get('x-pathname') || cookieStore.get('x-pathname')?.value || '';
   const isAdminRoute = pathname.startsWith('/admin');
 
   return (
