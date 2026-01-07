@@ -1,4 +1,3 @@
-import NavigationBar from '@/widgets/NavigationBar/ui';
 import './globals.css';
 import QueryProvider from '@/lib/QueryProvider';
 import { Toaster } from 'sonner';
@@ -6,7 +5,7 @@ import AuthProvider from '@/lib/AuthProvider';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
 import { Metadata } from 'next';
-import { cookies, headers } from 'next/headers';
+import { headers } from 'next/headers';
 import { detectDeviceType } from '@/shared/util/detectDeviceType';
 import MobileBlockUI from '@/shared/ui/moblieBlockUI/MoblieBlockUI';
 import ConditionalNavigationBar from '@/features/auth/ui/ConditionalNavigationBar';
