@@ -3,7 +3,7 @@ import LinkedButton from '@/shared/ui/linkedButton';
 import { NAVIGATE_ATTRIBUTE } from '../navigateAttribute';
 import AuthActions from './AuthActions';
 
-export default async function NavigationBar() {
+export default function NavigationBar() {
   return (
     <header className="border-b border-gray-800 bg-background/95 backdrop-blur-sm sticky top-0 z-50 h-18">
       <nav className="flex w-full justify-around items-center h-full p-4">
