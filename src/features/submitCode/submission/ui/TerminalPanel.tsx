@@ -16,6 +16,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useUserStore } from '@/entities/user/model/store';
 import { useState } from 'react';
 import { useSaveDraftData } from '@/entities/submitCode/submission/model/mutation/submitCode.mutation';
+import handleUnsavedSourceCode from '../util/handleUnsavedSourceCode';
 interface TerminalPanelProps {
   problemId: ProblemId;
   setMode: (mode: Mode) => void;
@@ -53,8 +54,19 @@ export default function TerminalPanel({
   const { mutateAsync } = useSubmissionForResultMutation(problemId);
   const { clearResults } = useProblemWebSocketStoreActions();
 
+  const [_, setUnsavedSourceCode] = handleUnsavedSourceCode();
+
   const submitForResult = () => {
-    if (!accessToken) return authGuardTrigger();
+    if (!accessToken) {
+      setUnsavedSourceCode({
+        problemId: problemId,
+        sourceCode: sourceCodeData.sourceCode,
+        languageId: sourceCodeData.languageId,
+      });
+
+      authGuardTrigger();
+      return;
+    }
     const newVersion = saveDraft({
       problemId: Number(problemId),
       languageId: sourceCodeData.languageId,
