@@ -34,7 +34,7 @@ export default function Discussion({ discussion, id }: IDiscussionContentProps) 
       <div className="w-full flex flex-col gap-2">
         <div className="flex items-center gap-3">
           <UserProfile profileImageUrl={userInfo.profileImageUrl} nickname={userInfo.nickname} />
-          <span className="text-[#888] text-sm ml-2">{LANGUAGE[languageId]}</span>
+          <span className="text-gray500 text-sm ml-2">{LANGUAGE[languageId]}</span>
         </div>
         {!isEdit ? (
           <>
