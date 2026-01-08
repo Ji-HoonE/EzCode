@@ -4,15 +4,12 @@ import { Spinner } from '@/shared/ui/loading-indicators';
 import Reply from './Reply';
 import ReplyForm from './ReplyForm';
 import { useRepliesQuery } from '@/entities/discussions';
-import ProtectedBlurBox from '@/shared/ui/LoginRequiredUi/ProtectedBlurBox';
-import Cookies from 'js-cookie';
 interface RepliesProps {
   problemId: ProblemId;
   discussionId: number;
 }
 export default function Replies({ problemId, discussionId }: RepliesProps) {
   const queryResult = useRepliesQuery(problemId, discussionId);
-  const accessToken = Cookies.get('accessToken');
 
   const repliesData = queryResult?.data?.result;
   const isPending = queryResult?.isPending;
@@ -26,7 +23,7 @@ export default function Replies({ problemId, discussionId }: RepliesProps) {
   }
   return (
     <div className="w-full h-full relative border-t border-primary pt-4 space-y-4 mt-4">
-      {!accessToken && <ProtectedBlurBox />}
+      {/* {!accessToken && <ProtectedBlurBox />} */}
       <div className="ml-4 flex flex-col gap-4">
         <ReplyForm
           problemId={problemId}

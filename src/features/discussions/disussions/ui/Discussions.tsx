@@ -77,7 +77,7 @@ export default function Discussions({ problemId }: IDiscussionProps) {
     );
   }
   return (
-    <div className="flex flex-col gap-[10px] w-full h-full">
+    <div className="flex flex-col gap-2.5 w-full h-full">
       <DiscussionForm problemId={problemId} mode="create" />
       <div className="flex items-center justify-center">
         {!discussions ? (

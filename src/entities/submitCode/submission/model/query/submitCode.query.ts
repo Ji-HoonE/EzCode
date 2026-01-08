@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { IDraftResponse, ISubmitPrepareData } from './submitCode.query.type';
 import { useProblemWebSocketStoreActions } from '@/features/submitCode/submission/model/useProblemWebSocketStore';
 import { PATHS } from '@/constants/paths';
+import Cookies from 'js-cookie';
 
 /**코드 제출시 필요한 세션키, initcaseIds 를 리스폰스로 받음 */
 
@@ -36,6 +37,8 @@ export const useGetSubmitPrepareData = (problemId: ProblemId, hasAccessToken: bo
 
 /**서버에 저장된 기존 소스코드 get */
 export const useGetDraftData = (problemId: ProblemId, laguageId: number) => {
+  const accessToken = Cookies.get('accessToken');
+
   return useQuery({
     queryKey: ['draft-sourceCode', problemId, laguageId],
     queryFn: async () => {
@@ -54,6 +57,6 @@ export const useGetDraftData = (problemId: ProblemId, laguageId: number) => {
       }
     },
     staleTime: 0,
-    enabled: !!problemId && !!laguageId,
+    enabled: !!problemId && !!laguageId && !!accessToken,
   });
 };

@@ -7,6 +7,7 @@ import { ISourceCode } from '@/entities/submitCode';
 import { useUserStore } from '@/entities/user/model/store';
 import { fetchSourceCodeData, INITIAL_SOURCE_CODE_DATA } from '@/shared';
 import { useGetDraftData } from '@/entities/submitCode/submission/model/query/submitCode.query';
+import handleUnsavedSourceCode from '../util/handleUnsavedSourceCode';
 
 interface IProblemWorksSectionProps {
   problemId: string;
@@ -21,6 +22,7 @@ export default function ProblemWorksSection({ problemId }: IProblemWorksSectionP
 
   const { user } = useUserStore((state) => state);
   const { data: draftData } = useGetDraftData(problemId, sourceCodeData.languageId);
+  const [unsavedSourceCode] = handleUnsavedSourceCode();
 
   const handleChangeSourceCodeData = (key: string, value: string | number | boolean) => {
     setSourceCodeData((prev) => ({ ...prev, [key]: value }));
@@ -29,25 +31,31 @@ export default function ProblemWorksSection({ problemId }: IProblemWorksSectionP
   useEffect(() => {
     if (!user) return;
 
-    const targetLanguageId = isInitialLoad
-      ? (user?.language?.id as number) // 초기 로드: 사용자 선호도 언어
-      : sourceCodeData.languageId; // 언어 변경: 선택된 언어
-
-    // 해당 언어의 draft 데이터 확인
-    if (draftData && draftData.languageId === targetLanguageId) {
-      // Draft 데이터가 있고, 언어가 일치하면 사용
+    if (unsavedSourceCode && unsavedSourceCode.problemId === problemId && isInitialLoad) {
       setSourceCodeData({
-        languageId: draftData.languageId,
-        sourceCode: draftData.code,
+        languageId: unsavedSourceCode.languageId,
+        sourceCode: unsavedSourceCode.sourceCode,
       });
-      setDraftVersion(draftData.version);
     } else {
-      // Draft가 없으면 해당 언어의 템플릿 코드 사용
-      const templateData = fetchSourceCodeData(targetLanguageId);
-      setSourceCodeData(templateData);
-      setDraftVersion(0);
-    }
+      const targetLanguageId = isInitialLoad
+        ? (user?.language?.id as number) // 초기 로드: 사용자 선호도 언어
+        : sourceCodeData.languageId; // 언어 변경: 선택된 언어
 
+      // 해당 언어의 draft 데이터 확인
+      if (draftData && draftData.languageId === targetLanguageId) {
+        // Draft 데이터가 있고, 언어가 일치하면 사용
+        setSourceCodeData({
+          languageId: draftData.languageId,
+          sourceCode: draftData.code,
+        });
+        setDraftVersion(draftData.version);
+      } else {
+        // Draft가 없으면 해당 언어의 템플릿 코드 사용
+        const templateData = fetchSourceCodeData(targetLanguageId);
+        setSourceCodeData(templateData);
+        setDraftVersion(0);
+      }
+    }
     // 초기 로드 완료 처리
     if (isInitialLoad) {
       setIsInitialLoad(false);

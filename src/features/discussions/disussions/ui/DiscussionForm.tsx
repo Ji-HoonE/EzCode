@@ -10,15 +10,17 @@ import { TDiscussionContentMutationResponse } from '@/entities/discussions/discu
 import { LANGUAGE_SELECTOR_OPTIONS, ProblemId } from '@/shared';
 import { Select } from '@/shared/ui/select/Select';
 import UnifiedInput from '@/shared/ui/InputFiled';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
 import { useUserStore } from '@/entities/user/model/store';
-
+import Cookies from 'js-cookie';
+import { useRouter, useSearchParams } from 'next/navigation';
 interface ICreateDiscussionInputProps {
   problemId: ProblemId;
   mode: 'create' | 'edit';
   discussion?: TDiscussionContentMutationResponse;
   changeEditMode?: (status: boolean) => void;
 }
+
 export default function DiscussionForm({
   problemId,
   mode = 'create',
@@ -36,6 +38,10 @@ export default function DiscussionForm({
     discussion?.discussionId || 0
   );
   const { user } = useUserStore();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const accessToken = Cookies.get('accessToken');
 
   const buttonText = mode === 'create' ? '토론 생성' : '토론 수정';
 
@@ -61,6 +67,15 @@ export default function DiscussionForm({
     setContentForm((prev) => ({ ...prev, languageId: user?.language?.id as number }));
   }, [user?.language]);
 
+  const handleFocus = (e: FocusEvent<HTMLTextAreaElement>) => {
+    if (!accessToken) {
+      e.target.blur();
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('auth-guard', 'true');
+      router.push(`?${params.toString()}`);
+    }
+  };
+
   return (
     <div className="relative flex flex-col gap-3">
       <Select
@@ -76,9 +91,10 @@ export default function DiscussionForm({
         onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
           setContentForm((prev) => ({ ...prev, content: e.target.value }))
         }
+        onFocus={(e: FocusEvent<HTMLTextAreaElement>) => handleFocus(e)}
       />
       <div className="absolute right-4 top-[calc(50%-5px)] flex gap-2">
-        <Button className="" onClick={() => submitDiscussionForm()}>
+        <Button className="" onClick={() => submitDiscussionForm()} disabled={!!!accessToken}>
           {buttonText}
         </Button>
         {mode === 'edit' && (
