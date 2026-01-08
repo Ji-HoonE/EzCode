@@ -5,7 +5,6 @@ import useReply from '../lib/useReply';
 import { Send } from 'lucide-react';
 import UnifiedInput from '@/shared/ui/InputFiled';
 import Cookies from 'js-cookie';
-import { toast } from 'sonner';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 interface ReplyFormProps {
