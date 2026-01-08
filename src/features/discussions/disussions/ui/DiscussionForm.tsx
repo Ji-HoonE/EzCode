@@ -13,7 +13,6 @@ import UnifiedInput from '@/shared/ui/InputFiled';
 import { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
 import { useUserStore } from '@/entities/user/model/store';
 import Cookies from 'js-cookie';
-import { toast } from 'sonner';
 import { useRouter, useSearchParams } from 'next/navigation';
 interface ICreateDiscussionInputProps {
   problemId: ProblemId;
