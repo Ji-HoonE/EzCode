@@ -31,7 +31,7 @@ export default function ProblemWorksSection({ problemId }: IProblemWorksSectionP
   useEffect(() => {
     if (!user) return;
 
-    if (unsavedSourceCode && unsavedSourceCode.problemId === problemId) {
+    if (unsavedSourceCode && unsavedSourceCode.problemId === problemId && isInitialLoad) {
       setSourceCodeData({
         languageId: unsavedSourceCode.languageId,
         sourceCode: unsavedSourceCode.sourceCode,
