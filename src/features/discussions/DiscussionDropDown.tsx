@@ -19,7 +19,7 @@ export default function DiscussionDropDown({ ...props }: IDiscussionDropDownProp
     <div className="relative">
       <KebabIcons className="text-white" onClick={() => setIsOpen((prev) => !prev)} />
       {isOpen && (
-        <ul className="flex flex-col gap-2 px-2 py-1 absolute bg-background rounded-xl whitespace-nowrap text-center border w-30 border-primary top-8 ">
+        <ul className="flex flex-col gap-2 px-2 py-1 absolute bg-background rounded-xl whitespace-nowrap text-center border w-30 border-primary top-8 z-100">
           {isAuthor ? (
             <>
               <li
