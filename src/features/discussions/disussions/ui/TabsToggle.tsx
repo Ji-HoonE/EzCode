@@ -1,25 +1,24 @@
 'use client';
-import { PATHS } from '@/constants/paths';
-import { ProblemId } from '@/shared';
 import clsx from 'clsx';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function TabsToggle({ problemId }: { problemId: ProblemId }) {
+export default function TabsToggle() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams.toString());
-  params.set('discussion', 'true');
 
   const active: 'discussion' | 'problem' = searchParams.get('discussion')
     ? 'discussion'
     : 'problem';
 
   const handleTabChange = (tab: 'problem' | 'discussion') => {
+    const params = new URLSearchParams(searchParams.toString());
+
     if (tab === 'problem') {
-      router.push(`${PATHS.PROBLEMS}/${problemId}`);
+      params.delete('discussion');
     } else {
-      router.push(`?${params.toString()}`);
+      params.set('discussion', 'true');
     }
+    router.push(`?${params.toString()}`);
   };
 
   return (
@@ -39,7 +38,7 @@ export default function TabsToggle({ problemId }: { problemId: ProblemId }) {
         onClick={() => handleTabChange('discussion')}
         className={`flex-1 py-3 px-6 rounded-[10px] font-medium transition-all duration-200 ${
           active === 'discussion'
-            ? 'bg-[#214d35] shadow-lg'
+            ? 'bg-primary shadow-lg'
             : 'text-white hover:bg-[rgba(255,255,255,0.08)] hover:text-secondary'
         }`}
       >
