@@ -5,8 +5,9 @@ import { IDiscussionContentResponse } from '@/entities/discussions/discussions/m
 import { ProblemId } from '@/shared';
 import DownVoteIcon from '@/shared/ui/icons/vote-icons/DownVoteIcon';
 import UpVoteIcon from '@/shared/ui/icons/vote-icons/UpVoteIcon';
-
+import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 interface IVoteProps {
   content: IDiscussionContentResponse | IReply;
@@ -25,7 +26,13 @@ export default function Vote({ content, problemId, id, type }: IVoteProps) {
 
   const { mutateAsync, data } = useVoteStatusMutation(String(problemId), discussionId, id, type);
 
+  const accessToken = Cookies.get('accessToken');
+
   const changeVoteStatus = (iconType: TVoteStatus) => {
+    if (!accessToken) {
+      toast.info('로그인이 필요한 기능입니다.');
+      return;
+    }
     if (iconType === voteStatus) {
       setVoteStatus('NONE');
       mutateAsync({ voteType: 'NONE' });
@@ -54,7 +61,7 @@ export default function Vote({ content, problemId, id, type }: IVoteProps) {
             changeVoteStatus('UP');
           }}
         />
-        <p className="pt-[4px]">{voteCount.upvoteCount}</p>
+        <p className="pt-1">{voteCount.upvoteCount}</p>
       </div>
       <div className="flex items-center gap-1">
         <DownVoteIcon
@@ -63,7 +70,7 @@ export default function Vote({ content, problemId, id, type }: IVoteProps) {
             changeVoteStatus('DOWN');
           }}
         />
-        <p className="pt-[4px]">{voteCount.downvoteCount}</p>
+        <p className="pt-1">{voteCount.downvoteCount}</p>
       </div>
     </>
   );
