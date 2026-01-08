@@ -14,6 +14,7 @@ import { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
 import { useUserStore } from '@/entities/user/model/store';
 import Cookies from 'js-cookie';
 import { toast } from 'sonner';
+import { useRouter, useSearchParams } from 'next/navigation';
 interface ICreateDiscussionInputProps {
   problemId: ProblemId;
   mode: 'create' | 'edit';
@@ -38,6 +39,9 @@ export default function DiscussionForm({
     discussion?.discussionId || 0
   );
   const { user } = useUserStore();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const accessToken = Cookies.get('accessToken');
 
   const buttonText = mode === 'create' ? '토론 생성' : '토론 수정';
@@ -67,7 +71,9 @@ export default function DiscussionForm({
   const handleFocus = (e: FocusEvent<HTMLTextAreaElement>) => {
     if (!accessToken) {
       e.target.blur();
-      toast.info('로그인 이후 토론, 댓글 작성이 가능합니다.');
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('auth-guard', 'true');
+      router.push(`?${params.toString()}`);
     }
   };
 
