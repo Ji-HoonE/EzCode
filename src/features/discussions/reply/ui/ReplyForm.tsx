@@ -1,9 +1,11 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, FocusEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { ProblemId } from '@/shared';
 import useReply from '../lib/useReply';
 import { Send } from 'lucide-react';
 import UnifiedInput from '@/shared/ui/InputFiled';
+import Cookies from 'js-cookie';
+import { toast } from 'sonner';
 
 interface ReplyFormProps {
   problemId: ProblemId;
@@ -29,6 +31,14 @@ export default function ReplyForm({
     parentReplyId
   );
 
+  const accessToken = Cookies.get('accessToken');
+  const handleFocus = (e: FocusEvent<HTMLTextAreaElement>) => {
+    if (!accessToken) {
+      e.target.blur();
+      toast.info('로그인 이후 댓글 작성이 가능합니다.');
+    }
+  };
+
   return (
     <div className="flex gap-2 mt-4 w-full">
       <UnifiedInput
@@ -37,6 +47,7 @@ export default function ReplyForm({
         value={value}
         onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleChangeValue(e.target.value)}
         className="rounded-[12px] min-h-10 text-sm"
+        onFocus={(e: FocusEvent<HTMLTextAreaElement>) => handleFocus(e)}
       />
       <>
         <Button
@@ -46,6 +57,7 @@ export default function ReplyForm({
             submitReply(mode);
             onClick?.();
           }}
+          disabled={!!!accessToken}
         >
           {mode === 'create' ? <Send className="w-4 h-4" /> : '완료'}
         </Button>
